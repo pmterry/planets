@@ -1,0 +1,328 @@
+jan14resnbook.txt
+
+01/23/14:
+Tallked to Keenan:
+Comments:
+
+Goal: Attempt to understand relationships betw. plants.  Attempt to understand, for example, why phenotypes of some grasses may better tolerate temperature, etc.  Make markers in this quest?
+
+Strategy: Try learn what can about Agrostis by comparing to model organism B. distachyon.
+
+Start with: Blastn (yes) two species vs Brachypodium distachyron (a model system).  Q: What e-value ??????????
+
+A. stol.
+A. capillaris
+
+Keenan referred to these as genome seqs?  So did they just fragment the genomes, seq with '454' (yes)
+
+To obtain: Brachypodium distachyron genome from Ensembl?
+Prevly, had ...dna_rm.toplevel.fa for sorghum.  But note: 'toplevel' just a link to 'genome ???????  So which to choose here (go with 'toplevel').
+
+Note: has 'genomic' alignments on Brachypodium Ensembl page ??????
+Note: also these, 'transcriptome mappings ???????
+
+Then, somehow, (??) see how these hits align to Brachypodium.  Note, lot of annotation for Brachypodium at Emsenbl, so try to benefit from that (exactly how ??).  
+
+Q: any gff annotation file for this Brachypodium distachyon genome ??????
+
+How to relate linearly ??
+i.e., 
+--get Brachypodium distachyon genome seq.
+--blastn A. stol., & A. capillaris against
+--get GFF? annotation file from Ensembl?
+--plot (IGV, gnu plot, circos, ggbio, other ??????)
+
+
+01/24/14:
+Documenting what doing in: ***Bdistachyon012414.txt*** file.
+
+01/06/15:
+Trouble wi sec 2.3, ggbio, Aug. 26.2014, working in file: /Users/bterry/macbookpro2015/keenanres15/ggbio/ggbiotesting122914.txt
+## 'wh' & my BSgenome Setaria not allowing to use 'autoplot' fcn ??????
+
+
+01/25/14:
+Couple comments:
+--I assume blastn will find if a read (~500 bp, '454') hits multiple loci on genome?
+--Q: after blastn, what kind of analysis ???
+--for functional annotation, gff file ?????
+--synteny, AnnRev article, suggests can be complicated to decipher ????
+
+02/06/14:
+Working to install Rsubread on HCC.  Working in file UCRwkshopcodetusker.txt where succeeded to install QuasR.
+Rsubread installed & tested on 02/06/14.
+
+02/11/14:
+Task: display reads aligned to brachypodium distachyon in IGV browser.
+i) possibly from blastn output, but 1st need convert to .sam, then .bam file. Q: how?  Put this on hold, while try (ii).
+ii) try align with Rsubread package.  See Bdistachyon012414.txt file.
+
+02/13/14:
+Sent email to Wei Shi about 'Killed' message during 'Buildindex' step of Rsubread package.  He emailed (2/17/14) check if './results' is writable?  I note: ran 'toy'size tgirke wkshop example, on hcc, no problem. 
+
+02/18/14:
+Try QuasR on tusker for brachypodium genome and initially, agroustis reads ('454').  Do in Bdistachyon012414.txt.
+## result: apparently created index for brachypodium genome, but alignment of Agrostis 454 reads 'Aborted', ....  I note 6 index files are signif. size.
+## TO DO: i) check wi hcc folks if any error messages due to tusker? ii) re-run on os x, see if get same result.
+
+
+02/20/14:
+## TO DO: run Rsubread on os x with brachygenome, Agrostis 454 reads, see if encounter same 'Killed' result?  Would appear to allow to answer Wei Shi email question.  See: ***Bdistachyon012414.txt***
+## Both build, and align ***"Completed successfully"***, but .bam file only 2 kb?  Even toy sizes in tgirke wkshops in Mb range ?????
+## Perhaps try display brachypodium dis. genome and this 2 kb bam file in IGV, see if can find where the 2 kb mays to ????
+## So have brachypodium genome, Agrostis aligned bam file loaded in IGV, now what ????
+
+iii) TO DO: Try QuasR on os x laptop, compare with attempt on tusker with brachypodium genome and Agrostis 454 reads.
+## ***looks like completed index, but bowtie failed to perform the alignments.*** Index a hidden dir. under 'data' dir.  Similar to tusker outcome.
+
+02/22/14:
+## So where am I?  Some things to try. working in: Bdistachyon012414.txt
+## i. view a bam file on tusker (has samtools installed),
+http://biobits.org/samtools_primer.html
+...
+BAM files are stored in a compressed, binary format, and cannot be viewed directly. However, you can use the same view command to display all alignments. For example, running:
+
+samtools view alignments/sim_reads_aligned.bam | more
+
+will display all your reads in the unix more paginated style.
+## copy the 2 kb above over to tusker, also use some bam files created on tusker while demonstrating Rsubread & QuasR would work for tgirke Rnaseq workshop examples.
+
+## ii. Q: why Rsubread aligns 1 read from Agrostis to brachypodium, while blastn aligns ????check how many on tusker??????  Idea: perhaps think of Rsubread, QuasR aligners as working similar to blastn, BUT with very low e-values set?  So perhaps a way to go is to compare reads of one species vs genome seq. of another species with blastn with varying e-values.  So impt to be able to display these in say IGV browser.  So need way to display in the browser, perhaps learn to convert blastn output to say sam files, perhaps with steps come up with using unix command line functions?  Finally, may still need way to handle large number of such alignments in trying to relate such non sequenced species to sequenced model genomes?  What about changes in the topology as more genomes are sequenced?
+
+## FROM THE PRECEEDING, do some things (see Bdistachyon012414.txt)
+a) ck 
+
+03/04-05/14:
+Back from bioc. wkshop, 02/27-28/14
+
+03/07/14:
+Next task: try create 'bed' like file from blastn output, try display in IGV, Gvis. Use Bdistachyon012414.txt file.
+## successful on IGV.
+
+03/10/14:
+Talked Keenan about success creation bed file for blastn Agrostis vs Brachypodium.
+WHAT TO TRY NEXT: rnaseq expt, see 'share' dir. on tusker, supposedly has 4 files of illumina reads, 100 bps/read => single (not paired end).  These need trimming of bar codes.  Suggest align with 'bowtie' or 'snap'.  Q: aligning not vs own genome?????????  'Kelley' thought that can adjust aligners to vary how many differences will tolerate in alignment??????  Buffalo grass (Buchloe dactyloides):
+95 (resistent)
+17
+50
+-pre (susceptible)
+Considering circos like display (perhaps use Gvis), with one treatment in one ring, another treatment in a 2nd ring.  On each ring would be differential expression, ie., quantitative counts on each ring so can compare expression between rings at similar location on brachypodium genome.
+
+So approach, START with like 'RNASeq Analysis' in Bioconductor wkshop, 02/28/14.  Look for similarr section tgirke whshops, 12/13-16/13.
+
+03/13/14:
+## Think need doc. evol. relations of species, genomes working with.
+Monocots:
+Agrostis stolonifera (?) (bent grass)
+Agrostis capillaris
+Agrostis canina
+Buchloe dactyloides (buffalo grass)
+maize
+
+
+eudicot:
+arabidopsis
+
+
+Dicots:
+
+
+Genomes:
+Brachypodium dac. (monocot)
+sorghum bicolor (monocot)
+etc.
+
+# Q: does there exist evolutionary tree with distances for preceding species ??????? (Q J. Mower question ??)
+
+
+04/01-17/14:
+Resume rnaseq analysis on '95' & '-pre'
+# see Bdistachyon012414.txt for alignment details
+# 04/16/14, bowtie2 align on trimmed '95' & 'PC1' fastq files found too few aligned reads, 0.02%, so switch to try align vs brachypodium ***cDNA*** file.
+
+04/29/14:
+## ggbio email sent only to author concerning error message (since already error reported on bioc. email post list).
+## talked to Keenan today:
+--samples '95' & 'PC1' are part of triplicate expt, so 3 of each expt'l & control in 'share' dir.  Q: TOPHAT2 use ?????????????????????????????????
+--ok to 'locate' '>1' aligned reads vs brachy.
+## can try Gvis for displaying '95', 'PC1' aligned reads (while waiting to see if ggbio will become functional again.
+
+## still referring to Bdistachyon012414.txt file.
+
+05/08/14:
+## new vignette of ggbio (April 28, 2014), so to try.
+
+5/20/14:
+still working on, ggbiotest050814.txt
+
+05/23/14:
+discussed wi. Keenan, result align bowtie2 for bufgrass '95' vs brachypodium.  There, only 4819 reads aligned wi brachypodium cDNA. Though confusion as slurm .err file suggested 2 million reads aligned ?????????????  See ggbiotest050814.txt.
+## He suggested try:
+Blast bufgrass de novo aligned reads vs brachy cDNA 'genome'.  Since 3rd 'ref' field identifies chromosome and left most start position, should then just display the blast mapped cDNAs vs brachypdium with ggbio.
+
+5/21/14 thru 06/16/14:
+Working thru on PH25x Data Analysis for Genomics audit course.
+
+06/17/14:
+
+## Q: trimmed '95' reads are 80 bp's long.  Could one just blast them directly vs bufgrass cDNAs, rather than use the de novo aligned bufgrass reads ????????
+
+# work in ggbiotest050814.txt file
+
+
+06/29/14:
+Still working '95', want to check fastq to fasta (went to iPlant workshop this week) either in iPlant, or Galaxy, s/w to do.  Q: Can Galaxy do it?
+
+Then take blastn output plus fastq input files, create .sam file preparatory to ggbio display (to try R 'merge' command).
+## still working in ggbiotest050814.txt file.
+
+
+## Note: perhaps check possibility repeating bowtie2 alignment but allowing 2 or 3 mismatches (Q: how many are default number ??????)
+
+07/08/14:
+## On to trying to align '95C1' vs brachypodium genome, but see if can improve on number of hits by adjusting bowtie2 parameters.
+## working in ggbiotest050814.txt
+
+07/23/14:
+## preceding date task not done.
+## back from ISMB2014, ideas
+Keenan: Use **saria italica** rather than brachypodium as model for '95' buf grass related seq'd genome
+## from ismb2014:
+--Phillippy pac bio seqg & Tim Smith in Nebraska
+--gwas big at ismb2014, so view Aaron gwas talks on iPlant video, prepare to 'follow' vjc at next week's bioc2014.
+
+08/04/14:
+## back from bioc2014.  Working on vjc wkshop, eQTL tutorial, but 1st, need get expressionset(s) from Recount url (A. Frazee)
+## Can't follow, TO DO, view A. Lorenz iPlant videos, run r code, then try come back to vjc tutorial.
+
+08/06/14:
+Get started, try blastn '95C1' buf grass reads vs Setaria italica genome, ...
+## But 1st email Ensembl, see if S. italica cDNAs have location info. such that could display in say IGV browser cDNAs vs S. italica genome?
+## 72%, records in 95C1 reads .fasta file compared to out6 blastn output file (08/11014 of ggbiotest050814.txt file).  Since not 100% clear how create .sam file from blastn_out6_95C1vsSitalica_gen file, for moment try go align 95C1 bufgrass reads (fastq) file to S. italica genome, use tophat2 or bowtie2.  See ggbiotest050814.txt, 08/11/14.
+27.12% unique alignment rate, 44$ total rate.
+08/19/14:
+Continue to work details, Herve Bioc2014 wkshop on .bam files and bioconductor, compare outputs from bowtie2 and tophat2 leading to comparison 95C1 & PC1 on ggbio circular display.  A plus here, vs blastn, don't have to risk not getting qqch correct when creating .sam file from blastn output!
+08/27/14:
+working in ggbiotest050814.txt, (08/26/14), tophat rate of mapping 4.5%, bowtie2 44.27%.  So for bowtie2 alignment, 
+i. try display aligning of 95C1 to S. italica genome wi ggbio. Note: idea to add aligned PC1 reads to circular ggbio display, my question, what achieved?  
+ii. Would appear need differential expn analysis alg., perhaps Ballgown (A. Frezee)?
+08/31/14:
+see this date in ggbiotest050814.txt file for status.
+09/13/14;
+see this date in ggbiotest050814.txt file for status.
+
+09/29/14:
+Trying learn prepare BSgenome package for ggbio, sec. 2.3, vignette dated Aug. 26, 3014.
+To submit request for support to bioc. support, 
+i. update to release version of R ## 3.1.1 (2014-07-10)
+ii. update RStudio ## 0.98.1062
+iii. rerun "check package" for 'stage3' from 2012 wkshop.
+## same error message.
+
+10/01/14:
+Bioc. package construction: Try use Trevor input, but bioconductor workshop, Oct 15-16, 2012. Use file: /Users/bterry/macbookpro2014/keenanres/ggbio_new/packs
+packagedevpractice092114.txt
+
+10/02/14:
+
+10/06/14:
+Working in packagedevpractice092114.txt, on 10/04/14, got .Rnw file to 'weave' a pdf with knitr (C. Bilder's Firts.txt(Rnw). Continue working on getting a R package to pass R CMD check.
+Success with YeastmRNACor (AdvancedR.pdf course, Oct 15-16, 2012).
+
+10/10/14:
+Try forge BSgenome package for S. italica. see packagedevpractice092114.txt, 10/12/14.
+
+11/13/14: After biocOct27-9-2014, Herve info at:
+https://support.bioconductor.org/p/62221/
+## indicates what I should try.  So back to packagedevpractice092114.txt to try.
+
+11/24/14:
+Working on phylogenetic tree for Boutaloua. See proj102314.txt.
+
+11/25/14:
+Pickup on BSgenome package, see 11/13/14 above.
+
+12/12/14:
+Sent 2nd error example to bioc support, no response as of today.
+Keenan: talked to briefly today. For now, B. dactyoides in Chloridoideae, and sorghum bic, set. italica are in Pani... in different subfamilies (proj102314.txt)
+## creation of BSgenome still an issue.
+
+12/21/14:
+So try again align '95' with Tophat, say to S. italica, with reduced constraints. 
+But 1st, with Herve's response to my 2nd question on Bioc support (see https://support.bioconductor.org/p/62221/), try again to forge BSgenome package for S. italica.
+
+12/24/14:
+see packagedevpractice092114.txt, looks like forged 1st BSgenome, ready to do sec 3, 'masked seqs'.
+
+12/29/14:
+While waiting for response to **3rd** forge thread, packagedevpractice092114.txt, familairizing self with ggplot2 from 'Intro to ggplot2, p-373 of 'R graphics cookbook', by W. Chang.
+
+01/03/15:
+Herve response to 3rd BSgenome support question back, essentially try use 'bare' BSgenome for S. italica.
+## 1st, re-run thru vignette code for ggbio, sec 2.1 to sec 4.1.3. see /Users/bterry/macbookpro2015/keenanres15/ggbio/ggbiotesting122914.txt
+
+01/08/15:
+
+
+
+## Then try wi my BSgenome & '95C1' aligned bam file.
+
+02/10/15:
+## 02/08/15 question to bioc support: ans.,
+Your first question doesn't really make sense. A BSgenome package contains the genome for a given species, where a GRanges object contains (at its most basic) the chromosome and location of regions of interest on the genome (where region of interest is usually something like transcripts, genes, SNPs, etc).
+
+To convert bam to GRanges you want the Rsamtools package. See the overview vignette here:http://bioconductor.org/packages/release/bioc/vignettes/Rsamtools/inst/doc/Rsamtools-Overview.pdf
+
+## Q: how to proceed if want to compare/plot S. italica vs '95C1' aligned bam file ????????
+
+
+03/16/15:
+After concentrate on agron 932, spr, 15, back to task visualizing '95C1', 'PC1.  Try take their bam files, display on R histogram on for each chromosome of S. italica. That is, for each read in bam file, have chr number and location on said chromosome. Like R. Isacarry, display wi histogram (in ph525.1x online course, week 4, histogram).
+Work from ggbiotest050814.txt
+
+04/11/15:
+Back from bioc. wkshop. Try run DESeq2 for 95C1, PC1, use triplicate from them. See file ggbiotest050814.txt.
+##############################*****************************************
+## start new dir: /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+#############################*******************************************
+
+
+04/15/15:
+## start new 'doc of res' file, for attempt to follow C. Differential Expression
+from Apr 06, 07, 2015 bioc. wkshop for B.dactyloides RNASeq data (95C1-3, PC1-3 samples, i.e., in triplicate. Call it Sitalica_041515.txt
+
+05/16/15:
+Ready for bowtie2 step in 04/15/15 project.
+
+06/08/15:
+In Sitalica_041515.txt, DE in 95C1-3,T1-3 not found, so try a transcriptome from B. dactyloides as 'genome' in attempt to find differentially expressed 'genes'.
+
+07/27/15:
+Back from ISMB2015 & Bioc2015, considering how annotate edgeR DE transcripts (52k of 196k) to next try do GSEA. Jenny suggestion of 'Trinotate' for the task?
+
+08/10/15:
+# Working on the following:
+
+# Set up '.git' on macbookpro, & on gitHub (cloned gitHub 'planets', pmterry to macbook). Plan to put this file in ~/planets on macbookpro, push to gitHub, and pull to macbook. see /Users/bterry/githubstuf/githubcomments.txt.
+
+# Worked on creating an R package, mypackr. Failed at point where tried to install a binary package created on macbookpro on macbook. See 
+/Users/bterry/macbookpro2015/bioc2015/RpacksHWickham/RpacksHWickhamprac080215.txt
+# and on macbook, /Users/bterry/macbookpro2015/bioc2015/outfrominstallattemptmypackr081015.txt
+
+# Considering Trinotate to annotate B. dactyloides transcriptome prior to GSEA analysis of 95C1-3, T1-3 RNAseq samples. Working in /Users/bterry/macbookpro2015/keenanres15/Sitalica26/Sitalica_041515.txt
+
+
+
+
+
+
+# 
+
+
+
+
+
+TO DO: Email J. Mower: Q: understanding genome relationships in plants ???
+
+
+
