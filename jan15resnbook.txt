@@ -312,8 +312,17 @@ Back from ISMB2015 & Bioc2015, considering how annotate edgeR DE transcripts (52
 # Considering Trinotate to annotate B. dactyloides transcriptome prior to GSEA analysis of 95C1-3, T1-3 RNAseq samples. Working in /Users/bterry/macbookpro2015/keenanres15/Sitalica26/Sitalica_041515.txt
 
 
+08/16/15:
+# switch from 
+/Users/bterry/macbookpro2015/keenanres15/Sitalica26/Sitalica_041515.txt
+# to /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/BdactyloidesthruGSEA081615.txt
 
 
+BdactyloidesthruGSEA081615.txt
+# logic location: 
+/Users/bterry/macbookpro2015/keenanres15/trintoGSEA/BdactyloidesthruGSEA081615.txt
+# Goal: identify DE genes/transcripts for trt (95T1-3) vs ctl (95C1-3).
+# Both of these doc. files into ~/planets for gitHub storage.
 
 
 # 
