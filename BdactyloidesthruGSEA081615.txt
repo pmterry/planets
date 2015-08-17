@@ -1,0 +1,78 @@
+BdactyloidesthruGSEA081615.txt
+
+08/16/15:
+# switching from 
+/Users/bterry/macbookpro2015/keenanres15/Sitalica26/Sitalica_041515.txt
+
+# To do: working from nprot.2013.084.pdf, apply Trinity to RNAseq single end 95C1-3, T1-3.
+
+# p-1503 of nprot.2013.084.pdf, do run on ***example data set provided***.
+# s/w setup (p-1503), path to s/w setup on Crane ???????
+
+# SEE 1st current notes (p-1503)
+# Q: will my **single end** RNAseq samples be a problem ????????????
+
+
+
+
+# setting up R & packages ???????
+
+# PROCEDURE:
+
+# 
+
+Trinity version trinityrnaseq_r2013-02-25: http://trinityrnaseq.sourceforge.net
+# looks like newer versions available ????????????????????
+# v2.0.6 at
+https://github.com/trinityrnaseq/trinityrnaseq/releases
+# looks like only source code available (tar.gz)
+# looks like I could use .gz or .zip ?????????
+# why not .tgz rather than .gz ???????????????????????????
+# so dnload trinityrnaseq-2.0.6.tar.gz (151 MB)
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+tar –xzvf trinityrnaseq-2.0.6.tar.gz
+# Same message as below, and won't work.
+# tried wi Mac uncompress utility, appears to work, so why not 'tar' ?????????????
+# Q: directions to install Trinity, etc. ????????????????
+
+
+# Dnloading TrinityNatureProtocolTutorial.tgz
+# p-1504
+# mine only 474 Mb ??????????????????
+
+# Name ‘TrinityNatureProtocolTutorial.tgz’
+# Why this, already this name ??????????
+tar –xvf TrinityNatureProtocolTutorial.tgz
+# nothing happened, so must not be correct, so try as per p-131, B. McCarty book ??????????????
+tar –xzvf TrinityNatureProtocolTutorial.tgz
+# nothing happened here either, perhaps the 474 Mb file is corrupt ???????
+# try rednload, try 
+wget http://sourceforge.net/projects/trinityrnaseq/files/misc/TrinityNatureProtocolTutorial.tgz/download
+# Started 9:45pm => 10:54pm end.
+# -rw-r--r--   1 bterry  staff  474015394 Feb  9  2013 download
+# still **not** 540 Mb ???????????????????????
+# title is 'download', so perhaps why need for name change.
+mv download TrinityNatureProtocolTutorial.tgz
+tar –xvf TrinityNatureProtocolTutorial.tgz
+philip-terry:trintoGSEA bterry$ tar –xvf TrinityNatureProtocolTutorial.tgz
+Usage:
+  List:    tar -tf <archive-filename>
+  Extract: tar -xf <archive-filename>
+  Create:  tar -cf <archive-filename> [filenames...]
+  Help:    tar --help
+philip-terry:trintoGSEA bterry$ 
+# why failed ???????????????????????????
+# try:
+tar –xzvf TrinityNatureProtocolTutorial.tgz
+# Q: same output, WHAT WRONG ????????????????????????????
+# tried Mac uncompress facility, appears to have worked. I note: looks like different files than shows, p-1504, perhaps just a different data set ??????
+
+
+
+
+#
+ 
+
+For trimmed reads, see line 327 in /Users/bterry/planets/Sitalica_041515.txt
+
+
