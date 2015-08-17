@@ -1,0 +1,3081 @@
+Sitalica_041515.txt
+
+04/15/15:
+
+Goal: do diff'l expression for attempt to follow C. Differential Expression
+from Apr 06, 07, 2015 bioc. wkshop for B.dactyloides RNASeq data (95C1-3, PC1-3 samples, i.e., in triplicate).
+
+Tasks: We’ll take the hard road, making a TxDb object from the GTF file used to align reads and using the TxDb to get all exons, grouped by gene. 1st day can try, Fri., 04/17/15.  Code displayed in C. Diff'l Expression in this wkshop was bioc. 3.1, & R 3.2. So on 04/17/15, 1st date can upgrade to R 3.2, 
+
+then proceed as in section '5. Reduction, setup, c'.
+
+04/19/15:
+## Q: do I need to install XQuartz ???? (sounds like probably after upgrading to yosemite, Q: the new XQuartz for os x 10.6 or later, so could it possibly still be there from Maverick ?????)
+## Anyway, installed it over again.
+
+04/20/15:
+Dnload to R-3.2.0.pkg
+md5 R-3.2.0.pkg
+Expected: MD5-hash: 997d88d641f9b838a0d21e273eab77f2
+philip-terry:Downloads bterry$ md5 R-3.2.0.pkg
+MD5 (R-3.2.0.pkg) = 997d88d641f9b838a0d21e273eab77f2
+## so, passes test.
+## R 3.2 successfully installed (perhaps earlier plot qqch to test if XQuartz useful?
+
+## Now test makeTxDbFromGFF, from bioc. Apr 2015 wkshop, C. Differential Expression, 5. Reduction, Setup, c, prepn TxDb package from GFF3 file for S. italica, ver 26.
+
+
+
+STOPPED
+
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("GenomicFeatures")
+
+## Ensembl URL for the GFF3 file is:
+ftp://ftp.ensemblgenomes.org/pub/plants/release-26/gff3/setaria_italica/
+
+getwd()
+[1] "/Users/bterry/macbookpro2015/keenanres15/Sitalica/genome/gff3_ver26"
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica/genome/gff3_ver26"
+path
+gff3file <- file.path(path, "Setaria_italica.JGIv2.0.26.gff3")
+gff3file
+library(GenomicFeatures)
+> library(GenomicFeatures)
+Error in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]) : 
+  namespace ‘BiocGenerics’ 0.11.1 is already loaded, but >= 0.11.3 is required
+Error: package or namespace load failed for ‘GenomicFeatures’
+> 
+
+txdb <- makeTxDbFromGFF(gff3file, format="gtf", circ_seqs=character())
+> txdb <- makeTxDbFromGFF(gff3file, format="gtf", circ_seqs=character())
+Error: could not find function "makeTxDbFromGFF"
+> 
+sessionInfo()
+
+04/21/15:
+Followup support request sent:
+/Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gff3_ver26/biocsupport042115.txt
+
+04/22/15:
+Herve response:
+Looks like your file is GFF, not GTF. Try again with format="gff3" (which is actually the default).
+## so try again.
+library(GenomicFeatures)
+getwd()
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gff3_ver26"
+path
+gff3file <- file.path(path, "Setaria_italica.JGIv2.0.26.gff3")
+gff3file
+txdb <- makeTxDbFromGFF(gff3file, format="gff3", circ_seqs=character())
+## 10:24pm => < 10:27pm
+genes <- exonsBy(txdb, by="gene")
+## ok, apparently worked!
+genes  ## ***TO COMPARE*** wi example, p-38, Apr 2015 wkshop notes ??????, i.e., this output looks strange ????????????????????????????????
+> genes
+GRangesList object of length 0:
+<0 elements>
+
+-------
+seqinfo: 76 sequences from an unspecified genome; no seqlengths
+> 
+width(genes)
+> width(genes)
+IntegerList of length 0
+> 
+## ***TO COMPARE***, see above ????????????????????????
+## or compare wi 'use cases', B. GenomicRanges.html
+
+04/23/15:
+## need to determine why seeing 'GRangesList object of length 0:' above ????
+## 1st, run 'use cases' in 'B. GenomicRanges from Apr 2015 bioc. wkshop for comparison.
+source("http://bioconductor.org/biocLite.R")
+biocLite("TxDb.Hsapiens.UCSC.hg19.knownGene")
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdbhg19 <- TxDb.Hsapiens.UCSC.hg19.knownGene
+geneshg19 <- exonsBy(txdbhg19, by="gene")
+geneshg19
+
+## so test 
+grlhg19 <- exonsBy(txdbhg19, by="tx", use.names=TRUE)
+grlhg19  ##  82960 as in 'use case'
+## why no 'seqlengths' ???????
+## have 'names'
+## now for
+geneshg19 <- exonsBy(txdbhg19, by="gene")
+geneshg19  ## 'GRangesList object of length 23459:'
+## try same for S. italica GFF3
+genes <- exonsBy(txdb, by="gene")
+genes  ## 'GRangesList object of length 0:', WHAT TO THINK ??????????????
+## try 
+grlsitalica <- exonsBy(txdb, "tx", use.names=TRUE)  ## NAs or dupl'd ????
+grlsitalica  ## 'GRangesList object of length 40599:'
+## SO QUESTION: 23459 vs 0, geneshg19 vs genes ??????????????????????????
+## THO get 82960 vs 40559 for transcripts grlhg19 vs grlsitalica
+## Note: 
+philip-terry:gff3_ver26 bterry$ wc Setaria_italica.JGIv2.0.26.gff3 
+ 3682506 33248224 656226313 Setaria_italica.JGIv2.0.26.gff3
+
+grep -c '^7' Setaria_italica.JGIv2.0.26.gff3  ## 329740
+grep -c -v '^7' Setaria_italica.JGIv2.0.26.gff3  ## 3352766
+##  329740 + 3352766 = [1] 3682506  ## matches 'wc'
+grep '^7' Setaria_italica.JGIv2.0.26.gff3 > test7.gff3 
+
+04/24/15:
+## try python script (refer: line 345, in ggbio040814.txt)
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gff3_ver26
+chmod 755 findcol3_gene.py  ## have '@' after -rwxr-xr-x@, ??????????????
+python findcol3_gene.py > test7col3gene.gff3  ## 3437 col3 gene records in out file.
+3437/329740 = [1] 0.01042336, only 1 % of rows in chr 7 have 'gene' in col3 ???????? 
+## Q: but 'GRangesList object of lebgth 0' for Setaria_italica.JGIv2.0.26.gff3. But for TxDb.Hsapiens.UCSC.hg19.knownGene, 23K such objects ??????????
+
+## check col3 'gene' rows in Setaria_italica.JGIv2.0.26.gff3
+chmod 755 findcol3_gene.py
+python findcol3_gene_Set_gff3.py > col3_gene__Set_gff3.gff3
+## fails, perhaps 1st line, perhaps 1 or 2 columns ???????????
+grep -c -v '^#' Setaria_italica.JGIv2.0.26.gff3  ## 3682505, so 1st line removed as desired.
+## so 
+grep -v '^#' Setaria_italica.JGIv2.0.26.gff3 > Setaria_italica.JGIv2.0.26_minus1stline.gff3
+wc Setaria_italica.JGIv2.0.26_minus1stline.gff3  ## 368250, so missing 1st line
+python findcol3_gene_Set_gff3minus1stline.py > col3_gene__Set_gff3minus1stline.gff3
+wc col3_gene__Set_gff3minus1stline.gff3  ## 35471 records wi 'gene' in col3.
+## REASONABLE ???????????????????
+
+## if so last, TO CHECK WITH Herve, why 
+> genes
+GRangesList object of length 0:
+<0 elements>
+## compared to geneshg19 above ??????????????????????
+
+## Prepare question to add to thread to Herve
+
+04/28/15:
+Following Herve's response to my support site thread: 'Existence of a makeTxDbFromGFF function in GenomicFeatures package?', I need to prepare a response, submit it.
+## test if 'exon' in col3 of gff3 file?
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gff3_ver26
+#chmod 755 findcol3_exon.py  ## have '@' after -rwxr-xr-x@, ??????????????
+python findcol3_exon.py > test7col3exon.gff3  
+python findcol3_exon.py | wc  ## 19684 lines, col3 records
+python findcol3_transcript.py > test7col3transcript.gff3  
+python findcol3_transcript.py | wc  ## 3924 lines, col3 records
+## to do, compare grlsitalica = 40599 with a python check for number 'transcript lines in Setaria_italica.JGIv2.0.26.gff3? (actually use Setaria_italica.JGIv2.0.26_minus1stline.gff3 cause 1st messes up python.
+
+python findcol3_transcript_Set_gff3minus1stline.py > col3_transcript__Set_gff3minus1stline.gff3
+wc col3_transcript__Set_gff3minus1stline.gff3  ## 40599 records wi 'transcript' in col3.
+## MATCHES grlsitalica ???????????????????
+
+04/29/15:
+## submitted '**comment**' to my support thread. Q: did **not** appear in regular list on support site, so if don't get Herve response by tomorrow, resubmit in way I prevly did.
+
+## so looking into prepn of a sampleTable for the B. dactyloides fastq files in triplicate.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/shared/apps/Trimmomatic-0.30/adapters
+## TO DO, work thru 'se' in C. Differential Expression, & lab2.1-basic_Bioconductor_infrastructure.html (BUT bioconductor 2.14, so how far out of date ?????????
+5. Reduction
+source("http://bioconductor.org/biocLite.R")
+biocLite("airway")
+library(airway)
+path <- system.file(package="airway", "extdata")
+path
+dir(path)
+csvfile <- dir(path, "sample_table.csv", full=TRUE)
+csvfile
+sampleTable <- read.csv(csvfile, row.names=1)
+head(sampleTable)
+library(Rsamtools)
+filenames <- dir(path, ".bam$", full=TRUE)
+filenames
+bamfiles <- BamFileList(filenames, yieldSize=1000000)
+bamfiles
+names(bamfiles) <- sub("_subset.bam", "", basename(filenames))
+bamfiles
+## names now match **1st** colm of sample table.
+library(GenomicFeatures)
+gtffile <- file.path(path, "Homo_sapiens.GRCh37.75_subset.gtf")
+gtffile
+txdb <- makeTxDbFromGFF(gtffile, format="gtf", circ_seqs=character())
+genes <- exonsBy(txdb, by="gene")
+genes
+library(GenomicAlignments)  ## no error **if** start fresh from '5. Reduction'
+se <- summarizeOverlaps(features=genes, reads=bamfiles,
+                        mode="Union",
+                        singleEnd=FALSE,
+                        ignore.strand=TRUE,
+                        fragments=TRUE)
+colData(se) <- as(sampleTable, "DataFrame")
+se
+colData(se)
+## looks like all sampleTable info in here. ***Q: what all do I need for my expt*** ??????????????
+rowData(se)
+head(assay(se))
+## 6. Analysis using DESeq2
+#library(airway)
+data(airway)
+se <- airway
+colData(se)
+source("http://bioconductor.org/biocLite.R")
+biocLite("DESeq2")
+library(DESeq2)
+dds <- DESeqDataSet(se, design = ~ cell + dex)
+dds <- DESeq(dds)
+res <- results(dds)
+## Q: how see results table ?????????????????????????????????????
+
+04/30/15:
+## 1st, sanity checks ??????
+topGene <- rownames(res)[which.min(res$padj)]
+res[topGene,]
+plotCounts(dds, gene=topGene, intgroup=c("dex"))
+plotMA(res, ylim=c(-5,5))
+hist(res$pvalue, breaks=50)
+hist(res$padj, breaks=50)
+plot(-log10(padj) ~ log2FoldChange, as.data.frame(res), pch=20)
+
+## talked keenan,
+To try for DESeq2 diff'l exp'n test,
+Initially, work with 
+[pterry@login.tusker shared]$ pwd
+/work/amundsen/shared
+
+-rw-r--r-- 1 bamaradasa amundsen  5761622114 Dec 10  2012 95C1_GATCAG_L006_R1_001.fastq
+-rw-r--r-- 1 bamaradasa amundsen  5702072028 Dec 10  2012 95C2_TAGCTT_L007_R1_001.fastq
+-rw-r--r-- 1 bamaradasa amundsen  6335475512 Dec 10  2012 95C3_GGCTAC_L007_R1_001.fastq
+-rw-r--r-- 1 bamaradasa amundsen  8685123849 Dec 10  2012 95T1_AGTCAA_L005_R1_001.fastq
+-rw-r--r-- 1 bamaradasa amundsen  7556133915 Dec 10  2012 95T2_AGTTCC_L005_R1_001.fastq
+-rw-r--r-- 1 bamaradasa amundsen  8135788136 Dec 10  2012 95T3_ATGTCA_L006_R1_001.fastq
+## 95C, untrt, 95T, trt. 
+## Have tentative plan for how 'sampleTable' will look.
+## looks like colm 1 will not have a name ????????????????????
+## 2nd colm named 'rep'
+## 3rd colm named LSdis
+## 4th colm named avgLength
+fnames <- c("95C1_GATCAG_L006_R1_001", "95T1_AGTCAA_L005_R1_001", "95C2_TAGCTT_L007_R1_001", "95T2_AGTTCC_L005_R1_001", "95C3_GGCTAC_L007_R1_001", "95T3_ATGTCA_L006_R1_001")
+reps <- c(1, 1, 2, 2, 3, 3)
+LSdis <- c("untrt", "trt", "untrt", "trt", "untrt", "trt")
+avgLength <- c(80, 80, 80, 80, 80, 80)
+sampleTable <- data.frame(fnames, reps, LSdis, avgLength, stringsAsFactors=FALSE)
+sampleTable
+setwd("/Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gff3_ver26")
+write.csv(sampleTable, "csv.file")
+csvfile <- read.csv("csv.file", header=TRUE, as.is=TRUE)
+csvfile
+## Issue: giving me a new 1st colm, numbering the rows ?????????????
+## 
+sampleTable <- data.frame(fnames=csvfile$fnames, reps=csvfile$reps, LSdis=csvfile$LSdis, avgLength=csvfile$avgLength, stringsAsFactors=FALSE)
+sampleTable  ## ok, except possibly for the colm name for colm 1 ??????????
+## refer sampleTable, C. Differential Expression html doc Apr, 2015, bioc. wkshop.
+
+05/01/15:
+## trying to import .csv file to look as that in '5. Reduction, part a', i,e., row names as 1st colm without a colm 1 colm name?
+## to try with 'csv.file', see whar get:
+samTabletest <- read.csv("csv.file", row.names=1)
+samTabletest  ## initial colm numbers absent, but 'fnames' still colm name for 1st colm of file names.
+## to try, cp 'csv.file' to **'file.csv'**, manually remove 1st colm of numbers from this copy. Then try read in again.
+samTabletestminuscolm1 <- read.csv("file.csv", row.names=1)
+samTabletestminuscolm1  ## **OK!** Now looks like sampleTable, C. Differential Expression html doc Apr, 2015, bioc. wkshop. I.e.,, without name in colm 1.
+
+
+
+
+## left to do for DESeq2 for 95C & 95T triplicate samples
+
+STOPPED
+
+***REDO***, GFF3 use to prepare TxDb such that in C. Differential Expression, Apr 2015 bioc wkshop, 5. Reduction, c, test/compare TxDb from Sitalica from GFF3 with TxDb.Hsapiens.UCSC.hg19.knownGene. Display both by "tx" and by 'gene'. See if still difference betw. for 'genes', not for "tx". Do it concisely, then if still diff., ask bioc. support, fix, or perhaps prepare summarizedExperiment with 'transcripts' rather than 'genes' for Sitalica to group the exons ????
+
+
+
+05/04/15:
+## submitted to bioc. support site, sort of definitive Q: that TxDb from Sitalica gff3 file not yielding any GRangesList objects from gff3 Sitalica gff3 file.
+> genesSitalica
+GRangesList object of length 0:
+
+## Q: how to proceed if can't get 'exons by genes' for S. italica gff3 file to display nonzero GRangesList object ??????????????????
+
+05/05/15:
+## Got response/solution from Herve. So implement it tomorrow! Its title:  'makeTxDbFromGFF not capturing/displaying 'gene' records from GFF3 file'.
+
+05/06/15:
+## Q: ftp://ftp.ensemblgenomes.org/pub/plants/release-26/gtf/setaria_italica/
+## 'considerably more info stored in Ensembl Genomes ????*****???????
+## Anyway, to do, 
+
+## test Herve example for creation TxDb for S. italica, but use his **rec**: gtf file:
+
+#source("http://bioconductor.org/biocLite.R")
+#biocLite()
+library(GenomicFeatures)
+getwd()
+#path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gff3_ver26"
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/gtf_ver26/gtf"
+path
+gtffile <- file.path(path, "Setaria_italica.JGIv2.0.26.gtf.gz")
+gtffile
+#txdb <- makeTxDbFromGFF(gff3file, format="gff3", circ_seqs=character())
+txdb <- makeTxDbFromGFF(gtffile, format="gtf", circ_seqs=character())
+## ok, apparently worked!
+ex_by_gn <- exonsBy(txdb, by="gene")
+ex_by_gn  ## GRangesList object of length 35471:, so OK!
+ex <- exons(txdb, columns="gene_id")
+table(elementLengths(mcols(ex)$gene_id))
+     1      2 
+166338     27 
+## as Herve got.
+
+05/09/15:
+## next, trim 6 fastq files (lines 742-842, Bdistachyon012414.txt).
+## 1st, do a fastQC of each fastq.gz file (see Bdistachyon012414.txt, line 793, lines 783 to 806). 
+## 1st, create a Sitalica/bufgrass dir on tusker.
+
+## To do: try run fastqc on command line with a file using srun.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+## work in /work/amundsen/pterry/Sitalica26/bufgrass
+cd /work/amundsen/pterry
+mkdir Sitalica26
+cd Sitalica26
+mkdir bufgrass
+cd bufgrass
+pwd
+srun --pty $SHELL
+cp /work/amundsen/shared/samples/95C1_GATCAG_L006_R1_001.fastq.gz .
+ls -al
+module load fastqc/0.10
+fastqc --help
+fastqc --version
+## Q: is input .gz or .txt ??????????????????????????????????????
+fastqc 95C1_GATCAG_L006_R1_001.fastq.gz  ## ~15 min to run
+## check if produces whatever it does.  Appeared to work.  Got zip file and a directory.
+pwd
+ls -al
+
+#rm 95C1_GATCAG_L006_R1_001.fastq.gz
+
+exit
+logout
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bufgrass/95C1_GATCAG_L006_R1_001_fastqc.zip .
+unzip 95C1_GATCAG_L006_R1_001_fastqc.zip
+cd  95C1_GATCAG_L006_R1_001_fastqc
+ls -l
+## ok, how get what website graph showed, 11 items with 'check mark', 'x', or '!' for each. => fastqc_report.html file.
+
+05/10/15:
+
+## TO CHECK: WHAT TO THINK OF THIS fastQC .html report ??????????????
+
+## work in /work/amundsen/pterry/Sitalica26/bufgrass
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+## work in /work/amundsen/pterry/Sitalica26/bufgrass
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+rm 95C1_GATCAG_L006_R1_001.fastq.gz
+## now do fastQC the 1st 'T1' fastq file?
+#cp /work/amundsen/shared/samples/95T1_AGTCAA_L005_R1_001.fastq.gz .
+## Error
+cd /work/amundsen/shared/samples  ## no 95T1 files
+cd ..
+ls -l
+module load fastqc/0.10
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+cp /work/amundsen/shared/95T1_AGTCAA_L005_R1_001.fastq .
+ls -l
+fastqc 95T1_AGTCAA_L005_R1_001.fastq  ## 11:42am < 12:10pm ~ 28 min to run
+## check if produces whatever it does.  Appeared to work.  Got zip file and a directory.
+pwd
+ls -al
+rm 95T1_AGTCAA_L005_R1_001.fastq
+exit
+logout
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bufgrass/95T1_AGTCAA_L005_R1_001_fastqc.zip .
+unzip 95T1_AGTCAA_L005_R1_001_fastqc.zip
+cd  95T1_AGTCAA_L005_R1_001_fastqc
+ls -l
+## ok, how get what website graph showed, 11 items with 'check mark', 'x', or '!' for each. => fastqc_report.html file.
+
+## TO CHECK: WHAT TO THINK OF THIS fastQC .html report ??????????????
+
+STOPPED
+
+## Subject to fastQC check, ready for 'trim', line 843 ->, Bdistachyon012414.txt, but wait, there used 'srun'. Looks like on line 938 - 973, succeeded wi slurm.
+
+
+
+
+i.
+## If/when Following a successful test to make new TxDb object from GFF3 file(YET TO TRY?), next need prepare to 'trim' all 6 fastq sample files, see lines 742-842, Bdistachyon012414.txt
+## perhaps slurm_trim_bufgrass95.sh  ??????????????????????
+
+05/11/15:
+
+## NOTE: To retry trimming with slurm script (with correction to dir. name).
+
+-Now 'trim' the '95' fastq file.
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp slurm_trim_bufgrass95C1.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Sitalica26/bufgrass
+# ls -l
+cd /home/amundsen/pterry/scripts
+pwd
+ls -al
+sbatch slurm_trim_bufgrass95C1.sh  ## 3518407 , 11:5931 am < 12:33 pm => ~ 30 min.
+squeue -u pterry
+## Q: the after finish commands used to run ???????????????????????????????
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -al
+## size of 
+-rw-r--r--  1 pterry amundsen 1294295448 Apr  6 17:51 output95C1_GATCAG_L006_R1_001.trimmed_slurm.fastq.gz
+## same as
+-rw-r--r--  1 pterry amundsen 1294295448 Apr  5 22:09 output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz
+## trimming run prevly with 'srun'.
+## SAME size as slurm on 95C1 on 05/11/15.
+less job.3518407.err
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 /work/amundsen/shared/samples/95C1_GATCAG_L006_R1_001.fastq.gz output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz ILLUMINACLIP:/work/amundsen/shared/apps/Trimmomatic-0.30/adapters/contaminants.fa:2:40:15 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:81 CROP:80
+Using Long Clipping Sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCACCTTGTAATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 21866037 Surviving: 19381393 (88.64%) Dropped: 2484644 (11.36%)
+TrimmomaticSE: Completed successfully
+job.3518407.err  (END)
+less job.3518407.out  ## 0 bytes
+
+[pterry@login.tusker bufgrass]$ ls -al
+total 1264396
+drwxr-xr-x 4 pterry amundsen       4096 May 11 12:00 .
+drwxr-xr-x 3 pterry amundsen       4096 May  9 22:43 ..
+drwxr-xr-x 4 pterry amundsen       4096 May  9 23:11 95C1_GATCAG_L006_R1_001_fastqc
+-rw-r--r-- 1 pterry amundsen     215329 May  9 23:11 95C1_GATCAG_L006_R1_001_fastqc.zip
+drwxr-xr-x 4 pterry amundsen       4096 May 10 12:01 95T1_AGTCAA_L005_R1_001_fastqc
+-rw-r--r-- 1 pterry amundsen     197507 May 10 12:01 95T1_AGTCAA_L005_R1_001_fastqc.zip
+-rw-r--r-- 1 pterry amundsen        711 May 11 12:16 job.3518407.err
+-rw-r--r-- 1 pterry amundsen          0 May 11 12:00 job.3518407.out
+-rw-r--r-- 1 pterry amundsen 1294295448 May 11 12:16 output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz
+## so this trimmed output, want run fastQC on it, preparatory to aligning (bowtie2)
+
+STOPPED
+
+## TO CHECK: WHAT TO THINK OF THIS fastQC .html report ??????????????
+
+## work in /work/amundsen/pterry/Sitalica26/bufgrass
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+#rm 95C1_GATCAG_L006_R1_001.fastq.gz
+ls -l
+## now do fastQC on /work/amundsen/pterry/Sitalica26/bufgrass/output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz 
+## file?  
+## note: already in 
+module load fastqc/0.10
+
+fastqc output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz  ## 10:01am < 10:14pm ~ 15 min to run
+## check if produces whatever it does.  Appeared to work.  Got zip file and a directory.
+pwd
+ls -al
+-rw-r--r-- 1 pterry amundsen     173890 May 12 10:12 output95C1_GATCAG_L006_R1_001.trimmed_fastqc.zip
+exit
+logout
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bufgrass/output95C1_GATCAG_L006_R1_001.trimmed_fastqc.zip .
+unzip output95C1_GATCAG_L006_R1_001.trimmed_fastqc.zip
+cd  output95C1_GATCAG_L006_R1_001.trimmed_fastqc
+ls -l
+## ok, how get what website graph showed, 6 items with 'check mark', 3 'x', or 2 '!' for each. => fastqc_report.html file.
+
+05/13/15:
+Talked to Keenan, JJ, JJ says my trimmed fastqc_report.html for trimmed output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz reasonable, so proceed with other 5 fastq files, trim them as did '95C1', check wi fastQC, then proceed to align vs S. italica.
+
+05/14/15:
+## '95T1'
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+cp /work/amundsen/shared/95T1_AGTCAA_L005_R1_001.fastq .
+ls -l
+-rw-r--r-- 1 pterry amundsen 8685123849 May 14 10:55 95T1_AGTCAA_L005_R1_001.fastq
+gzip 95T1_AGTCAA_L005_R1_001.fastq  ## ~ 38 min.
+ls -l
+-rw-r--r-- 1 pterry amundsen 2874470125 May 14 10:55 95T1_AGTCAA_L005_R1_001.fastq.gz
+## 2874470125/8685123849, so ~ 3x diff in size.
+exit
+logout
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp slurm_trim_bufgrass95T1.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+-Now 'trim' the '95' fastq file.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Sitalica26/bufgrass
+# ls -l
+cd /home/amundsen/pterry/scripts
+pwd
+ls -al
+sbatch slurm_trim_bufgrass95T1.sh  ## Submitted batch job 3698848
+ 12:14 pm < 12:30 pm => ~ 30 min.
+squeue -u pterry
+squeue --start --user pterry
+           3698848     batch TJob_tri   pterry PD 2015-05-14T17:12:37      1 c2515                (Priority)
+## Q: the '17' in 'start time' ?????????????????????????
+## Q: the after finish commands used to run ???????????????????????????????
+
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -al
+## size of 
+
+-rw-r--r--  1 pterry amundsen 1294295448 Apr  6 17:51 output95C1_GATCAG_L006_R1_001.trimmed_slurm.fastq.gz
+-rw-r--r-- 1 pterry amundsen 1956185030 May 14 12:25 output95T1_AGTCAA_L005_R1_001.trimmed.fastq.gz
+
+less job.3698848.err
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 /work/amundsen/pterry/Sitalica26/bufgrass/95T1_AGTCAA_L005_R1_001.fastq.gz output95T1_AGTCAA_L005_R1_001.trimmed.fastq.gz ILLUMINACLIP:/work/amundsen/shared/apps/Trimmomatic-0.30/adapters/contaminants.fa:2:40:15 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:81 CROP:80
+Using Long Clipping Sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCACCTTGTAATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 32961762 Surviving: 27915998 (84.69%) Dropped: 5045764 (15.31%)
+TrimmomaticSE: Completed successfully
+job.3698848.err
+less job.3698848.out  ## 0 bytes
+ 
+## then fastQC for 95T1
+
+## work in /work/amundsen/pterry/Sitalica26/bufgrass
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+rm 95T1_AGTCAA_L005_R1_001.fastq.gz
+ls -l
+## now do fastQC on /work/amundsen/pterry/Sitalica26/bufgrass/output95T1_AGTCAA_L005_R1_001.trimmed.fastq.gz 
+## file?  
+## note: already in 
+module load fastqc/0.10
+
+fastqc output95T1_AGTCAA_L005_R1_001.trimmed.fastq.gz  ## 10:14pm < 1:30pm ~ 15 min to run
+## check if produces whatever it does.  Appeared to work.  Got zip file and a directory.
+pwd
+ls -al
+-rw-r--r-- 1 pterry amundsen     173890 May 12 10:12 
+output95C1_GATCAG_L006_R1_001.trimmed_fastqc.zip
+-rw-r--r-- 1 pterry amundsen     191184 May 14 13:30 output95T1_AGTCAA_L005_R1_001.trimmed_fastqc.zip
+exit
+logout
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bufgrass/output95T1_AGTCAA_L005_R1_001.trimmed_fastqc.zip .
+unzip output95T1_AGTCAA_L005_R1_001.trimmed_fastqc.zip
+cd  output95T1_AGTCAA_L005_R1_001.trimmed_fastqc
+ls -l
+## ok, how get what website graph showed, 6 items with 'check mark', 3 'x', or 2 '!' for each. => fastqc_report.html file.
+
+## Think ready to trim other 4 files in this DESeq2 analysis.
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+cp /work/amundsen/shared/95C2_TAGCTT_L007_R1_001.fastq .
+ls -l
+exit
+logout
+
+05/15/15:
+
+-Now 'trim' the '95C2' fastq file.
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp slurm_trim_bufgrass95C2.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Sitalica26/bufgrass
+# ls -l
+cd /home/amundsen/pterry/scripts
+pwd
+ls -al
+sbatch slurm_trim_bufgrass95C2.sh  ## Submitted batch job 3700173
+ 12:12 pm < 1:14 pm => ~ 30 min. ??
+squeue -u pterry
+
+#squeue --start --user pterry
+## Q: the after finish commands used to run ???????????????????????????????
+## sacct -j 3700173 -o start,end   ## Q: Start, End ??????????????
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -al
+[pterry@login.tusker bufgrass]$ sacct -j 3700173 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-15T12:37:33 2015-05-15T12:56:39 
+## so ~  19 min.
+## so try gzip 95C2_TAGCTT_L007_R1_001.fastq, but wait, may not need since 'return' in script file was the prev ERROR?
+less job.3700173.err
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 /work/amundsen/pterry/Sitalica26/bufgrass/95C2_TAGCTT_L007_R1_001.fastq.gz output95C2_TAGCTT_L007_R1_001.trimmed.fastq.gz ILLUMINACLIP:/work/amundsen/shared/apps/Trimmomatic-0.30/adapters/contaminants.fa:2:40:15 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:81 CROP:80
+Using Long Clipping Sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCACCTTGTAATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 21639862 Surviving: 19517268 (90.19%) Dropped: 2122594 (9.81%)
+TrimmomaticSE: Completed successfully
+job.3700173.err (END) 
+rm 95C2_TAGCTT_L007_R1_001.fastq.gz
+## for now, skip fastQC on 95C2.
+
+## so left, to trim 95C3, 95T2, 95T3.
+
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+cp /work/amundsen/shared/95C3_GGCTAC_L007_R1_001.fastq .
+ls -l
+exit
+logout
+
+05/15/15:
+
+-Now 'trim' the '95C3' fastq file.
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp slurm_trim_bufgrass95C3.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Sitalica26/bufgrass
+# ls -l
+cd /home/amundsen/pterry/scripts
+pwd
+ls -al
+sbatch slurm_trim_bufgrass95C3.sh  ## Submitted batch job 3700247
+ 12:12 pm < 1:14 pm => ~ 30 min. ??
+squeue -u pterry
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+-rw-r--r-- 1 pterry amundsen 1423854510 May 15 14:36 output95C3_GGCTAC_L007_R1_001.trimmed.fastq.gz
+sacct -j 3700247 -o start,end
+[pterry@login.tusker bufgrass]$ sacct -j 3700247 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-15T14:15:32 2015-05-15T14:36:28 
+2015-05-15T14:15:32 2015-05-15T14:36:28 
+[pterry@login.tusker bufgrass]$ 
+less job.3700247.err
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 /work/amundsen/pterry/Sitalica26/bufgrass/95C3_GGCTAC_L007_R1_001.fastq output95C3_GGCTAC_L007_R1_001.trimmed.fastq.gz ILLUMINACLIP:/work/amundsen/shared/apps/Trimmomatic-0.30/adapters/contaminants.fa:2:40:15 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:81 CROP:80
+Using Long Clipping Sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCACCTTGTAATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 24043657 Surviving: 21681817 (90.18%) Dropped: 2361840 (9.82%)
+TrimmomaticSE: Completed successfully
+job.3700247.err (END) 
+rm 95C3_GGCTAC_L007_R1_001.fastq
+
+## so left, to trim 95T2, 95T3.
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+cp /work/amundsen/shared/95T2_AGTTCC_L005_R1_001.fastq .
+ls -l
+exit
+logout
+-Now 'trim' the '95C3' fastq file.
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp slurm_trim_bufgrass95T2.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Sitalica26/bufgrass
+# ls -l
+cd /home/amundsen/pterry/scripts
+pwd
+ls -al
+sbatch slurm_trim_bufgrass95T2.sh  ## Submitted batch job 3701394
+ 12:33 am < 1:14 pm => ~ 30 min. ??
+squeue -u pterry
+
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+
+
+sacct -j 3701394 -o start,end  ## ~14min
+less job.3701394.err
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 /work/amundsen/pterry/Sitalica26/bufgrass/95T2_AGTTCC_L005_R1_001.fastq output95T2_AGTTCC_L005_R1_001.trimmed.fastq.gz ILLUMINACLIP:/work/amundsen/shared/apps/Trimmomatic-0.30/adapters/contaminants.fa:2:40:15 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:81 CROP:80
+Using Long Clipping Sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCACCTTGTAATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 28676996 Surviving: 24276992 (84.66%) Dropped: 4400004 (15.34%)
+TrimmomaticSE: Completed successfully
+job.3701394.err (END) 
+rm 95T2_AGTTCC_L005_R1_001.fastq
+logout
+
+05/16/15:
+
+## so left, to trim 95T3.
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+cp /work/amundsen/shared/95T3_ATGTCA_L006_R1_001.fastq .
+ls -l
+exit
+logout
+-Now 'trim' the '95T3' fastq file.
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/bufgrass/trim
+scp slurm_trim_bufgrass95T3.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Sitalica26/bufgrass
+# ls -l
+cd /home/amundsen/pterry/scripts
+pwd
+ls -al
+sbatch slurm_trim_bufgrass95T3.sh  ## Submitted batch job 3703436
+ 1:18 pm < 1:14 pm => ~ 30 min. ??
+squeue -u pterry
+
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+sacct -j 3703436 -o start,end  ## ~29min
+less job.3703436.err
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 /work/amundsen/pterry/Sitalica26/bufgrass/95T3_ATGTCA_L006_R1_001.fastq output95T3_ATGTCA_L006_R1_001.trimmed.fastq.gz ILLUMINACLIP:/work/amundsen/shared/apps/Trimmomatic-0.30/adapters/contaminants.fa:2:40:15 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:81 CROP:80
+Using Long Clipping Sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCACCTTGTAATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 30876341 Surviving: 27406970 (88.76%) Dropped: 3469371 (11.24%)
+TrimmomaticSE: Completed successfully
+job.3703436.err (END)
+rm 95T3_ATGTCA_L006_R1_001.fastq
+
+STOPPED
+
+## now ready for bowtie2 for the 6 samples (95C1 to 3, & 95T1 to 3). refer 
+
+05/19/15:
+## now ready for bowtie2 for the 6 samples (95C1 to 3, & 95T1 to 3). refer to /Users/bterry/macbookpro2014/keenanres/Sitalica/genome dir. for prev. example using bowtie2. 
+## Example in ggbiotest050814.txt (08/18/14). 
+## line 1186: prepn of bowtie2 index file
+## now need for Setaria_italica.JGIv2.0.26.dna.genome.fa.gz (unmasked) from url: 
+ftp://ftp.ensemblgenomes.org/pub/plants/release-26/fasta/setaria_italica/dna/
+## place in /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome/Setaria_italica.JGIv2.0.26.dna.genome.fa.gz
+## done, now need scp this file over to /work/amundsen/pterry/Sitalica26/genome after create gen_seq dir.
+
+## ck dir. layout there, prepn to set up new one for ver .26 genome.
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26
+mkdir genome
+logout
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+scp Setaria_italica.JGIv2.0.26.dna.genome.fa.gz pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/genome
+## 8:39pm => 8:54pm, ~ 15 min.
+
+## Q: gunzip .gz file now???????????????????????????????????
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load bowtie/2.2
+cd /work/amundsen/pterry/Sitalica26/genome
+ls -l
+gunzip Setaria_italica.JGIv2.0.26.dna.genome.fa.gz
+ls -l
+pwd
+cd ..
+mkdir bowtie22IND
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+
+bowtie2-build /work/amundsen/pterry/Sitalica26/genome/Setaria_italica.JGIv2.0.26.dna.genome.fa Setaria_italica.JGIv2.0.26.dna.genome
+## 9:26pm => 9:44pm, ~ 18 min.
+#/work/amundsen/pterry/Sitalica/gen_seq/Setaria_italica.JGIv2.0.22.dna.genome.fa #Setaria_italica.JGIv2.0.22.dna.genome 
+ls -l
+## 6 '.bt2' files produced.
+exit
+
+05/20/15:
+## next, align the 6 fastq files with bowtie2
+
+## now align S.italica genome vs bufgrass 95C1 fastq file with ***bowtie2***.
+## need a script file, perhaps new dir, bowtie2_out ????????
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+## TO fix script file, done
+
+scp slurm_Sitalica26_gen_vstrimbufgrass95C1bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+#cd /work/amundsen/pterry/Sitalica26/bufgrass
+#ls -l
+#gunzip output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz
+## should have done 'srun' 1st
+#ls -l
+#cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+#mkdir bowtie22_out
+#ls -l
+
+cd /home/amundsen/pterry/scripts
+sbatch slurm_Sitalica26_gen_vstrimbufgrass95C1bowtie22.sh  3711390 11:01am => 11:23am, no longer listed in squeue -u pterry
+squeue -u pterry
+
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+ls -l
+less job.3711390.err
+19381393 reads; of these:
+  19381393 (100.00%) were unpaired; of these:
+    10800908 (55.73%) aligned 0 times
+    5256321 (27.12%) aligned exactly 1 time
+    3324164 (17.15%) aligned >1 times
+44.27% overall alignment rate
+job.3711390.err (END) 
+## compare ggbiotest050814.txt, line 1342
+
+sacct -j 3711390 -o start,end
+[pterry@login.tusker bowtie22IND]$ sacct -j 3711390 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-20T11:01:23 2015-05-20T11:16:38 
+2015-05-20T11:01:23 2015-05-20T11:16:38 
+[pterry@login.tusker bowtie22IND]$
+
+[pterry@login.tusker bowtie22_out]$ ls -l
+total 4999132
+-rw-r--r-- 1 pterry amundsen 5119099207 May 20 11:16 trimmed95C1vsSitalica26_bowtie22.sam
+
+## Next, align '95C2' fastq sample files
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+## TO fix script file, done
+scp slurm_Sitalica26_gen_vstrimbufgrass95C2bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+srun --pty $SHELL
+gunzip output95C2_TAGCTT_L007_R1_001.trimmed.fastq.gz
+ls -l
+exit
+cd /home/amundsen/pterry/scripts
+sbatch slurm_Sitalica26_gen_vstrimbufgrass95C2bowtie22.sh  3711649 12:51am => 1:15am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+ls -l
+less job.3711649.err
+19517268 reads; of these:
+  19517268 (100.00%) were unpaired; of these:
+    9793754 (50.18%) aligned 0 times
+    5749449 (29.46%) aligned exactly 1 time
+    3974065 (20.36%) aligned >1 times
+49.82% overall alignment rate
+job.3711649.err (END) 
+
+sacct -j 3711649 -o start,end
+[pterry@login.tusker bowtie22IND]$ sacct -j 3711649 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-20T12:51:12 2015-05-20T13:07:23 
+2015-05-20T12:51:12 2015-05-20T13:07:23 
+[pterry@login.tusker bowtie22IND]$ 
+
+cd bowtie22_out
+ls -l
+
+## Next, align '95C3' fastq sample file
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+## TO fix script file, done
+scp slurm_Sitalica26_gen_vstrimbufgrass95C3bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+srun --pty $SHELL
+gunzip output95C3_GGCTAC_L007_R1_001.trimmed.fastq.gz
+ls -l
+exit
+cd /home/amundsen/pterry/scripts
+sbatch slurm_Sitalica26_gen_vstrimbufgrass95C3bowtie22.sh  3712778 9:58pm => 1:15am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+ls -l
+less job.3712778.err
+21681817 reads; of these:
+  21681817 (100.00%) were unpaired; of these:
+    12572862 (57.99%) aligned 0 times
+    5572119 (25.70%) aligned exactly 1 time
+    3536836 (16.31%) aligned >1 times
+42.01% overall alignment rate
+job.3712778.err (END) 
+sacct -j 3712778 -o start,end
+[pterry@login.tusker bowtie22IND]$ sacct -j 3712778 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-20T21:58:52 2015-05-20T22:16:07 
+2015-05-20T21:58:52 2015-05-20T22:16:07
+cd bowtie22_out
+ls -l
+
+## Next, align '95T1' fastq sample file
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+## TO fix script file, done
+scp slurm_Sitalica26_gen_vstrimbufgrass95T1bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+srun --pty $SHELL
+gunzip output95T1_AGTCAA_L005_R1_001.trimmed.fastq.gz
+ls -l
+exit
+cd /home/amundsen/pterry/scripts
+sbatch slurm_Sitalica26_gen_vstrimbufgrass95T1bowtie22.sh  3712925 11:07pm => 1:15am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+ls -l
+less job.3712925.err
+27915998 reads; of these:
+  27915998 (100.00%) were unpaired; of these:
+    13693754 (49.05%) aligned 0 times
+    9251123 (33.14%) aligned exactly 1 time
+    4971121 (17.81%) aligned >1 times
+50.95% overall alignment rate
+job.3712925.err (END) 
+sacct -j 3712925 -o start,end
+[pterry@login.tusker bowtie22IND]$ sacct -j 3712925 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-20T23:07:29 2015-05-20T23:29:19 
+2015-05-20T23:07:29 2015-05-20T23:29:19 
+cd bowtie22_out
+ls -l
+
+## Next, align '95T2' fastq sample file
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+## TO fix script file, done
+scp slurm_Sitalica26_gen_vstrimbufgrass95T2bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+srun --pty $SHELL
+gunzip output95T2_AGTTCC_L005_R1_001.trimmed.fastq.gz
+ls -l
+exit
+cd /home/amundsen/pterry/scripts
+sbatch slurm_Sitalica26_gen_vstrimbufgrass95T2bowtie22.sh  3713039 11:45pm => 1:15am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+ls -l
+less job.3713039.err
+24276992 reads; of these:
+  24276992 (100.00%) were unpaired; of these:
+    12626309 (52.01%) aligned 0 times
+    7786283 (32.07%) aligned exactly 1 time
+    3864400 (15.92%) aligned >1 times
+47.99% overall alignment rate
+job.3713039.err (END) 
+sacct -j 3713039 -o start,end
+[pterry@login.tusker bowtie22IND]$ sacct -j 3713039 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-20T23:44:55 2015-05-21T00:02:58 
+2015-05-20T23:44:55 2015-05-21T00:02:58 
+cd bowtie22_out
+ls -l
+
+05/21/15:
+## Next, align '95T3' fastq sample file
+
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+## TO fix script file, done
+scp slurm_Sitalica26_gen_vstrimbufgrass95T3bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+srun --pty $SHELL
+gunzip output95T3_ATGTCA_L006_R1_001.trimmed.fastq.gz
+ls -l
+exit
+cd /home/amundsen/pterry/scripts
+sbatch slurm_Sitalica26_gen_vstrimbufgrass95T3bowtie22.sh  3714855 1:07pm => 1:15am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND
+ls -l
+less job.3714855.err
+27406970 reads; of these:
+  27406970 (100.00%) were unpaired; of these:
+    14450712 (52.73%) aligned 0 times
+    8543939 (31.17%) aligned exactly 1 time
+    4412319 (16.10%) aligned >1 times
+47.27% overall alignment rate
+job.3714855.err (END) 
+sacct -j 3714855 -o start,end
+[pterry@login.tusker bowtie22IND]$ sacct -j 3714855 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-05-21T13:07:53 2015-05-21T13:29:40 
+2015-05-21T13:07:53 2015-05-21T13:29:40 
+cd bowtie22_out
+ls -l
+
+## Now back to '5. Reduction' step of 'C. Differential Expression from Apr, 2015 bioc. wkshop (http://www.bioconductor.org/help/course-materials/2015/SeattleApr2015/C_DifferentialExpression.html)
+
+STOPPED
+
+5. Reduction
+path <- "path to dir with .bam files, sample_table file, 'gtf' file
+## Q: must the bam files be sorted ???????????????????????????
+dir(path)
+## prepare bam files, convert sam to bam on tusker wi 'view'command
+
+05/25/15:
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out
+## place one of sam files in test dir, test if deletes sam when creates bam?
+mkdir samtoolstest
+ls -l
+cp trimmed95C1vsSitalica26_bowtie22.sam samtoolstest
+srun --pty $SHELL
+module load samtools/0.1
+cd samtoolstest
+ls -l
+samtools view -b -S -o trimmed95C1vsSitalica26_bowtie22.bam trimmed95C1vsSitalica26_bowtie22.sam
+## 9:23pm => < 9:54pm
+ls -l
+## Q: 336 sequences, but if only want to use reads aligning to chroms 1-9 ??????
+## in .bam file, how select for single-hit reads ???????????????????
+## try count num. reads not aligning, etc.
+#samtools view ...bam | head -n 5
+samtools view trimmed95C1vsSitalica26_bowtie22.bam | head -n 5
+## 1st 5 records flag field = 4
+#samtools sort sample.bam sample.sorted
+samtools sort trimmed95C1vsSitalica26_bowtie22.bam trimmed95C1vsSitalica26_bowtie22.sorted.bam
+## 9:57pm => 10:11pm
+ls -l
+1652387651 to 1230440447, Q: why diff. size ?????????, Q: output file is 'bam.bam' ????????????????????, apparently don't put '.bam' end output file for 'sort' command ????????????????????????
+rm trimmed95C1vsSitalica26_bowtie22.sorted.bam.bam
+## no longer there before 'rm' ????????????????
+samtools sort trimmed95C1vsSitalica26_bowtie22.bam trimmed95C1vsSitalica26_bowtie22.sorted
+## 10:22pm =>
+## srun timed out, so try again.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/samtoolstest
+ls -l
+## need remove 3 partial files
+rm trimmed95C1vsSitalica26_bowtie22.sorted.0000.bam
+rm trimmed95C1vsSitalica26_bowtie22.sorted.0001.bam
+rm trimmed95C1vsSitalica26_bowtie22.sorted.0002.bam
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+samtools sort trimmed95C1vsSitalica26_bowtie22.bam trimmed95C1vsSitalica26_bowtie22.sorted
+## 10:41pm => < 11:03pm
+ls -l
+1652387651 to 1230440447, Q: why diff. size ?????????
+samtools view trimmed95C1vsSitalica26_bowtie22.sorted.bam | head -n 5
+## flag field is 16, 0, 16, 0, 0, so definitely diff. order records in sorted bam file.
+## 'X' ???????????????????
+#samtools view -X sample.sorted.bam | head -n 5
+samtools view -X trimmed95C1vsSitalica26_bowtie22.sorted.bam | head -n 5
+samtools view -?
+## sect 6 here, but how to understand ????????????????????
+#samtools view ...bam | wc -l
+samtools view trimmed95C1vsSitalica26_bowtie22.sorted.bam | wc -l
+## 11:30pm => ?
+## 19381393 lines, so total reads in bam file ????????????
+samtools view -c -f 4 trimmed95C1vsSitalica26_bowtie22.sorted.bam
+## num. reads which did not align 10800908 ?????????????????
+## timed out, so
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+
+cp trimmed95C1vsSitalica26_bowtie22.sorted.bam trimmed95C1vsSitalica26_bowtie22.sorted.copy.bam
+ls -l
+samtools view -F 4 trimmed95C1vsSitalica26_bowtie22.sorted.copy.bam
+## fills screen many lines ????????
+samtools view -F 4 trimmed95C1vsSitalica26_bowtie22.sorted.copy.bam >  nonaligningreads
+ls -l
+## created nonaligningreads, > 2.6 Gb
+## Q: is it a file of the reads minus the nonaligning reads ?????????
+less nonaligningreads  ## looks like these reads 'don't' match flag = 4 reads ?????????
+## so now what if want bam file with reads aligning exactly once ??????? Q: ck with N. Palmer ???????????????????????????????
+
+05/26/15:
+## Q: Use sam/bam file straight from bowtie2 output ????????????????
+
+05/27/15:
+## email response from Nathan, 'featureCounts' in 'SubRead' program, looks like doing **similar** to 'C. Diff'l Expression', p-18 from Apr 2015 Bioc. wkshop. p-18, 'genes <- exonsBy(...). Similar to featureCounts gene meta-feature.   
+## BUT, featureCount EXCLUDES multihit reads, but p-16-18, 'C. Diff'l Expression' does NOT say how it handles multiple hits ?????????????????????
+## ***So look into how use featureCounts with DESeq2*** ???????????????????
+## look into if 'C. Diff'l Expression', p-18 from Apr 2015 Bioc. wkshop can select only reads aligning to single, here gene (i.e., don't count reads overlapping more than one feature). Perhaps look in GenomicAlignments package ???????? 
+## Perhaps featureCounts output is a countable similar to 'se', p-18, C. Diff'l Expn ????????????? But if so, can one subsequently use it for DESeq2 ????
+## ***What diff'l expn s/w did Nathan provide his featureCounts output to*** ??????
+
+05/29/15:
+After reading 'SummariseOverlaps.pdf' (ed may, 2014, compile apr 23, 2015), **decide try** follow '5. Reduction', C.Diff'l Expression from Apr 2015 bioc. wkshop to prepare my bowtie2 aligned 95C1-3, 95T1-3 triplicate single read rnaseq data.
+
+## Q: should one sort these 'bam' files here? **Might as well**, no apparent downside, could later index if desired. So sort them on tusker before scp to laptop.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out
+ls -l
+## contains 6 bowtie2 aligned & trimmed 95C1-3 & 95T1-3 sam files.
+## get prevly sorted trimmed95C1 bam file back to bowtie22_out dir.
+cp samtoolstest/trimmed95C1vsSitalica26_bowtie22.sorted.bam .
+ls -l
+
+## now create other 5 sorted bam files.
+
+## 95C2
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out
+srun --pty $SHELL
+module load samtools/0.1
+samtools view -b -S -o trimmed95C2vsSitalica26_bowtie22.bam trimmed95C2vsSitalica26_bowtie22.sam
+## 10:02pm => < 10:35pm
+ls -l
+samtools sort trimmed95C2vsSitalica26_bowtie22.bam trimmed95C2vsSitalica26_bowtie22.sorted
+## 10:36pm => 10:49pm
+ls -l
+samtools view trimmed95C2vsSitalica26_bowtie22.sorted.bam | head -n 5
+exit
+
+## 95C3
+srun --pty $SHELL
+module load samtools/0.1
+samtools view -b -S -o trimmed95C3vsSitalica26_bowtie22.bam trimmed95C3vsSitalica26_bowtie22.sam
+
+## 10:55pm => < 11:10pm
+ls -l
+samtools sort trimmed95C3vsSitalica26_bowtie22.bam trimmed95C3vsSitalica26_bowtie22.sorted
+## 11:13pm => 11:24pm
+ls -l
+samtools view trimmed95C3vsSitalica26_bowtie22.sorted.bam | head -n 5
+exit
+logout
+
+05/30/15:
+
+## 95T1
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out
+srun --pty $SHELL
+module load samtools/0.1
+samtools view -b -S -o trimmed95T1vsSitalica26_bowtie22.bam trimmed95T1vsSitalica26_bowtie22.sam
+## 12:59pm => < 1:18pm
+ls -l
+samtools sort trimmed95T1vsSitalica26_bowtie22.bam trimmed95T1vsSitalica26_bowtie22.sorted
+## 1:19pm => 1:37pm
+ls -l
+samtools view trimmed95T1vsSitalica26_bowtie22.sorted.bam | head -n 5
+exit
+
+## 95T2
+srun --pty $SHELL
+module load samtools/0.1
+samtools view -b -S -o trimmed95T2vsSitalica26_bowtie22.bam trimmed95T2vsSitalica26_bowtie22.sam
+
+## 1:44pm => 2:04pm
+ls -l
+samtools sort trimmed95T2vsSitalica26_bowtie22.bam trimmed95T2vsSitalica26_bowtie22.sorted
+## 2:04pm => 2:20pm
+ls -l
+samtools view trimmed95T2vsSitalica26_bowtie22.sorted.bam | head -n 5
+exit
+
+
+## 95T3
+srun --pty $SHELL
+module load samtools/0.1
+samtools view -b -S -o trimmed95T3vsSitalica26_bowtie22.bam trimmed95T3vsSitalica26_bowtie22.sam
+
+## 2:22pm => < 2:42pm
+ls -l
+samtools sort trimmed95T3vsSitalica26_bowtie22.bam trimmed95T3vsSitalica26_bowtie22.sorted
+## 2:43pm => < 3:01pm
+ls -l
+samtools view trimmed95T3vsSitalica26_bowtie22.sorted.bam | head -n 5
+exit
+logout
+
+## scp bowtie2 trimmed sorted.bam output files to 
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2
+## Q: should one sort these 'bam' files here? **Might as well**, no apparent downside, could later index if desired. So sort them on tusker before scp to laptop.
+cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/trimmed95C1vsSitalica26_bowtie22.sorted.bam .
+## 9:31pm => < 9:45pm
+ls -l
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/trimmed95C2vsSitalica26_bowtie22.sorted.bam .
+## 9:47pm => < 10:09pm
+ls -l
+
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/trimmed95C3vsSitalica26_bowtie22.sorted.bam .
+ ## 10:10pm => < 10:22pm
+ls -l
+
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/trimmed95T1vsSitalica26_bowtie22.sorted.bam .
+## restart 10:56pm => 11:13pm
+ls -l
+
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/trimmed95T2vsSitalica26_bowtie22.sorted.bam .
+## restart 11:15pm => 11:29pm
+ls -l
+
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/Sitalica26/bowtie22IND/bowtie22_out/trimmed95T3vsSitalica26_bowtie22.sorted.bam .
+## restart 11:30pm => pm
+ls -l
+
+## Next, put sorted.bam file names in samp_tab_dirbowtie22names.csv file.
+## done
+## proceed wi p-17, part (a) of "C. Diff'l Exp'n".
+## so start R sesion, do part (a)
+r
+setwd("/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2")
+getwd()
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2"
+path
+csvfile <- dir(path, "samp_tab_trimvsSitalica26bowtie22sortd.csv", full=TRUE)
+csvfile
+sampleTable <- read.csv(csvfile, row.names=1)
+sampleTable
+str(sampleTable$reps)
+
+
+## part (b) BAM files containing aligned reads. Create an object that references these files. What does the yieldSize argument mean?
+library(Rsamtools)
+
+filenames <- dir(path, ".bam$", full=TRUE)
+filenames
+bamfiles <- BamFileList(filenames, yieldSize=1000000)
+bamfiles
+#names(bamfiles) <- sub("_subset.bam", "", basename(filenames))
+
+## part (c) Known gene models. These might come from an existing TxDb package, or created from biomart or UCSC, or from a GTF file. We’ll take the hard road, making a TxDb object from the GTF file used to align reads and using the TxDb to get all exons, grouped by gene.
+
+library(GenomicFeatures)
+gtffile <- file.path(path, "Setaria_italica.JGIv2.0.26.gtf")
+gtffile
+txdb <- makeTxDbFromGFF(gtffile, format="gtf", circ_seqs=character())
+
+## Prepare the 'metadata' data frame ... metadata: OK
+
+genes <- exonsBy(txdb, by="gene")
+
+## p-18, Counting
+library(GenomicAlignments)
+se <- summarizeOverlaps(features=genes, reads=bamfiles,
+                        mode="Union",
+                        singleEnd=TRUE,
+                        ignore.strand=TRUE,
+                        fragments=FALSE)
+## 11:39pm => 11:42pm
+## changed from singleEnd=FALSE, fragments=TRUE
+Error in .checkArgs(reads, singleEnd, fragments) : 
+  when 'fragments=TRUE', 'singleEnd' should be FALSE
+## need go look at manual, understand what did ??????????????????????????????
+colData(se) <- as(sampleTable, "DataFrame")
+se
+colData(se)
+rowData(se)
+## Q: will absence of 'exon name' have any effect ???????????????
+head(assay(se))
+
+06/01/15:
+## 6. Analysis using DESeq2 (p-21, "C. Diff'l Exp'n")
+library(DESeq2)
+dds <- DESeqDataSet(se, design = ~ reps + LSdis)
+> dds <- DESeqDataSet(se, design = ~ reps + LSdis)
+the design formula contains a numeric variable with integer values,
+  specifying a model with increasing fold change for higher values.
+  did you mean for this to be a factor? if so, first convert
+  this variable to a factor using the factor() function
+> 
+## try again wi 'reps' = "a", "b", "c"
+dds <- DESeqDataSet(se, design = ~ reps + LSdis)
+dds <- DESeq(dds)
+res <- results(dds)
+## Q: how view, analyze this ????????????????????????
+
+## Simple visualizations / sanity checks include
+## Look at counts of strongly differentiated genes, to get a sense of how counts translate to the summary statistics reported in the result table
+topGene <- rownames(res)[which.min(res$padj)]
+res[topGene,]
+## Q: my padj ***near*** 1, no 'e-134' like "C. Diff'l Exp'n" example ???????????
+## Q: WHAT TO THINK, perhaps no differentiated genes, qqch wrong with my approach, ????????????????????????
+plotCounts(dds, gene=topGene, intgroup=c("LSdis"))
+## Q: so plot for most extreme 'padj' gene, plot does not show difference in counts betw. 'trt', 'untrt'  ??????????????????????????????????
+
+## An ‘MA’ plot shows for each gene the between-group log-fold-change versus average log count; it should be funnel-shaped and approximately symmetric around y=0, with lots of between-treatment variation for genes with low counts.
+plotMA(res, ylim=c(-5,5))
+## No red dots => NO DIFF'LLY EXP'D GENES ?????????????????
+## Plot the distribution of (unadjusted) P values, which should be uniform (under the null) but with a peak at small P value (true positives, hopefully!)
+hist(res$pvalue, breaks=50)
+## Q: so don't have peak at small p-value, does this help in det'g if problem in analysis, or problem in aligning to a different genome, etc. ??????????????
+## Look at a ‘volcano plot’ of adjusted P-value versus log fold change, to get a sense of the fraction of up- versus down-regulated genes.
+plot(-log10(padj) ~ log2FoldChange, as.data.frame(res), pch=20)
+
+## testing:
+log10(10) = 1
+10^1 = 10
+-log10(10) = -1
+-10^1
+-10^0.00014 => -1.000322
+-log10(padj) = 120
+-10^120 => -1e+120
+## so my volcano plot and that in the example, the 'padj' values differ by 2 orders of magnitude. ????????????????????? Mine not significant, those in example are.
+
+## Q: ck wi Nathan, try decide what not ok ????????
+
+STOPPED
+
+06/03/15:
+
+## talked to Nathan. Upshot: remove columns 'reps' & 'avgLength' from samp_tab_trimvsSitalica26bowtie22sortd.csv & rerun ## proceed wi p-17, part (a) of "C. Diff'l Exp'n" (line 1246 => above)
+
+06/04/15:
+r
+setwd("/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2")
+getwd()
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2"
+path
+csvfile <- dir(path, "samp_tab_trimvsSitalica26bowtie22sortd.csv", full=TRUE)
+csvfile
+sampleTable <- read.csv(csvfile, row.names=1)
+sampleTable
+## part (b) BAM files containing aligned reads. Create an object that references these files. What does the yieldSize argument mean?
+library(Rsamtools)
+
+filenames <- dir(path, ".bam$", full=TRUE)
+filenames
+bamfiles <- BamFileList(filenames, yieldSize=1000000)
+bamfiles
+library(GenomicFeatures)
+gtffile <- file.path(path, "Setaria_italica.JGIv2.0.26.gtf")
+gtffile
+txdb <- makeTxDbFromGFF(gtffile, format="gtf", circ_seqs=character())
+dir(path)
+
+## Prepare the 'metadata' data frame ... metadata: OK
+
+genes <- exonsBy(txdb, by="gene")
+
+## p-18, Counting
+library(GenomicAlignments)
+se <- summarizeOverlaps(features=genes, reads=bamfiles,
+                        mode="Union",
+                        singleEnd=TRUE,
+                        ignore.strand=TRUE,
+                        fragments=FALSE)
+colData(se) <- as(sampleTable, "DataFrame")
+se
+colData(se)
+rowData(se)
+## Q: will absence of 'exon name' have any effect ???????????????
+head(assay(se))
+
+## See if can do **PCA** on count table ????????
+class(assay(se))
+## perhaps, try coerce to df ????
+test_m <- head(assay(se))
+## if can coerce to df, then can do PCA ???????
+test_df <- as.data.frame(test_m)
+class(test_df)
+test_df
+names(test_df)  ## just the 6 colm names
+dim(test_df)
+test_m_all <- assay(se)
+class(test_m_all)
+test_df_all <- as.data.frame(test_m_all)
+dim(test_df_all)  ## [1] 35471     6
+names(test_df_all)
+head(test_df_all)
+class(test_df_all)
+head(test_df_all[,1])
+
+model <- prcomp(test_df_all,scale=TRUE)
+print(model)  ## p-352
+plot(model)  ## p-353
+## looks like PC1 taking 78% of variance ??????
+summary(model) ## p-354
+biplot(model)  ## p-733
+## Q's: on plot ?????????????  Q's: should I try qqch like p-734, 'The R Book' ???????????
+## SO 6 '.BAM' FILES BASICALLY **NOT** SPLIT ON 1ST (PC1) AXIS ??????????
+
+## 6. Analysis using DESeq2 (p-21, "C. Diff'l Exp'n")
+library(DESeq2)
+dds <- DESeqDataSet(se, design = ~ LSdis)
+dds <- DESeq(dds)
+res <- results(dds)
+## Simple visualizations / sanity checks include
+## Look at counts of strongly differentiated genes, to get a sense of how counts translate to the summary statistics reported in the result table
+topGene <- rownames(res)[which.min(res$padj)]
+res[topGene,]
+> res[topGene,]
+log2 fold change (MAP): LSdis untrt vs trt 
+Wald test p-value: LSdis untrt vs trt 
+DataFrame with 1 row and 6 columns
+             baseMean log2FoldChange     lfcSE      stat    pvalue      padj
+            <numeric>      <numeric> <numeric> <numeric> <numeric> <numeric>
+Si000001m.g  590.8355     -0.4519916 0.4338033 -1.041928 0.2974452 0.9923325
+> 
+## so looks like padj still **not** significant ??????????????????????????
+
+plotCounts(dds, gene=topGene, intgroup=c("LSdis"))
+## still **not split** like example in "C. Diff'l Exp'n"
+## An ‘MA’ plot shows for each gene the between-group log-fold-change versus average log count; it should be funnel-shaped and approximately symmetric around y=0, with lots of between-treatment variation for genes with low counts.
+
+plotMA(res, ylim=c(-5,5))
+## NO RED DOTS, 'DIFFERENTIALLY EXPRESSED GENES ???????????????????
+
+## Plot the distribution of (unadjusted) P values, which should be uniform (under the null) but with a peak at small P value (true positives, hopefully!)
+hist(res$pvalue, breaks=50)
+## Look at a ‘volcano plot’ of adjusted P-value versus log fold change, to get a sense of the fraction of up- versus down-regulated genes.
+plot(-log10(padj) ~ log2FoldChange, as.data.frame(res), pch=20)
+## nothing like example in "C. Diff'l Exp'n" ??????????????????????
+
+## So now ***what*** to think ??????????????????????????????
+## How to troubleshoot ?????????????????????
+## Go back thru each step, doc. where a problem may exist, what one might do to check that step.
+
+STOPPED
+
+## TO do, copy over from pencil/paper
+## Q: biol'l reps ??????????????????????????????????????
+## Q: how explain 'cor' result ?????????????????????????
+## Sitalica_041515.txt, line numbers from
+## note: use of S. italica, rel. 26, genome for bowtie2 aligning of B. dactyloides reads (any comment on if not own genome the problem? I note not using 'masked' genome version, could that be causing the problem?
+## line 147, sampletable
+## line 312 Sitalica gtf
+## lines 828 - 1013, '.err' file, 40-50% alignment rate.
+## line 1141 'sorted bam files ?
+## line 1316 sanity checks failed
+## line 1349 modified sampleTable 
+## line 1418 PCA, no split along PC1 axix, Note: ph525.3x, any of these PCA assoc'd techniques helpful for me here?
+## line 1441 sanity checks still failing?
+
+06/07/15:
+## While waiting to talk to Keenan, test out 'cor' for doing a 'sample correlation matrix' to check if input data may have unexpected duplication?
+## see https://github.com/genomicsclass/labs/blob/master/course3/eda_with_pca.Rmd
+
+library(Biobase)
+source("http://bioconductor.org/biocLite.R")
+biocLite('GSE5859')
+Warning message:
+package ‘GSE5859’ is not available (for R version 3.2.0) 
+library(GSE5859)
+data(GSE5859)
+cors <- cor(exprs(e))
+
+## so skip this test, try go to 'C. Diff'l Expression' approach I working, take thru 
+head(assay(se))
+## then try 'cor' on the 6 colms of count data for 95C1-3, 95T1-3, see how correlations are betw. columns. Q: will 95C1-3 be more correlated than say 95C1 wi 95T1-3?
+
+r
+setwd("/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2")
+getwd()
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2"
+path
+csvfile <- dir(path, "samp_tab_trimvsSitalica26bowtie22sortd.csv", full=TRUE)
+csvfile
+sampleTable <- read.csv(csvfile, row.names=1)
+sampleTable
+## part (b) BAM files containing aligned reads. Create an object that references these files. What does the yieldSize argument mean?
+library(Rsamtools)
+
+filenames <- dir(path, ".bam$", full=TRUE)
+filenames
+bamfiles <- BamFileList(filenames, yieldSize=1000000)
+bamfiles
+library(GenomicFeatures)
+gtffile <- file.path(path, "Setaria_italica.JGIv2.0.26.gtf")
+gtffile
+txdb <- makeTxDbFromGFF(gtffile, format="gtf", circ_seqs=character())
+dir(path)
+
+## Prepare the 'metadata' data frame ... metadata: OK
+
+genes <- exonsBy(txdb, by="gene")
+
+## p-18, Counting
+library(GenomicAlignments)
+se <- summarizeOverlaps(features=genes, reads=bamfiles,
+                        mode="Union",
+                        singleEnd=TRUE,
+                        ignore.strand=TRUE,
+                        fragments=FALSE)
+colData(se) <- as(sampleTable, "DataFrame")
+se
+colData(se)
+rowData(se)
+## Q: will absence of 'exon name' have any effect ???????????????
+head(assay(se))
+class(assay(se))
+
+test_m_all <- assay(se)
+class(test_m_all)
+head(test_m_all)
+dim(test_m_all)  ## [1] 35471     6
+cors <- cor(test_m_all)
+class(cors)
+head(cors)
+## Q: what to think of 'cor' results ???????????????????????????????????
+## Q: why don't get expected result ???????????????????????
+
+06/08/15:
+## Test cor on airways sample, 'C. Diff'l Expression', sec 6. Analysis using DESe2. See if cor results 'follow' cell & dex colms. Of course, with these colms in sampleTable, ***could run R. Isarray EDA with PCA, week 3 of ph525.3x***. Q: might there be some additional parameters for my 95C1-3, 95T1-3, which could do this Isarrary EDA with PCA on ??????????????????????
+
+r
+library(airway)
+data(airway)
+se <- airway
+colData(se)
+rowData(se)
+head(assay(se))
+class(assay(se))
+fullairways <- assay(se)
+dim(fullairways)  ## [1] 64102     8
+cors <- cor(fullairways)
+class(cors)
+head(cors)
+dim(cors)
+cors
+## not as different as cor on my 95C1-3, 95T1-3 above ???????????????????????
+
+## Talked to Keenan, upshot: ***suggest*** use de novo transcriptome (of B. dactyloides) as 'genome' to align 95C1-3, 95T1-3 against ??????
+.../shared/sajeewablast/198168seqs.fasta
+## Q: is preceding statement correct ???????
+## check edgeR vignette concerning use reference fasta file ??????????
+## Perhaps idea, Sitalica genome is a fasta file, so here create bowtie2 index using this transcriptome fasta file, bowtie2 align 96C1-3, T1-3 vs this 'genome'. Then, in C. Diff'l Expn, can't make summarizedExperiment data structure cause don't have GTF file for B. dactyloides. So, perhaps Keenan saying don't need GTF file, all of transcriptome by def. are gene seqs. So look at edgeR vignette for way to get DE genes from this arrangement ??????????????????????
+## after looking, looks like edgeR looking for counts table with 'genes' as rows, but I won't have such rows, so what to think ???????????????????
+## 'blast' in fasta file number ??????????????????
+## 'shared', line 173 above.
+
+06/09/15:
+## checked wi keenam, says just use transcriptome names in 198168seqs.fasta as names in subsequent table for edgeR ??????????????????
+
+## so ***before*** start wi plan to find DE 'genes' using a B. dactyloides 'genome' (transcriptome), practice with use edgeR preparing for GSEA following. See 'E. Gene Set Enrichment, follow the 'Practical' section there.
+
+library(edgeR)
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("goseq")
+library(goseq)
+path <- system.file(package="goseq", "extdata", "Li_sum.txt")
+path
+table.summary <- read.table(path, sep='\t', header=TRUE, stringsAsFactors=FALSE)
+class(table.summary)  ## data.frame
+head(table.summary)  ## apparently a count table except 1st colm has gene names, thus not yet a 'count' table.
+dim(table.summary)  ## [1] 49506     8
+counts <- table.summary[,-1]
+head(counts)  ## counts minus row names (apparently colm 1 ?????)
+dim(counts)  ## [1] 49506     7
+
+06/11/12:
+rownames(counts) <- table.summary[,1]
+head(counts)  ## so gene names no longer a column in 'counts', but the 1st column 'without' a column name.
+grp <- factor(rep(c("Control","Treated"), times=c(4,3)))
+grp  ## perhaps saying columns are in this order ????????
+class(grp)
+colSums(counts)  ## appear to be the column sums ???????
+summarized <- DGEList(counts, lib.size=colSums(counts), group=grp)
+class(summarized)  ## 'DGEList'
+disp <- estimateCommonDisp(summarized)
+tested <- exactTest(disp)
+topTags(tested)
+## 7. Comprehension
+class(tested$table)  ## data.frame
+head(tested$table)
+dim(tested$table)  ## [1] 49506     3
+padj <- with(tested$table, {
+    keep <- logFC != 0
+    value <- p.adjust(PValue[keep], method="BH")
+    setNames(value, rownames(tested)[keep])
+})
+class(padj)  ## "numeric"
+dim(padj)  ## NULL
+length(padj)  ## [1] 22743
+head(padj)
+genes <- padj < 0.05
+length(genes)  ## [1] 22743
+class(genes)  ## logical)
+head(genes)
+table(genes)  ## perhaps 'TRUE' are padj < .05 genes ??????????
+## so looks like thru 'Practical & 7. Comprehension section' working.
+
+## Resume with ***plan*** to find DE seqs by aligning vs 198168seqs.fasta instead of Sitalica since found no DE genes vs Sitalica.
+## so order of steps (overview)
+## create bowtie2 index for 198168seqs.fasta
+## bowtie2 align 95C1-3, T1-3 trimmed reads vs 198168seqs.fasta (transcriptome/'genome')
+## convert the 6 .sam to .bam files
+## sort .bam FILES
+## create samtools 'index' file for each .bam file
+## samtools idxstats => output counts for each 'gene', for the 6 .bam files. But need to experiment, see exactly what this does ???????????????????
+## create df of 6 colms of counts, with rownames for the transcriptome ref. genes.
+## if necessary (?), try coerce df to matrix
+## follow edgeR in 'Practical', 'E. Gene Set Enrichment from apr, 2015 bioc. wkshop.
+## sanity checks (like did for DESeq2 in 'C. Fifferential Expression' in Apr 2015 bioc. wkshop.
+
+
+## create dirs, cp 198168seqs.fasta file
+
+cd /work/amundsen/pterry/
+mkdir 198168_txtome
+cd 198168_txtome
+mkdir tx_genome
+mkdir bowtie22IND
+## to create the index in this dir.
+cd tx_genome
+## cp 198168seqs.fasta .
+cd /work/amundsen/pterry/198168_txtome/tx_genome
+cp /work/amundsen/shared/SajeewaBLAST/198168seqs.fasta .
+
+
+
+06/16/15:
+## Before proceed, investigate 198168seqs.fasta file a bit.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/tx_genome
+ls -l
+-rw-r--r-- 1 pterry amundsen 115137192 Jun 11 23:19 198168seqs.fasta
+less 198168seqs.fasta
+srun --pty $SHELL
+grep -c '^>c' 198168seqs.fasta
+[pterry@c2911.tusker tx_genome]$ grep -c '^>c' 198168seqs.fasta
+124350
+wc 198168seqs.fasta  
+[pterry@c2911.tusker tx_genome]$ wc 198168seqs.fasta  
+   392336    392336 115137192 198168seqs.fasta
+exit
+## get idea **avg length** of ref seqs, perhaps, wc number of characters/grep count? Perhaps try small subset of file to guage usefulness of this ??????????
+115137192/124350  ## [1] 925.9123
+
+## create commands to create bowtie22 index for 198168seqs.fasta
+## line 781 => ...
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load bowtie/2.2
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+
+bowtie2-build /work/amundsen/pterry/198168_txtome/tx_genome/198168seqs.fasta 198168seqs
+## 11:49am => < 11;57am
+exit
+ls -l
+## 6 '.bt2' files produced.
+
+## bowtie2 align 95C1-3, T1-3 trimmed reads vs 198168seqs.fasta (transcriptome/'genome')
+## refer line 802 above
+
+## next, align the 6 fastq files with bowtie2
+
+## now align 198168seqs tx_genome vs bufgrass 95C1 fastq file with ***bowtie2***.
+## need a script file, perhaps new dir, bowtie2_out ????????
+#cd /Users/bterry/macbookpro2015/keenanres15/Sitalica26/genome
+
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+
+## TO fix script file, done
+
+scp slurm_198168seqs_gen_vstrimbufgrass95C1bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+mkdir bowtie22_out
+ls -l
+
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_gen_vstrimbufgrass95C1bowtie22.sh  4071363 5:21pm => < 5:47pm, no longer listed in squeue -u pterry
+squeue -u pterry
+
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+less job.4071363.err
+19381393 reads; of these:
+  19381393 (100.00%) were unpaired; of these:
+    587858 (3.03%) aligned 0 times
+    15113476 (77.98%) aligned exactly 1 time
+    3680059 (18.99%) aligned >1 times
+96.97% overall alignment rate
+job.4071363.err (END) 
+## note: compare to 95C1 vs Sitalica26 genome, 
+
+19381393 reads; of these:
+  19381393 (100.00%) were unpaired; of these:
+    10800908 (55.73%) aligned 0 times
+    5256321 (27.12%) aligned exactly 1 time
+    3324164 (17.15%) aligned >1 times
+44.27% overall alignment rate
+job.3711390.err (END) 
+## compare ggbiotest050814.txt, line 1342
+## 3x as many reads align 'aligned exactly 1 time'.
+## Q: what to think ??????????????????????????????????
+cd bowtie22_out
+ls -l
+-rw-r--r-- 1 pterry amundsen 5990857277 Jun 16 17:38 trimmed95C1vs198168seqs_bowtie22.sam
+
+## before aligning any more of the 6 fastq files, look into 'idxstats' outfile for this 95C1 '.bam' file. **Q:** any way to det. which reads map only once ??????
+## a Q: relationship betw this result and if had B. dactyloides genome seq ???????
+
+sacct -j 4071363 -o start,end
+
+[pterry@login.tusker bowtie22IND]$ sacct -j 3711390 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-16T17:24:18 2015-06-16T17:39:11 
+2015-06-16T17:24:18 2015-06-16T17:39:11 
+[pterry@c2411.tusker samtoolstest]$ 
+
+## from lines 1042-55
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+## place one of sam files in test dir, test if deletes sam when creates bam?
+mkdir samtoolstest
+ls -l
+cp trimmed95C1vs198168seqs_bowtie22.sam samtoolstest
+srun --pty $SHELL
+module load samtools/0.1
+cd samtoolstest
+ls -l
+samtools view -b -S -o trimmed95C1vs198168seqs_bowtie22.bam trimmed95C1vs198168seqs_bowtie22.sam
+## 11:55pm => ???< 12:08am
+ls -l
+exit
+
+06/17/15:
+## lines 1072-85
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+samtools sort trimmed95C1vs198168seqs_bowtie22.bam trimmed95C1vs198168seqs_bowtie22.sorted
+## 9:52am => < 10:04am
+ls -l
+-rw-r--r-- 1 pterry amundsen 1080667332 Jun 17 10:02 trimmed95C1vs198168seqs_bowtie22.sorted.bam
+exit
+srun --pty $SHELL
+module load samtools/0.1
+
+## now for the index:
+## from https://github.com/arq5x/tutorials/blob/master/samtools.md
+## 1st ck that this filename correct after created above.
+samtools index trimmed95C1vs198168seqs_bowtie22.sorted.bam
+10:06am => 10:07am
+ls -l
+-rw-r--r-- 1 pterry amundsen    9348456 Jun 17 10:07 trimmed95C1vs198168seqs_bowtie22.sorted.bam.bai
+
+## now idxstats, see https://pepebioinformatics.wordpress.com/2014/05/29/samtools-count-mapped-and-unmapped-reads-in-bam-file/
+#samtools idxstats file1.bam
+## check that index '.bai' file present, yes
+srun --pty $SHELL
+module load samtools/0.1
+samtools idxstats trimmed95C1vs198168seqs_bowtie22.sorted.bam > test
+ls -l
+-rw-r--r-- 1 pterry amundsen    5567164 Jun 17 10:10 test
+exit
+less test
+wc test
+##  196169  784676 5567164 test
+cut -f3 test | paste -sd+ - | bc        ## p-70-1, kochan & wood book, 3rd edn
+## 18793535
+## 19381393 - 18793535 = [1] 587858
+## ***Unless*** can distinguish uniquely aligning reads from multiply aligning reads, perhaps proceed get idxstats output for remaining 95C2-3, TC1-3, build count table in R and submit to edgeR ???????????????????????
+
+## check field 3 in '.sam' file
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest
+ls -l
+#srun --pty $SHELL
+module load samtools/0.1
+less trimmed95C1vs198168seqs_bowtie22.sam
+## colm 3 is 'reference' name.
+
+06/18/15:
+
+## perhaps check if all reads in .sam file are unique (how ??). According to bowtie2 .err file, expect some multiple aligning reads. So check if in .sam file, find some multiple reads in colm 1. Since same count in 'test' and in bowtie2 .err file, suggests in idxstats output, test, counts in colm 3 are some multiple hit reads. This would differ from summarizedOverlap result 
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+less trimmed95C1vs198168seqs_bowtie22.sam
+## colm 3 is 'reference' name.
+##Count the total number of alignments.
+samtools view trimmed95C1vs198168seqs_bowtie22.sorted.bam | wc -l  ## 19381393
+## 11:03am => 11:06am
+grep -c '^HWI' trimmed95C1vs198168seqs_bowtie22.sam  ## 19381393
+grep '^HWI' trimmed95C1vs198168seqs_bowtie22.sam > grepHWI
+less grepHWI
+wc grepHWI
+  19381393  367811520 5984170641 grepHWI
+exit
+
+srun --pty $SHELL
+less grepHWI
+cut -f1 grepHWI | sort | uniq -d > grepHWInotuniq
+## 11:20am => < 11:37am
+head -5 grepHWInotuniq
+## syntax prev command, or no lines in file, nothing returned ????????????
+wc grepHWInotuniq
+0 0 0 grepHWInotuniq
+exit
+
+srun --pty $SHELL
+cut -f1 grepHWI | sort | uniq > grepHWIuniq
+## 12:04pm => 12:22pm
+ls -l
+wc grepHWIuniq  ## compare to bowtie2 .err file content
+##  19381393  19381393 842963702 grepHWIuniq
+exit
+## So apparently multi-aligning reads in .sam file are only listed ***ONCE*** in this file. So output file from idxstats, the counts in colm 3 can only count each read ONCE in aligning to a ref. seq. 
+## Q: alg for selecting which ref a multialigning read aligns to ***????????***
+
+## Q: why grep -c for 198168seqs.fasta not equal 'wc test' ???????????????
+
+## to finish prepn other 5 idxstats output files.
+## Try couple more tests:
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest
+ls -l
+srun --pty $SHELL
+cd /work/amundsen/pterry/198168_txtome/tx_genome
+grep -c '^>' 198168seqs.fasta  ## 196168, Q: off by 1 from 'wc test' ??????
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest
+grep -c '^c' test  ## 124350, so now except 'off by 1' diff, get **agreement** betw number of ref. items in 198168seqs.fasta & test.
+## so apparently ***not all*** ref. items in 198168seqs.fasta begin with '>c'
+
+## then re-practice, E. Gene Set Enrichment, 'Practical' section, see how set up, run edgeR. 
+## refer line 1575-1618 above.
+
+06/19/15:
+## **finish** preparing 95C1, colm 3 for subsequent inclusion in data frame count table as per E. Gene Set Enrichment, the 'Practical section.
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest
+ls -l
+srun --pty $SHELL
+cut -f3 test > 95C1colm3cnts.txt
+head -5 95C1colm3cnts.txt
+wc 95C1colm3cnts.txt  ## 196169 196169 450247 95C1colm3cnts.txt
+exit
+
+## bowtie2 align 95C2-3, T1-3 trimmed reads (remaining 5) vs 198168seqs.fasta (transcriptome/'genome')
+## need a script file
+## modify slurm script for 95C1 sample, see dir.,
+/Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+## file: slurm_198168seqs_gen_vstrimbufgrass95C1bowtie22.sh
+
+## need logon to tusker to ck path/file name for 95C2 ????????
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+## ok, script file created for 95C2
+
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_gen_vstrimbufgrass95C2bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_gen_vstrimbufgrass95C2bowtie22.sh  4085084  10:06pm => < 10:21pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+less job.4085084.err
+19517268 reads; of these:
+  19517268 (100.00%) were unpaired; of these:
+    537714 (2.76%) aligned 0 times
+    14946160 (76.58%) aligned exactly 1 time
+    4033394 (20.67%) aligned >1 times
+97.24% overall alignment rate
+job.4085084.err (END) 
+cd bowtie22_out
+ls -l
+#sacct -j 4071363 -o start,end
+srun --pty $SHELL
+module load samtools/0.1
+ls -l
+samtools view -b -S -o trimmed95C2vs198168seqs_bowtie22.bam trimmed95C2vs198168seqs_bowtie22.sam
+## 11:05pm => ???< 11:17am
+ls -l
+exit
+srun --pty $SHELL
+module load samtools/0.1
+samtools sort trimmed95C2vs198168seqs_bowtie22.bam trimmed95C2vs198168seqs_bowtie22.sorted
+## 11:23pm => 12:14am, still not done ????????????????????????
+## never finished ***??????????????????????***
+
+## troubleshooting:
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+cd bowtie22_out
+ls -l
+-rw-r--r-- 1 pterry amundsen 1061637726 Jun 19 23:35 trimmed95C2vs198168seqs_bowtie22.sorted.bam
+## SO Q: did this complete ????????????????????????????
+
+## perhaps rerun wi slurm script, see if get same size output ??????????
+
+06/20/15:
+## ok, script file created for 95C2 samtools sort
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_trysamtoolssort95C2.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_trysamtoolssort95C2.sh  4086070  11:29am => < 11:46am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+## identical length to questionable run last night wi 'srun', so use this output.
+less job.4086070.err
+[bam_sort_core] merging from 8 files...
+job.4086070.err (END) 
+sacct -j 4086070 -o start,end
+[pterry@login.tusker bowtie22_out]$ sacct -j 4086070 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-20T11:29:23 2015-06-20T11:40:00 
+2015-06-20T11:29:23 2015-06-20T11:40:00 
+
+## ref line 1771 => for index, then get counts colm 3 for 95C2.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+## now for the index:
+## from https://github.com/arq5x/tutorials/blob/master/samtools.md
+## 1st ck that this filename correct after created above.
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+samtools index trimmed95C2vs198168seqs_bowtie22.sorted.bam
+2:37pm => 2:38am
+ls -l
+## ok, trimmed95C2vs198168seqs_bowtie22.sorted.bam.bai
+exit
+
+## now idxstats, see https://pepebioinformatics.wordpress.com/2014/05/29/samtools-count-mapped-and-unmapped-reads-in-bam-file/
+#samtools idxstats file1.bam
+## check that index '.bai' file present, yes
+srun --pty $SHELL
+module load samtools/0.1
+samtools idxstats trimmed95C2vs198168seqs_bowtie22.sorted.bam > 95C2idxstats_out.txt
+ls -l
+-rw-r--r-- 1 pterry amundsen    5569036 Jun 20 14:57 95C2idxstats_out.txt
+exit
+less 95C2idxstats_out.txt
+wc 95C2idxstats_out.txt
+##  196169  784676 5569036 95C2idxstats_out.txt
+srun --pty $SHELL
+cut -f3 95C2idxstats_out.txt | paste -sd+ - | bc        ## p-70-1, kochan & wood book, 3rd edn
+## 18979554
+exit
+
+## **finish** preparing 95C2, colm 3 for subsequent inclusion in data frame count table as per E. Gene Set Enrichment, the 'Practical section.
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+srun --pty $SHELL
+cut -f3 95C2idxstats_out.txt > 95C2colm3cnts.txt
+head -5 95C2colm3cnts.txt
+wc 95C2colm3cnts.txt  ## 196169 196169 452119 95C2colm3cnts.txt
+exit
+
+## bowtie2 align 95C3, T1-3 trimmed reads (remaining 4) vs 198168seqs.fasta (transcriptome/'genome')
+
+## 95C3
+## need a script file
+## modify slurm script for 95C2 sample, see dir.,
+/Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+## file: slurm_198168seqs_gen_vstrimbufgrass95C2bowtie22.sh
+## need logon to tusker to ck path/file name for 95C2 ????????
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+## ok, script file created for 95C2
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_gen_vstrimbufgrass95C3bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_gen_vstrimbufgrass95C3bowtie22.sh  4087376  10:42pm => < 10:21pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+less job.4087376.err
+21681817 reads; of these:
+  21681817 (100.00%) were unpaired; of these:
+    652223 (3.01%) aligned 0 times
+    17055794 (78.66%) aligned exactly 1 time
+    3973800 (18.33%) aligned >1 times
+96.99% overall alignment rate
+job.4087376.err (END) 
+sacct -j 4087376 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-20T22:43:25 2015-06-20T23:00:55 
+2015-06-20T22:43:25 2015-06-20T23:00:55 
+[pterry@login.tusker bowtie22IND]$ 
+
+cd bowtie22_out
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+ls -l
+samtools view -b -S -o trimmed95C3vs198168seqs_bowtie22.bam trimmed95C3vs198168seqs_bowtie22.sam
+## 11:44pm => ???< 11:56am
+ls -l
+exit
+
+06/21/15:
+## perhaps run wi slurm script for 95C3, ref: line 1943, for 'sort' step
+## ok, script file created for 95C3 samtools sort
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_trysamtoolssort95C3.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_trysamtoolssort95C3.sh  4088161  09:55am => < 10:07am, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+-rw-r--r-- 1 pterry amundsen 1154229830 Jun 21 10:04 trimmed95C3vs198168seqs_bowtie22.sorted.bam
+less job.4088161.err
+[bam_sort_core] merging from 9 files...
+job.4088161.err (END) 
+sacct -j 4088161 -o start,end
+## ref line 1771 => for index, then get counts colm 3 for 95C3.
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+## now for the index:
+## from https://github.com/arq5x/tutorials/blob/master/samtools.md
+## 1st ck that this filename correct after created above.
+#cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+samtools index trimmed95C3vs198168seqs_bowtie22.sorted.bam
+10:33am => 10:34am
+ls -l
+-rw-r--r-- 1 pterry amundsen    8590440 Jun 21 10:33 trimmed95C3vs198168seqs_bowtie22.sorted.bam.bai
+## ok, trimmed95C3vs198168seqs_bowtie22.sorted.bam.bai
+exit
+
+## now idxstats, see https://pepebioinformatics.wordpress.com/2014/05/29/samtools-count-mapped-and-unmapped-reads-in-bam-file/
+#samtools idxstats file1.bam
+## check that index '.bai' file present, yes
+srun --pty $SHELL
+module load samtools/0.1
+samtools idxstats trimmed95C3vs198168seqs_bowtie22.sorted.bam > 95C3idxstats_out.txt
+ls -l
+-rw-r--r-- 1 pterry amundsen    5562278 Jun 21 11:18 95C3idxstats_out.txt
+#exit
+less 95C3idxstats_out.txt
+wc 95C3idxstats_out.txt
+##  196169  784676 5562278 95C3idxstats_out.txt
+#srun --pty $SHELL
+cut -f3 95C3idxstats_out.txt | paste -sd+ - | bc        ## p-70-1, kochan & wood book, 3rd edn
+## 21029594
+#exit
+## **finish** preparing 95C2, colm 3 for subsequent inclusion in data frame count table as per E. Gene Set Enrichment, the 'Practical section.
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+#ls -l
+#srun --pty $SHELL
+cut -f3 95C3idxstats_out.txt > 95C3colm3cnts.txt
+head -5 95C3colm3cnts.txt
+wc 95C3colm3cnts.txt  ## 196169 196169 445361 95C3colm3cnts.txt
+exit
+head -5 95C3idxstats_out.txt
+[pterry@c3013.tusker bowtie22_out]$ head -5 95C3idxstats_out.txt
+comp1_c0_seq1	302	0	0
+comp1000_c0_seq1	221	0	0
+comp100000_c0_seq2	2456	1	0
+comp100001_c0_seq2	4754	0	0
+comp100002_c0_seq1	956	5	0
+tail -5 95C3idxstats_out.txt
+[pterry@c3013.tusker bowtie22_out]$ tail -5 95C3idxstats_out.txt
+pre_comp999841_c0_seq1	225	0	0
+pre_comp999913_c0_seq1	240	0	0
+pre_comp999922_c0_seq1	366	3	0
+pre_comp999998_c0_seq1	265	0	0
+*	0	0	652223
+head -5 95C2idxstats_out.txt
+[pterry@c3013.tusker bowtie22_out]$ head -5 95C2idxstats_out.txt
+comp1_c0_seq1	302	0	0
+comp1000_c0_seq1	221	0	0
+comp100000_c0_seq2	2456	2	0
+comp100001_c0_seq2	4754	0	0
+comp100002_c0_seq1	956	10	0
+tail -5 95C2idxstats_out.txt
+[pterry@c3013.tusker bowtie22_out]$ tail -5 95C2idxstats_out.txt
+pre_comp999841_c0_seq1	225	0	0
+pre_comp999913_c0_seq1	240	0	0
+pre_comp999922_c0_seq1	366	3	0
+pre_comp999998_c0_seq1	265	1	0
+*	0	0	537714
+
+head -5 test  ## '95C1'
+[pterry@c3013.tusker samtoolstest]$ head -5 test
+comp1_c0_seq1	302	0	0
+comp1000_c0_seq1	221	0	0
+comp100000_c0_seq2	2456	0	0
+comp100001_c0_seq2	4754	1	0
+comp100002_c0_seq1	956	9	0
+
+tail -5 test
+[pterry@c3013.tusker samtoolstest]$ tail -5 test
+pre_comp999841_c0_seq1	225	0	0
+pre_comp999913_c0_seq1	240	0	0
+pre_comp999922_c0_seq1	366	1	0
+pre_comp999998_c0_seq1	265	0	0
+*	0	0	587858
+
+## Q: what to make of '*' line ????????????????
+## The 'ref. seq. names' seem to be in register.
+exit
+
+## ref: line 2014
+## bowtie2 align 95T1, T1-3 trimmed reads (remaining 3) vs 198168seqs.fasta (transcriptome/'genome')
+
+## 95T1
+## need a script file
+## modify slurm script for 95C3 sample, see dir.,
+/Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+## file: slurm_198168seqs_gen_vstrimbufgrass95T1bowtie22.sh
+## need logon to tusker to ck path/file name for 95C2 ????????
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+## ok, script file created for 95T1
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_gen_vstrimbufgrass95T1bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_gen_vstrimbufgrass95T1bowtie22.sh  4088591  1:14pm => < 10:21pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+less job.4088591.err
+27915998 reads; of these:
+  27915998 (100.00%) were unpaired; of these:
+    848911 (3.04%) aligned 0 times
+    21708926 (77.77%) aligned exactly 1 time
+    5358161 (19.19%) aligned >1 times
+96.96% overall alignment rate
+job.4088591.err (END) 
+sacct -j 4088591 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-21T13:15:23 2015-06-21T13:35:10 
+2015-06-21T13:15:23 2015-06-21T13:35:10 
+
+cd bowtie22_out
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+ls -l
+samtools view -b -S -o trimmed95T1vs198168seqs_bowtie22.bam trimmed95T1vs198168seqs_bowtie22.sam
+## 1:45pm => ???< 2:07pm
+ls -l
+exit
+
+## perhaps run wi slurm script for 95T1, ref: line 1943, for 'sort' step
+## ok, script file created for 95T1 samtools sort
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_trysamtoolssort95T1.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_trysamtoolssort95T1.sh  4088773  02:19pm => < 02:35pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+-rw-r--r-- 1 pterry amundsen 1700682607 Jun 21 14:32 trimmed95T1vs198168seqs_bowtie22.sorted.bam
+less job.4088773.err
+[bam_sort_core] merging from 12 files...
+job.4088773.err (END) 
+sacct -j 4088773 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-21T14:20:00 2015-06-21T14:32:57 
+2015-06-21T14:20:00 2015-06-21T14:32:57
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+## now for the index:
+## from https://github.com/arq5x/tutorials/blob/master/samtools.md
+## 1st ck that this filename correct after created above.
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+samtools index trimmed95T1vs198168seqs_bowtie22.sorted.bam
+5:43pm => < 5:45pm
+ls -l
+-rw-r--r-- 1 pterry amundsen   11814816 Jun 21 17:43 trimmed95T1vs198168seqs_bowtie22.sorted.bam.bai
+
+## ok, trimmed95T1vs198168seqs_bowtie22.sorted.bam.bai
+exit
+
+## now idxstats, see https://pepebioinformatics.wordpress.com/2014/05/29/samtools-count-mapped-and-unmapped-reads-in-bam-file/
+#samtools idxstats file1.bam
+## check that index '.bai' file present, yes
+#srun --pty $SHELL
+module load samtools/0.1
+samtools idxstats trimmed95T1vs198168seqs_bowtie22.sorted.bam > 95T1idxstats_out.txt
+ls -l
+-rw-r--r-- 1 pterry amundsen    5605398 Jun 21 17:49 95T1idxstats_out.txt
+#exit
+less 95T1idxstats_out.txt
+wc 95T1idxstats_out.txt
+## 196169  784676 5605398 95T1idxstats_out.txt
+
+#srun --pty $SHELL
+cut -f3 95T1idxstats_out.txt | paste -sd+ - | bc        ## p-70-1, kochan & wood book, 3rd edn
+## 27067087
+#exit
+## **finish** preparing 95T1, colm 3 for subsequent inclusion in data frame count table as per E. Gene Set Enrichment, the 'Practical section.
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+#ls -l
+#srun --pty $SHELL
+cut -f3 95T1idxstats_out.txt > 95T1colm3cnts.txt
+head -5 95T1colm3cnts.txt
+wc 95T1colm3cnts.txt  ## 196169 196169 488481 95T1colm3cnts.txt
+head -5 95T1idxstats_out.txt
+[pterry@c2623.tusker bowtie22_out]$ head -5 95T1idxstats_out.txt
+comp1_c0_seq1	302	3	0
+comp1000_c0_seq1	221	0	0
+comp100000_c0_seq2	2456	111	0
+comp100001_c0_seq2	4754	95	0
+comp100002_c0_seq1	956	21	0
+
+tail -5 95T1idxstats_out.txt
+[pterry@c2623.tusker bowtie22_out]$ tail -5 95T1idxstats_out.txt
+pre_comp999841_c0_seq1	225	0	0
+pre_comp999913_c0_seq1	240	1	0
+pre_comp999922_c0_seq1	366	0	0
+pre_comp999998_c0_seq1	265	0	0
+*	0	0	848911
+
+exit
+
+## bowtie2 align 95T2, T2-3 trimmed reads (remaining 2) vs 198168seqs.fasta (transcriptome/'genome')
+
+## 95T2, REF. LINE 2175
+
+## 95T2
+## need a script file
+## modify slurm script for 95T1 sample, see dir.,
+/Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+## file: slurm_198168seqs_gen_vstrimbufgrass95T1bowtie22.sh
+## need logon to tusker to ck path/file name for 95C2 ????????
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+## ok, script file created for 95T2
+
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_gen_vstrimbufgrass95T2bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_gen_vstrimbufgrass95T2bowtie22.sh  4089571  10:23pm => < 10:45pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+less job.4089571.err
+24276992 reads; of these:
+  24276992 (100.00%) were unpaired; of these:
+    741718 (3.06%) aligned 0 times
+    19149202 (78.88%) aligned exactly 1 time
+    4386072 (18.07%) aligned >1 times
+96.94% overall alignment rate
+job.4089571.err (END) 
+sacct -j 4089571 -o start,end
+             Start                 End 
+------------------- ------------------- 
+2015-06-21T22:24:46 2015-06-21T22:42:08 
+2015-06-21T22:24:46 2015-06-21T22:42:08 
+
+cd bowtie22_out
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+ls -l
+samtools view -b -S -o trimmed95T2vs198168seqs_bowtie22.bam trimmed95T2vs198168seqs_bowtie22.sam
+## 10:52pm => ???< 11:09pm
+ls -l
+exit
+
+## perhaps run wi slurm script for 95T2, ref: line 2224, for 'sort' step
+## ok, script file created for 95T2 samtools sort
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_trysamtoolssort95T2.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_trysamtoolssort95T2.sh  4089687  11:26pm => < 11:40pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+-rw-r--r-- 1 pterry amundsen 1494595396 Jun 21 23:38 trimmed95T2vs198168seqs_bowtie22.sorted.bam
+
+less job.4089687.err
+[bam_sort_core] merging from 10 files...
+job.4089687.err (END) 
+
+sacct -j 4089687 -o start,end
+[pterry@login.tusker bowtie22_out]$ sacct -j 4089687 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-21T23:27:42 2015-06-21T23:38:59 
+2015-06-21T23:27:42 2015-06-21T23:38:59
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+## now for the index:
+## from https://github.com/arq5x/tutorials/blob/master/samtools.md
+## 1st ck that this filename correct after created above.
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+samtools index trimmed95T2vs198168seqs_bowtie22.sorted.bam
+12:03am => < 12:04am
+ls -l
+-rw-r--r-- 1 pterry amundsen   11649432 Jun 22 00:04 trimmed95T2vs198168seqs_bowtie22.sorted.bam.bai
+## ok, trimmed95T2vs198168seqs_bowtie22.sorted.bam.bai
+exit
+
+06/22/15:
+
+## now idxstats, see https://pepebioinformatics.wordpress.com/2014/05/29/samtools-count-mapped-and-unmapped-reads-in-bam-file/
+#samtools idxstats file1.bam
+## check that index '.bai' file present, yes
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+samtools idxstats trimmed95T2vs198168seqs_bowtie22.sorted.bam > 95T2idxstats_out.txt
+ls -l
+-rw-r--r-- 1 pterry amundsen    5600437 Jun 22 09:45 95T2idxstats_out.txt
+#exit
+less 95T2idxstats_out.txt
+wc 95T2idxstats_out.txt
+ 196169  784676 5600437 95T2idxstats_out.txt
+
+#srun --pty $SHELL
+cut -f3 95T2idxstats_out.txt | paste -sd+ - | bc        ## p-70-1, kochan & wood book, 3rd edn
+## 23535274
+exit
+
+## **finish** preparing 95T2, colm 3 for subsequent inclusion in data frame count table as per E. Gene Set Enrichment, the 'Practical section.
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+
+srun --pty $SHELL
+cut -f3 95T2idxstats_out.txt > 95T2colm3cnts.txt
+ls -l
+head -5 95T2colm3cnts.txt
+wc 95T2colm3cnts.txt  ## 196169 196169 483520 95T2colm3cnts.txt
+head -5 95T2idxstats_out.txt
+[pterry@c2907.tusker bowtie22_out]$ head -5 95T2idxstats_out.txt
+comp1_c0_seq1	302	0	0
+comp1000_c0_seq1	221	0	0
+comp100000_c0_seq2	2456	123	0
+comp100001_c0_seq2	4754	58	0
+comp100002_c0_seq1	956	25	0
+
+tail -5 95T2idxstats_out.txt
+[pterry@c2907.tusker bowtie22_out]$ tail -5 95T2idxstats_out.txt
+pre_comp999841_c0_seq1	225	0	0
+pre_comp999913_c0_seq1	240	1	0
+pre_comp999922_c0_seq1	366	2	0
+pre_comp999998_c0_seq1	265	0	0
+*	0	0	741718
+
+exit
+
+## bowtie2 align 95T3, T3 trimmed reads (remaining 1) vs 198168seqs.fasta (transcriptome/'genome')
+
+## 95T3, REF. LINE 2308
+
+## 95T3
+## need a script file
+## modify slurm script for 95T2 sample, see dir.,
+/Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+## file: slurm_198168seqs_gen_vstrimbufgrass95T2bowtie22.sh
+## need logon to tusker to ck path/file name for 95C2 ????????
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass
+ls -l
+## ok, script file created for 95T3
+
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_gen_vstrimbufgrass95T3bowtie22.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_gen_vstrimbufgrass95T3bowtie22.sh  4091151  2:26pm => < ???pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+ls -l
+less job.4091151.err
+27406970 reads; of these:
+  27406970 (100.00%) were unpaired; of these:
+    861398 (3.14%) aligned 0 times
+    21483544 (78.39%) aligned exactly 1 time
+    5062028 (18.47%) aligned >1 times
+96.86% overall alignment rate
+job.4091151.err (END) 
+sacct -j 4091151 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-22T14:26:51 2015-06-22T14:47:53 
+2015-06-22T14:26:51 2015-06-22T14:47:53 
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND
+cd bowtie22_out
+ls -l
+srun --pty $SHELL
+module load samtools/0.1
+ls -l
+samtools view -b -S -o trimmed95T3vs198168seqs_bowtie22.bam trimmed95T3vs198168seqs_bowtie22.sam
+## 10:03pm => < 10:25pm
+## [samopen] SAM header is present: 196168 sequences.
+## Q: why 168 rather than 169 ?????????????????????????????????????????
+ls -l
+exit
+
+## perhaps run wi slurm script for 95T3, ref: line 2358, for 'sort' step
+## ok, script file created for 95T3 samtools sort
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome
+scp slurm_198168seqs_trysamtoolssort95T3.sh pterry@tusker.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+sbatch slurm_198168seqs_trysamtoolssort95T3.sh  4140462  10:36pm => < ???pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+-rw-r--r-- 1 pterry amundsen 1573245038 Jun 22 22:52 trimmed95T3vs198168seqs_bowtie22.sorted.bam
+
+less job.4140462.err
+[bam_sort_core] merging from 12 files...
+job.4140462.err (END) 
+sacct -j 4140462 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-06-22T22:35:53 2015-06-22T22:52:39 
+2015-06-22T22:35:53 2015-06-22T22:52:39 
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+## now for the index:
+## from https://github.com/arq5x/tutorials/blob/master/samtools.md
+## 1st ck that this filename correct after created above.
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+samtools index trimmed95T3vs198168seqs_bowtie22.sorted.bam
+1:10pm => < 11:11pm
+ls -l
+-rw-r--r-- 1 pterry amundsen   12059184 Jun 22 23:10 trimmed95T3vs198168seqs_bowtie22.sorted.bam.bai
+## ok, trimmed95T3vs198168seqs_bowtie22.sorted.bam.bai
+exit
+
+## now idxstats, see https://pepebioinformatics.wordpress.com/2014/05/29/samtools-count-mapped-and-unmapped-reads-in-bam-file/
+#samtools idxstats file1.bam
+## check that index '.bai' file present, yes
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+module load samtools/0.1
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+samtools idxstats trimmed95T3vs198168seqs_bowtie22.sorted.bam > 95T3idxstats_out.txt
+ls -l
+-rw-r--r-- 1 pterry amundsen    5608924 Jun 22 23:17 95T3idxstats_out.txt
+#exit
+less 95T3idxstats_out.txt
+wc 95T3idxstats_out.txt
+ 196169  784676 5608924 95T3idxstats_out.txt
+
+cut -f3 95T3idxstats_out.txt | paste -sd+ - | bc        ## p-70-1, kochan & wood book, 3rd edn
+## 26545572
+exit
+
+## **finish** preparing 95T2, colm 3 for subsequent inclusion in data frame count table as per E. Gene Set Enrichment, the 'Practical section.
+
+#ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+ls -l
+
+srun --pty $SHELL
+cut -f3 95T3idxstats_out.txt > 95T3colm3cnts.txt
+ls -l
+head -5 95T3colm3cnts.txt
+wc 95T3colm3cnts.txt  196169 196169 492007 95T3colm3cnts.txt
+head -5 95T3idxstats_out.txt
+[pterry@c2913.tusker bowtie22_out]$ head -5 95T3idxstats_out.txt
+comp1_c0_seq1	302	0	0
+comp1000_c0_seq1	221	0	0
+comp100000_c0_seq2	2456	160	0
+comp100001_c0_seq2	4754	98	0
+comp100002_c0_seq1	956	28	0
+
+tail -5 95T3idxstats_out.txt
+[pterry@c2913.tusker bowtie22_out]$ tail -5 95T3idxstats_out.txt
+pre_comp999841_c0_seq1	225	0	0
+pre_comp999913_c0_seq1	240	2	0
+pre_comp999922_c0_seq1	366	4	0
+pre_comp999998_c0_seq1	265	0	0
+*	0	0	861398
+
+exit
+
+06/23/15:
+## now, see line 1628
+## create df of 6 colms of counts, with rownames for the transcriptome ref. 'exons'.
+## so scp to laptop, 6 files of counts, and a 7th with the names of the references ('exons').
+
+95C1colm3cnts.txt
+95C2colm3cnts.txt
+95C3colm3cnts.txt
+95T1colm3cnts.txt
+95T2colm3cnts.txt
+95T3colm3cnts.txt
+
+## create a 7th file with colm 1, the ref. names from say 
+95T3colm1refnames.txt
+
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+#module load samtools/0.1
+cd /work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out
+cut -f1 95T3idxstats_out.txt > 95T3colm1refnames.txt
+ls -l
+wc 95T3colm1refnames.txt
+ 196169  196169 3915034 95T3colm1refnames.txt
+head -5 95T3colm1refnames.txt
+[pterry@c2305.tusker bowtie22_out]$ head -5 95T3colm1refnames.txt
+comp1_c0_seq1
+comp1000_c0_seq1
+comp100000_c0_seq2
+comp100001_c0_seq2
+comp100002_c0_seq1
+tail -5 95T3colm1refnames.txt
+[pterry@c2305.tusker bowtie22_out]$ tail -5 95T3colm1refnames.txt
+pre_comp999841_c0_seq1
+pre_comp999913_c0_seq1
+pre_comp999922_c0_seq1
+pre_comp999998_c0_seq1
+*
+
+exit
+
+## now scp these 7 files to laptop
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome/colm3cts
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/samtoolstest/95C1colm3cnts.txt .
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/95C2colm3cnts.txt .
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/95C3colm3cnts.txt .
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/95T1colm3cnts.txt .
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/95T2colm3cnts.txt .
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/95T3colm3cnts.txt .
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/bowtie22IND/bowtie22_out/95T3colm1refnames.txt .
+
+06/24/15:
+## back to r on laptop
+
+
+## Q: shorten/change ????????
+
+## set wking dir ??????????????????
+setwd("/Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome/colm3cts")
+library(edgeR)
+## need arrange so each colm has header sample name ???????????????????????
+refs <- read.table("95T3colm1refnames.txt", header=FALSE, stringsAsFactors=FALSE)
+head(refs)
+class(refs)  ## dataframe
+length(refs)  ## [1] 1
+C1 <- read.table("95C1colm3cnts.txt", header=FALSE)
+head(C1)
+C2 <- read.table("95C2colm3cnts.txt", header=FALSE)
+C3 <- read.table("95C3colm3cnts.txt", header=FALSE)
+T1 <- read.table("95T1colm3cnts.txt", header=FALSE)
+T2 <- read.table("95T2colm3cnts.txt", header=FALSE)
+T3 <- read.table("95T3colm3cnts.txt", header=FALSE)
+
+
+newdf <- data.frame(refs=refs$V1, C1=C1$V1, C2=C2$V1, C3=C3$V1, T1=T1$V1, T2=T2$V1, T3=T3$V1, stringsAsFactors=FALSE)
+head(newdf)
+class(newdf)
+cts <- newdf[,-1]
+head(cts)
+class(cts)
+rownames(cts) <- newdf[,1]
+head(cts)
+## OK!
+
+grp <- factor(rep(c("ctl","trt"), times=c(3,3)))
+grp
+summarized <- DGEList(cts, lib.size=colSums(cts), group=grp)
+## Q: calcNormFactore(...), WHY only in edgeR vignette, p-8 ***?????????????***
+disp <- estimateCommonDisp(summarized)
+tested <- exactTest(disp)
+topTags(tested)
+ttab <- tested$table
+class(tested$table)
+head(tested$table)
+dim(tested$table)
+[1] 196169      3
+hist(ttab$PValue, breaks=50)
+class(topTags(tested))  ## edgeR data structure
+metest <- as.data.frame(topTags(tested))
+class(metest)  ## dataframe
+dim(metest)  ## 10 4, so looks like can't get more than 10 rows this way ??????
+class(tested)
+dim(tested)  ## [1] 196169      3
+head(tested$table)
+tail(tested$table)
+class(tested$table)  ## DataFrame
+## perhaps could sort on tested$table$PValue to find more than 10 smallest PValues ??????????????????????????????
+head(ttab)
+class(ttab)
+dim(ttab)
+head(ttab, n=8L)
+ttab[4:5, 3]
+
+pvrevsort <- ttab[order(-ttab[4:5,3])]
+dim(pvrevsort)
+
+
+
+
+## ----------------------------------------------
+## p-195, matloff book
+V1 <- c("def", "ab", "zzzz")
+V2 <- c(2, 5, 1)
+y <- data.frame(V1=V1, V2=V2, stringsAsFactors=FALSE)
+y
+r <- order(y$V2)
+r
+z <- y[r,]
+z
+r <- order(-y$V2)
+r
+
+w <- y[r,]
+w
+## ------------------------------------------------
+r <- order(-ttab$PValue)
+class(r)
+head(r)
+pvrevsort <- ttab[r,]
+head(pvrevsort)
+dim(pvrevsort)  ## [1] 196169      3
+tail(pvrevsort)
+
+r <- order(ttab$PValue)
+head(r)
+pvrevsort <- ttab[r,]
+dim(pvrevsort)
+head(pvrevsort)
+tail(pvrevsort)
+
+06/26/15:
+
+pvrevsort[100,]
+## pre_comp402434_c0_seq1 7.418578 3.63875 4.305807e-27
+pvrevsort[500,]
+## comp86983_c0_seq1 7.82714 1.419792 1.167194e-19
+## So plenty significant ref seqs to ncbi blast search
+
+## so now sorted small to large, PValue in ttab dataframe.
+## Q: how to take say find the 1st 100 of these ref seqs in fasta file, 198168seqs.fasta, submit to ncbi blast, without doing manually ??????? Perhaps do manually wi bbedit 'search' command ????????
+
+
+## print list 1st 100 most significant PValues
+pvrevsort[1:100,]
+
+
+## 1st rcp this file over to laptop.
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/198168_txtome/tx_genome
+## -rw-r--r-- 1 pterry amundsen 115137192 Jun 11 23:19 198168seqs.fasta
+
+cd /Users/bterry/macbookpro2015/keenanres15/Bdactranscriptome/tx_genome
+scp pterry@tusker.unl.edu:/work/amundsen/pterry/198168_txtome/tx_genome/198168seqs.fasta .
+less 198168seqs.fasta  ## not as easy as use bbedit & search
+comp65229_c0_seq1
+pre_comp566577_c0_seq1
+
+STOPPED
+
+
+padj <- with(tested$table, {
+    keep <- logFC != 0
+    value <- p.adjust(PValue[keep], method="BH")
+    setNames(value, rownames(tested)[keep])
+})
+class(padj)
+length(padj)  ## [1] 172210
+head(padj)  ## like a vector with names for each vector element.
+sortedpadj <- sort(padj)
+head(sortedpadj)
+## **same** order of ref's in top 6 as in '> topTags(tested)', just bit different actual value for PValue, padj for each ref.
+
+
+
+
+genes <- padj < 0.05
+table(genes)
+genes
+ FALSE   TRUE 
+119756  52454 
+## 
+> 52454/119756
+[1] 0.4380073  
+## 196169 - (119756 + 52454) = [1] 23959
+## so 23959 refs have logFC == 0
+class(padj)  ## numeric
+head(padj)
+?SetNames  ## ?????????????????????????????????????
+
+
+## example in E. Gene set enrichment 
+> 3208/19535
+[1] 0.1642181
+
+class(tested)  ## from edgeR
+
+## diff. in ratios ??????????
+## '*' row in count table ????????
+## what to think ???????????????????????
+## try locate 'toptags' on ref 'genes', blast, etc, try identify? 
+## what else to try ???????????
+## try do sanity checks, in C. Differential Expression ???????????
+STOPPED
+
+## initially, go back thru '6. Analysis using DESeq2' ??????
+
+## perhaps nathan.palmer@ars.usda.gov
+
+## refer line 212
+## 6. Analysis using DESeq2
+#library(airway)
+data(airway)
+se <- airway
+colData(se)
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("DESeq2")
+library(DESeq2)
+se
+dds <- DESeqDataSet(se, design = ~ cell + dex)
+class(dds)  ## [1] "DESeqDataSet"
+dds <- DESeq(dds)
+res <- results(dds)
+## Q: how see results table ?????????????????????????????????????
+class(res)  ## [1] "DESeqResults"
+head(res)  ## apparently displays like a data.frame ???????????
+class(res$padj)  ## [1] "numeric"
+length(res$padj)  ## [1] 64102
+
+which.min(res$padj)  ## [1] 9658
+res[9658,]
+topGene <- rownames(res)[which.min(res$padj)]
+class(topGene)
+topGene
+
+res[topGene,]
+?plotCounts  ## from DESeq2 package.
+plotCounts(dds, gene=topGene, intgroup=c("dex"))
+plotMA(res, ylim=c(-5,5))
+
+06/25/15:
+hist(res$pvalue, breaks=50)
+hist(res$padj, breaks=50)
+
+
+plot(-log10(padj) ~ log2FoldChange, as.data.frame(res), pch=20)
+
+
+06/27/15:
+## Talked to Keenan on 06/25/15. Some comments:
+--try blast ref's with most significant PValues. Initially try ncbi web blast.
+--Q: blast2go ??????
+--NBS LLR genes (may be important here ????
+--NB ARC domain ????
+HAMM ER to look for domains above.
+
+
+STOPPED
+
+## Back to 'what/how to do blast to identify ref seqs with low PValues. Initial attempt with pvsort.fasta with 10 smallest PValues on NCBI blast web site, **only** numbers 1, 7, & 10 have hits vs nr/nt using 'Highly similar sequences (megablast)'. So need way make the blast search more efficient, and the hits not very helpful, and 7 of ref seqs got **no** hits ??????????
+## To check into:
+--command line blast, **check** back in my notes, where I think I implemented command line blast. Would such a blast vs say GTF of S. italica help ????????
+--on NCBI web site blast, con optimize for less similar seqs (discontinuous megablast, or blastn). Perhaps try each of these, see what get ???????
+--'more dissimilar sequences (discontiguous megablast), lot more hits than megablast. Problem: way to quickly visualize relevant output ?????????
+--Somewhat similar seqs (blastn). Apparently even more hits. Perhaps best choice might be the middle choice, discontiguous megablast ????????
+
+## Proceed, try find prevly used blast. Purpose: try 'present' output for easier viewing, analysis ?????????
+
+
+06/29/15:
+edgeR, **perhaps** try 
+--readDGE, p-10 of edgeR users guide ?????????????????????
+--what about 'calcNormFactors, p-11 of edgeR users guide ??????????????????
+
+concerning ncbi webased disc-megablast output of blasting pvsort.fasta seqs, any way to present this data in useful convenient form ?????????????????????
+
+06/30/15:
+## perhaps try get a file like from example C. Diff'l Exprn or E. Gene set enrichment with 'gene', names for rows for my edgeR output with 'ref's as row names. Can I do blast on ref's < .05 pvalue, get their hit(s) for each ref, place 'name' of that hit as row name, then proceed to Gene Set Enrichment steps. Have > 52k refs to work with ??????????????????
+## email ncbi blast or bioconductor support board with this question.
+## Check Keenan, RNAseq expt set up to look at the 52k ref's with E. Gene Set Enrichment. For this expt, aligned vs this tx_tome, can I blast these < .05 pvalue refs, identify them similar to identities on p-9, 10 of E Gene Set Enrichment ????????? Nor clear if can, need to look into **???????**
+
+## 07/02/15:
+## email Keenan with this concept after go thru p-9, 10 of E. Gene Set Enrichment ????????????????????????????????????????
+
+
+07/16/15:
+# Talked to Keenan. Proceed to try annotate transcriptome reference seqs with padj < .05 in effort to use in gene set enrichment alg. to try find pathways, etc. for the 52k refs which differ betw. trtmnt & control.
+# To try see if feasible way to do this:
+# Biostar question
+# Nathan question
+# TP002 person, also try the question on?
+
+07/18/15:
+# 3 inquiries from 07/16/15 now sent.
+
+07/23/15:
+# summary/status of initiatives post bioc2015 concerning info on if/how to annotate B. dactyloices transcriptome for use in 'GSEA' analysis of 52K diff expd 95C1-3, T1-3 vs transcriptome refs ???????????????????????????
+# Q: from M. Love wkshop, how to decide how to set padj for deciding how many diffly expressed genes found ?????????????????????
+
+# TP002 (email & 'PAGER'):
+Great question. If I were to approach the problem that you described, I’d use the annotation from the transcriptome, often available from REFSEQ or UniProt annotations. Even if there’s no direct mapping of genes or mRNAs to REFSEQ/Uniprot entries, you may perform homology mapping of the transcripts to obtain functional annotation group first. Then, for the two or more experimental conditions, you may use available mapped functional categories to perform GSEA.
+
+# S. Davis: sdavis2@mail.nih.gov
+RNAseq, Aligner/Quant,
+=> Kallisto => artemis package (also a poster at Bioc2015, p-100, notes)
+# Q: looks like Kallisto published May, 2015. Q: is artemis package yet available (Q: question for S. Davis)?
+
+
+# Jenny (U. Ill):
+# email response, to decide: how much to include here ??????????????
+
+# A. Culhane: blast vs a plant suggestion. grasses, monocot? 
+gholani, 2010, Bioinformatics.
+
+
+# Biostars (the Q from 'seta' including 'annoncrypt' ?
+# see what I printed out. Looks like may not be best rec. I am getting. Need know more about blast2go?
+
+# Nathan?:
+
+
+07/27/15:
+Talked to Keenan:
+--Ok try doc. transcriptome with 'Trinotate' as per Jenny email. So respond to Jenny email, with approprite suggestions, questions.
+--Try email Nathan, speak with him briefly about what considering doing.
+Note: female, Aaron Scully (sp), local person, knows bioinformatics, try contact?
+
+07/29/15:
+Keenan: trinotate on 'crane'
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+module avail
+man trinotate/r2013-11-10
+[pterry@login.crane ~]$ man trinotate/r2013-11-10
+trinotate/r2013-11-10: No such file or directory
+No manual entry for trinotate/r2013-11-10
+[pterry@login.crane ~]$ 
+
+07/31/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+module load trinotate/r2013-11-10
+man trinotate/r2013-11-10
+[pterry@login.crane ~]$ man trinotate/r2013-11-10
+trinotate/r2013-11-10: No such file or directory
+No manual entry for trinotate/r2013-11-10
+[pterry@login.crane ~]$ 
+
+08/06-07/15:
+# Issue: documentation/annotation of B. dactyloides transcripts in transcriptome (Keenan supplied, prepared with Trinity).
+
+# Jenny suggestion: use Trinotate. Do for the 52k transcripts with padj < .05 following edgeR analysis.
+
+# Q: how find out how to use Trinotate ???????????
+# Q: signed up for trinotate users group, but does not look very helpful ??????
+
+
+
+# Q: need format of output suitable for GSEA.
+
+# Q: which GSEA alg. to use ??????????????????
+
+# Q: how best to go about this documentation/annotation task ?????????
+# Q: possible **contacts**: 
+
+# just ask each overview question: 'is trinotate good way to generate annotation for GSEA, what GSEA method to use?'
+# seth (sean??) Davis ???? => overview question ?????
+# A. Culhane advice, notebook, p--109 (inclg cluster, pca, etc. ?????), **look** over her omics workshop.html.
+# TP002 person
+
+# read:
+
+https://trinotate.github.io/#Contact
+
+# Pittsburgh super computer ???????
+http://www.psc.edu/index.php/user-resources/software/trinotate
+
+# http://2015-may-nonmodel.readthedocs.org/en/dev/annotate.html
+
+
+08/13/15:
+# reading thu Trinity papers:
+/Users/bterry/macbookpro2015/bioc2015/nprot.2013.084.pdf
+/Users/bterry/macbookpro2015/bioc2015/nbt.1883.pdf
+# wi idea understand bit more about Trinity, then Trinotate and GSEA.
+# 
+
+
+
+
+--perhaps one of the other databases ??????????????????????
+--perhaps email ncbi folks with question ?????????????
+
+
+
+
+
+
+## Add'l sanity check: run PCA on count table (Q: how do this with data structure I using ???????????????????)
+
+
+
+
+
+
+
+
+
+## For now, follow 'C. Diff'l Exp'n, p-18, arranging exons by genes. 
+
+## So prepare as if file names in dir '.../bowtie22_out' will be used in 'samptab.csv'
+
+
+
+
+
+## try investigate further, presumably 'nonaligningreads
+' now has no non-aligning reads ???????
+## Q: N. Palmer, DESeq2 on aligned reads only, or singly aligned reads only ????????
+
+
+## then scp bam files to 
+/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2
+
+a. Metadata describing samples. Read this using read.csv().
+
+
+setwd("/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2")
+path <- "/Users/bterry/macbookpro2015/keenanres15/Sitalica26/reductnfordeseq2"
+## put sampletable, bam files in this dir.
+csvfile <- dir(path, "samp_tab.csv", full=TRUE)
+
+
+
+
+
+
+ ok, working 
+
+
+## size of 
+
+-rw-r--r--  1 pterry amundsen 1294295448 Apr  6 17:51 output95C1_GATCAG_L006_R1_001.trimmed_slurm.fastq.gz
+-rw-r--r-- 1 pterry amundsen 1956185030 May 14 12:25 output95T1_AGTCAA_L005_R1_001.trimmed.fastq.gz
+
+less job.3698848.err
+
+
+
+
+
+
+
+
+
+
+After trimming, next would be bowtie2 aligning (see line 978, Bdistachyon012414.txt). Think need new bowtie2 index file wi ver 26 of S. italica. Then ready perform 6 alignments. Need check % of reads which aligned (values '0' & '16' of flag field in 'sam' file). Q: do I need to verify how many reads are unique per chromosome ??????????????
+
+
+
+ii. get resolution for gff3 conversion to TxDb file (currently the GRangesList object of lenght 0 for 'genes" ??????????????????????????
+iii. when (i) done, proceed to 'Counting' section & creation summarizedExperiment.
+
+
+
