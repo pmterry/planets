@@ -165,8 +165,6 @@ srun --pty $SHELL   # prompt back almost instantly, 10:23pm
 exit
 srun --pty --ntasks-per-node=8 --mem 10gb $SHELL  # prompt back immedly
 cd /work/amundsen/pterry
-# mkdir trin_tmp
-# cd trin_tmp
 1.
 wget http://sourceforge.net/projects/trinityrnaseq/files/misc/TrinityNatureProtocolTutorial.tgz/download
 # started 10:27pm => 11:00pm
@@ -191,27 +189,96 @@ tar: invalid option -- '?'
 Try `tar --help' or `tar --usage' for more information.
 [pterry@c1422.crane pterry]$ 
 # also failed ????????????????????????????????????????????
+# hand typed in command, worked.
 
-STOPPED
-
+08/21/15:
 4.
 mv TrinityNatureProtocolTutorial Trin20Tut
 #mkdir Bdac_Trin20_workg
 #cd Bdac_Trin20_workg
 cd Trin20Tut
-# cp contents NatureProtocolTutorial uncompressed dir to Bdac_Trin20_workg
-# Q: Is this what meant? Adam: **perhaps** try cp the created dir. to #Bdac_Trin20_workg
-#cp expanded dir .
 5.
 # concatenate ...
 cat 1M_READS_sample/*.left.fq > reads.ALL.left.fq
 cat 1M_READS_sample/*.right.fq > reads.ALL.right.fq
 6.
 # Assemble with Trinity
+export TRINITY_HOME=/util/opt/trinity/2.0.6/gcc/4.8.2
+echo $TRINITY_HOME
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
 module load trinity/2.0
-$TRINITY_HOME/Trinity.pl --seqType fq --JM 10G \
+# Q: is this consistent with v 2.0.6 ???????????????????????
+$TRINITY_HOME/Trinity --seqType fq --JM 10G \
     --left reads.ALL.left.fq --right reads.ALL.right.fq \
     --SS_lib_type RF --CPU 6
+
+[pterry@c2218.crane Trin20Tut]$ $TRINITY_HOME/Trinity --seqType fq --JM 10G \
+>     --left reads.ALL.left.fq --right reads.ALL.right.fq \
+>     --SS_lib_type RF --CPU 6
+Error, do not understand options: --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+[pterry@c2218.crane Trin20Tut]$ Trinity -h
+# gave bunch details, upshot may be may have to contact support site, for syntax for parameters in error message ??????????????????????
+# To try **1st**, manually enter the Trinity command 
+
+$TRINITY_HOME/Trinity.pl --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+
+[pterry@c0918.crane Trin20Tut]$ $TRINITY_HOME/Trinity.pl --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+bash: /util/opt/trinity/2.0/gcc/4.8/Trinity.pl: No such file or directory
+[pterry@c0918.crane Trin20Tut]$ 
+# perhaps issue is location/definition of $TRINITY_HOME ???????????????????
+# Don't find Trinity.pl in /util/opt/trinity/2.0/gcc/4.8
+# there is a 'Trinity'
+# so try 
+
+$TRINITY_HOME/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+
+[pterry@c0509.crane Trin20Tut]$ $TRINITY_HOME/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+bash: /util/opt/trinity/2.0/gcc/4.8:/util/opt/trinity/2.0.6/gcc/4.8.2/Trinity: No such file or directory
+[pterry@c0509.crane Trin20Tut]$ 
+# Q: confusing ?????????????????????????????????????????????????
+/util/opt/trinity/2.0/gcc/4.8
+/util/opt/trinity/2.0.6/gcc/4.8.2/Trinity
+# Q: perhaps just use /util/opt/trinity/2.0.6/gcc/4.8.2/Trinity for Trinity location ??????????????????????
+/util/opt/trinity/2.0.6/gcc/4.8.2/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+
+[pterry@c0509.crane Trin20Tut]$ /util/opt/trinity/2.0.6/gcc/4.8.2/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+Error, do not understand options: --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+# Q: what to think ?????????????????????????
+# Q: are there multiple installs on trinity on crane, confusion from ??????
+
+
+
+
+[pterry@c0918.crane Trin20Tut]$ $TRINITY_HOME/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+Error, do not understand options: --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+[pterry@c0918.crane Trin20Tut]$ 
+Trinity -h
+
+cd /util/opt/trinity/2.0.6/gcc/4.8.2
+[pterry@c0918.crane 4.8.2]$ pwd
+/util/opt/trinity/2.0.6/gcc/4.8.2
+# a 'Trinity' here.
+# How to proceed? 
+echo $TRINITY_HOME
+
+[pterry@c0918.crane 4.8.2]$ echo $TRINITY_HOME
+/util/opt/trinity/2.0/gcc/4.8
+
+# not for 2.0.6 ???????????????????
+cd sample_data/test_Trinity_Assembly
+
+STOPPED
+
+
+# TRY COME UP WITH A PLAN TO PROCEED ?????????
+
+
+
+
+# TO DO: send this output to Trinity support site.
+
 
 # --JM, --CPU ????????????????????????
 
