@@ -614,9 +614,10 @@ job.1974828.err (END)
 # using RSEM output, so RSEM needs to work to do this step ???????????????
 
 08/29/15:
-# practice update, testing git/github procedure
+# practice update, testing git/github procedure from pro.
 
-
+# practice update, testing git/github procedure from macbook.
+# bit more edit.
 
 
 
