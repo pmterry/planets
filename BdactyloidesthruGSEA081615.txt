@@ -249,8 +249,6 @@ Error, do not understand options: --JM 10G --left reads.ALL.left.fq --right read
 # Q: are there multiple installs on trinity on crane, confusion from ??????
 
 
-
-
 [pterry@c0918.crane Trin20Tut]$ $TRINITY_HOME/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
 Error, do not understand options: --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
 [pterry@c0918.crane Trin20Tut]$ 
@@ -271,6 +269,361 @@ cd sample_data/test_Trinity_Assembly
 
 STOPPED
 
+08/23/15:
+# Rewriting & testing:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+srun --pty --ntasks-per-node=8 --mem 10gb $SHELL  # prompt back immedly
+cd /work/amundsen/pterry
+cd Trin20Tut
+# export TRINITY_HOME=/util/opt/trinity/2.0.6/gcc/4.8.2
+# Q: is this appropriate, or should specify ***SOMETHING ELSE*** ????????
+# LIKE /util/opt/trinity/2.0/gcc/4.8  ?????????????????????
+export TRINITY_HOME=/util/opt/trinity/2.0/gcc/4.8
+
+echo $TRINITY_HOME
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+echo $PATH
+module load trinity/2.0
+# module load trinity/2.0.6
+echo $PATH
+# module load trinity/2.0 perhaps not hitting '2.0.6' ????????????????
+# but /util/opt/trinity/2.0/gcc/4.8   ?????????????????????
+echo $PATH
+# LOOKS LIKE hitting different version of Trinity (NOT 2.0.6), need different 'module load trinity/2.0' command ????????????*************????????????????
+# BUT **soft link** 2.0 -> 2.0.6 ????????????????????????
+
+
+
+
+$TRINITY_HOME/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+
+# OR
+
+/util/opt/trinity/2.0.6/gcc/4.8.2/Trinity --seqType fq --JM 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+
+# or 
+
+$TRINITY_HOME/Trinity --seqType fq --max_memory 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+
+# OR
+
+/util/opt/trinity/2.0.6/gcc/4.8.2/Trinity --seqType fq --max_memory 10G --left reads.ALL.left.fq --right reads.ALL.right.fq --SS_lib_type RF --CPU 6
+# 3:36pm -> THIS ONE STARTED RUNNING ???????????******????????????
+# WHY ????????????????
+
+# go back check what created in 'Trin20Tut' dir.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry
+cd Trin20Tut
+ls -al
+cd trinity_out_dir
+ls -al
+# whole bunch new dir's in this new dir.
+# Q: Don't see any error messages, but apparently terminated early ??????????
+# Q: 2 questions:
+# 1) why particular trinity command ran ????????????????
+# 2) why did it terminate early, if did, what to do about that ?????????????
+
+08/24/15:
+Talked to Adam (HCC)
+
+i. Check if run from 08/23/15 may have finished, but my terminal session perhaps lost contact, did not reflect such.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry
+cd Trin20Tut
+ls -al
+cd trinity_out_dir
+ls -al
+# Looks like no Trinity.fasta in trinity_out_dir dir. as expected in step 7 of 
+http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html when step 6 finishes.
+ii. Try resume 08/23/15 trinity run on Crane. But do with SLURM batch file. So will need create scripts dir in /home/amundsen/pterry on Crane.
+mkdir scripts
+
+08/25/15:
+# so try 1st to run trinity without erasing directories created in trinity_out_dir dir. in /work/amundsen/pterry/Trin20Tut from 08/23/15 run which apparently did not complete (no Trinity.fasta file produced), Adam says crane may resume where it left off?
+# /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/tut/slurm_trinityexampledatacrane.sh
+# Adam, don't export to TRINITY_HOME, says Crane will/may do this itself?
+
+# now go back look how I scp'd slurm script to cluster, ran slurm script, checked on it afterwords
+# start at line 418, 962, Sitalica041515.txt
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/tut
+## TO fix script file, done
+scp slurm_trinityexampledatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_trinityexampledatacrane.sh  1971803 11:36pm => 12:14am, no longer listed in squeue -u pterry
+squeue -u pterry
+
+cd /work/amundsen/pterry/Trin20Tut
+ls -l
+less job.1971803.err  # 0 bytes
+less job.1971803.out  # 1730956
+cd trinity_out_dir
+# look for Trinity.fasta File
+-rw-r--r-- 1 pterry amundsen   11073091 Aug 26 00:04 Trinity.fasta
+less Trinity.fasta
+>TR1|c0_g1_i1 len=745 path=[723:0-744] [-1, 723, -2]
+TAAAAGTATGTTTGTCCTCTAACACTCGTGGAAAAGAATTCCAAAATTGAGAAATTCTTC
+TTTTTTTGGTAGCAATTGATGCTAAAATTTAATAATTTTACTTTAATTTCGTTAATTTTT
+TCTCAACTAAGAAATTTCTAAGCTGAGCGTCATTTCGGTGAACTTTTATTATTTTCTATT
+GAAAAAACATTACAATAGATAAAAAATAAGAAGACTGCATGATTAGAAGATTTTTTCACA
+CAATGGGAAGGCAGGATCGTATTTATAAAACGCTTTCAGAAGCCTTGAAAACAGACAAGA
+TTACCTTGTATAATGATAGTTATAAACATAGCCATCATATTGCGATGAAAGGCGTACCAG
+ACACAAATGAGACTCATTTCCGTTTAGAAATTGTATCACCAGAGTTCTCCGGGATGTCAA
+GAGTCGCCCGACATCGACTTGTTTATGGATTACTAAAAGATGAATTTGATGGCGGCCTTC
+ATGCTCTCCAAATAACTTCTAGCAAGACTCCTGATGAAGTTTCGTAATTTTCGAAAAGTA
+TTCAGGTATATTATTACATTTTTACATTTAGACAATTACATGACAGATTGAATGTGCTTG
+CTCGATTGTTTTGTTGCACTTTGTTCGCATGCTTAAATATGAAATACTGCGAAGTGAAAA
+GAATTTCACACATATTACAAAAAGGGTGAAACCAAAATAAATCTTATTTTGAGTTGATTC
+ACGGCTTAATCAGCGATTATTTACT
+>TR2|c0_g1_i1 len=750 path=[728:0-749] [-1, 728, -2]
+AAGCTGATTATATTGACTTTACTTACCGAATGATTTAATATATTCCTTTACTATTAATTC
+TAAAAAAACCCAGACTTACAACCTAGTCGTTAAATTGTAGGAACCGACTACAACTTCGAC
+AGCTGTTTCAAAGCATTTGAAAAACTTACAAAGTGTTTAAGATTGAATCTTTTTTTTAAC
+CTGTACTATATTTTTCTCTTGTAATTAGCTCTATTTTCCTTTTCACTATGCCATTTTTGA
+AACCTTCAAAGGTTTCACTTAAACGAATTCTCCAAGGAAATCCACCCAAACCAATTGGCT
+TAACTGAGTATGGTCATTTGCTGAGGCTCGTTGGTCTTCGTGAAGCAGACTCTAAGGAAG
+AGAATGAAAGAACAATTCTAAAACTCAACGAAGGAATCATTCAAATGCATGCAATTGAGA
+GACTTGATACATCCTTCATTAAGGAACCATTTCGTACTTTGAATCATGCTATTAATGCGG
+...
+>TR5742|c0_g2_i1 len=965 path=[1103:0-198 1104:199-219 1105:220-964] [-1, 1103, 1104, 1105, -2]
+Trinity.fasta
+# apparently 5742 reconstructed transcripts found/assembled in Trinity.fasta
+file, Q: is this reasonable ??????????
+
+sacct -j 1971803 -o start,end
+[pterry@login.crane trinity_out_dir]$ sacct -j 1971803 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-08-25T23:36:03 2015-08-26T00:04:16 
+2015-08-25T23:36:03 2015-08-26T00:04:16 
+[pterry@login.crane trinity_out_dir]$ 
+
+# perhaps run from scratch again ???????????????
+# or proceed to step 7 ???????
+
+08/26/15:
+# or proceed to step 7, http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html
+7.
+# 'examine the stats' ...
+$TRINITY_HOME/util/TrinityStats.pl trinity_out_dir/Trinity.fasta
+# Q: perhaps run from /work/amundsen/pterry/Trin20Tut, yes cause trinity_out_dir dir inside ?????????
+# So, create a SLURM script to run TrinityStats.pl
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/tut
+## TO fix script file, done
+scp slurm_7TrinityStatsexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_7TrinityStatsexampdatacrane.sh  1972265 11:55am => 11:56am, no longer listed in squeue -u pterry
+squeue -u pterry
+
+cd /work/amundsen/pterry/Trin20Tut
+ls -l
+less job.1972265.err  # 0 bytes
+less job.1972265.out  # 818 bytes
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':  9346
+Total trinity transcripts:      9537
+Percent GC: 38.14
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+        Contig N10: 3125
+        Contig N20: 2544
+        Contig N30: 2159
+        Contig N40: 1856
+        Contig N50: 1603
+
+        Median contig length: 812
+        Average contig: 1070.19
+        Total assembled bases: 10206444
+
+job.1972265.out 
+# Q: 5742 records in Trinity.fasta file, any comment relating this number to these stats from TrinityStats.pl file ?????????????????
+
+# now, steps 8-13, http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html
+# Quality assessment, optional, but recomended.
+# For learning purposes, run each step in its own slurm script
+9. Prepare the reference transcriptome fasta file as a BLAST database:
+# So, create a SLURM script to run TrinityStats.pl
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/tut
+## TO fix script file, done
+scp slurm_8Trinitymakeblastdbexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_8Trinitymakeblastdbexampdatacrane.sh  1972371 1:18pm => 11:56am, no longer listed in squeue -u pterry
+squeue -u pterry
+# initially, got a 'PD' status
+
+cd /work/amundsen/pterry/Trin20Tut
+ls -l
+less job.1972371.err  # 0 bytes
+/var/spool/slurmd/job1972371/slurm_script: line 17: makeblastdb: command not found
+job.1972371.err (END) 
+# Q: can't find makeblastdb ???????????????????????????????
+# perhaps, need module blast ??????????????????
+STOPPED
+modules avail
+module spider blast
+
+less job.1972371.out  # 0 bytes
+
+# retry slurm with 
+module load blast/2.2.9
+# added to slurm file.
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/tut
+## TO fix script file, done
+scp slurm_8Trinitymakeblastdbexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_8Trinitymakeblastdbexampdatacrane.sh 1972627 2:53pm => 3:03pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Trin20Tut
+ls -l
+less job.1972627.out  # 0 bytes
+less job.1972627.out  # 290 bytes
+Building a new DB, current time: 08/26/2015 14:54:45
+New DB name:   S_pombe_refTrans.fasta
+New DB title:  S_pombe_refTrans.fasta
+Sequence type: Nucleotide
+Keep Linkouts: T
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 5163 sequences in 0.619704 seconds.
+job.1972627.out (END) 
+# new .nhr, .nin, .nsq files in /work/amundsen/pterry/Trin20Tut dir.
+
+10. Run megablast to align the known transcripts to the Trinity assembly:
+# create slurm file to accomplish
+scp slurm_10Trinityblastnexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_10Trinityblastnexampdatacrane.sh 1972739 3:47pm => 3:55pm, no longer listed in squeue -u pterry
+cd /work/amundsen/pterry/Trin20Tut
+ls -l
+job.1972739.err  # 0 bytes
+job.1972739.out  # 0 bytes
+less Trinity_vs_S_pombe_refTrans.blastn
+TR1|c0_g1_i1    SPBC16E9.06c_T0 100.00  309     0       0       219     527     1       309     4e-163    571
+TR2|c0_g1_i1    SPCC777.11_T0   100.00  387     0       0       228     614     1       387     0.0       715
+TR3|c0_g1_i1    SPAC1556.01c_T0 100.00  298     0       0       1       298     3406    3109    2e-157    551
+...
+TR5742|c0_g2_i1 SPAC22H10.02_T0 100.00  417     0       0       53      469     1       417     0.0       771
+(END) 
+Trinity_vs_S_pombe_refTrans.blastn 
+# Q: which colm is e value, looks like perhaps colm 11 ???????????????????????
+
+11.  Once megablast has completed, run the script below to examine the length coverage of top database hits: 
+# create slurm file to accomplish
+scp slurm_11Trinitylengcovexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_11Trinitylengcovexampdatacrane.sh 1973257 10:27pm => 10:27pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Trin20Tut
+ls -l
+job.1973257.err  # 0 bytes  # when changed 'blastn' file name
+Error, cannot open file Trinity_vs_S_pombe_genes.blastn at /util/opt/trinity/2.0/gcc/4.8/util/analyze_blastPlus_topHit_coverage.pl line 49.
+job.1973226.err (END) 
+# perhaps Trinity_vs_S_pombe_genes.blastn from http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html is a typo, perhaps should be Trinity_vs_S_pombe_refTrans.blastn
+# anyway try it, fix slurm file, retry
+job.1973257.out
+#hit_pct_cov_bin        count_in_bin    >bin_below
+100     3398    3398
+90      193     3591
+80      160     3751
+70      202     3953
+60      217     4170
+50      200     4370
+40      159     4529
+30      144     4673
+20      76      4749
+10      15      4764
+job.1973257.out (END) 
+# Q: how understand this output ???????????????????????????
+
+12.  Examine the number of input RNA-Seq reads that are well represented by the transcriptome assembly. Trinity provides a script ‘alignReads.pl’ that executes Bowtie to align the left and right fragment reads separately to the Trinity contigs and then groups the reads together into pairs while retaining those single read alignments that are not found to be properly paired with their mate. Run ‘alignReads.pl’ by:
+
+# create slurm file to accomplish
+scp slurm_12Trinityexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_12Trinityexampdatacrane.sh 1973323 11:39pm => 10:27pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Trin20Tut
+ls -al
+job.1973323.err  # 128 bytes
+/var/spool/slurmd/job1973323/slurm_script: line 18: /util/opt/trinity/2.0/gcc/4.8/util/alignReads.pl: No such file or directory
+job.1973323.err (END) 
+# Note: don't find file alignReads.pl in dir /util/opt/trinity/2.0/gcc/4.8.2/util
+# as step 12 is expecting ????????????????????????????????????????????
+job.1973323.out  # 0 bytes
+
+13.
+# Looks like file to run this step is available, but need step 12 to work 1st ????????????????????????????????????????????????
+
+Abundance estimation using RSEM
+14. Don't follow ?????????????????????????????????????????????
+15-18.
+
+08/27/15:
+15.
+# Don't see 'RSEM_util dir containing run_RSEM_align_n_estimate.pl ????????
+# guess, could set up a slurm for say step 15, verify if can locate this file or not.
+scp slurm_15Trinityexampdatacrane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_15Trinityexampdatacrane.sh 1974828  11:55pm => 10:27pm, no longer listed in squeue -u pterry
+squeue -u pterry
+cd /work/amundsen/pterry/Trin20Tut
+ls -al
+less job.1974828.err # 153 bytes
+/var/spool/slurmd/job1974828/slurm_script: line 17: /util/opt/trinity/2.0/gcc/4.8/util/RSEM_util/run_RSEM_align_n_estimate.pl: No such file or directory
+job.1974828.err (END) 
+# as anticipated, could not find this file.
+# looks like I **send message to support site** concerning missing files for steps 15, 12. ??????????????????????????????
+# so currently, can't run 12, 13, 15 - 18, 19 to end without 15 & 12.
+
+
+
+
+19.
+# using RSEM output, so RSEM needs to work to do this step ???????????????
+
+
+
+
+
+
+
+
+
 
 # TRY COME UP WITH A PLAN TO PROCEED ?????????
 
@@ -282,9 +635,6 @@ STOPPED
 
 # --JM, --CPU ????????????????????????
 
-7.
-# 'examine the stats' ...
-$TRINITY_HOME/util/TrinityStats.pl trinity_out_dir/Trinity.fasta
 
 exit
 
