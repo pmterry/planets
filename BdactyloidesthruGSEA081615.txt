@@ -612,15 +612,78 @@ job.1974828.err (END)
 
 19.
 # using RSEM output, so RSEM needs to work to do this step ???????????????
+#######################################################################
+08/29/15: see 08/29/15 in /Users/bterry/githubstuf/githubcomments.txt
 
-08/29/15:
 # practice update, testing git/github procedure from pro.
 
 # practice update, testing git/github procedure from macbook.
 # bit more edit.
+########################################################################
+
+09/02/15:
+# last night, submitted Q: trinityrnaseq-2.0.6.tar.gz lacks some of the '.pl' files present in earlier versions? Submitted to 
+https://groups.google.com/forum/#!forum/trinityrnaseq-users
+
+# *******Response*******:
+Hi Pterry
+You can find the newer version at:
+$TRINITY_HOME/util/align_and_estimate_abundance.pl
+
+This should do the same thing. The instructions are at:
+http://trinityrnaseq.github.io/analysis/abundance_estimation.html
+
+Thanks, Mark
+
+# So, Some changes from http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html
+
+# so now, need digest new info in these instructions, proceed. I note, looks like edgeR not part of this new site,
+http://trinityrnaseq.github.io/analysis/abundance_estimation.html
+
+# one possible approach, rather than step 12 from 
+http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html
+# go to new tutorial, 'Example usage', and follow rec. there. That is, 
+
+It is useful to first run align_and_estimate_abundance.pl to only prep your reference database for alignment, using --prep_reference, and then subsequently running it on each of your sets of reads in parallel to obtain sample-specific abundance estimates.
+
+# so this the 1st two example commands there.
+
+## Just prepare the reference for alignment and abundance estimation
+#
+#    ./align_and_estimate_abundance.pl --transcripts Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference
 
 
+# Q: Is this starting with Trinity.fasta and S_pombe_refTrans.fasta ??????? Perhaps no 'blastn' like in 9, 10 of 
+# So to run this, perhaps pattern as in step 11 from http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html  ????????????
+# Q: but how knows about the ref, S_pombe_refTrans.fasta, no argument for '--prep_reference'   ??????????????
 
+# perhaps write slurm to do, see if runs, 
+# ck prev slurm for needed modules ???????????
+
+cd /work/amundsen/pterry/Trin20Tut
+
+$TRINITY_HOME/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode 
+
+09/06/15:
+# but wait, start again with:
+
+STOPPED
+
+http://trinityrnaseq.github.io/index.html
+
+09/07/15:
+# perhaps 1st, try run 'runMe.sh', get better understanding of Trinity system ??????????
+# then, try run some of the 'Downstream analyses' alternatives ???????
+-- RSEM, eXpress & IGV
+--edgeR, ...,   clarify 'note' before toc, biol'l reps, independently  ??????????????????, looks like run RESM before this (generating exp'n values matrices) ?????????
+--Transdecoder ???
+--Trinotate ????
+--full length ...  ???????????
+
+git add BdactyloidesthruGSEA081615.txt
+git commit -m "update 09/07/15 BdactyloidesthruGSEA081615.txt from pro"
+git push origin master
+git remote -v
 
 
 
