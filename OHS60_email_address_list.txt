@@ -1,4 +1,4 @@
-This file: OHS60_email_address_list
+This file: OHS60_email_address_list.txt
 
 This github URL: https://github.com/pmterry/planets/
 
