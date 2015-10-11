@@ -685,6 +685,702 @@ git commit -m "update 09/07/15 BdactyloidesthruGSEA081615.txt from pro"
 git push origin master
 git remote -v
 
+09/08/15:
+cd ~/planets
+git pull origin master
+
+# from pro laptop, looking at trinityrnaseq-2.0.6.tar.gz expansion on pro laptop, run runMeminuseXpress.sh from following dir on crane: /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinityrnaseq-2.0.6/sample_data/test_Trinity_Assembly
+# initially here, run from 'shell'.
+# place slurm scripts in 'testing' dir in this path.
+# 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/trinity_out_dir
+mv Trinity.fasta Trinity.fasta_pre090815
+# @: how find test_Trinity_Assembly dir on crane, Found
+cd /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly
+srun --pty $SHELL
+runMe.sh
+./runMe.sh
+# Q: what happened/or didn't ??????????????????????
+
+09/09/15:
+# What to try? 
+# in runMe.sh script, trinity command using 'fq.gz' files, so why need gunzip commands preceding ????????????????
+# Q: question where new Trinity.fasta will appear, if just run the trinity command directly ??????????????
+# since in /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly, in crane installation dir, would like to proceed if do, without messing up the installation (ck Adam ???????????????????????????)
+# --output <string>, so could direct output, 
+# note: it says, must include 'trinity' in the name as a safety precaution!
+# so, if after adam, ok to try, then say output to /work/amundsen/pterry/Trin20Tut/trinity_out_dir  ?????????????
+
+09/10/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly
+srun --pty $SHELL
+# srun --pty --ntasks-per-node=4 --mem 10gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+
+#######################################################
+##  Run Trinity to Generate Transcriptome Assemblies ##
+#######################################################
+../../Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --output /work/amundsen/pterry/Trin20Tut/trinity_out_dir/Trinity091015.fasta --CPU 4
+# FAILS, still trying to write to /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly, which is read only.
+# so fix as per my handwritten steps, try again.
+
+09/11/15:
+# 1. Give full path to trinity pgm when run
+# 2. remove '--output' parameter from trinity run command
+# 3. copy /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly dir. to /work/amundsen/pterry/Trin20Tut dir.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Trin20Tut
+cp -r /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly .
+
+[pterry@c1523.crane Trin20Tut]$ cp /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly .
+cp: omitting directory `/util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly'
+[pterry@c1523.crane Trin20Tut]$ 
+# Q: why failed ????????????????????????????
+
+philip-terry:test091115 bterry$ cp -r /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinityrnaseq-2.0.6/sample_data/test_Trinity_Assembly .
+philip-terry:test091115 bterry$ 
+philip-terry:test091115 bterry$ ls -al
+total 0
+drwxr-xr-x   3 bterry  staff  102 Sep 11 12:40 .
+drwxr-xr-x  14 bterry  staff  476 Sep 11 11:59 ..
+drwxr-xr-x@ 15 bterry  staff  510 Sep 11 12:40 test_Trinity_Assembly
+philip-terry:test091115 bterry$ 
+# so worked on test on 'pro'
+# ready to try on 'crane'
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+srun --pty $SHELL
+cd /work/amundsen/pterry/Trin20Tut
+cp -r /util/opt/trinity/2.0/gcc/4.8/sample_data/test_Trinity_Assembly .
+ls -al
+exit
+# appears worked ok.
+# cd /util/opt/trinity/2.0/gcc/4.8  ## has trinity executable 
+srun --pty $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+# 4. cd to /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly, run trinity command from this dir.
+cd /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly
+/util/opt/trinity/2.0/gcc/4.8/Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --CPU 4
+# error, checked Adam, HCC, thinks need allow more than 1G ram available with std call to SHELL, so retry as follows:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# check dir, if need clean up qqch before rerun
+cd /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly
+ls -al
+rm -rf trinity_out_dir
+rm *.fq
+rm *.readcount
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+cd /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly
+/util/opt/trinity/2.0/gcc/4.8/Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --CPU 4
+# started 11:46pm => 11:48pm, done.
+exit
+cd trinity_out_dir
+less Trinity.fasta
+>TR1|c0_g1_i1 len=281 path=[273:0-146 274:147-280] [-1, 273, 274, -2]
+GCCAGTAGAAATGTGGACATGATAAGCCATCGTGTGGCCAAACTAGAGGAGACAAGGAAC
+GCTTTTCATCCTCTGTTTTGGAGCCAGGCCATGTCAGTAGCTTTCAGTGGAAAGTCTGAG
+GGGACATTTGACTGTCCATGGCTGTAGAGCAGGCACACTGTCCAGGCCGCCTAACTGTTT
+GACCAGCACTAATGAAATGTCAGTGTCCTGCACTCACTGTCTGCATGTTGTTCAAATGAT
+TTTCTGCATGGTGCTTTGACTTTGGCTGTCCCATGACCCAG
+>TR1|c2_g1_i1 len=518 path=[565:0-25 566:26-40 572:41-109 571:110-255 569:256-279 570:280-517] [-1, 565, 566, 572, 571, 569, 570, -2]
+CCAGTATGAGTGCTGGGTGTGTGTGTGTTGTGTGTTACCTGTGCATTTGTGTATTATGTG
+TGTGCAGGAGAGGAGGTGAGGGCATGCATGTGCATGGGTGTGTGCATGTTGCATGTCTGT
+GTGGGTGTGGGTGTGGTGGGGTACTATGGCCTGGAATGGTGATTCAGCCAGCTCAGTGCA
+CTTCCCTGTGGTGACTTTTTAGAAGTGTGCAAGTGAGTAGGAGAAGGAAGTGCAAGATGG
+CAGCACAGTGTGTTTGATTAACAGTAACACTTTAACTTGTATGATCACTTTTTCTCAGGT
+GCTCTGAGTCAGGTGTGGGGCTGACATCATCACTTTCTAGCCAGGTCTCCCTCACAGTAT
+CCTTAGAATTTCAGAACTTTGAGGTGTCACAAAGTATGAGCTAAGAGCTAGACAGATTTT
+TTTCCTTTTCCAGCGTAATGATGGTTGTCTTAACCAAAACTGGGGGGGGGGGGGATTTTG
+TTGTACCCCCTGGTGGTCTTCATTTGAGTGATTTTGAT
+>TR1|c3_g1_i1 len=360 path=[495:0-57 501:58-225 487:226-249 500:250-323 498:324-359] [-1, 495, 501, 487, 500, 498, -2]
+AAGTGAGCCGGCATTTCCATCAGGTACCTGTGGCTGGTGGCTCCCTCCACGGGGCTGGCT
+ATGTAGCTCCCATATGTCCCTTAGAGAGTCTGTCATCCTCTTTACTTTGTCACTAACCCC
+TTGTCTTAACCAAGCATCATGTGGGCAAAGATGCAGTTTTCCTTTATTAGATGGCCTGGG
+TCTAGATACGCTGGTGGTGGACTTGCCTCACAGGGTTCAGAGTGCTCAGGGAGCTTCCTA
+Trinity.fasta
+
+
+# TO DO: recheck doc for meaning of the fields ??????????????
+# see in http://trinityrnaseq.github.io/index.html, 'Output of Trinity' section.
+# now run following to 
+Obtain basic stats for the number of genes and isoforms and contiguity of the assembly by running:
+
+% $TRINITY_HOME/util/TrinityStats.pl trinity_out_dir/Trinity.fasta
+
+# so,
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+/util/opt/trinity/2.0/gcc/4.8/util/TrinityStats.pl trinity_out_dir/Trinity.fasta
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':	67
+Total trinity transcripts:	94
+Percent GC: 49.44
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+	Contig N10: 8543
+	Contig N20: 8062
+	Contig N30: 7195
+	Contig N40: 5534
+	Contig N50: 3918
+
+	Median contig length: 496.5
+	Average contig: 1666.59
+	Total assembled bases: 156659
+
+
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+	Contig N10: 8757
+	Contig N20: 7195
+	Contig N30: 5905
+	Contig N40: 5399
+	Contig N50: 3745
+
+	Median contig length: 378
+	Average contig: 1057.79
+	Total assembled bases: 70872
+# apparently http://trinityrnaseq.github.io/index.html, 'Output of Trinity' section showing results for different input data ???????????????????
+
+
+
+[pterry@c0125.crane test_Trinity_Assembly]$ 
+
+
+
+
+09/12/15:
+# perhaps next, from runMe.sh, try 'use RSEM to estimate read abundance', run from /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly
+# see ref: http://trinityrnaseq.github.io/analysis/abundance_estimation.html
+# note: 1st 'note', Q: what is 'preparation of ref', perhaps just align all the reads to the ref ????????????????????
+# ... subsequently run 'align_and_estimate_abundance.pl' on 'on each of your sets of reads in parallel to obtain sample-specific abundance estimates' ???????
+# for 95C1-3,T1-3, would their be 2 runs or 6 runs ?????????????????????
+# a ***guess***, cat biol reps, then run 'align_and_estimate_abundance.pl' on each of these ?????????????????????????
+# appears runMe.sh example, just cat'd all the reads in one file (actually 2, left & right) ???????????????????????????????
+# looking thru 'align_and_estimate_abundance.pl'
+# Alignment output (bam) section
+# The alignment step generates the file **bowtie.bam**, which is then fed directly into either RSEM or eXpress. Note, the alignment step also generates a **bowtie.csorted.bam** file, which is a coordinate-sorted bam file that can be used for visualization using IGV
+# perhaps split into 2 steps, see what outputs are ?????????????
+# RSEM output
+# The RSEM computation generates two primary output files containing the abundance estimation information:
+RSEM.isoforms.results  : EM read counts per Trinity transcript
+RSEM.genes.results     : EM read counts on a per-Trinity-component (aka... gene) basis, 'gene' used loosely here.
+# The output for the isoforms file looks like so:
+...
+# and the genes file provides expression results on a per-Trinity component basis:
+...
+# 
+
+
+09/15/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+#cd /work/amundsen/pterry/Trin20Tut/test_Trinity_Assembly
+# srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+cd /util/opt/trinity/2.0/gcc/4.8/sample_data
+ls -al
+cd test_full_edgeR_pipeline
+ls -al
+cd rnaseq_reads
+ls -al
+cd /work/amundsen/pterry/Trin20Tut
+srun --pty $SHELL
+cp -r /util/opt/trinity/2.0/gcc/4.8/sample_data/test_full_edgeR_pipeline .
+ls -al
+cd test_full_edgeR_pipeline/rnaseq_reads
+pwd
+ls -al
+exit
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+## /util/opt/trinity/2.0/gcc/4.8/Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --CPU 4
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+pwd
+ls -al
+/util/opt/trinity/2.0/gcc/4.8/Trinity --seqType fq --max_memory 2G --left Sp_ds.10k.left.fq.gz,Sp_hs.10k.left.fq.gz,Sp_log.10k.left.fq.gz,Sp_plat.10k.left.fq.gz --right Sp_ds.10k.right.fq.gz,Sp_hs.10k.right.fq.gz,Sp_log.10k.right.fq.gz,Sp_plat.10k.right.fq.gz --SS_lib_type RF --CPU 4
+# 11:04pm => 11:09pm.
+exit
+pwd
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+ls -al
+cd trinity_out_dir
+ls -al
+less Trinity.fasta
+>TR1|c0_g1_i1 len=783 path=[761:0-782] [-1, 761, -2]
+ACCAAGACGAAATGATTCGTGCTGGTCGTCTTTCTCACCGCTACAAGGGTATTGGTGAGT
+GTTTCAAGCGTACTGCTGCTGAAGAAGGTGTTATTTCCCTTTGGAGAGGTAATACCGCTA
+ATGTCTTACGTTACTTCCCCACTCAGGCCTTGAACTTTGCTTTCAAGGATAAATTTAAGA
+AGATGTTTGGTTACAAGAAGGAAAGGGATGGTTATGCTAAATGGTTTGCCGGTAATTTAG
+CCTCTGGTGGTGCTGCTGGTGCCGCTTCCCTTTTGTTTGTCTACTCTCTTGACTATGCCC
+GTACCCGTCTTGCCAATGATGCCAAATCCGCCAAGAAGGGAGGTGAACGTCAATTTAACG
+GTTTGGTCGATGTCTATCGTAAGACCTATCGTTCTGATGGTTTACGTGGTTTGTACCGTG
+GTTTTGGCCCTTCTGTTGTCGGTATTGTTGTTTACCGTGGTTTGTACTTCGGTATGTATG
+ATACCTTGAAACCCGTCGTTTTGGTTGGTCCTTTGGAGGGCAACTTCTTGGCCTCCTTCC
+TTCTCGGTTGGGCCGTTACCACTGGTTCTGGTGTTGCTTCTTATCCTCTTGATACCATCC
+GTCGTCGTATGATGATGACATCTGGTGAAGCCGTCAAGTATAGCTCCTCCTTTGAATGTG
+GTCGTCAAATCCTCGCCAAGGAAGGTGCTCGTTCTTTCTTCAAGGGTGCCGGTGCCAACA
+TTCTTCGTGGTGTTGCTGGAGCTGGTGTCCTTTCCATTTATGACCAAGTTCAACTTTTGA
+TGT
+>TR1|c1_g1_i1 len=299 path=[277:0-298] [-1, 277, -2]
+GTTTTCCTTTCATATCATCATTTTCTTGTTGTTGTGCTAAGGCTTCATCTCTTTATCTCT
+TTTTTTTTCGTACATTTGAACTTATCTATTTACCAGAATTAGTGAAAAATGGCTACTTCA
+TCTGCTGCCGCTGCTGCTAGCACCCCCGTGAATGCAAACACCATCACTGAAACAAAGAAC
+TCTACTTTCTTCTTTGATTTCATGATGGGTGGTGTTTCTGCTGCTGTATCTAAAACCGCT
+GCCGCTCCCATTGAGCGTGTCAAGCTTCTCATTCAAAACCAAGACGAAATGATTCGTGC
+>TR1|c2_g1_i1 len=322 path=[300:0-321] [-1, 300, -2]
+TTTTGATGTTCGGCAAGAAGTTCTAATTGCCCTAATGTCTTTTCTTTTCAATTGCTTTGC
+Trinity.fasta 
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+/util/opt/trinity/2.0/gcc/4.8/util/TrinityStats.pl trinity_out_dir/Trinity.fasta
+
+# think next, do from http://trinityrnaseq.github.io/analysis/abundance_estimation.html
+# p-1, two steps, 
+
+09/16/15:
+# 1. Just prepare the reference for alignment and abundance estimation
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference
+
+exit
+# look for 'prep reference'
+ls -al
+cd trinity_out_dir
+ls -al
+# ran from 'rnaseq_reads dir, but bunch of stuff in trinity_out_dir dir. ?????????????????????????
+Only prepping reference. Stopping now.
+# so looks like may have completed ok.
+
+# 2. Run the alignment and abundance estimation (assumes reference has already been prepped, errors-out if prepped reference not located.)
+
+# Q: will there be an issue with locating needed files for alignment and abundance estimation ??????????????????
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_ds.10k.left.fq --right Sp_ds.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode
+
+exit
+ls -al
+cd trinity_out_dir
+ls -al
+
+# ok, find a 
+-rw-r--r-- 1 pterry amundsen   29693 Sep 16 12:12 RSEM.isoforms.results
+file in /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads dir.
+# Q: if have 3 more sets of reads to run (http://trinityrnaseq.github.io/analysis/abundance_estimation.html, 'Align Reads and Estimate Abundance' section, what do you do for RSEM.isoforms.results & preceding files, rename, ?????????????????????????
+less RSEM.isoforms.results
+# Q: how to proceed ?????????????
+# note: In http://trinityrnaseq.github.io/analysis/diff_expression_analysis.html, section 'Generating Expression Value Matrices', we see multiple sampleA.RSEM.isoform.results files, so here will similarly rename RSEM.isoforms.results file, run other 3 sets of read files with align_and_estimate_abundance.pl. But I note several files created in this align_and_estimate_abundance.pl step, hopefully, only changing name of RSEM.isoforms.results will not be a problem ??????????????????
+
+# pwd => /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+# or perhaps cp RSEM.isoforms.results to ds.RSEM.isoforms.results, and RSEM.genes.results to ds.RSEM.genes.results, don't change anything else before running next set read files with align_and_estimate_abundance.pl ??????????????????????????
+cp RSEM.isoforms.results ds.RSEM.isoforms.results
+cp RSEM.genes.results ds.RSEM.genes.results
+
+# next, run 'hs' sample.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_hs.10k.left.fq --right Sp_hs.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode
+[pterry@c0406.crane rnaseq_reads]$ /util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_hs.10k.left.fq --right Sp_hs.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode
+CMD: touch RSEM.isoforms.results.ok
+# so ***did not run*** ????????????????????????
+# so try removing some files ???????????????????????????????
+rm -rf RSEM.stat
+rm bowtie.bam
+rm bowtie.bam.ok
+rm RSEM.genes.results
+rm RSEM.isoforms.results
+rm RSEM.isoforms.results.ok
+exit
+ls -al
+# Q: what to think of this removal step ???????????**********????????????
+
+cp RSEM.isoforms.results hs.RSEM.isoforms.results
+cp RSEM.genes.results hs.RSEM.genes.results
+
+09/17/15:
+# next, run 'log' sample.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+rm -rf RSEM.stat
+rm bowtie.bam
+rm bowtie.bam.ok
+rm RSEM.genes.results
+rm RSEM.isoforms.results
+rm RSEM.isoforms.results.ok
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_log.10k.left.fq --right Sp_log.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode
+exit
+ls -al
+cp RSEM.isoforms.results log.RSEM.isoforms.results
+cp RSEM.genes.results log.RSEM.genes.results
+
+# next, run 'plat' sample.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+rm -rf RSEM.stat
+rm bowtie.bam
+rm bowtie.bam.ok
+rm RSEM.genes.results
+rm RSEM.isoforms.results
+rm RSEM.isoforms.results.ok
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_plat.10k.left.fq --right Sp_plat.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode
+ls -al
+cp RSEM.isoforms.results plat.RSEM.isoforms.results
+cp RSEM.genes.results plat.RSEM.genes.results
+ls -al
+
+# Q: section 'How many expressed genes or transcripts do I have?'
+# Q: Would like to understand how useful this section might be ??????????
+
+09/18/15:
+# now from 'http://trinityrnaseq.github.io/analysis/diff_expression_analysis.html'
+p-1, section,
+'Generating Expression Value Matrices'
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/abundance_estimates_to_matrix.pl --est_method RSEM  --out_prefix Trinity_trans ds.RSEM.isoforms.results hs.RSEM.isoforms.results log.RSEM.isoforms.results plat.RSEM.isoforms.results
+exit
+ls -al
+# result: got one expected result, not the other ???????????????
+# that is, ERRORs after got
+Trinity_trans.counts.matrix  : matrix of fragment raw counts
+-rw-r--r-- 1 pterry amundsen   16684 Sep 18 15:31 Trinity_trans.counts.matrix
+
+# i.e., did not get the following expected file, i.e., got '0' bytes in
+Trinity_trans.TMM.fpkm.matrix : TMM-normalized FPKM expression values
+# p-2, reading along, says using code in edgeR, but ***NOT*** LOADING edgeR till next section, 'Identifying Differentially Expressed Transcripts' ????****?????
+
+# Q: when Adam returns next week, try troubleshoot above error ????***????????
+
+09/22/15:
+p-2 'Identifying Differentially Expressed Transcripts' section.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+ls -al
+less Trinity_trans.counts.matrix
+        ds.RSEM hs.RSEM log.RSEM        plat.RSEM
+TR24|c0_g1_i1   3.00    19.00   0.00    0.00
+TR108|c0_g1_i1  2.00    0.00    1.00    2.00
+TR30|c0_g1_i1   1.00    0.00    0.00    1.00
+TR197|c0_g1_i1  2.00    0.00    0.00    4.00
+Trinity_trans.counts.matrix 
+
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+module load R/3.2
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+R   # R ver 3.2.1
+source("http://bioconductor.org/biocLite.R")
+# Q: ck Adam: 'create personal library ...(y/n)'  # try 'y'
+
+> source("http://bioconductor.org/biocLite.R")
+Warning in install.packages("BiocInstaller", repos = a["BioCsoft", "URL"]) :
+  'lib = "/util/opt/R/3.2.1/gcc/4.4.7/lib64/R/library"' is not writable
+Would you like to use a personal library instead?  (y/n) y
+Would you like to create a personal library
+~/R/x86_64-unknown-linux-gnu-library/3.2
+to install packages into?  (y/n) y
+Error in install.packages("BiocInstaller", repos = a["BioCsoft", "URL"]) : 
+  unable to create ‘~/R/x86_64-unknown-linux-gnu-library/3.2’
+In addition: Warning message:
+In dir.create(userdir, recursive = TRUE) :
+  cannot create dir '/home/amundsen/pterry/R/x86_64-unknown-linux-gnu-library', reason 'No such file or directory'
+> q()
+Save workspace image? [y/n/c]: n
+[pterry@c0312.crane rnaseq_reads]$ exit
+exit
+[pterry@login.crane rnaseq_reads]$ 
+# Q: how to proceed ????????????????????????????????????????
+# no dir '/home/amundsen/pterry', perhaps I should have created ‘~/R/x86_64-unknown-linux-gnu-library/3.2’, then tried:
+source("http://bioconductor.org/biocLite.R")
+# Q: ????????????????????????????????????????????????????
+
+biocLite('edgeR')
+biocLite('ctc')
+biocLite('Biobase')
+install.packages('gplots’)
+install.packages(‘ape’)
+
+10/07/15:
+# After check wi Adam at HCC, to retry:
+
+i) abundance_estimates_to_matrix.pl  ## line 1138 above. probably 
+module load R/3.2 1st ??????????????
+# perhaps, for now, don't try fix 09/18/15, ''Generating Expression Value Matrices', the failure to get 'Trinity_trans.TMM.fpkm.matrix' output file. Since got 'Trinity_trans.counts.matrix', just proceed to 'Identifying Differentially Expressed Transcripts' section of 'http://trinityrnaseq.github.io/analysis/diff_expression_analysis.html'
+
+ii) Identifying Differentially Expressed Transcripts (must load bioconductor packages from **LOGIN** node) (Adam)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+ls -al
+module load R/3.2
+R  # R ver 3.2.1
+source("http://bioconductor.org/biocLite.R")
+biocLite('edgeR')  # did all here
+biocLite('ctc')  ## did none here
+biocLite('Biobase')  ## did none here
+install.packages("gplots")
+# needed double quotes, when trying to select download site, mouse could not manipulate selection of site, clicked on Berlin, bit later, appears to have done the download ?????????????????????
+install.packages("ape")  ## did not ask for dnload site, apparently just did it ?????????????????????
+q()
+logout
+
+STOPPED
+
+p-3
+# 'Identifying DE features: With biological replicates (PREFERRED)'
+# **prepare** 'samples_described.txt' file (Q: separator for columns??), scp to '/work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads' dir on crane.
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+## TO fix the file, done
+scp samples_described.txt pterry@crane.unl.edu:/work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.0
+
+module load R/3.2
+cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+# **to fix**: next command wi correct dir on crane
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl --matrix counts.matrix --method edgeR --samples_file samples_described.txt
+
+[pterry@c1923.crane rnaseq_reads]$ /util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl --matrix counts.matrix --method edgeR --samples_file samples_described.txt
+Error, cannot open file counts.matrix at /util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl line 312.
+[pterry@c1923.crane rnaseq_reads]$ 
+# perhaps for '--matrix' parameter, change argument to 'Trinity_trans.counts.matrix'
+# to try
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl --matrix Trinity_trans.counts.matrix --method edgeR --samples_file samples_described.txt
+
+# apparently ran ????????
+exit
+ls -al
+# see 1 new dir,
+drwxr-xr-x 2 pterry amundsen    4096 Oct  7 12:30 edgeR.223987.dir
+# bunch files here
+[pterry@login.crane rnaseq_reads]$ cd edgeR.223987.dir/
+[pterry@login.crane edgeR.223987.dir]$ ls -al
+total 244
+drwxr-xr-x 2 pterry amundsen  4096 Oct  7 12:30 .
+drwxr-xr-x 5 pterry amundsen  4096 Oct  7 12:30 ..
+-rw-r--r-- 1 pterry amundsen   973 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_hs_rep1.ds_rep1.vs.hs_rep1.EdgeR.Rscript
+-rw-r--r-- 1 pterry amundsen 23081 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_hs_rep1.edgeR.DE_results
+-rw-r--r-- 1 pterry amundsen 10420 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_hs_rep1.edgeR.DE_results.MA_n_Volcano.pdf
+-rw-r--r-- 1 pterry amundsen   976 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_log_rep1.ds_rep1.vs.log_rep1.EdgeR.Rscript
+-rw-r--r-- 1 pterry amundsen 23903 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_log_rep1.edgeR.DE_results
+-rw-r--r-- 1 pterry amundsen 10468 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_log_rep1.edgeR.DE_results.MA_n_Volcano.pdf
+-rw-r--r-- 1 pterry amundsen   979 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_plat_rep1.ds_rep1.vs.plat_rep1.EdgeR.Rscript
+-rw-r--r-- 1 pterry amundsen 22223 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_plat_rep1.edgeR.DE_results
+-rw-r--r-- 1 pterry amundsen  9626 Oct  7 12:30 Trinity_trans.counts.matrix.ds_rep1_vs_plat_rep1.edgeR.DE_results.MA_n_Volcano.pdf
+-rw-r--r-- 1 pterry amundsen 20468 Oct  7 12:30 Trinity_trans.counts.matrix.hs_rep1_vs_log_rep1.edgeR.DE_results
+-rw-r--r-- 1 pterry amundsen 10382 Oct  7 12:30 Trinity_trans.counts.matrix.hs_rep1_vs_log_rep1.edgeR.DE_results.MA_n_Volcano.pdf
+-rw-r--r-- 1 pterry amundsen   976 Oct  7 12:30 Trinity_trans.counts.matrix.hs_rep1_vs_log_rep1.hs_rep1.vs.log_rep1.EdgeR.Rscript
+-rw-r--r-- 1 pterry amundsen 22619 Oct  7 12:30 Trinity_trans.counts.matrix.hs_rep1_vs_plat_rep1.edgeR.DE_results
+-rw-r--r-- 1 pterry amundsen 10543 Oct  7 12:30 Trinity_trans.counts.matrix.hs_rep1_vs_plat_rep1.edgeR.DE_results.MA_n_Volcano.pdf
+-rw-r--r-- 1 pterry amundsen   979 Oct  7 12:30 Trinity_trans.counts.matrix.hs_rep1_vs_plat_rep1.hs_rep1.vs.plat_rep1.EdgeR.Rscript
+-rw-r--r-- 1 pterry amundsen 23098 Oct  7 12:30 Trinity_trans.counts.matrix.log_rep1_vs_plat_rep1.edgeR.DE_results
+-rw-r--r-- 1 pterry amundsen 10107 Oct  7 12:30 Trinity_trans.counts.matrix.log_rep1_vs_plat_rep1.edgeR.DE_results.MA_n_Volcano.pdf
+-rw-r--r-- 1 pterry amundsen   982 Oct  7 12:30 Trinity_trans.counts.matrix.log_rep1_vs_plat_rep1.log_rep1.vs.plat_rep1.EdgeR.Rscript
+[pterry@login.crane edgeR.223987.dir]$ 
+
+# next, perhaps do 'less' for the 6 'DE_results' files ????
+# seeing some small pvals, 'topTags' from edgeR ????????????
+# **to do:** scp the 6 'pdf' files to 'pro', display in 'adobe reader'
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+#scp pterry@tusker.unl.edu:/work/amundsen/pterry/brachy_dis/blastn_out/blastn_out6_AstolvsBrachydis .
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads/edgeR.223987.dir/Trinity_trans.counts.matrix.ds_rep1_vs_hs_rep1.edgeR.DE_results.MA_n_Volcano.pdf .
+
+# displayed in adobe reader. Still some Q's ?????????????????
+
+10/08/15:
+# attempt to do **trinotate**. and GOseq.
+tar xzvf Trinotate-2.0.2.tar.gz
+# ok, should be able to use to find where things located when try use on crane.
+# /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/trinotate2.0.2/Trinotate-2.0.2
+
+10/10/15:
+# Summary of situation as best understand now, check Keenan on what s/w need, then proceed (will need Adam involvement for using 'crane'.
+
+# Trinity
+# diff'l_expn_analysis.html
+p-4 of 8
+# dir. edgeR.223987.dir has results:
+--has results & volcano plots for 6 combinations of 4 biol'l samples.
+# Q: p-5 of 8, is GO_seq using results from edgeR.223987.dir ???????
+
+# New trinotate doc (last couple weeks)
+# trinotate.github.io
+p-1
+# Q: TrinotateWeb => (Trinity/RSEM/Bioconductor)  => Q: relation to edgeR.223987.dir above ???????????????
+p-2
+S/W:
+trinotate
+Trinity (Transdecoder, DE with RSEM, Bioconductor)
+sqlite
+NCBI Blast+
+HMMER/PFAM
+p-3
+Files needed:
+Trinity.fasta
+Trinity.fasta.transdecoder.pep (Q: Req'd ?????????????)
+p-6
+syntax for commands
+Trinotate Pre-gen'd sqlite db
+Loading transcripts, coding regions ???????
+p-7
+Load blast homologies ????????
+TRinotate: output annotation rept.
+--trinotate-annotation-report.xls ????***********???????????
+p-8
+sample data ?????
+
+.../wiki/Running-GOSeq 
+p-1
+--blastogo ????????????
+Extract GO assignments per gene
+GO DAG ?????????????????
+--trinolate.xls ?????????*********?????????
+Run GOSeq
+p-2
+factor_labeling.txt
+GO-seq on DE features
+--DE analysis using a trinity assembly
+p-7of9
+GO enrichment analysis on DE genes [GOAL, me] ????????
+CIRCULAR doc.: what is a direct path to what want ?????????????
+
+
+
+
+
+
+
+# check result in curr dir.
+
+
+
+
+
+
+
+
+
+##### Done Running Trinity #####
+
+
+cd /work/amundsen/pterry/Trin20Tut/trinity_out_dir
+ls -al
+
+
+
 
 
 # TRY COME UP WITH A PLAN TO PROCEED ?????????
