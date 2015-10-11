@@ -1,0 +1,11 @@
+This file: OHS60_email_address_list
+
+This github URL: https://github.com/pmterry/planets/
+
+10/11/15:
+Example with three email addresses.
+
+Arterburn, Sharrel (McBride)      searterbu@charter.net
+Smith, Charles                    c7psmith@hotmail.com
+Terry, Mike                       pterry2@mac.com
+
