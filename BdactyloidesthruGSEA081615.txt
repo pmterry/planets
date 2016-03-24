@@ -632,7 +632,7 @@ $TRINITY_HOME/util/align_and_estimate_abundance.pl
 
 This should do the same thing. The instructions are at:
 http://trinityrnaseq.github.io/analysis/abundance_estimation.html
-
+# broken link 12/05/15 ?????????????????????????
 Thanks, Mark
 
 # So, Some changes from http://trinityrnaseq.github.io/trinity_rnaseq_tutorial.html
@@ -1307,7 +1307,7 @@ tar xzvf Trinotate-2.0.2.tar.gz
 # /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/trinotate2.0.2/Trinotate-2.0.2
 
 10/10/15:
-# Summary of situation as best understand now, check Keenan on what s/w need, then proceed (will need Adam involvement for using 'crane'.
+# Summary of situation as best understand now, check Keenan on what s/w need, then proceed (will need Adam involvement for using 'crane').
 
 # Trinity
 # diff'l_expn_analysis.html
@@ -1357,46 +1357,4259 @@ p-7of9
 GO enrichment analysis on DE genes [GOAL, me] ????????
 CIRCULAR doc.: what is a direct path to what want ?????????????
 
+10/22/15:
+# from githubcomments.txt, did
+cd ~/planets
+git pull origin master
+
+10/26/15:
+https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression
+--7, Gene Ontology (GO) Enrichment Analysis on Differentially Expressed Genes
+# ***Q***: do I need a ref. genome to accomplish this goal ????????
+**Before** running GO-Seq, you must follow the relevant **Trinotate protocol** (see next url ref) to generate the GO assignments leveraged by this process.
+https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq
+# Gene Ontology Enrichment using Trinotate and GOseq
+# Run Trinotate to Generate an Annotation Report
+# Use http://trinotate.sf.net[Trinotate] (***broken*** link????) to generate an annotation report ***'trinotate.xls'***, which includes top-matching blast matches from SwissProt (and optionally UniRef) and any corresponding Gene Ontology (GO) assignments from the TrEMBL/SwissProt databases.
+# Q: so what to do ?????????
+# perhaps go to basic trinotate web site: http://trinotate.github.io/
+which on p-7 of 9, section 
+# Trinotate: Output an Annotation Report
+# outputs: trinotate_annotation_report.xls, an 'xls' report.
+
+# so if try follow this web site, p-3 of 9, shows need for file: Trinity.fasta.transdecoder.pep. ***Instructions*** for generation of this file can be found here: http://transdecoder.github.io/
+# Q: ***WHAT*** USE FOR 'target_transcripts.fasta' ??????????????
+# Q: how 'transdecoder' output and next section in 'basic trinotate web site' work ????
+# 2. Capturing BLAST Homologies
+# Q: where get '.trinotate.pep' files ????????????????????
+# Q: also 'transdecoder.pep'  ?????????????????????????
+# next probably p-5 of 9, section 'Trinotate: Loading Above Results into a Trinotate SQLite Database'
+# p-7 of 9, 'xls' file.
+
+# back to transdecoder web page,
+
+10/27/15:
+# The latest release of TransDecoder can be found here:
+https://github.com/TransDecoder/TransDecoder/releases
+
+# Running TransDecoder
+# Predicting coding regions from a transcript fasta file
+
+# Step 1: extract the long open reading frames
+TransDecoder.LongOrfs -t target_transcripts.fasta
+# Q: what file is target_transcripts.fasta ????????????????????????
+# Trinity.fasta, or one of the initial transcript files ???????????
+
+# Step 3: predict the likely coding regions
+TransDecoder.Predict -t target_transcripts.fasta [ homology options ]
+# Q: again, what file is target_transcripts.fasta ????????????????????????
+
+# perhaps all need, i.e., don't need next section: ????????????
+Starting from a genome-based transcript structure GTF file (eg. cufflinks)
+p-2 of 5
+# section: Sample data and execution
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/TransDecoderv2.0.1
+tar -xzvf TransDecoder-2.0.1.tar.gz
+
+# so yes, a sample_data dir with runMe.sh file
+STOPPED
+
+10/28/15:
+# TO DO: ck transDecoder-users site before continue
+# did, nothing to help me decide what to use for 'target_transcripts.fasta' in following step ???????????????????????????????????????????
+
+10/30/15:
+# From TransDecoder-users support site, 'blastp Warning: Sequence contains no data', appears to be saying 'I have used the latest version of Transdecoder and the script "TransDecoder.LongOrfs -t target_transcripts.fasta" on my freshly created Trinity de novo assembly fasta file' => apparently 'target_transcripts.fasta' placeholder means can substitute 'Trinity.fasta' output from running Trinity ???????
+
+# I note in http://trinotate.github.io/, states in section '1. Software Required', 'Trinity (includes TransDecoder...' ???????
+# But in 'http://transdecoder.github.io/', at section 'Obtaining TransDecoder
+The latest release of TransDecoder can be found **here**.
+
+# TO DO: at http://transdecoder.github.io/, 
+i) have Adam dnload, load TransDecoder.
+ii) then in section, 'Running TransDecoder
+Predicting coding regions from a transcript fasta file', run Step 1
+# Step 1: extract the long open reading frames
+TransDecoder.LongOrfs -t target_transcripts.fasta
+# I assume substitute Trinity.fasta for placeholder 'target_transcripts.fasta' ???????? OR copy Trinity.fasta to target_transcripts.fasta and use the latter ????
+
+# Q: is step 3 needed ????????????????????????
+# Step 3: predict the likely coding regions
+TransDecoder.Predict -t target_transcripts.fasta [ homology options ]
+# if so, what about the 'homology options' ??????????????????? Perhaps see runMe.sh under /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/TransDecoderv2.0.1/TransDecoder-2.0.1/sample_data
+#Note: In https://groups.google.com/forum/#!forum/trinotate-users, 'TransDecoder.LongOrfs or TransDecoder.Predict' question suggests need the final transdecoder pep file, which is generated by TransDecoder.Predict
 
 
+iii)
+# Then, following TransDecoder, back to 'http://trinotate.github.io/', section, '1. Software Required' 
+# probably need sqlite, ncbi blast+, HMMER/PHAM 
+# Then, in section '2. Sequence Databases Required', looks like need dnload 3 databases ????????????
+# dnload on 'pro' just to see what have.
+# SwissProt: uniprot_sprot...., keeping .part name ??????????
+# not dnloading reliably (14.1, 49.1, always with '.part' at end of name ??????, supposed to be 63.6
+# Uniref90: start, 7:01pm =>
+# got 136.4 Mb, should be 4.3 Gb ??????????????????
+# Pham-A: got 34.3 Mb, supposed to be 220 Mb ????????????????????
 
+# Finally, in section '2. Capturing BLAST Homologies', looks like run blastx & blastp.
 
+# then to .xls file beginning with section 'Trinotate: Loading Above Results into a Trinotate SQLite Database'.
 
+11/02-03/15:
+# I note at http://trinotate.github.io/, claims Trinity (includes TransDecoder). I note: TransDecoder is in ***'tar.gz'*** file in trinity-plugins dir. of trinity v2.0.6, but **not**???????? in this subdir. for v2.1.1 ???????????
+# note: when dnload transDecoder v2.0.1, found TRansDecoder.LongOrfs & TRansDecoder.Predict **inside** of TRansDecoder-2.0.1 dir.
 
-# check result in curr dir.
+# so will need get Adam to install Trinity 2.1.1 & TRansDecoder-2.0.1 on crane.
+# Then run Trinity on test_Trinity_Assembly data (runMe.sh file), followed by step 1 & step 3 (arrange so if same name output file, they don't mess each other up) so can see what is output. Then back to trinotate, 2. Capturing BLAST Homologies section on way to '.xls' file.
 
+# ck what Jean-Jack has in 'biodata/1.0' on crane at HCC.
+ml spider biodata/1.0
+module load biodata/1.0
+ml spider ZEA_MAYS  
+Lmod has detected the following error:  Unable to find: "ZEA_MAYS"
+## ?????????????????????????? 
 
+ls $GENOMES  ## to find out what genomes are available.
+# but this worked.
+# so **check** with JJ, if 3 db's in http://trinotate.github.io/, would he want to put in 'biodata/1.0' ?????
+i) uniprot_sprot.trinotate_v2.0.pep.gz (63.6 MB)
+ii) uniprot_uniref90.trinotate_v2.0.pep.gz (4.3 GB)
+iii) Pfam-A.hmm.gz  (220 MB)
 
+# keenan Q's:
+i) what filename he used in the 'transdecoder' command line ??????
+ii) what transdecoder command line ?????????????
 
-
-
-
-
-
-##### Done Running Trinity #####
-
-
+# check crane dirs preparing to run Transdecoder
 cd /work/amundsen/pterry/Trin20Tut/trinity_out_dir
+# Note:
+
+# will have to go back thru BdactyloidesthruGSEA081615.txt, more than 1 Trinity.fasta, so need clarify which is which, which can use, or will I need run again ????????????????????
+
+# Note: https://github.com/trinityrnaseq/trinityrnaseq/releases, trinity **v2.1.1** now avail. I have **2.0.6** on laptop.
+# so dnload, expand v2.1.1, see what inside.
+# trinityrnaseq-2.1.1.tar.gz, 131 Mb
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+tar -xzvf trinityrnaseq-2.1.1.tar.gz
+# not finding example data with this new trinity doc ?????????????
+# in expanded trinity tar.gz, find sample_data/test_data with test data & a Trinity.fasta file (only 260 Kb)
+# perhaps use this Trinity.fasta for testing transDecoder & trinotate.
+# but dir. test_Trinity_Assembly appears have different sample data ??????
+# perhaps rerun to get Trinity.fasta since this new ver. Trinity.
+
+11/04/15:
+# to email Adam, about trinity, transDecoder changes for Crane.
+
+11/07/15:
+# working with 'module' on Crane
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+module avail
+# Use "module keyword key1 key2 ..." to search for all possible modules matching
+any of the "keys".
+module trinity  ## ???????????
+module spider trinity
+module spider trinity/2.1
+# try identify location trinity executable 
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+echo $PATH
+# So probably path name to trinity v2.1 executable on crane is /util/opt/trinity/2.1/gcc/4.8/Trinity ref: line 940 above. 
+
+# now, try set up to run trinity v2.1 on some v2.1 practice data.
+# Q: JJ's comments about use of 3 db's he loaded ???????????????????
+
+ 11/08/15:
+# check some locations on Crane
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin20Tut
+# has trinity_out_dir dir.
+cd trinity_out_dir  ## has a Trinity.fasta file.
+cd test_full_edgeR_pipeline/rnaseq_reads
+# ck for location of read files on crane, trinity v2.1
+cd /util/opt/trinity/2.1/gcc/4.8  ## Trinity executable is here
+cd sample_data/test_Trinity_Assembly ## found 4 gzipped read files here
+# that is in /util/opt/trinity/2.1/gcc/4.8/sample_data/test_Trinity_Assembly
+# create new dir, Trin21test for trinityrnaseq-2.1.1
+mkdir Trin21test
+cd Trin21test
+cp /util/opt/trinity/2.1/gcc/4.8/sample_data/test_Trinity_Assembly/*.gz .
+# ok, copied 4 gzipped read files
+# ready try run Trinity on v2.1 sample data
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+# srun --pty --ntasks-per-node=4 --mem 4gb $SHELL  # taking to long to allocate?
+# so try with 2 gb
+srun --pty --ntasks-per-node=4 --mem 2gb $SHELL
+
+
+cd /work/amundsen/pterry/Trin21test
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+/util/opt/trinity/2.1/gcc/4.8/Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --CPU 4 --no_cleanup
+
+exit
+# Q: last part of error message ??????????????????
+* Running CMD: /util/opt/trinity/2.1.1/gcc/4.8.3/trinity-plugins/jellyfish/bin/jellyfish count -t 4 -m 25 -s 304805520  both.fa
+sh: line 1: 195135 Killed                  /util/opt/trinity/2.1.1/gcc/4.8.3/trinity-plugins/jellyfish/bin/jellyfish count -t 4 -m 25 -s 304805520 both.fa 2> tmp.194805.stderr
+Trinity run failed. Must investigate error above.
+[pterry@c0313.crane Trin21test]$ exit
+exit
+srun: error: c0313: task 0: Exited with exit code 2
+                                                   [pterry@login.crane ~]$ 
+
+11/09/15:
+# Per Adam, try rerun Trinity with different parameters in 'srun' command. Previous run 'killed', not enough memory. Don't forget to delete stuff put these by previous failed Trinity attempt.
+
+REMOVE PREVIOUS STUFF 1ST !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL  # Q: '=' in 'qos' parameter ??????????????
+cd /work/amundsen/pterry/Trin21test
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+/util/opt/trinity/2.1/gcc/4.8/Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --CPU 4 --no_cleanup
+
+exit
+pwd
+cd /work/amundsen/pterry/Trin21test
+ls -al
+cd trinity_out_dir
+ls -al
+less Trinity.fasta
+# so looks like Trinity from v2.1.1 worked,
+-rw-r--r-- 1 pterry amundsen   193199 Nov  9 14:36 Trinity.fasta
+
+# now, to locate transDecoder executables on crane ????????
+module spider transdecoder/2.0
+module load transdecoder/2.0
+echo $PATH
+# check if executables under /util/opt/transdecoder/2.0/gcc/4.4/ dir ????????
+cd /util/opt/transdecoder/2.0/gcc/4.4
+# looks like needed executables in this dir.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /util/opt/transdecoder/2.0/gcc/4.4
+ls -al
+module help transdecoder
+
+(STOPPED)
+11/10/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test
+ls -al
+mkdir transdecoderLongtest
+cd transdecoderLongtest
+cp /work/amundsen/pterry/Trin21test/trinity_out_dir/Trinity.fasta .
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL
+module load transdecoder/2.0
+cd /work/amundsen/pterry/Trin21test/transdecoderLongtest
+/util/opt/transdecoder/2.0/gcc/4.4/TransDecoder.LongOrfs -t Trinity.fasta
+exit
+ls -al
+cd Trinity.fasta.transdecoder_dir
 ls -al
 
+# examine output
+ls -al
+# check for '.transdecoder.' files preparing for 'blastp in trinotate/2. Capturing BLAST Homologies section' ???????????
+-rw-r--r-- 1 pterry amundsen  56472 Nov 10 22:46 longest_orfs.pep
+# the expected output from step 1, from TransDecoder.LongOrfs executable.
+# Q: why not 'optional', cause looks like *only* use is in the 'optional' *step 2* ??????????????????????????????????
+
+11/11/15:
+# ok, for now *skip* step 2 whose directions are in section 'Including homology searches as ORF retention criteria'.
+# Q: looks like link there to dnload the db's, but several, ****which**** ?????????
+# Q: diff. homologies here in step 2 & blastp in trinotate.github.io, section '2. Capturing BLAST Homologies' ??????????????????????????????????????????
+
+# So proceed with step 3:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test
+ls -al
+mkdir transdecoderPredicttest
+ls -al
+cd transdecoderPredicttest
+cp /work/amundsen/pterry/Trin21test/trinity_out_dir/Trinity.fasta .
+ls -al
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL
+module load transdecoder/2.0
+cd /work/amundsen/pterry/Trin21test/transdecoderPredicttest
+/util/opt/transdecoder/2.0/gcc/4.4/TransDecoder.Predict -t Trinity.fasta
+exit
+
+[pterry@c0710.crane transdecoderPredicttest]$ /util/opt/transdecoder/2.0/gcc/4.4/TransDecoder.Predict -t Trinity.fasta
+Error, cannot find directory: Trinity.fasta.transdecoder_dir,  be sure to first run TransDecoder.LongOrfs before TransDecoder.Predict
+
+# Looks like perhaps try this command from 
+cd /work/amundsen/pterry/Trin21test/transdecoderLongtest
+# dir. then try 
+/util/opt/transdecoder/2.0/gcc/4.4/TransDecoder.Predict -t Trinity.fasta
+# see if it finds dir Trinity.fasta.transdecoder_dir and perhaps uses longest_orfs.pep file there ??????????????????
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL
+module load transdecoder/2.0
+cd /work/amundsen/pterry/Trin21test/transdecoderLongtest
+/util/opt/transdecoder/2.0/gcc/4.4/TransDecoder.Predict -t Trinity.fasta
+# looks like ran! SO need run 'step 1' before 'step 3'.
+# finishes in /work/amundsen/pterry/Trin21test/transdecoderLongtest/Trinity.fasta.transdecoder_dir
+exit
+ls -al
+# places desired output file in 
+/work/amundsen/pterry/Trin21test/transdecoderLongtest/Trinity.fasta.transdecoder.pep
+# so do need to run 'step 1' before 'step 3'.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test
+ls -al
+# COMPARE: (size (wc), content (less), ???) 
+TRinity.fasta,
+cd trinity_out_dir
+ls -al
+-rw-r--r-- 1 pterry amundsen 193199 Nov 10 22:44 Trinity.fasta
+wc Trinity.fasta
+  2898   5360 193199 Trinity.fasta
+less Trinity.fasta
+cd cd transdecoderLongtest/
+longest_orfs.pep,
+-rw-r--r-- 1 pterry amundsen  56472 Nov 10 22:46 longest_orfs.pep
+wc longest_orfs.pep
+  232   812 56472 longest_orfs.pep
+less longest_orfs.pep
+Trinity.fasta.transdecoder.pep
+-rw-r--r-- 1 pterry amundsen  47385 Nov 11 11:25 Trinity.fasta.transdecoder.pep
+wc Trinity.fasta.transdecoder.pep
+  680  1224 47385 Trinity.fasta.transdecoder.pep
+less Trinity.fasta.transdecoder.pep
+# what to make of these files ?????????????????????????
+
+
+
+# OK, now switch back to http://trinotate.github.io/, section: 2. Capturing BLAST Homologies
+# 1st, run non-optional blastx
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+srun --pty --ntasks-per-node=8 --mem 8gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test
+ls -al
+cd trinity_out_dir  ## location of Trinity.fasta
+module load blast/2.2.29
+module load trinotate/2.0  ## here probably need for location of database ??
+
+# search Trinity transcripts
+ 
+
+blastx -query Trinity.fasta -db $TRINOTATE_SP -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastx.outfmt6
+# 12:01pm => 12:03pm, prompt back, but some **error** messages ????????????????
+[pterry@c0523.crane trinity_out_dir]$ blastx -query Trinity.fasta -db $TRINOTATE_SP -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastx.outfmt6
+Error: (1431.1) FASTA-Reader: Warning: FASTA-Reader: Title is very long: 1654 characters (max is 1000)
+Error: (1431.1) FASTA-Reader: Warning: FASTA-Reader: Title is very long: 1654 characters (max is 1000)
+# WHAT to think of these errors ???????????????????????
+exit
+ls -al
+-rw-r--r-- 1 pterry amundsen     7316 Nov 12 12:03 blastx.outfmt6
+less blastx.outfmt6
+wc blastx.outfmt6
+#  100 1200 7316 blastx.outfmt6
+# compare: Trinity.fasta has 2898 rows ??????????????????
+
+# now blastp ...
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+srun --pty --ntasks-per-node=8 --mem 8gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test
+ls -al
+cd transdecoderLongtest  ## location of Trinity.fasta.transdecoder.pep
+ls -al
+module load blast/2.2.29
+module load trinotate/2.0  ## here probably need for location of database ??
+# now search Transdecoder-predicted proteins
+
+blastp -query Trinity.fasta.transdecoder.pep -db $TRINOTATE_SP -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastp.outfmt6
+# 10:01pm => 10:02pm
+exit
+ls -al
+-rw-r--r-- 1 pterry amundsen   5305 Nov 12 22:02 blastp.outfmt6
+wc blastp.outfmt6
+  69  828 5305 blastp.outfmt6
+# compare: Trinity.fasta.transdecoder.pep has 680 lines ???????????????
+less blastp.outfmt6
+
+11/13/15:
+# Next, in http://trinotate.github.io/, in section 'Trinotate: Loading Above Results into a 'Trinotate SQLite Database', need setup 'Trinotate SQLite Database'.
+p-6 of 9
+# 1. Retrieve the Trinotate Pre-generated Resource SQLite database
+# create a directory to wget the sqlite db to.
+
+11/16/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test
+mkdir sqlitedbtest
+cd sqlitedbtest
+wget "https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz
+ls -al
+gunzip Trinotate.sqlite.gz  ## ~1.5 to ~6.1 gb
+
+
+# 2. Load transcripts and coding regions, 3 data types/files ???????
+# Trinity.fasta ?????????????
+# Trinity.fasta.transdecoder.pep
+# Trinity.fasta.gene_trans_map
+
+# *To do*, substitute actual path for $TRINITY_HOME
+# Q: what in this 3rd file ???????????????????
+# line 1582 above, did 
+# module load trinity/2.1
+# do anything ??????????????*************????????????************
+# error trying to Load
+module spider trinity/2.1
+srun --pty --ntasks-per-node=8 --mem 8gb --qos=short $SHELL
+pwd
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+# no such module listed on crane, BUT think Adam installed it ??????????**?????
+
+# $TRINITY_HOME/util/support_scripts/get_Trinity_gene_to_trans_map.pl Trinity.fasta >  Trinity.fasta.gene_trans_map
+# cd /util/opt/trinity/2.1/gcc/4.8  ## think the path for trinity v2.1.1, but need verify ??????????******??????????????
+# from dir wi Trinity.fasta, 
+# /work/amundsen/pterry/Trin21test/transdecoderLongtest
+cd /work/amundsen/pterry/Trin21test/transdecoderLongtest
+
+/util/opt/trinity/2.1/gcc/4.8/util/support_scripts/get_Trinity_gene_to_trans_map.pl Trinity.fasta >  Trinity.fasta.gene_trans_map
+
+module load trinotate/2.0
+# Load these info into the Trinotate sqlite database like so (example, using Trinity assemblies):
+# Q: cp Trinity.fasta, Trinity.fasta.gene_trans_map, and Trinity.fasta.transdecoder.pep to 
+/work/amundsen/pterry/Trin21test/sqlitedbtest dir.
+cd /work/amundsen/pterry/Trin21test/sqlitedbtest
+cp /work/amundsen/pterry/Trin21test/transdecoderLongtest/Trinity.fasta .
+cp /work/amundsen/pterry/Trin21test/transdecoderLongtest/Trinity.fasta.gene_trans_map .
+cp /work/amundsen/pterry/Trin21test/transdecoderLongtest/Trinity.fasta.transdecoder.pep .
+
+Trinotate Trinotate.sqlite init --gene_trans_map Trinity.fasta.gene_trans_map --transcript_fasta Trinity.fasta --transdecoder_pep Trinity.fasta.transdecoder.pep
+# ***error*** message ??????????????????????????
+# p-7 of 9
+# 3. Loading BLAST homologies
+# load protein hits
+# cp .../blastp.outfmt6 .  ## to get path ??????????????
+Trinotate Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6
+
+# co .../blastx.outfmt6 .  ## to get path ??????????????
+Trinotate Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6
+
+# Trinotate: Output an Annotation Report
+Trinotate Trinotate.sqlite report [opts] > trinotate_annotation_report.xls
+
+# Q: check this the .xls file actually need ??????????????????????
+
+11/16/15:
+# Q: ok, read thru trinity, trinotate, transDecoder webpage doc., drew graph of paths for analyzing a Trinity.fasta output file. 
+# To try: locate 4 biol'l rep samples, resulting Trinity.fasta file ran thru at least edgeR step. Take this thru transDecoder, ..., to '.xls' file. Then combining this .xls output with the edgeR path output, try continue on with 'GOseq', try see what get ?????????????????????
+
+
+11/18/15:
+# to check on failure tranotate sqlite db to run, perhaps install sqlite db engine ??????????
+# talked to Jingchao about SQLite error message, from 11/16/15.
+# Rather than try dnload precompiled SQLite binaries to crane, suggested:
+# install a perl module, DBD::SQLite from cran, see HCC doc., 'Installing Perl modules'
+# Initial configuration of local::lib
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+ls -al
+less .bashrc
+cp .bashrc bashrctest
+# use vi to add 'eval $(perl -Mlocal::lib)' at end of file 
+vi bashrctest
+# add new line at end.
+i, to end, 'o', write line, esc, :wq
+cat bashrctest
+mv .bashrc bashtmp
+mv bashrctest .bashrc
+# logout and login to load your .bashrc
+
+# To configure local::lib, add the following line to the end of your ~/.bashrc file in your home directory.
+eval $(perl -Mlocal::lib)
+# Next, logout and login to load your .bashrc. This will create a local Perl module directory, ~/perl5, inside your home directory and set environment variables to use it.
+
+# look for & inside ~/perl5 dir
+# yes, have it.
+cd perl5
+# has one file
+
+11/19/15:
+# Installing a module from CPAN
+# before start, how exit 'cpan' ?????????????????
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+$ cpan
+# bunch of things to set, did automatic by mistake, couple Q: i) where it put general 'biold & cache' dir, ii) Autoconfigured everything but 'urllist'.
+Please call 'o conf init urllist' to configure your CPAN server(s) now!
+
+11/20/15:
+# What to do, ck Jingchao ??????????????????
+# Jingchao: just go with what have in cpan install above.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cpan
+# cpan> install My::Module
+install DBD::SQLite
+# how exit 'cpan' 'q'
+# don't know if install of DBD::SQLite worked, so go try run it.
+# I assume ready try run 'TRinotate Trinotate.sqlite init ...' ???????????
+# repeat/resume 11/16/15 above.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+# srun --pty --ntasks-per-node=8 --mem 8gb --qos=short $SHELL
+# error message ????????????????
+cd /work/amundsen/pterry/Trin21test/sqlitedbtest
+module load trinotate/2.0
+Trinotate Trinotate.sqlite init --gene_trans_map Trinity.fasta.gene_trans_map --transcript_fasta Trinity.fasta --transdecoder_pep Trinity.fasta.transdecoder.pep
+# without srun, **don't** see error messages
+# p-7 of 9
+# 3. Loading BLAST homologies
+# load protein hits
+
+# cd /work/amundsen/pterry/Trin21test/transdecoderLongtest
+ls -al
+cd /work/amundsen/pterry/Trin21test/sqlitedbtest
+
+cp /work/amundsen/pterry/Trin21test/transdecoderLongtest/blastp.outfmt6 .  
+Trinotate Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6
+# appears to have worked.
+# /work/amundsen/pterry/Trin21test/trinity_out_dir
+
+cp /work/amundsen/pterry/Trin21test/trinity_out_dir/blastx.outfmt6 .  
+Trinotate Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6
+# appears to have worked.
+
+# Trinotate: Output an Annotation Report
+# Trinotate Trinotate.sqlite report [opts] > trinotate_annotation_report.xls
+# omit '[opts]', see what happens
+Trinotate Trinotate.sqlite report > trinotate_annotation_report.xls
+
+-rw-r--r-- 1 pterry amundsen      64155 Nov 20 23:13 trinotate_annotation_report.xls
+less trinotate_annotation_report.xls
+wc trinotate_annotation_report.xls
+#   140  5563 64155 trinotate_annotation_report.xls
+
+(STOPPED)
+
+# Q: how check this the .xls file actually need ??????????????????????
+# perhaps scp over to laptop, examine it bit more ????????
+# perhaps look over this info? Trinotate: Sample data and execution
 
 
 
 
-# TRY COME UP WITH A PLAN TO PROCEED ?????????
 
 
 
 
-# TO DO: send this output to Trinity support site.
 
+# meantime practice with https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq
+# Run Trinotate to Generate an Annotation Report
+# prevly used trinotate to generate a '.xls' report.
+# using Example Data from 'TRINITY_HOME/sample_data/test_GOSeq_trinotate_pipe/Spombe/', 
+# Extract GO assignments per gene
 
-# --JM, --CPU ????????????????????????
+# check '.xls' file for such GO assignments
+# '.xls' file complicated ???????????????????????????????????
 
+11/22/15:
+# before try run following, perhaps identify what to replace placeholders with, examine what in some of these files ????????????????
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+srun --pty --ntasks-per-node=8 --mem 8gb --qos=short $SHELL
+# get error message, but gives back prompt wi resources asking for ??????
+module load trinotate/2.0
+# echo $TRINOTATE_HOME  ## /util/opt/trinotate/2.0
+# cd $WORK
+# ls -al
+# /work/amundsen/pterry/Trin21test, perhaps work inside this dir
+# run from say /work/amundsen/pterry/Trin21test/sampdataGOtest,
+cd /work/amundsen/pterry/Trin21test
+mkdir sampdataGOtest
+ls -al
+cd sampdataGOtest
+# ck location of Trinotate_report.xls
+# looks like 
+cp /util/opt/trinity/2.1/gcc/4.8/sample_data/test_GOSeq_trinotate_pipe/Spombe/Trinotate_report.xls . 
+ls -al
+
+a trinotate script, perhaps copy from /spomb dir, needed files to where plan to run this sample data ?????????????????? 
+
+# ${TRINOTATE_HOME}/util/extract_GO_assignments_from_Trinotate_xls.pl \
+                         --Trinotate_xls trinotate.xls \
+                         -G --include_ancestral_terms \
+                         > go_annotations.txt
+# fix ${TRINOTATE_HOME}, Q: how use this env var??, or perhaps just use actual path ??????
+
+/util/opt/trinotate/2.0/util/extract_GO_assignments_from_Trinotate_xls.pl --Trinotate_xls Trinotate_report.xls -G --include_ancestral_terms > go_annotations.txt
+Total transcript entries: 9426
+Found obo: /util/opt/trinotate/2.0.2/util/../PerlLib/obo/go-basic.obo.gz
+Warning, cannot parse parent info: regulates ! regulates
+Warning, cannot parse parent info: regulates ! regulates
+[95.48] processed.      
+
+Done processing, writing output.
+
+Finished.
+# Q: what to think or warnings ????????????????????????????????????????
+exit
+cd sampdataGOtest
+ls -al
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+less go_annotations.txt
+
+# now section: Run GOseq in https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq#example-data
+# think need arrange install bioc. GOseq package before can proceed. Reference 09/22/15 above.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+module load R/3.2
+R  # R ver 3.2.1
+source("http://bioconductor.org/biocLite.R")
+biocLite("goseq")
+# a ton of output came over the screen, after say 6 min, asked if want to update, saying 'a' ??????????????????????????????????????
+  'lib = "/util/opt/R/3.2.1/gcc/4.4.7/lib64/R/library"' is not writable
+Would you like to use a personal library instead?  (y/n) 
+# guess I will say 'y'
+# ... installing to /home/amundsen/pterry/R/x86_64-unknown-linux-gnu-library/3.2/mgcv/libs
+# Q: ?
+sessionInfo()
+q()
+logout
+
+# 1st, examine the 3 files in the runMe.sh file am following ?????????
+
+hs_induced_vs_log.factors  ## Q: how come up with the factor labeling files ????
+
+Trinotate_report.xls.trans.gene_ontology  # Q: how get, perhaps from '.xls' file, 'go.annotations.txt ??????????????
+
+Trinity.seq_lengths  ## Q: An indication given of how to get.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+# cp /util/opt/trinity/2.0/gcc/4.8/sample_data/test_GOSeq_trinotate_pipe/Spombe/hs_induced_vs_log.factors .
+# cp /util/opt/trinity/2.0/gcc/4.8/sample_data/test_GOSeq_trinotate_pipe/Spombe/ds_induced_vs_log.factors .
+# cp /util/opt/trinity/2.0/gcc/4.8/sample_data/test_GOSeq_trinotate_pipe/Spombe/Trinotate_report.xls.trans.gene_ontology .
+# cp /util/opt/trinity/2.0/gcc/4.8/sample_data/test_GOSeq_trinotate_pipe/Spombe/Trinity.seq_lengths .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+# always a problem wi lib.pm ???????????????????????????????????????????????
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+module load R/3.2
+
+_______________________________________
+# **to fix**: next command wi correct dir on crane
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl --matrix counts.matrix --method edgeR --samples_file samples_described.txt
+
+[pterry@c1923.crane rnaseq_reads]$ /util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl --matrix counts.matrix --method edgeR --samples_file samples_described.txt
+Error, cannot open file counts.matrix at /util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl line 312.
+[pterry@c1923.crane rnaseq_reads]$ 
+# perhaps for '--matrix' parameter, change argument to 'Trinity_trans.counts.matrix'
+# to try
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_DE_analysis.pl --matrix Trinity_trans.counts.matrix --method edgeR --samples_file samples_described.txt
+
+# apparently ran ????????
+______________________________________________
+# ${TRINITY_HOME}/Analysis/DifferentialExpression/run_GOseq.pl \
+                       --factor_labeling  factor_labeling.txt \
+                       --GO_assignments go_annotations.txt \
+                       --lengths gene.lengths.txt
+
+# before run following replace wi correct files, examine files 1st ????????
+
+# to replace preceding by two commands in .../Spombe/runMe.sh
+
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_GOseq.pl --factor_labeling hs_induced_vs_log.factors --GO_assignments Trinotate_report.xls.trans.gene_ontology --lengths Trinity.seq_lengths
+
+# giving an error ??????????????????????????????????????????
+# see line 2002, need to get qvalue package ????????????????
+
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_GOseq.pl --factor_labeling ds_induced_vs_log.factors --GO_assignments Trinotate_report.xls.trans.gene_ontology --lengths Trinity.seq_lengths
 
 exit
 
+11/25/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+module load R/3.2
+R  # R ver 3.2.1
+source("http://bioconductor.org/biocLite.R")
+Bioconductor version 3.1 (BiocInstaller 1.18.5), ?biocLite for help
+A newer version of Bioconductor is available for this version of R,
+  ?BiocUpgrade for help
+# so do upgrade
+source("http://bioconductor.org/biocLite.R")
+biocLite("BiocUpgrade")
+Upgrade all packages to Bioconductor version 3.2? [y/n]: 
+# y
+The downloaded source packages are in
+	‘/tmp/RtmpyPnADG/downloaded_packages’
+Warning in install.packages(update[instlib == l, "Package"], l, contriburl = contriburl,  :
+  'lib = "/util/opt/R/3.2.1/gcc/4.4.7/lib64/R/library"' is not writable
+Would you like to use a personal library instead?  (y/n) Y
+# preceding taking > 10 min.
+# to do, logout, start install of qvalue package again.
+q()
+logout
 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+module load R/3.2
+R  # R ver 3.2.1
+source("http://bioconductor.org/biocLite.R")
+biocLite("qvalue")
+# again taking sevl min. ????????????????????????????????????????
+# ... installing to /home/amundsen/pterry/R/x86_64-unknown-linux-gnu-library/3.2/mgcv/libs
+# less than a Mb in file mgcv.so ??????????????
+# Q: ?
+sessionInfo()
+q()
+logout
+
+# ready to try 'run_GOseq.pl' again.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb $SHELL
+# always a problem wi lib.pm ???????????????????????????????????????????????
+cd /work/amundsen/pterry/Trin21test/sampdataGOtest
+ls -al
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+module load R/3.2
+
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_GOseq.pl --factor_labeling hs_induced_vs_log.factors --GO_assignments Trinotate_report.xls.trans.gene_ontology --lengths Trinity.seq_lengths
+
+ls -al
+
+/util/opt/trinity/2.0/gcc/4.8/Analysis/DifferentialExpression/run_GOseq.pl --factor_labeling ds_induced_vs_log.factors --GO_assignments Trinotate_report.xls.trans.gene_ontology --lengths Trinity.seq_lengths
+ls -al
+exit
+# 5 new files, Q: should I have saved Rplots.pdf after run 'hs', and 'ds' ?????
+
+# what now, 
+
+# perhaps examine the 5 new files above,
+less heatshock.GOseq.depleted
+# not exactly like section 'Output format', of page https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq
+# ??????????
+
+11/28/15:
+# scp Rplots.pdf ...
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/sampdataGOtest/Rplots.pdf .
+# Q: what looking at in Rplots.pdf ???????????????????????????????????? 
+
+# see p-5 of 9
+
+# then, perhaps back to wepage that called this one, https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression, 
+# see p- 7 of 9, section: Gene Ontology (GO) Enrichment Analysis on Differentially Expressed Genes, 
+
+but question, may have to coordinate which sample examples, may want to go back, run the example wi biol'l reps thru all the steps preceding before proceding with this webpage, section 'Gene Ontology (GO) Enrichment Analysis on Differentially Expressed Genes' ??????????????????????????
+
+11/29/15:
+# perhaps 1st, outline steps as per my pencil diagram to start with multibiol'l example.
+# Then actually run the example thru the steps.
+
+12/04-05/15:
+# working from Trinity Wiki Home, https://github.com/trinityrnaseq/trinityrnaseq/wiki
+# & ref, line 1489 above, 1574, 1584,
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+# Q: start new dir, biolrepexamp ????????????????
+cd /work/amundsen/pterry/Trin21test
+#mkdir multbiolexamp
+cd multbiolexamp
+# cp /util/opt/trinity/2.1/gcc/4.8/sample_data/test_DATA/*.gz .
+
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL  # Q: '=' in 'qos' parameter ??????????????
+# never got resources, Fri nite ???????????????????????????
+# ok, sat morning, but usual error 'Can't locate local/lib.pm in @INC...' ???
+# perhaps will need slurm ?????????????????????????????
+
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+# /util/opt/trinity/2.1/gcc/4.8/Trinity --seqType fq --max_memory 2G --left reads.left.fq.gz,reads2.left.fq.gz --right reads.right.fq.gz,reads2.right.fq.gz --SS_lib_type RF --CPU 4 --no_cleanup
+
+/util/opt/trinity/2.1/gcc/4.8/Trinity --seqType fq --max_memory 2G --left Sp_ds.10k.left.fq.gz,Sp_hs.10k.left.fq.gz,Sp_log.10k.left.fq.gz,Sp_plat.10k.left.fq.gz --right Sp_ds.10k.right.fq.gz,Sp_hs.10k.right.fq.gz,Sp_log.10k.right.fq.gz,Sp_plat.10k.right.fq.gz --SS_lib_type RF --CPU 4
+# 9:05 - 9:08am
+exitp
+pwd
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+ls -al
+cd trinity_out_dir
+ls -al
+wc Trinity.fasta  ##   4851   8084 284846 Trinity.fasta
+# note: wc of Trinity.fasta in test_DATA dir gives   4443    7594  259708, bit different number of lines.
+less Trinity.fasta
+# top file different from laptop Trinity.fasta in test_DATA dir file.
+# anyway, so looks like Trinity from v2.1.1 worked,
+-rw-r--r-- 1 pterry amundsen   284846 Dec  5 09:08 Trinity.fasta
+
+################################################################
+# for now, **skip** down to 'Downstream Analyses' section, skipping 'Assenbly Quality Assessment' section.
+#################################################################
+
+12/06/15:
+# Within 'Downstream Analysis' section,
+
+# 'Trinity Transcript Quantification' section (09/16/15 above):
+# 1. Just prepare the reference for alignment and abundance estimation
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL
+# not getting resources, 10;50am, try
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference
+exit
+# 528 lines on screen, last one 'Only prepping reference. Stopping now.'
+# look for 'prep reference' files
+ls -al
+cd trinity_out_dir
+ls -al
+# ran from 'Trin21test/multbiolexamp' dir, but 15 new files in trinity_out_dir dir. ?????????????????????????
+# so looks like may have completed '--prep_reference' ok.
+
+# 2. Run the alignment and abundance estimation (assumes reference has already been prepped, errors-out if prepped reference not located.)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_ds.10k.left.fq --right Sp_ds.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix ds
+# ran 9/16/15 above, but error today ?????????????????????
+exit
+gunzip Sp_ds.10k.left.fq.gz
+gunzip Sp_ds.10k.right.fq.gz
+# retry align_and_estimate_abundance.pl
+# looks like ran ok 'CMD: touch ds.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'ds' files, 1 'ds' dir in 'multbiolexamp' dir, appears no changes in 'trinity_out_dir'.
+
+# TO do, repeat 'align_and_estimate_abundance.pl' for 'hs', 'log' & 'plat'.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+gunzip Sp_hs.10k.left.fq.gz
+gunzip Sp_hs.10k.right.fq.gz
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_hs.10k.left.fq --right Sp_hs.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix hs
+exit
+
+# looks like ran ok 'CMD: touch hs.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'hs' files, 1 'hs' dir in 'multbiolexamp' dir, appears no changes in 'trinity_out_dir'.
+
+(STOPPED)
+
+# now quantitate transcript abundance for **'log'** biol'l '.fq' files
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+gunzip Sp_log.10k.left.fq.gz
+gunzip Sp_log.10k.right.fq.gz
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+# 5:04pm => 5:10pm
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_log.10k.left.fq --right Sp_log.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix log
+exit
+
+# looks like ran ok 'CMD: touch log.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'log' files, 1 'log' dir in 'multbiolexamp' dir, appears no changes in 'trinity_out_dir'.
+
+# now quantitate transcript abundance for **'plat'** biol'l '.fq' files
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+gunzip Sp_plat.10k.left.fq.gz
+gunzip Sp_plat.10k.right.fq.gz
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+# 5:17pm => 5:18pm
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+
+/util/opt/trinity/2.0/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_plat.10k.left.fq --right Sp_plat.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix plat
+exit
+
+# looks like ran ok 'CMD: touch plat.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'plat' files, 1 'plat' dir in 'multbiolexamp' dir, appears no changes in 'trinity_out_dir'.
+
+# Note: perhaps should have specified 'plat.RSEM' as --output_prefix rather than just 'plat' ???????????????????????????????????????????????????
+
+# 'Build Transcript and Gene Expression Matrices' section. (ref: 09/18/15, line 1121 =>)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+cd /work/amundsen/pterry/Trin21test/multbiolexamp
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+
+
+/util/opt/trinity/2.0/gcc/4.8/util/abundance_estimates_to_matrix.pl --est_method RSEM  --out_prefix Trinity_trans ds.isoforms.results hs.isoforms.results log.isoforms.results plat.isoforms.results
+# got error message, 'R: command not found'
+# perhaps need add:
+module load R/3.2
+# to try
+exit
+ls -al
+-rw-r--r-- 1 pterry amundsen   24232 Dec  7 00:01 Trinity_trans.counts.matrix
+-rw-r--r-- 1 pterry amundsen   28181 Dec  7 00:01 Trinity_trans.not_cross_norm.fpkm.tmp
+-rw-r--r-- 1 pterry amundsen     226 Dec  7 00:01 Trinity_trans.not_cross_norm.fpkm.tmp.TMM_info.txt
+-rw-r--r-- 1 pterry amundsen   30413 Dec  7 00:01 Trinity_trans.TMM.fpkm.matrix
+[pterry@login.crane multbiolexamp]$ 
+# Q: did I get the expected 3 files ?????????????????????????????
+
+12/07/15:
+Try look at files output, see if helps to see what they look like?
+Trinity_trans.counts.matrix  ## may be the raw counts will need below.
+Trinity_trans.not_cross_norm.fpkm.tmp
+Trinity_trans.not_cross_norm.fpkm.tmp.TMM_info.txt
+Trinity_trans.TMM.fpkm.matrix  ## relation to expected 'trans_counts.TMM.EXPR.matrix' ??????????????????????????????????
+# **Q:** so do have 2 of the 3 expected output files ?????????????????????????
+
+# so **before** going to section 'Counting Numbers of Expressed Transcripts or Genes', need determine if I got needed output file from prev section, 'Build Transcript and Gene Expression Matrices' ?????????????????????????????????
+
+# so moving on to 'Quality Check Your Samples and Replicates' in Trinity outline,/04-05/15, delete dir 
+# 'Compare replicates for each of your samples' section:
+
+*********************ERROR*****************
+Error from line 2229 onward mixing trinity /2.0 and /2.1. so go back to line 2164, 12/04-05/15, for now, create new dir multbiol4examp, re run all steps from then to now starting with Trinity (12/04-5/15) thru to this error note.
+**********************ERROR********************
+
+12/08/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+# Q: start new dir, multbiol4examp ????????????????
+cd /work/amundsen/pterry/Trin21test
+mkdir multbiol4examp
+cd multbiol4examp
+# cp /util/opt/trinity/2.1/gcc/4.8/sample_data/test_DATA/*.gz .
+
+srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL  # Q: '=' in 'qos' parameter ??????????????
+# ok, Tues nite, but usual error 'Can't locate local/lib.pm in @INC...' ???
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+
+/util/opt/trinity/2.1/gcc/4.8/Trinity --seqType fq --max_memory 2G --left Sp_ds.10k.left.fq.gz,Sp_hs.10k.left.fq.gz,Sp_log.10k.left.fq.gz,Sp_plat.10k.left.fq.gz --right Sp_ds.10k.right.fq.gz,Sp_hs.10k.right.fq.gz,Sp_log.10k.right.fq.gz,Sp_plat.10k.right.fq.gz --SS_lib_type RF --CPU 4
+# 10:14 - 10:19pm
+exit
+pwd
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+ls -al
+cd trinity_out_dir
+ls -al
+wc Trinity.fasta  ##   4851   8084 284846 Trinity.fasta
+# Preceding when ran 12/04-05/15
+# following when ran just now (Q: why the difference ??????????????)
+  4842   8051 284264 Trinity.fasta
+
+# note: wc of Trinity.fasta in test_DATA dir gives   4443    7594  259708, bit different number of lines.
+less Trinity.fasta
+# top of file different from laptop Trinity.fasta in test_DATA dir file ?????
+# anyway, so looks like Trinity from v2.1.1 worked,
+-rw-r--r-- 1 pterry amundsen   284264 Dec  8 22:18 Trinity.fasta
+
+################################################################
+# for now, **skip** down to 'Downstream Analyses' section, skipping 'Assenbly Quality Assessment' section.
+#################################################################
+
+# Within 'Downstream Analysis' section,
+
+# 'Trinity Transcript Quantification' section (09/16/15 above):
+# 1. Just prepare the reference for alignment and abundance estimation
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+#srun --pty --ntasks-per-node=4 --mem 8gb --qos=short $SHELL
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1 
+module load samtools/1.2
+module load trinity/2.1
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+
+#/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference
+# error (did not get wi v2.0.6)
+Error, must specify output directory name via: --output_dir    at /util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl line 285.
+# so specify where went wi v2.0 unspecified ?????
+/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference --output_dir trinity_out_dir
+# Error, see output to screen ??????????? Need check with Adam.
+exit
+
+12/09/15:
+# Adam installed RSEM, probably v1.2.25, to be available by specifying 
+module load rsem/1.2
+# check wi module available
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1 
+module load samtools/1.2
+module load trinity/2.1
+module load rsem/1.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference --output_dir trinity_out_dir
+
+# Only prepping reference. Stopping now.
+# so looks like ran ok.
+exit
+# look for 'prep reference' files
+ls -al  # don't see any new ones here.
+cd trinity_out_dir
+ls -al
+# ran from 'Trin21test/multbiol4examp' dir, but 15 new files in trinity_out_dir dir. ?????????????????????????
+# so looks like may have completed '--prep_reference' ok.
+
+# 2. Run the alignment and abundance estimation (assumes reference has already been prepped, errors-out if prepped reference not located.)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+gunzip Sp_ds.10k.left.fq.gz
+gunzip Sp_ds.10k.right.fq.gz
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+# don't know if needed, did RSEM above ?????????????????????
+module load rsem/1.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_ds.10k.left.fq --right Sp_ds.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix ds --output_dir /work/amundsen/pterry/Trin21test/multbiol4examp
+#Error, must specify output directory name via: --output_dir
+exit
+# looks like ran ok 'CMD: touch ds.isoforms.results.ok'
+ls -al
+#cd trinity_out_dir
+ls -al
+# 5 'ds' files, 1 'ds' dir in 'multbiolexamp' dir, appears no changes in 'trinity_out_dir'.
+ 
+# TO do, repeat 'align_and_estimate_abundance.pl' for 'hs', 'log' & 'plat'.
+'hs' next
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+gunzip Sp_hs.10k.left.fq.gz
+gunzip Sp_hs.10k.right.fq.gz
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+# don't know if needed, did RSEM above ?????????????????????
+module load rsem/1.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_hs.10k.left.fq --right Sp_hs.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix hs --output_dir /work/amundsen/pterry/Trin21test/multbiol4examp
+exit
+
+# looks like ran ok 'CMD: touch hs.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'hs' files, 1 'hs' dir in 'multbiol4examp' dir, appears no changes in 'trinity_out_dir'.
+
+# now quantitate transcript abundance for **'log'** biol'l '.fq' files
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+gunzip Sp_log.10k.left.fq.gz
+gunzip Sp_log.10k.right.fq.gz
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+# don't know if needed, did RSEM above ?????????????????????
+module load rsem/1.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_log.10k.left.fq --right Sp_log.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix log --output_dir /work/amundsen/pterry/Trin21test/multbiol4examp
+exit
+
+# looks like ran ok 'CMD: touch log.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'log' files, 1 'log' dir in 'multbiol4examp' dir, appears no changes in 'trinity_out_dir'.
+
+# now quantitate transcript abundance for **'plat'** biol'l '.fq' files
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+gunzip Sp_plat.10k.left.fq.gz
+gunzip Sp_plat.10k.right.fq.gz
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+# don't know if needed, did RSEM above ?????????????????????
+module load rsem/1.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+/util/opt/trinity/2.1/gcc/4.8/util/align_and_estimate_abundance.pl --transcripts trinity_out_dir/Trinity.fasta --seqType fq --left Sp_plat.10k.left.fq --right Sp_plat.10k.right.fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix plat --output_dir /work/amundsen/pterry/Trin21test/multbiol4examp
+exit
+
+# looks like ran ok 'CMD: touch plat.isoforms.results.ok'
+
+ls -al
+cd trinity_out_dir
+ls -al
+# 5 'plat' files, 1 'plat' dir in 'multbiol4examp' dir, appears no changes in 'trinity_out_dir'.
+
+# 'Build Transcript and Gene Expression Matrices' section. (ref: 09/18/15, line 1121 =>)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+
+/util/opt/trinity/2.1/gcc/4.8/util/abundance_estimates_to_matrix.pl --est_method RSEM  --out_prefix Trinity_trans ds.isoforms.results hs.isoforms.results log.isoforms.results plat.isoforms.results
+exit
+ls -al
+# looks like I got the expected 3 files!
+-rw-r--r-- 1 pterry amundsen   23844 Dec 10 23:47 Trinity_trans.counts.matrix
+# note: almost all zeros in right hand 4 colms ???????????????????????????
+        ds      hs      log     plat
+TRINITY_DN270_c0_g1_i1  0.00    0.00    0.00    0.00
+TRINITY_DN521_c1_g1_i1  0.00    0.00    0.00    0.00
+...
+Trinity_trans.counts.matrix 
+
+-rw-r--r-- 1 pterry amundsen   26092 Dec 10 23:47 Trinity_trans.TMM.EXPR.matrix
+-rw-r--r-- 1 pterry amundsen   17218 Dec 10 23:47 Trinity_trans.TPM.not_cross_norm
+
+(STOPPED)
+
+******************************************************
+# so proceed wi section: 'Counting Numbers of Expressed Transcripts or Genes'
+# but Q: what to replace the placeholder file names by ???????????????????
+# perhaps a question to support site ?????????????????
+************************************************************
+# For moment skip on to 
+
+12/11/15:
+
+# so moving on to 'Quality Check Your Samples and Replicates' in Trinity outline,/04-05/15, delete dir 
+# 'Compare replicates for each of your samples' section:
+
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp samples.txt pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/multbiol4examp/
+
+(STOPPED)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+
+# % $TRINITY_HOME/Analysis/DifferentialExpression/PtR --matrix counts.matrix \
+                  --samples samples.txt --CPM --log2 --compare_replicates
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+
+/util/opt/trinity/2.1/gcc/4.8/Analysis/DifferentialExpression/PtR --matrix Trinity_trans.counts.matrix --samples samples.txt --CPM --log2 --compare_replicates
+exit
+ls -al
+# two new files, neither a '.pdf' file as suggested in this section, and one is '0' bytes ?????????
+-rw-r--r-- 1 pterry amundsen       0 Dec 11 20:11 Trinity_trans.counts.matrix.minCol10.minRow10.CPM.log2.dat
+-rw-r--r-- 1 pterry amundsen    4563 Dec 11 20:11 Trinity_trans.counts.matrix.R
+less Trinity_trans.counts.matrix.R
+less Trinity_trans.counts.matrix  ## almost all zeros in right most 4 colms ????????????????????????????????????????????????
+# note: lots of values in the example file: $TRINITY_HOME/sample_data/test_DE_analysis/Trinity_trans.counts.matrix.
+# so, perhaps try this this command with that file to test this step with its example 'samples.txt' file ?????????????????????
+# perhaps create little dir by self for this test ????????????
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp
+mkdir qc_comp_reps
+cd qc_comp_reps
+cp /util/opt/trinity/2.1/gcc/4.8/sample_data/test_DE_analysis/samples.txt .
+cp /util/opt/trinity/2.1/gcc/4.8/sample_data/test_DE_analysis/Trinity_trans.counts.matrix .
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps
+
+/util/opt/trinity/2.1/gcc/4.8/Analysis/DifferentialExpression/PtR --matrix Trinity_trans.counts.matrix --samples samples.txt --CPM --log2 --compare_replicates
+exit
+ls -al
+# output looks appropriate, to scp '.pdf' files over to look at.
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211_qc_testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps/wt_37.rep_compare.pdf .
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps/wt_GSNO.rep_compare.pdf .
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps/wt_ph8.rep_compare.pdf .
+# 4 plots each '.pdf' file, 1st seems useful, Q: what about the 4th one ?????????
+
+12/12/15:
+# section: 'Compare Replicates Across Samples'
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+cd /work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps
+
+/util/opt/trinity/2.1/gcc/4.8/Analysis/DifferentialExpression/PtR --matrix Trinity_trans.counts.matrix -s samples.txt --log2 --sample_cor_matrix
+exit
+ls -al
+# To view 'Trinity_trans.counts.matrix.minCol10.minRow10.log2.sample_cor_matrix.pdf'
+logout
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211_qc_testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps/Trinity_trans.counts.matrix.minCol10.minRow10.log2.sample_cor_matrix.pdf .
+
+# PCA Analysis
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+cd /work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+
+cd /work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps
+
+/util/opt/trinity/2.1/gcc/4.8/Analysis/DifferentialExpression/PtR --matrix Trinity_trans.counts.matrix -s samples.txt --log2 --prin_comp 3
+exit
+ls -al
+# To view ??????
+'Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf'
+logout
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211_qc_testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/multbiol4examp/qc_comp_reps/Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf .
+
+12/13/15:
+# 'Differential Expression Analysis Using a Trinity Assembly' section.
+# assume have prevly installed R packages needed in section 'Running Differential Expression Analysis'
+# Note: 'full' example has 4 biol'l samples, BUT NO reps ??????????????
+# Q: could they mean 'biol'l reps' here, tho each sample has different trtmnt ???????????????????????????????????????????????????????
+
+****************************************************************
+# **thinking** just take 95 C1-3, 95 T1-3 (subsequent to trimmomatic step), start run with these, try work thru trinity/trinotate/transDecoder this way?
+
+# to find trimmed 95C1-3, 95T1-3
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Sitalica26/bufgrass/
+ls -al
+# look for output95C1_GATCAG_L006_R1_001.trimmed.fastq.gz file.
+# looks like found the 6 trimmed files there.
+-rw-r--r-- 1 pterry amundsen 4292886820 Aug 19 10:40 
+output95C1_GATCAG_L006_R1_001.trimmed.fastq
+-rw-r--r-- 1 pterry amundsen 4323022386 Aug 19 10:40 output95C2_TAGCTT_L007_R1_001.trimmed.fastq
+-rw-r--r-- 1 pterry amundsen 4802473397 Aug 19 10:41 output95C3_GGCTAC_L007_R1_001.trimmed.fastq
+-rw-r--r-- 1 pterry amundsen 6183099523 Aug 19 10:41 output95T1_AGTCAA_L005_R1_001.trimmed.fastq
+-rw-r--r-- 1 pterry amundsen 5377105021 Aug 19 10:42 output95T2_AGTTCC_L005_R1_001.trimmed.fastq
+-rw-r--r-- 1 pterry amundsen 6070497421 Aug 19 10:43 output95T3_ATGTCA_L006_R1_001.trimmed.fastq
+# spot checked these files with fastQC, see Sitalica_041515.txt, line 494.
+
+
+12/14/15:
+# next, arrange run trinity step on these 6, create Trinity.fasta file.
+# So, create a dir. for this project:
+
+#cd /work/amundsen/pterry/Trin21test
+# mkdir 95C1-3T1-3
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+# ref: 'Running Trinity' section of 'https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running%20Trinity'
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_trinity95C1-3T1-3crane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+# ref: line 2395
+# from 12/08/15:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+cp /work/amundsen/pterry/Sitalica26/bufgrass/*.fastq .
+cp /work/amundsen/pterry/Sitalica26/bufgrass/output95C1*.fastq .
+cp /work/amundsen/pterry/Sitalica26/bufgrass/output95C2*.fastq .
+cp /work/amundsen/pterry/Sitalica26/bufgrass/output95C3*.fastq .
+cp /work/amundsen/pterry/Sitalica26/bufgrass/output95T1*.fastq .
+cp /work/amundsen/pterry/Sitalica26/bufgrass/output95T2*.fastq .
+cp /work/amundsen/pterry/Sitalica26/bufgrass/output95T3*.fastq .
+logout
+
+
+
+# run slurm ???????
+
+# from line 357
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_trinity95C1-3T1-3crane.sh  2762140 11:53pm => ??:??am, no longer listed in squeue -u pterry
+squeue -u pterry
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+[pterry@login.crane scripts]$
+
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+ls -l
+less job.2762121.err  # 0 bytes
+less job.2762121.out  # 70 bytes
+Error, with --single reads, the --SS_lib_type can be 'F' or 'R' only.
+job.2762121.out (END) 
+# :Strand-specific RNA-Seq read orientation. Not knowing if 95C1-3T1-3 samples have any specific orientation [**CK Keenan** ?????????????????????????, and 'typical Trinity command' omits this parameter, so let me also omit it, and rerun sbatch.
+
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2762140     batch TJob_tri   pterry  R       0:51      1 c1219
+[pterry@login.crane scripts]$ 
+
+# so new try is running: 2762140 11:53pm => ??:??am
+
+
+12/15/15:
+# had relogin to crane 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+squeue -u pterry
+[pterry@login.crane ~]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+# so apparently job no longer running.             
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+ls -l
+less job.2762140.err  # 99 bytes
+slurmstepd: error: *** JOB 2762140 CANCELLED AT 2015-12-15T05:53:08 DUE TO TIME LIMIT on c1219 ***
+job.2762140.err (END) 
+less job.2762140.out  # 900382 bytes
+sacct -j 2762140 -o start,end
+[pterry@login.crane 95C1-3T1-3]$ sacct -j 2762140 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-14T23:52:49 2015-12-15T05:53:08 
+2015-12-14T23:52:49 2015-12-15T05:53:21 
+[pterry@login.crane 95C1-3T1-3]$ 
+# so ran 6 hrs
+# Q: can one estimate how to change slurm file for rerun ????????????????
+# Note: less job.2762140.out file indicates stopped when running in 'Trinity Phase 2: assembling clusters of reads', ~ 20% complete.
+# Keenan, Adam, try resume this Trinity run, just resubmit slurm file, only set time for 72:00:00.
+# can use 'tail job.2762140.out' to monitor progress.
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+re-scp modified slurm script file.
+scp slurm_trinity95C1-3T1-3crane.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_trinity95C1-3T1-3crane.sh  2764994 1:31pm => ??:??am, on 12/15/15
+squeue -u pterry
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2764994     batch TJob_tri   pterry  R       0:53      1 c1208
+# check
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+ls -al
+tail job.2764994.out
+head job.2764994.out
+# Q: warnings:
+WARNING, cannot remove output directory /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/read_partitions/Fb_0/CBin_192/c19264.trinity.reads.fa.out, since not created in this run. (safety precaution)
+# presumably this message ok ??????????????????????????????????????????????????
+
+# to check progress of trinity run
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+squeue -u pterry
+tail job.2764994.out  ## 28% complete. Still getting WARNINGs.
+# looks like started these %'s at zero upon this resubmission, not at ~ 20% where 1st slurm submission stopped ???????????????
+
+# to check progress of trinity run, midnight, betw Dec 15 & 16
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+[pterry@login.crane 95C1-3T1-3]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2764994     batch TJob_tri   pterry  R   10:38:16      1 c1208
+squeue -u pterry
+tail job.2764994.out  ## 34% complete. Still getting WARNINGs.
+
+12/16/15:
+# to check progress of trinity run, 9:45am, Dec 16
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+squeue -u pterry
+[pterry@login.crane 95C1-3T1-3]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2764994     batch TJob_tri   pterry  R   20:12:15      1 c1208
+tail job.2764994.out  ## 38% complete. Still getting WARNINGs.
+# Q: taking long time, will my 72 hr time be enough, can I restart it again if not enough time ?????????
+
+# to check progress of trinity run, 10:15pm, Dec 16
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+squeue -u pterry
+[pterry@login.crane 95C1-3T1-3]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+tail job.2764994.out  ## looks like no error at end of file.
+# so apparently done, and 
+sacct -j 2764994 -o start,end
+[pterry@login.crane 95C1-3T1-3]$ sacct -j 2764994 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-15T13:30:36 2015-12-16T13:51:53 
+2015-12-15T13:30:36 2015-12-16T13:51:53 
+# so ran for **24:20** hrs:min
+
+cd trinity_out_dir
+-rw-r--r-- 1 pterry amundsen   194832811 Dec 16 13:51 Trinity.fasta
+# so ~ **195 Mb**
+less Trinity.fasta
+>TRINITY_DN10610_c0_g1_i1 len=460 path=[946:0-169 948:170-236 943:237-459] [-1, 946, 948, 943, -2]
+CGCATGCTGTTTGTGCAGTGGTGCAGTTCAGAGCGTTGGTGTTGAGCCGGGAAATGGGTA
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+ls -al
+cd trinity_out_dir
+ls -al
+wc Trinity.fasta
+[pterry@login.crane trinity_out_dir]$ wc Trinity.fasta
+  2459588   8071010 194832811 Trinity.fasta
+
+# Next, perhaps skip 'Assessing the Read Content of the Transcriptome Assembly' & 'Assessing the Read Content of the Transcriptome Assembly' **for now**.
+# ... Post- Transcriptome Assembly Downstream Analyses, 
+
+# Trinity Transcript Quantification
+# Plan try RSEM method. Run abundance seprately for each sample.
+# section: Estimating Transcript Abundance
+
+# 1. Just prepare the reference for alignment and abundance estimation
+# ref: 12/08/15 above
+
+scp slurm_align_est_abun_prepref.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+(STOPPED)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_prepref.sh  2816536 11:36pm => ??:??am, on 12/15/15
+squeue -u pterry
+[pterry@login.crane ~]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+# Q: 9:30am, Dec 18, does this mean, stopped, not complete ??????????????????
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+ls -al
+less job.2816536.err
+Only prepping reference. Stopping now.
+# so looks like ran ok ???????????????????
+less job.2816536.out
+
+sacct -j 2816536 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T00:05:56 2015-12-18T00:22:13 
+2015-12-18T00:05:56 2015-12-18T00:22:13 
+# so ran bit over 16 min, started ~ 30 min after submission.
+
+cd trinity_out_dir
+ls -al
+# lot new stuff in dir trinity_out_dir, so probably ran ok.
+# Q: any way judge if job would have run sooner if ask for fewer resources? Since job ran in ~ 16 min, in future could ask for fewer resources, test how well would run.
+
+12/18/15:
+
+# 2. Run the alignment and abundance estimation (assumes reference has already been prepped, errors-out if prepped reference not located.)
+
+scp slurm_align_est_abun_95C1.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_95C1.sh  2820246 1:27pm => ??:??am, on 12/15/15
+squeue -u pterry  ## running
+squeue -u pterry  ## when checked at 6pm
+[pterry@login.crane 95C1-3T1-3]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+ls -al
+less job.2820246.err
+CMD: set -o pipefail && bowtie -q --all --best --strata -m 300 --chunkmbs 512 -S -p 4 /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.bowtie /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/output95C1_GATCAG_L006_R1_001.trimmed.fastq | samtools view -F 4 -S -b -o 95C1.bowtie.bam -
+# reads processed: 19381393
+# reads with at least one reported alignment: 17265440 (89.08%)
+# reads that failed to align: 2115953 (10.92%)
+Reported 30221873 alignments to 1 output stream(s)
+CMD: touch 95C1.bowtie.bam.ok
+CMD: rsem-calculate-expression     -p 4    --no-bam-output --bam 95C1.bowtie.bam /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.RSEM 95C1 
+CMD: touch 95C1.isoforms.results.ok
+job.2820246.err (END) 
+# Q: anything should note in 'less' output ???????????????????
+sacct -j 2820246 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T13:27:03 2015-12-18T14:29:03 
+2015-12-18T13:27:03 2015-12-18T14:29:03 
+[pterry@login.crane 95C1-3T1-3]
+# 1:02 hrs to run
+ls -al
+# 5 '95C1' files, 1 '95C1' dir in '95C1-3T1-3' dir, appears no changes in 'trinity_out_dir'.
+wc output95C1_GATCAG_L006_R1_001.trimmed.fastq
+  77525572   96906965 4292886820 output95C1_GATCAG_L006_R1_001.trimmed.fastq
+# Q: why discrepancy with 'reads processed: 19381393' ?????????????????????
+
+
+# now for alignment and abundance estimation on 2nd input file, output95C2_TAGCTT_L007_R1_001.trimmed.fastq
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_align_est_abun_95C2.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_95C2.sh 2821099 7:12pm => ??:??am, on 12/18/15
+squeue -u pterry  ## running
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+less job.2821099.err
+CMD: set -o pipefail && bowtie -q --all --best --strata -m 300 --chunkmbs 512 -S -p 4 /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.bowtie /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/output95C2_TAGCTT_L007_R1_001.trimmed.fastq | samtools view -F 4 -S -b -o 95C2.bowtie.bam -
+# reads processed: 19517268
+# reads with at least one reported alignment: 17600885 (90.18%)
+# reads that failed to align: 1916383 (9.82%)
+Reported 30025634 alignments to 1 output stream(s)
+CMD: touch 95C2.bowtie.bam.ok
+CMD: rsem-calculate-expression     -p 4    --no-bam-output --bam 95C2.bowtie.bam /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.RSEM 95C2 
+CMD: touch 95C2.isoforms.results.ok
+job.2821099.err (END) 
+# 5 '95C2' files, 1 '95C2' dir in '95C1-3T1-3' dir, appears no changes in 'trinity_out_dir'.
+sacct -j 2821099 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T19:18:10 2015-12-18T20:10:29 
+2015-12-18T19:18:10 2015-12-18T20:10:29 
+# ~ 52 min
+
+
+# now for alignment and abundance estimation on 3rd input file, output95C3_GGCTAC_L007_R1_001.trimmed.fastq
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_align_est_abun_95C3.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_95C3.sh 2821101 7:23pm => ??:??am, on 12/18/15
+squeue -u pterry  ## running
+less job.2821101.err
+CMD: set -o pipefail && bowtie -q --all --best --strata -m 300 --chunkmbs 512 -S -p 4 /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.bowtie /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/output95C3_GGCTAC_L007_R1_001.trimmed.fastq | samtools view -F 4 -S -b -o 95C3.bowtie.bam -
+# reads processed: 21681817
+# reads with at least one reported alignment: 19222537 (88.66%)
+# reads that failed to align: 2459280 (11.34%)
+Reported 32248349 alignments to 1 output stream(s)
+CMD: touch 95C3.bowtie.bam.ok
+CMD: rsem-calculate-expression     -p 4    --no-bam-output --bam 95C3.bowtie.bam /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.RSEM 95C3 
+CMD: touch 95C3.isoforms.results.ok
+job.2821101.err (END) 
+# 5 '95C3' files, 1 '95C3' dir in '95C1-3T1-3' dir
+sacct -j 2821101 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T19:23:35 2015-12-18T20:16:42 
+2015-12-18T19:23:35 2015-12-18T20:16:42 
+~ 53 min
+
+
+
+# now for alignment and abundance estimation on 4th input file, output95T1_AGTCAA_L005_R1_001.trimmed.fastq
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_align_est_abun_95T1.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_95T1.sh 2821138 8:07pm => ??:??am, on 12/18/15
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+less job.2821138.err
+CMD: set -o pipefail && bowtie -q --all --best --strata -m 300 --chunkmbs 512 -S -p 4 /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.bowtie /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/output95T1_AGTCAA_L005_R1_001.trimmed.fastq | samtools view -F 4 -S -b -o 95T1.bowtie.bam -
+# reads processed: 27915998
+# reads with at least one reported alignment: 25125553 (90.00%)
+# reads that failed to align: 2790445 (10.00%)
+Reported 46585714 alignments to 1 output stream(s)
+CMD: touch 95T1.bowtie.bam.ok
+CMD: rsem-calculate-expression     -p 4    --no-bam-output --bam 95T1.bowtie.bam /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.RSEM 95T1 
+CMD: touch 95T1.isoforms.results.ok
+job.2821138.err (END) 
+# 5 '95T1' files, 1 '95T1' dir in '95C1-3T1-3' dir
+sacct -j 2821138 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T20:10:29 2015-12-18T21:32:25 
+2015-12-18T20:10:29 2015-12-18T21:32:25 
+~ 1 hr & 22 min
+
+
+# now for alignment and abundance estimation on 5th input file, output95T2_AGTTCC_L005_R1_001.trimmed.fastq
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_align_est_abun_95T2.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_95T2.sh 2821224 9:45pm => ??:??am, on 12/18/15
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+less job.2821224.err
+CMD: set -o pipefail && bowtie -q --all --best --strata -m 300 --chunkmbs 512 -S -p 4 /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.bowtie /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/output95T2_AGTTCC_L005_R1_001.trimmed.fastq | samtools view -F 4 -S -b -o 95T2.bowtie.bam -
+# reads processed: 24276992
+# reads with at least one reported alignment: 21721173 (89.47%)
+# reads that failed to align: 2555819 (10.53%)
+Reported 41023010 alignments to 1 output stream(s)
+CMD: touch 95T2.bowtie.bam.ok
+CMD: rsem-calculate-expression     -p 4    --no-bam-output --bam 95T2.bowtie.bam /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.RSEM 95T2 
+CMD: touch 95T2.isoforms.results.ok
+job.2821224.err (END) 
+# 5 '95T2' files, 1 '95T2' dir in '95C1-3T1-3' dir
+sacct -j 2821224 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T21:45:12 2015-12-18T22:48:44 
+2015-12-18T21:45:12 2015-12-18T22:48:44 
+~ 1 hr 3 min
+
+
+
+
+# now for alignment and abundance estimation on 6th input file, output95T3_ATGTCA_L006_R1_001.trimmed.fastq
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_align_est_abun_95T3.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_align_est_abun_95T3.sh 2821232 9:54pm => ??:??am, on 12/18/15
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+less job.2821232.err
+CMD: set -o pipefail && bowtie -q --all --best --strata -m 300 --chunkmbs 512 -S -p 4 /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.bowtie /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/output95T3_ATGTCA_L006_R1_001.trimmed.fastq | samtools view -F 4 -S -b -o 95T3.bowtie.bam -
+# reads processed: 27406970
+# reads with at least one reported alignment: 24481044 (89.32%)
+# reads that failed to align: 2925926 (10.68%)
+Reported 45979768 alignments to 1 output stream(s)
+CMD: touch 95T3.bowtie.bam.ok
+CMD: rsem-calculate-expression     -p 4    --no-bam-output --bam 95T3.bowtie.bam /lustre/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta.RSEM 95T3 
+CMD: touch 95T3.isoforms.results.ok
+job.2821232.err (END) 
+# 5 '95T3' files, 1 '95T3' dir in '95C1-3T1-3' dir
+sacct -j 2821232 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-18T21:54:00 2015-12-18T23:08:51 
+2015-12-18T21:54:00 2015-12-18T23:08:51
+~ 1 hr & 14 min
+
+
+# section 'Build Transcript and Gene Expression Matrices' of outline section 'Trinity Transcript Quantification'
+# ck line 2348 =>
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_bld_tx_expn_matrix.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_bld_tx_expn_matrix.sh 2823955 11:06pm => ??:??am, on 12/18/15
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+less job.2823955.err
+more job.2823955.err
+cat job.2823955.err
+# so got the expected **3** files, 
+-rw-r--r--  1 pterry amundsen    9495163 Dec 19 23:06 Trinity_trans.counts.matrix
+-rw-r--r--  1 pterry amundsen   10187631 Dec 19 23:06 Trinity_trans.TMM.EXPR.matrix
+-rw-r--r--  1 pterry amundsen    8155802 Dec 19 23:06 Trinity_trans.TPM.not_cross_norm
+-rw-r--r--  1 pterry amundsen        321 Dec 19 23:06 Trinity_trans.TPM.not_cross_norm.TMM_info.txt
+# and got a 4th, 
+less Trinity_trans.TPM.not_cross_norm.TMM_info.txt 
+group   lib.size        norm.factors    eff.lib.size
+95C1    999977  0.883874641930173       883854.312813409
+95C2    1000301 0.882696475460211       882962.167099324
+95C3    998550  0.834140792372941       832931.288224001
+95T1    999664  1.13104358832889        1130663.55768321
+95T2    1000371 1.15966847286907        1160098.7098725
+95T3    999781  1.17150832834834        1171251.76802443
+Trinity_trans.TPM.not_cross_norm.TMM_info.txt (END) 
+# what should I make of this, content of output to .err file, don't see any error messages, looks like using edgeR to build this count table ?????????????
+# Perhaps check edgeR doc ????????????????????????????
+# note: ***looks like using edgeR for this task from the job.2823955.err file content.***
+
+
+# could try 'Counting Numbers of Expressed Transcripts or Genes' section before moving on to 'Quality Check Your Samples and Replicates section.
+
+# but for the 'trans' version, what to make of the part following 'tee' ??????
+# so skip to 'Quality Check Your Samples and Replicates section' section.
+
+
+12/21/15:
+# 'Quality Check Your Samples and Replicates section' section' of 'https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Transcript-Quantification'. Then 'Compare replicates for each of your samples' section.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+# cd /work/amundsen/pterry/Trin20Tut/test_full_edgeR_pipeline/rnaseq_reads
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+mkdir qc_comp_reps
+cd qc_comp_reps
+cp /work/amundsen/pterry/Trin21test/95C1-3T1-3/Trinity_trans.counts.matrix .
+ls -al
+logout
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_comp_reps_for_each_sample.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+scp samples.txt pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_comp_reps_for_each_sample.sh 2826393 2:16pm => ??:??am, on 12/18/15
+squeue -u pterry  ## PD
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+# not working ??????
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+less job.2826393.err  # don't see an error ?????
+less job.2826393.out
+ls -al
+# don't see expected 6 pdf files ?????????????????
+# got expected results prevly with example input files, see line 2706-11, 12/11/15 above.
+# Apparently uses 'Trinity_trans.counts.matrix.R' file specific to '--compare_replicates', etc. specification ???????????????????
+# note: 'if' stmnt before 'pdf...' in this file, perhaps reason not creating expected 'pdf' files ???????????????????
+# **BUT NOTE**, in $TRINITY_HOME/sample_data/test_DE_analysis dir, samples.txt file, 1st colm, each biol'l sample NO VARIATION in 1st colm.
+# SO, **RERUN** WITH THAT CORRECTION in samples.txt file. mv Trinity_trans.counts.matrix.minCol10.minRow10.CPM.log2.dat to Trinity_trans.counts.matrix.minCol10.minRow10.CPM.log2.dat_bad_samples.txt_file
+# modify left colm so only two values (biol'l trtmnts), 95C & 95T.
+
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp samples.txt pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_comp_reps_for_each_sample.sh 2826862 10:06pm => ??:??am, 
+squeue -u pterry  ## PD
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+less job.2826862.err
+more job.2826862.out
+# have the 2 expected .pdf files,
+-rw-r--r--  1 pterry amundsen  5963833 Dec 21 22:06 95C.rep_compare.pdf
+-rw-r--r--  1 pterry amundsen  7057759 Dec 21 22:06 95T.rep_compare.pdf
+# so, scp over to macbook pro to view /.../testing/trinitypdf_qc95CandT
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211pdf_qc95CandT
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps/95C.rep_compare.pdf .
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps/95T.rep_compare.pdf .
+# so looks like '--compare_replicates' worked.
+# to try '--sample_cor_matrix'
+# i.e., 'Compare Replicates Across Samples' section.
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_comp_reps_for_each_sample_sampcormatrix.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_comp_reps_for_each_sample_sampcormatrix.sh 2826924 11:10pm => ??:??am, 
+squeue -u pterry  ## PD
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+-rw-r--r--  1 pterry amundsen     6157 Dec 21 23:09 Trinity_trans.counts.matrix.minCol10.minRow10.log2.sample_cor_matrix.pdf
+# so scp over, view
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211pdf_qc95CandT
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps/Trinity_trans.counts.matrix.minCol10.minRow10.log2.sample_cor_matrix.pdf .
+# as expect, replicates are more highly correlated within samples than between samples.
+
+# now PCA plot:
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_comp_reps_for_each_sample_PCA.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_comp_reps_for_each_sample_PCA.sh 2826963 11:42pm => ??:??am, 
+squeue -u pterry  ## PD
+# PD for about 10 min, so forget for tonight.
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+ls -al
+-rw-r--r--  1 pterry amundsen     3611 Dec 22 00:14 Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf
+# so scp to macbook pro, look at it
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211pdf_qc95CandT
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps/Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf .
+# corrupt file, Adobe can't read ??????????????????
+
+12/22/15:
+# Try pCA creation again ??
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+cp Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf_corrupt
+rm Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_comp_reps_for_each_sample_PCA.sh 2828155 9:36pm => ??:??am, 
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps
+-rw-r--r--  1 pterry amundsen     3611 Dec 22 09:35 Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf
+# so try scp this to macbook pro to view
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/qc_comp_reps/Trinity_trans.counts.matrix.minCol10.minRow10.log2.principal_components.pdf .
+# 2nd attempt, this pdf file also corrupt, Adobe can't read ????????
+# Note : with the 'example data', dir .../testing/trinity211_qc_testing, the PCA pdf file can be read by Adobe reader ????????????????????????
+# should I try 'globus' rather than 'scp' ?????????????
+
+# On to 'Differential Expression Analysis Using a Trinity Assembly' section.
+# looks like indicating need prevly have prepared (the 6 '.isoforms.results' files ?????????????????
+ Or perhaps the 'counts.matrix' file ????????# in 
+ -rw-r--r--  1 pterry amundsen    9495163 Dec 19 23:06 Trinity_trans.counts.matrix
+# file in /work/amundsen/pterry/Trin21test/95C1-3T1-3 dir or subdir qc_comp_reps
+
+# 'Running Differential Expression Analysis' section.
+Prevly installed: edgeR, R, add'l R packages
+# Q: difference, 'transcripts.counts.matrix' file & 'genes.counts.matrix' file ?????????????????????????????
+# 'Identifying DE features: With biological replicates (PREFERRED)' section.
+
+12/24/15:
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_run_DE_analysis.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+#mkdir DEanalysis
+#cd DEanalysis
+#cp ../Trinity_trans.counts.matrix .
+#cp ../qc_comp_reps/samples.txt .
+#ls -al
+# now code to run slurm
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_run_DE_analysis.sh 2840120 10:18am => ??:??am, 
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis
+ls -al
+more job.2840120.err  ## no apparent errors flagged
+more job.2840120.out
+cd edgeR.115118.dir 
+ls -al
+-rw-r--r-- 1 pterry amundsen     1033 Dec 24 10:18 Trinity_trans.counts.matrix.95C_vs_95T.95C.vs.95T.EdgeR.Rscript
+
+-rw-r--r-- 1 pterry amundsen 15079499 Dec 24 10:18 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results
+
+-rw-r--r-- 1 pterry amundsen  2100598 Dec 24 10:18 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.MA_n_Volcano.pdf
+
+# so looks like what expecting from section 'Differential Expression Output Explained'. Tho, repeat of '95C.vs.95T' in R script name not as in 'Differential Expression Output Explained' ????
+less Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results
+# **how** calc columns logCPM, PValue, FDR ??????????????????
+# Q: looks like 5 'number' colm headings, but only 4 number fields in file table ?????????????????????????????????????? 
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.MA_n_Volcano.pdf .
+# 2.1 Mb
+# p-5 of section 'Differential Expression Output Explained', why only 2 plots in 'Differential Expression Output Explained', but 4 in pdf file ????????????????????
+# Note: 'insufficient memory in printer to print page' ???????????????
+
+STOPPED
+
+12/25/15:
+# Next, 'Extracting and clustering differentially expressed transcripts' section.
+# 'cluster the transcripts according to their patterns of differential expression across the samples', Q: like to know bit more ????????
+# To do this, you can run the following from within the DE output directory (edgeR.115118.dir), by running the script inside 'slurm_analyze_diff_expr.sh' file.
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_analyze_diff_expr.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_analyze_diff_expr.sh 2857620 11:01am => ??:??am, 
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir
+# error, need --samples parameter
+# running wi --samples param., don't see error mesages
+
+12/26/15:
+# to check: files output, see p-6 of 9
+# which will extract all genes that have P-values at most 1e-3 (meaning this context ?????) and are at least 2^2 fold differentially expressed.
+# 1st,
+-rw-r--r-- 1 pterry amundsen    308395 Dec 25 11:01 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+id      logFC   logCPM  PValue  FDR     95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN31372_c0_g1_i1        -13.303565262659        9.83961096097471        6.64875466320565e-40    1.06371431230228e-34    286.387 488.956 206.128 0.000   0.000   0.085
+# 2nd
+-rw-r--r-- 1 pterry amundsen    547935 Dec 25 11:01 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+# 3rd,
+-rw-r--r-- 1 pterry amundsen    616505 Dec 25 11:01 diffExpr.P1e-3_C2.matrix.log2.dat
+# All features found DE in any of these pairwise comparisons consolidated into a single expression matrix:
+95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN44017_c0_g1_i2        5.02427534791448        5.25179482264146        5.54460902638193        3.12416267883585        2.46205231879643        2.35698889179248
+# 4th,
+-rw-r--r-- 1 pterry amundsen       612 Dec 25 11:01 diffExpr.P1e-3_C2.matrix.log2.sample_cor.dat
+# A Pearson correlation matrix for pairwise sample comparisons based on this set of DE features.
+# Q: view what supposed to get in 5th, next, 'pdf'
+# 5th,
+-rw-r--r-- 1 pterry amundsen      6122 Dec 25 11:01 diffExpr.P1e-3_C2.matrix.log2.sample_cor_matrix.pdf
+# clustered heatmap showing the above sample correlation matrix.
+# 6th,
+-rw-r--r-- 1 pterry amundsen    325281 Dec 25 11:01 diffExpr.P1e-3_C2.matrix.log2.centered.genes_vs_samples_heatmap.pdf
+# clustered heatmap of DE genes vs. sample replicates.
+# Q: what is this ?????????????????????????????????????????
+# Q: 'all.RData' compared to '.RData' ???????????????????????
+# So scp to 'pdf' files over for viewing.
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing/trinity211pdf_qc95CandT
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir/diffExpr.P1e-3_C2.matrix.log2.sample_cor_matrix.pdf .
+# viewing ok wi adobe, looks ok as per p-6 of 9 example.
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir/diffExpr.P1e-3_C2.matrix.log2.centered.genes_vs_samples_heatmap.pdf .
+# viewing ok wi adobe, looks ok as per p-7 of 9 example.
+
+# 'all.RData', is it the following ???????????????????????????
+-rw-r--r-- 1 pterry amundsen 145702813 Dec 25 11:01 diffExpr.P1e-3_C2.matrix.RData
+
+# Next, section ***'Gene Ontology (GO) Enrichment Analysis on Differentially Expressed Genes'***
+# ***Before*** running GO-Seq, you must follow the relevant **Trinotate** protocol to generate the GO assignments leveraged by this process.
+# https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq
+
+Use http://trinotate.sf.net[Trinotate] to generate an annotation report ***'trinotate.xls'***, which includes top-matching blast matches from SwissProt (and optionally UniRef) and any corresponding Gene Ontology (GO) assignments from the TrEMBL/SwissProt databases.
+# go to
+http://trinotate.github.io/
+
+12/29-30/15:
+TransDecoder identifies candidate coding regions within transcript sequences, such as those generated by de novo RNA-Seq transcript assembly using Trinity
+
+1. Files needed for execution (trinotate)
+
+    Trinity.fasta - Final product containing all the transcripts assembled by Trinity
+
+    Trinity.fasta.transdecoder.pep - Most likely Longest-ORF peptide candidates generated from the Trinity Assembly. Instructions for generation of this file can be found here: http://transdecoder.github.io/
+
+# so, go to obtain Trinity.fasta.transdecoder.pep, go to
+# http://transdecoder.github.io/
+
+Running TransDecoder
+# needed Adam to install Trinity 2.1.1 & TransDecoder-2.0.1 on Crane
+
+Predicting coding regions from a transcript fasta file
+
+# Step 1: extract the long open reading frames
+# TransDecoder.LongOrfs -t target_transcripts.fasta
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+mkdir transdecoder
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/transdecoder
+# cp ../Trinity.fasta .  # may perhaps access without copying ????
+# create slurm
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_run_transdecoderLong.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_run_transdecoderLong.sh 2915071 7:24pm => ??:??am, 
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/transdecoder
+cd Trinity.fasta.transdecoder_dir
+-rw-r--r-- 1 pterry amundsen  55091096 Dec 30 19:31 longest_orfs.pep
+cd ..
+sacct -j 2915071 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-30T19:24:14 2015-12-30T19:31:19 
+2015-12-30T19:24:14 2015-12-30T19:31:19 
+# ~ 7 min run
+more job.2915071.out
+more job.2915071.err
+...
+#################################
+### Done preparing long ORFs.  ###
+##################################
+
+	Use file: Trinity.fasta.transdecoder_dir/longest_orfs.pep  for Pfam and/
+or BlastP searches to enable homology-based coding region identification.
+
+	Then, run TransDecoder.Predict for your final coding region predictions.
+**********************************************************
+# So, ***SKIP*** 'step 2' foe now, ***BUT***, later will want to try. Note: ***HOW*** access '-db uniprot_sprot.fasta' when want to try step 2 ???????????????????????????
+***********************************************************
+
+# step 3
+# run 'Predict' from 'transdecoder' dir.
+# create slurm script
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_run_transdecoderPredict_95C1-T3.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_run_transdecoderPredict_95C1-T3.sh 2915529 11:28pm => ??:??am, 
+squeue -u pterry  ## PD
+more job.2915529.err
+tail job.2915529.err
+transdecoder is finished.  See output files Trinity.fasta.transdecoder.*
+more job.2915529.out
+sacct -j 2915529 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-30T23:37:39 2015-12-31T00:14:21 
+2015-12-30T23:37:39 2015-12-31T00:14:21 
+# so ~ 37 min run.
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/transdecoder
+-rw-r--r--  1 pterry amundsen  36511970 Dec 31 00:12 Trinity.fasta.transdecoder.pep
+# so looks like ran ok.
+Ck sizes of files:
+wc Trinity.fasta.transdecoder.pep
+  458936  1054848 36511970 Trinity.fasta.transdecoder.pep
+cd Trinity.fasta.transdecoder_dir
+wc longest_orfs.pep
+  316734  1108569 55091096 longest_orfs.pep
+cd ..
+cd ..
+cd trinity_out_dir
+wc Trinity.fasta
+  2459588   8071010 194832811 Trinity.fasta
+# what to think ?????????????????????
+
+
+12/31/15:
+# back to http://trinotate.github.io/,
+# section '2. Capturing BLAST Homologies'
+
+(STOPPED)
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_run_trinotate_blastx_95C1-T3.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+mkdir trinotate
+
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_run_trinotate_blastx_95C1-T3.sh 2918371 6:20pm => ??:??am, 
+squeue -u pterry  ## PD
+
+less job.2918371.err
+Selenocysteine (U) at position 690 replaced by X
+Selenocysteine (U) at position 690 replaced by X
+Selenocysteine (U) at position 192 replaced by X
+Error: (1431.1) FASTA-Reader: Warning: FASTA-Reader: Title is very long: 1237 characters (max is 1000)
+Error: (1431.1) FASTA-Reader: Warning: FASTA-Reader: Title is very long: 1180 characters (max is 1000)
+Error: (1431.1) FASTA-Reader: Warning: FASTA-Reader: Title is very long: 1260 characters (max is 1000)
+...
+# end of file has same output
+# What to think of the 'errors' ????????????????
+# tail job.2918371.err
+more job.2918371.out  ## zero bytes
+sacct -j  2918371 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2015-12-31T18:20:21 2016-01-01T21:11:43 
+2015-12-31T18:20:21 2016-01-01T21:11:43 
+# so 26 hrs 52 min. to run.
+
+-rw-r--r--  1 pterry amundsen 12722936 Jan  1 21:11 blastx.outfmt6
+less blastx.outfmt6
+TRINITY_DN10610_c0_g1_i1        ARGO_PECCP      41.18   34      19      1       317     415     121     154     6.3     30.4
+TRINITY_DN10610_c0_g2_i1        ARGO_PECCP      41.18   34      19      1       315     413     121     154     6.3     30.4
+...
+TRINITY_DN38713_c0_g1_i2        APX8_ORYSJ      82.76   29      5       0       1       87      330     358     4e-08   55.1
+TRINITY_DN38713_c0_g2_i1        APX7_ORYSJ      91.79   268     22      0       794     1597    91      358     0.0       525
+(END) 
+# need go, find defs of columns again ????????????????????
+
+
+01/01/16:
+# prev still running, now 18 hrs, note, did not match nodes wi threads in slurm_run_trinotate_blastx_95C1-T3.sh ???????????????????????????????
+
+# mean time proceed to 'blastp non-optional step, section '2. Capturing BLAST Homologies', http://trinotate.github.io/
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_run_trinotate_blastp_95C1-T3.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+#cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate
+#mkdir blastp
+
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_run_trinotate_blastp_95C1-T3.sh 2920667 1:58pm => ??:??am, 
+squeue -u pterry  ## PD
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/blastp
+
+# two jobs running when went to Mex.
+# both done 2am, 01/02/16
+
+#Note: module help trinotate
+
+less job.2920667.err
+Selenocysteine (U) at position 523 replaced by X
+Selenocysteine (U) at position 106 replaced by X
+Selenocysteine (U) at position 106 replaced by X
+...
+
+sacct -j  2920667 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2016-01-01T14:03:30 2016-01-01T20:54:14 
+2016-01-01T14:03:30 2016-01-01T20:54:14 
+## 6 hrs 51 min.
+
+-rw-r--r-- 1 pterry amundsen 6857589 Jan  1 20:54 blastp.outfmt6
+less blastp.outfmt6
+TRINITY_DN10001_c0_g1_i1|m.106285       POF11_SCHPO     25.69   471     252     12      292     713     76      497     3e-47     179
+TRINITY_DN10001_c0_g2_i1|m.106290       POF11_SCHPO     25.69   471     252     12      292     713     76      497     3e-47     179
+
+# perhaps should do bit more looking, V. Buffalo bk, ????????????
+
+
+01/13/16:
+# now section, Trinotate: Loading Above Results into a Trinotate SQLite Database
+# 1. Retrieve the Trinotate Pre-generated Resource SQLite database
+# create a directory to wget the sqlite db to.
+
+STOPPED
+
+01/15/16:
+# ref: 11/16/15: above
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+# cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate
+# mkdir sqlitedb95C1-T3
+#cd sqlitedb95C1-T3
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+[pterry@login.crane sqlitedb95C1-T3]$ srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+Can't locate local/lib.pm in @INC (@INC contains: /home/amundsen/pterry/perl5/lib/perl5/x86_64-linux-thread-multi /home/amundsen/pterry/perl5/lib/perl5/x86_64-linux-thread-multi /home/amundsen/pterry/perl5/lib/perl5 /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .).
+BEGIN failed--compilation aborted.
+[pterry@c0907.crane sqlitedb95C1-T3]$ 
+# get resources but ERROR message ???????????????????????????
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+wget "https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz
+# started 8:59pm => 
+unix command stopped at 97%, hit return after a while, => 'broken pipe', left me at 'laptop' prompt, if log back in, can I do a check sum for this dwnload ??????????????????????????????
+# Q: should I have used 'srun' for wget task ?????????????????
+# 2nd attempt, ran wget with 'srun'. This time 'broken pipe' after hit return after command line 'stopped' at 35% ???????????????? 
+-rw-r--r-- 1 pterry amundsen  916897792 Jan 15 21:38 Trinotate.sqlite.gz
+-rw-r--r-- 1 pterry amundsen 1488153633 Feb  5  2015 Trinotate.sqlite.gz_prev
+# fewer bytes transferred than prev attempt ???????????????
+# could I use the /work/amundsen/pterry/Trin21test/sqlitedbtest
+-rw-r--r--  1 pterry amundsen 6145534976 Nov 20 23:09 Trinotate.sqlite
+from Nov 20, 2015 ??????????????????????????????????
+# Try on macbook laptop thru firefox browser, start 10:20 pm => aborts after min. or two ????
+
+01/19/16:
+# talked to Adam(HCC), thinks source server may be dropping link before wget whole file transferred. Note: so he successfully got thr file today, same length as one of my two attempts.
+# Note: looks like his dnload did not change the name from 
+Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz
+# to
+Trinotate.sqlite.gz
+-rw-r--r-- 1 pterry amundsen 1488153633 Jan 19 11:49 Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz
+-rw-r--r-- 1 pterry amundsen 1488153633 Feb  5  2015 Trinotate.sqlite.gz_prev
+# so change now
+cp Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz Trinotate.sqlite.gz
+
+# so resume from Adam's dnload, try **not** using 'srun'. Perhaps later try with?
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+ls -al
+-rw-r--r-- 1 pterry amundsen 1488153633 Jan 19 11:49 Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz
+-rw-r--r-- 1 pterry amundsen 1488153633 Jan 19 23:27 Trinotate.sqlite.gz
+-rw-r--r-- 1 pterry amundsen 1488153633 Feb  5  2015 Trinotate.sqlite.gz_prev
+
+gunzip Trinotate.sqlite.gz  ## ~1.5 to ~6.1 gb
+# Note: **difference**, Nov 20, & Jan 19 in size Trinotate.sqlite is 277,504 ******????????????????????*****************???????????????????
+# anyway, proceed with following: 
+
+01/20/16:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+ls -al
+
+# sec 2
+# note: line 1893, not using 'srun' to run following
+module load trinotate/2.0
+/util/opt/trinity/2.1/gcc/4.8/util/support_scripts/get_Trinity_gene_to_trans_map.pl ../../trinity_out_dir/Trinity.fasta > Trinity.fasta.gene_trans_map
+ls -al
+# got 
+-rw-r--r-- 1 pterry amundsen    7754524 Jan 20 09:59 Trinity.fasta.gene_trans_map
+
+#Trinotate Trinotate.sqlite init --gene_trans_map Trinity.fasta.gene_trans_map --transcript_fasta Trinity.fasta --transdecoder_pep Trinity.fasta.transdecoder.pep
+
+Trinotate Trinotate.sqlite init --gene_trans_map Trinity.fasta.gene_trans_map --transcript_fasta ../../trinity_out_dir/Trinity.fasta --transdecoder_pep ../../transdecoder/Trinity.fasta.transdecoder.pep
+
+# Loading complete..
+# looks like everything ok.
+ls -al  ### no new files in current dir.
+# without srun, **don't** see error messages
+# p-7 of 9
+# 3. Loading BLAST homologies
+# load protein hits
+
+# resume copying line 1904 ...
+Trinotate Trinotate.sqlite LOAD_swissprot_blastp ../blastp/blastp.outfmt6
+BlastDbase loading complete..
+# so looks like ok.
+# from line 1909
+Trinotate Trinotate.sqlite LOAD_swissprot_blastx ../blastx.outfmt6
+BlastDbase loading complete..
+# so looks like ok.
+
+# from line 1912
+# Trinotate: Output an Annotation Report
+# Trinotate Trinotate.sqlite report [opts] > trinotate_annotation_report.xls
+# omit '[opts]', see what happens
+Trinotate Trinotate.sqlite report > trinotate_annotation_report.xls
+# from login node, ran 20 min, 
+-rw-r--r-- 1 pterry amundsen   49090560 Jan 20 10:34 trinotate_annotation_report.xls
+# but did not finish.
+# so while not logging out, try 'srun'
+cp trinotate_annotation_report.xls trinotate_annotation_report.xls_prev
+rm trinotate_annotation_report.xls
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+# got usual @INC error message ??????
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+module load trinotate/2.0
+Trinotate Trinotate.sqlite report > trinotate_annotation_report.xls
+# start 10:46am => 11:21am
+exit
+# **to do** following for 95C1-T3 data
+-rw-r--r-- 1 pterry amundsen   78676610 Jan 20 11:13 trinotate_annotation_report.xls
+less trinotate_annotation_report.xls
+wc trinotate_annotation_report.xls
+  178728  6371013 78676610 trinotate_annotation_report.xls
+# Q: how handle .xls file on crane ??????????????????????????
+
+01/21/16:
+# Now section **'Gene Ontology (GO) Enrichment Analysis on Differentially Expressed Genes'** of 
+https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression#gene-ontology-go-enrichment-analysis-on-differentially-expressed-genes
+
+# Before running GO-Seq, you must follow the **relevant Trinotate** protocol to generate the GO assignments leveraged by this process.
+# **relevant Trinotate**, a link to
+https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq
+# 'Running GOSeq'
+
+# prevly generated 'trinotate.xls' report. (see 01/20/16 above.
+# ... which includes top-matching blast matches from SwissProt (and optionally UniRef) and any corresponding Gene Ontology (GO) assignments from the TrEMBL/SwissProt databases.
+
+# 'Extract GO assignments per gene' section.
+# ${TRINOTATE_HOME}/util/extract_GO_assignments_from_Trinotate_xls.pl --Trinotate_xls trinotate.xls -G --include_ancestral_terms > go_annotations.txt
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+mkdir GOassigns
+cd GOassigns
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3/GOassigns
+module load trinotate/2.0
+
+/util/opt/trinotate/2.0/util/extract_GO_assignments_from_Trinotate_xls.pl --Trinotate_xls ../trinotate_annotation_report.xls -G --include_ancestral_terms > go_annotations.txt
+
+Done processing, writing output.
+
+Finished.
+# looks like ran ok.
+exit
+ls -al
+# examine output file ???????
+less go_annotations.txt
+# looks like for each trinity transcript, a list of GO assignments are associated.
+-rw-r--r-- 1 pterry amundsen 17377720 Jan 21 23:23 go_annotations.txt
+
+wc go_annotations.txt
+   31816    63632 17377720 go_annotations.txt
+# so ~ 32k trinity transcripts(debruign graphs) ?????????????????
+
+# Q: what next ????????????
+# a guess, go down to 'GO-Seq on Differentially Expressed Features', skip 'Run GOseq' section' ????????????????????????????
+# This section links circularly back: See **DE analysis** link for instructions on automatically running GO-Seq on significantly DE features.
+# **Assuming** this means go back to 'Gene Ontology (GO) Enrichment Analysis on Differentially Expressed Genes' section of https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression#gene-ontology-go-enrichment-analysis-on-differentially-expressed-genes
+# Q: 'gene lengths', check did I do transcript lengths, any confusion here ????????????????? ?????????????
+# apparently, see like 95C1.genes.results, etc. But have 5 more files like this in dir 95C1-3T1-3 ????????????
+# am I ready to run 'analyze_diff_expr.pl' script ??????????????????????
+
+01/24/16:
+# do some checking on files which may create a 'genes.lengths.txt' file from (see section run GOseq in 'Running GOSeq' in https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-GOSeq)
+# so compare say 95C1.genes.results with 95T1.genes.results files. Initially colm 1 from each.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+more 95C1.genes.results
+more 95T1.genes.results
+wc 95C1.genes.results
+  115192   806344 10089771 95C1.genes.results
+wc 95T1.genes.results
+  115192   806344 10112734 95T1.genes.results
+# so same number of lines
+cat 95C1.genes.results | cut -f 1 > 95C1_colm1.txt
+cat 95T1.genes.results | cut -f 1 > 95T1_colm1.txt
+wc 95C1_colm1.txt
+wc 95T1_colm1.txt
+more 95C1_colm1.txt
+more 95T1_colm1.txt
+diff -u 95C1_colm1.txt 95T1_colm1.txt > diffC1T1.txt
+# 0 bytes in diffC1T1.txt
+# so assume/conclude all 6 95??.genes.results files have same gene IDs for all rows in the files.
+
+# to be complete, check if colm 3 is same betw. 95C1.genes.results & 95T1.genes.results
+cat 95C1.genes.results | cut -f 3 > 95C1_colm3.txt
+cat 95T1.genes.results | cut -f 3 > 95T1_colm3.txt
+wc 95C1_colm3.txt
+wc 95T1_colm3.txt
+more 95C1_colm3.txt
+more 95T1_colm3.txt
+diff -u 95C1_colm3.txt 95T1_colm3.txt > diffC1T1_colm3.txt
+-rw-r--r--  1 pterry amundsen     556059 Jan 24 14:30 diffC1T1_colm3.txt
+# what to think
+more diffC1T1_colm3.txt
+# so 1st 4 changes betw files in colm3 are
+-10, +31, +4.02, +0.01
+# percentages are: 4.1,1.4,1.8,.036
+# so mean percent difference = 1.834%, range is 4.1% to 0.036%
+# conclude if these 4 are representative of diffs in gene lengths, can just use values from 95C1.genes.results file. **Q**: is this ok ??????????????
+
+STOPPED
+
+# Q: do I have goseq installed, see line 1208 above ???????????????? Need check if installed (perhaps 'library(GOseq)' after do 'module load R/3.2') ??????
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+
+
+
+#modify analyze_diff_expr.pl by adding 3 addl parameters, place in slurm run,
+# Q: what files expect in output ???????
+# do in new dir to keep output just for this step easily distinguishable.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+cd DEanalysis
+cd edgeR.115118.dir
+mkdir GOseqonDEgenes
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir/GOseqonDEgenes
+
+module load compiler/gcc/4.8
+module load bowtie/1.1
+module load samtools/1.2
+module load trinity/2.1
+module load R/3.2
+
+R
+library(goseq)
+# it loaded, so apparently prevly installed.
+
+# So go forward with creating 'genes.lengths.txt' file using 95C1.genes.results.
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir/GOseqonDEgenes
+cat ../../../95C1.genes.results | cut -f 1,3 > genes.lengths.txt
+-rw-r--r-- 1 pterry amundsen 3345152 Jan 24 21:06 genes.lengths.txt
+more genes.lengths.txt
+gene_id	length
+TRINITY_DN10001_c0_g1	3179.00
+TRINITY_DN10001_c0_g2	3178.00
+wc genes.lengths.txt
+ 115192  230384 3345152 genes.lengths.txt
+
+#modify slurm analyze_diff_expr.pl by adding 3 addl parameters, place in slurm run,
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3/GOassigns
+ls -al
+
+# Ready try run
+logout
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_analyze_diff_expr_wiGO.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_analyze_diff_expr_wiGO.sh 3120381 11:07pm => ??:??am, 
+squeue -u pterry  ## PD still at 11:30pm
+[pterry@login.crane GOseqonDEgenes]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           3120381     batch TJob_ana   pterry PD       0:00      1 (ReqNodeNotAvail(Unavailable:c1
+[pterry@login.crane GOseqonDEgenes]$ 
+# What does this mean ??????????????????
+
+01/25/16:
+# crane to go down for maintenance 9am, 01/26/16. To do submit slurm with say 15 hr time.
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_analyze_diff_expr_wiGO_15hr.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_analyze_diff_expr_wiGO_15hr.sh 3123392 12:23pm => ??:??am, 
+squeue -u pterry  ## PD still at 11:30pm
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir/GOseqonDEgenes
+ls -al
+less job.3123392.err
+Error, no DE_results files!  This needs to be run in the edgeR or DESeq output directory at /util/opt/trinity/2.1/gcc/4.8/Analysis/DifferentialExpression/analyze_diff_expr.pl line 127.
+job.3123392.err (END) 
+
+# ok, fixed slurm to be run in edgeR.115118.dir directory.
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp slurm_analyze_diff_expr_wiGO_12hr.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -al
+sbatch slurm_analyze_diff_expr_wiGO_12hr.sh 3128028 3:39pm => ??:??am, 
+squeue -u pterry  ## R
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir
+less job.3128028.err
+more job.3128028.err
+more job.3128028.out
+# no error messages apparent in .err or .out Files
+# Q: how to examine directory, determine what have ??????????????
+# Note: 4 GOseq.depleted or GOseq.enriched files have only headers, no data in rows below ???????????????????????
+# To do, check out the 4 pdf files ????????????
+
+sacct -j  3128028 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2016-01-25T15:38:52 2016-01-25T15:40:59 
+2016-01-25T15:38:52 2016-01-25T15:40:59 
+# 2 min 7 sec
+
+02/01/16:
+#Think make **plan** to examine files from Trinity.fasta to run of 
+sbatch slurm_analyze_diff_expr_wiGO_12hr.sh
+# see if can determine why 4 GOseq.depleted or GOseq.enriched files have only headers, no data in rows below ???????????????????????
+
+02/08/16:
+# try apply what learned from V. Buffalo book, p-194 thru 247.
+# initially try understand bit more about Trinity.fasta file in 
+
+# from 12/16/15,
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+-rw-r--r-- 1 pterry amundsen   194832811 Dec 16 13:51 Trinity.fasta
+# so ~ **195 Mb**
+less Trinity.fasta
+>TRINITY_DN10610_c0_g1_i1 len=460 path=[946:0-169 948:170-236 943:237-459] [-1, 946, 948, 943, -2]
+CGCATGCTGTTTGTGCAGTGGTGCAGTTCAGAGCGTTGGTGTTGAGCCGGGAAATGGGTA
+wc Trinity.fasta
+[pterry@login.crane trinity_out_dir]$ wc Trinity.fasta
+  2459588   8071010 194832811 Trinity.fasta
+# Q: would understanding what in the ">" lines help me ??????????????
+
+STOPPED
+
+02/10/16:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+grep -c "^>" Trinity.fasta
+165459
+# 2459588/165459 = 14.86524
+
+# Next file,
+# from 01/24/16,
+95C1.isoforms.results
+95C1.genes.results
+# To do: examine these files
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+more 95C1.genes.results
+gene_id	transcript_id(s)	length	effective_length	expected_count	
+TPM	FPKM
+TRINITY_DN10001_c0_g1	TRINITY_DN10001_c0_g1_i1	3179.00	3179.00	0.00	
+0.00	0.00
+TRINITY_DN10001_c0_g2	TRINITY_DN10001_c0_g2_i1	3178.00	3178.00	0.00	
+0.00	0.00
+wc 95C1.genes.results
+  115192   806344 10089771 95C1.genes.results
+grep -c "^TR" 95C1.genes.results
+115191    ## so diff of 1 probably the header line.
+# difference 'genes' & 'isoforms' files ??????????????????
+# apparently, for 1 thing, 1st two columns in **reverse** order, 'transcript_id' & 'gene_id'
+# Q: diff. 'transcript_id' & 'gene_id' ??????????????????******?????????
+
+
+02/10/16:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+genes95C1 <- read.delim("95C1.genes.results", header=TRUE)
+colnames(genes95C1)
+head(genes95C1, n=3)
+dim(genes95C1)
+summary(genes95C1$expected_count)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+     0.00      0.00      1.00     75.27      6.25 270700.00
+# skewed to right, a **lot**.     
+q()
+exit
+# perhaps a plot of expected_count colm.
+module load R/3.2  ## 3.2.1
+R
+getwd()
+# install.packages("ggplot2")
+library(ggplot2)
+genes95C1 <- read.delim("95C1.genes.results", header=TRUE)
+dim(genes95C1)
+ggplot(genes95C1, aes(x=gene_id, y=expected_count)) + geom_point()
+# need update xquartz ...,7 to ....2.7.8 ...dmg ?????????????????????
+# perhaps find num. counts > 6.25, 3rd Qu.
+
+02/13/16:
+# find num. reads in output95C1_GATCAG_L006_R1_001.trimmed.fastq file.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+wc output95C1_GATCAG_L006_R1_001.trimmed.fastq
+  77525572   96906965 4292886820 output95C1_GATCAG_L006_R1_001.trimmed.fastq
+less output95C1_GATCAG_L006_R1_001.trimmed.fastq
+@HWI-ST1023:164:D1FJNACXX:6:1101:1189:2079 1:N:0:GATCAG
+GGGATGGTTACTGGAAGTGGTTTGCTGGCAACCTTGCCTCCGGTGGTGCTGCCGGTGCTTCCTCCCTGTTTTTCGTGTAC
++
+CCCFFFFDHHHHHJJJJEIIHHJIIGHIIJJIJJJIJJIJIJJDHI;FEGIIIII;BACECDDECDCE@CACBC@A19<A
+# so Trinity.fasta record names **don't obviously relate** to those in 'reads' file. BUT, should there not be some relationship ?????????????????
+ls -al
+-rw-r--r--  1 pterry amundsen 4292886820 Dec 14 22:24 output95C1_GATCAG_L006_R1_001.trimmed.fastq
+grep -c "^@HWI" output95C1_GATCAG_L006_R1_001.trimmed.fastq
+19381393
+# so, Trinity.fasta 165,459 "^>" records, 95C1 read/fastq file has 19,381,393 records.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+genes95C1 <- read.delim("95C1.genes.results", header=TRUE)
+colnames(genes95C1)
+[1] "gene_id"          "transcript_id.s." "length"           "effective_length"
+[5] "expected_count"   "TPM"              "FPKM"        
+head(genes95C1, n=3)
+                gene_id         transcript_id.s. length effective_length
+1 TRINITY_DN10001_c0_g1 TRINITY_DN10001_c0_g1_i1   3179             3179
+  expected_count TPM FPKM
+1              0   0    0
+dim(genes95C1)
+[1] 115191      7
+summary(genes95C1$TPM)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+    0.000     0.000     0.440     8.681     2.100 23860.000 
+sum(genes95C1$TPM)  ## expect 1,000,000, and got it.
+[1] 1e+06
+library(ggplot2)
+ggplot(genes95C1, aes(x=gene_id, y=TPM)) + geom_point()
+sessionInfo()
+> sessionInfo()
+R version 3.2.1 (2015-06-18)
+Platform: x86_64-unknown-linux-gnu (64-bit)
+Running under: Scientific Linux release 6.7 (Carbon)
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggplot2_1.0.1
+
+loaded via a namespace (and not attached):
+ [1] labeling_0.3     MASS_7.3-45      colorspace_1.2-6 scales_0.3.0    
+ [5] magrittr_1.5     plyr_1.8.3       tools_3.2.1      gtable_0.1.2    
+ [9] reshape2_1.4.1   Rcpp_0.12.2      stringi_1.0-1    grid_3.2.1      
+[13] stringr_1.0.0    digest_0.6.8     proto_0.3-10     munsell_0.4.2   
+> 
+q()
+exit
+# count reads aligning 95C1 fastq file to Trinity.fasta file.
+# ref. p-370, Vbuffalo book
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+
+module load compiler/gcc/4.8
+#module load bowtie/1.1
+module load samtools/1.2
+
+samtools flags UNMAP
+0x4	4	UNMAP
+samtools view -F 4 95C1.bowtie.bam | head -n 3
+HWI-ST1023:164:D1FJNACXX:6:1101:1236:2247	0	TRINITY_DN46485_c0_g1_i3117	255	80M	*	0	0	CACAAACTTGGCTATGGAAACTGGGATGAACTTAAAGCTGCATTCCGCATGTCTCCCTTGTTCCGATTCGATTGGTTTGT	CC@FFFFFHGHHGGJIIIIJIJBHIFIJJJJIIIIIJEEIJGIJG@GFGBGGIEIFGEHEHGIGBBGHHHHHFFBDFC<;	XA:i:0	MD:Z:80NM:i:0
+# Q: mapping a read to qqch in Trinity, each record beginning wi 'HWI' ???? ??????????????
+# note: bam file ~ 1.5 Gb
+-rw-r--r--  1 pterry amundsen 1499094344 Dec 18 13:33 95C1.bowtie.bam
+samtools view -F 4 95C1.bowtie.bam > 95C1onlyaligned.txt
+ls -al
+-rw-r--r--  1 pterry amundsen 8289992814 Feb 13 12:12 95C1onlyaligned.txt
+# 8 GB
+less 95C1onlyaligned.txt
+HWI-ST1023:164:D1FJNACXX:6:1101:1236:2247       0       TRINITY_DN46485_c0_g1_i1        3117    255     80M     *       0       0       CACAAACTTGGCTATGGAAACTGGGATGAACTTAAAGCTGCATTCCGCATGTCTCCCTTGTTCCGATTCGATTGGTTTGT        CC@FFFFFHGHHGGJIIIIJIJBHIFIJJJJIIIIIJEEIJGIJG@GFGBGGIEIFGEHEHGIGBBGHHHHHFFBDFC<;        XA:i:0  MD:Z:80 NM:i:0
+HWI-ST1023:164:D1FJNACXX:6:1101:1189:2079       16      TRINITY_DN37623_c0_g1_i1        1357    255     80M     *       0       0       GTACACGAAAAACAGGGAGGAAGCACCGGCAGCACCACCGGAGGCAAGGTTGCCAGCAAACCACTTCCAGTAACCATCCC        A<91A@CBCAC@ECDCEDDCECAB;IIIIIGEF;IHDJJIJIJJIJJJIJJIIHGIIJHHIIEJJJJHHHHHDFFFFCCC        XA:i:0  MD:Z:80 NM:i:0
+wc 95C1onlyaligned.txt
+  30221873  423106222 8289992814 95C1onlyaligned.txt
+grep -c "^HWI" 95C1onlyaligned.txt
+30221873
+#30221873/19381393
+# Q: **WHY** more aligned reads than reads in output95C1_GATCAG_L006_R1_001.trimmed.fastq reads file ???????*****????????
+# multiple sligning reads ??????????????????
+
+STOPPED
+
+# do for 'isoforms' since created these files with 'isoforms' ???????
+02/14/16:
+# section 'Build Transcript and Gene Expression Matrices' of outline section 'Trinity Transcript Quantification'
+# investigating files created here.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+# mkdir vbufalo
+#cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+
+-rw-r--r--  1 pterry amundsen    9495163 Dec 19 23:06 Trinity_trans.counts.matrix
+wc Trinity_trans.counts.matrix
+ 165460 1158219 9495163 Trinity_trans.counts.matrix
+less Trinity_trans.counts.matrix
+        95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN44017_c0_g1_i2        252.87  293.76  403.97  108.04  57.49   60.78
+TRINITY_DN48025_c0_g1_i1        29.25   78.98   27.97   25.48   72.45   67.83
+grep -c "^TRI" Trinity_trans.counts.matrix
+165459
+head -n 3 Trinity_trans.counts.matrix
+	95C1	95C2	95C3	95T1	95T2	95T3
+TRINITY_DN44017_c0_g1_i2	252.87	293.76	403.97	108.04	57.49	60.78
+# to check if 7 colms when in R
+
+-rw-r--r--  1 pterry amundsen   10187631 Dec 19 23:06 Trinity_trans.TMM.EXPR.matrix
+wc Trinity_trans.TMM.EXPR.matrix
+  165460  1158219 10187631 Trinity_trans.TMM.EXPR.matrix
+less Trinity_trans.TMM.EXPR.matrix
+        95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN44017_c0_g1_i2        31.543  37.102  45.676  7.719   4.510   4.123
+TRINITY_DN48025_c0_g1_i1        3.858   10.536  3.345   1.927   6.002   4.866
+grep -c "^TRI" Trinity_trans.TMM.EXPR.matrix
+165459
+
+-rw-r--r--  1 pterry amundsen    8155802 Dec 19 23:06 Trinity_trans.TPM.not_cross_norm
+wc Trinity_trans.TPM.not_cross_norm
+ 165460 1158219 8155802 Trinity_trans.TPM.not_cross_norm
+less Trinity_trans.TPM.not_cross_norm
+        95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN44017_c0_g1_i2        27.88   32.75   38.1    8.73    5.23    4.83
+TRINITY_DN48025_c0_g1_i1        3.41    9.3     2.79    2.18    6.96    5.7
+# note **differences** top 2 lines of he 3 files.
+# Q: Would note p-6 of 8, kallisto '.tsv' file similar to 'isoforms' file as input to prepn of 2 'matrix' files, 1 'TPM' file ?????????????***********?????????????????
+grep -c "^TRI" Trinity_trans.TPM.not_cross_norm
+165459
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+# read csv or delim ??????????????????????? p-196, vbuffalo bk
+iso95C1cts <- read.delim("Trinity_trans.counts.matrix", header=TRUE)
+colnames(iso95C1cts)
+[1] "X"     "X95C1" "X95C2" "X95C3" "X95T1" "X95T2" "X95T3"
+head(iso95C1cts, n=3)
+                         X  X95C1  X95C2  X95C3  X95T1 X95T2 X95T3
+1 TRINITY_DN44017_c0_g1_i2 252.87 293.76 403.97 108.04 57.49 60.78
+dim(iso95C1cts)
+[1] 165459      7
+# same as Trinity.fasta, 'isoforms' above.
+summary(iso95C1cts$X95C1)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     0.0      0.0      1.0     52.4     10.0 270700.0 
+summary(iso95C1cts$X95T1)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+     0.00      1.00      4.00     75.86     22.02 116500.00      
+library(ggplot2)
+# may have to assign colm label to colm 1, or R may have done
+# so could plot x=colm1, y=95C1
+ggplot(iso95C1cts, aes(x=X, y=X95C1)) + geom_point()
+# repeat, wi y=X95T1
+ggplot(iso95C1cts, aes(x=X, y=X95T1)) + geom_point()
+sum(iso95C1cts$X95C1)
+[1] 8669922
+sum(iso95C1cts$X95T1)
+[1] 12551158
+# Q: X95T1 colm more total cts, but max point < 1/2 of max for X95C1 ??????????????????
+
+STOPPED
+
+# repeat for other 2 files, impt so can compare basis TPM.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+# read csv or delim ??????????????????????? p-196, vbuffalo bk
+iso95C1TMM <- read.delim("Trinity_trans.TMM.EXPR.matrix", header=TRUE)
+colnames(iso95C1TMM)
+[1] "X"     "X95C1" "X95C2" "X95C3" "X95T1" "X95T2" "X95T3"
+head(iso95C1TMM, n=3)
+                         X  X95C1  X95C2  X95C3 X95T1 X95T2 X95T3
+1 TRINITY_DN44017_c0_g1_i2 31.543 37.102 45.676 7.719 4.510 4.123
+2 TRINITY_DN48025_c0_g1_i1  3.858 10.536  3.345 1.927 6.002 4.866
+dim(iso95C1TMM)
+[1] 165459      7
+# same as Trinity.fasta, 'isoforms' above.
+summary(iso95C1TMM$X95C1)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+   0.000    0.000    0.566    6.838    2.489 9704.000 
+summary(iso95C1TMM$X95T1)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+   0.000    0.239    0.990    5.344    2.891 4518.000 
+library(ggplot2)
+# may have to assign colm label to colm 1, or R may have done
+# so could plot x=colm1, y=95C1
+ggplot(iso95C1TMM, aes(x=X, y=X95C1)) + geom_point()
+# repeat, wi y=X95T1
+ggplot(iso95C1TMM, aes(x=X, y=X95T1)) + geom_point()
+sum(iso95C1TMM$X95C1)
+[1] 1131382
+sum(iso95C1TMM$X95T1)
+[1] 884141.5
+# Q: WHY don't these last two total 1,000,000, perhaps cause normalize across 6 colms  ?????????????????????????
+# Q: what difference, TMM, TPM ???????????*********????????????
+q()
+exit
+
+02/15/16:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+# ref line 3425, 'Extracting and clustering differentially expressed transcripts'
+# Compare two files:
+-rw-r--r-- 1 pterry amundsen    308395 Jan 25 15:38 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+-rw-r--r-- 1 pterry amundsen    547935 Jan 25 15:38 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+#cp ../DEanalysis/edgeR.115118.dir/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset .
+#cp ../DEanalysis/edgeR.115118.dir/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset .
+
+STOPPED
+
+less Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+id      logFC   logCPM  PValue  FDR     95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN31372_c0_g1_i1        -13.303565262659        9.83961096097471        6.64875466320565e-40    1.06371431230228e-34    286.387 488.956 206.128 0.000   0.000   0.085
+less Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+id      logFC   logCPM  PValue  FDR     95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN42864_c1_g1_i1        10.9011095379641        6.52933145958951        4.64962937243796e-35    3.71940127204116e-30    0.091   0.079   0.000   109.103 99.779  137.430
+wc Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+  2186  24046 308395 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+wc Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+  3972  43692 547935 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+grep -c "^TRI" Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+2185
+grep -c "^TRI" Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+3971
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo")  # if need to ???????????????
+de95C_up <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset", header=TRUE)
+colnames(de95C_up)
+ [1] "id"     "logFC"  "logCPM" "PValue" "FDR"    "X95C1"  "X95C2"  "X95C3" 
+ [9] "X95T1"  "X95T2"  "X95T3" 
+head(de95C_up, n=2)
+                        id     logFC   logCPM       PValue          FDR   X95C1
+1 TRINITY_DN31372_c0_g1_i1 -13.30357 9.839611 6.648755e-40 1.063714e-34 286.387
+2 TRINITY_DN35725_c0_g1_i1 -10.43986 8.363475 1.112486e-33 4.472129e-29 771.082
+    X95C2    X95C3 X95T1 X95T2 X95T3
+1 488.956  206.128 0.000 0.000 0.085
+2 617.234 1395.999 0.442 0.647 1.067
+dim(de95C_up)
+[1] 2185   11
+#summary(de95C_up$????????????)
+
+de95T_up <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset", header=TRUE)
+colnames(de95T_up)
+ [1] "id"     "logFC"  "logCPM" "PValue" "FDR"    "X95C1"  "X95C2"  "X95C3" 
+ [9] "X95T1"  "X95T2"  "X95T3" 
+head(de95T_up, n=2)
+                        id    logFC   logCPM       PValue          FDR X95C1
+1 TRINITY_DN42864_c1_g1_i1 10.90111 6.529331 4.649629e-35 3.719401e-30 0.091
+2 TRINITY_DN73954_c0_g1_i1 10.38759 5.187235 1.134433e-27 2.592778e-23 0.170
+  X95C2 X95C3   X95T1  X95T2   X95T3
+1 0.079     0 109.103 99.779 137.430
+2 0.000     0 116.229 82.679  97.276
+dim(de95T_up)
+[1] 3971   11
+#summary(de95T-up$????????????)
+
+# install.packages("ggplot2")
+#library(ggplot2)
+#ggplot(de95C-up, aes(x=??????????, y=????????)) + geom_point()
+
+#ggplot(de95T-up, aes(x=??????????, y=????????)) + geom_point()
+
+# finally, apply '%in%'
+CinT <- de95C_up$id %in% de95T_up$id
+length(CinT)
+[1] 2185
+head(CinT)
+# do length, head, etc. of CtoT.txt
+sum(CinT)  # number of x=C-UP records in y=T-UP, expect **zero** ??????????
+[1] 0
+q()
+exit
+
+02/17/16:
+# To Do: might compare 95C-UP.subset & 95T-UP.subset transcript column against transcript column of a file with all the transcript id's. Here %in% vs Trinity_trans.TMM.EXPR.matrix file used by 'analyze_diff_expr.pl' to produce these two 'subset' files.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+cp ../Trinity_trans.TMM.EXPR.matrix .
+less Trinity_trans.TMM.EXPR.matrix
+        95C1    95C2    95C3    95T1    95T2    95T3
+TRINITY_DN44017_c0_g1_i2        31.543  37.102  45.676  7.719   4.510   4.123
+wc Trinity_trans.TMM.EXPR.matrix
+  165460  1158219 10187631 Trinity_trans.TMM.EXPR.matrix
+grep -c "^TRI" Trinity_trans.TMM.EXPR.matrix
+165459
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo")  # if need to ???????????????
+de95C_up <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset", header=TRUE)
+colnames(de95C_up)
+ [1] "id"     "logFC"  "logCPM" "PValue" "FDR"    "X95C1"  "X95C2"  "X95C3" 
+ [9] "X95T1"  "X95T2"  "X95T3" 
+dim(de95C_up)
+[1] 2185   11
+TMMmatrix <- read.delim("Trinity_trans.TMM.EXPR.matrix", header=TRUE)
+colnames(TMMmatrix)
+[1] "X"     "X95C1" "X95C2" "X95C3" "X95T1" "X95T2" "X95T3"
+head(TMMmatrix, n=2)
+                         X  X95C1  X95C2  X95C3 X95T1 X95T2 X95T3
+1 TRINITY_DN44017_c0_g1_i2 31.543 37.102 45.676 7.719 4.510 4.123
+2 TRINITY_DN48025_c0_g1_i1  3.858 10.536  3.345 1.927 6.002 4.866
+dim(TMMmatrix)
+[1] 165459      7
+# now %in%
+CinTMM <- de95C_up$id %in% TMMmatrix$X
+length(CinTMM)
+[1] 2185
+head(CinTMM)
+[1] TRUE TRUE TRUE TRUE TRUE TRUE
+sum(CinTMM)
+[1] 2185    ## as expected.
+TMMinC <- TMMmatrix$X %in% de95C_up$id
+length(TMMinC)
+[1] 165459   ## as expect
+head(TMMinC)
+sum(TMMinC)
+[1] 2185  ## so apparently not duplicate transcript id's matching a transcript id in de95C_up in TMMmatrix$X ????????
+q()
+exit
+
+# now, perhaps at some point, check:
+# TinC
+# TinTMM
+
+
+02/20/16:
+
+# for moment, go do
+#Cinxls
+#Tinxls
+#xlsinTMM
+# finally, check if GOterm info in .xls file for transcript id's matching transcript id's in C & T.  Q: HOW TO DO ???????????
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+cp /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3/trinotate_annotation_report.xls .
+wc trinotate_annotation_report.xls
+  178728  6371013 78676610 trinotate_annotation_report.xls
+grep -c "^TRI" trinotate_annotation_report.xls
+178727
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo")  # if need to ???????????????
+de95C_up <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset", header=TRUE)
+colnames(de95C_up)
+ [1] "id"     "logFC"  "logCPM" "PValue" "FDR"    "X95C1"  "X95C2"  "X95C3" 
+ [9] "X95T1"  "X95T2"  "X95T3" 
+dim(de95C_up)
+[1] 2185   11
+head(de95C_up, n=3)
+                        id     logFC   logCPM       PValue          FDR   X95C1
+1 TRINITY_DN31372_c0_g1_i1 -13.30357 9.839611 6.648755e-40 1.063714e-34 286.387
+2 TRINITY_DN35725_c0_g1_i1 -10.43986 8.363475 1.112486e-33 4.472129e-29 771.082
+3 TRINITY_DN39789_c1_g1_i4 -13.77152 6.345168 1.118123e-33 4.472129e-29  59.986
+    X95C2    X95C3 X95T1 X95T2 X95T3
+1 488.956  206.128 0.000 0.000 0.085
+2 617.234 1395.999 0.442 0.647 1.067
+3  55.546   95.511 0.000 0.000 0.000
+
+go_xls <- read.delim("trinotate_annotation_report.xls", header=TRUE)
+# Q: what are delimeters in this file ????????????????????????????
+colnames(go_xls)
+ [1] "X.gene_id"             "transcript_id"         "sprot_Top_BLASTX_hit" 
+ [4] "TrEMBL_Top_BLASTX_hit" "RNAMMER"               "prot_id"              
+ [7] "prot_coords"           "sprot_Top_BLASTP_hit"  "TrEMBL_Top_BLASTP_hit"
+[10] "Pfam"                  "SignalP"               "TmHMM"                
+[13] "eggnog"                "gene_ontology_blast"   "gene_ontology_pfam"   
+[16] "transcript"            "peptide"   
+dim(go_xls)
+[1] 178727     17
+
+# now %in%, C_UP in go_xls
+head(go_xls, n=3)
+Cinxls <- de95C_up$id %in% go_xls$transcript_id
+length(Cinxls)
+[1] 2185
+head(Cinxls)
+[1] TRUE TRUE TRUE TRUE TRUE TRUE
+sum(Cinxls)
+[1] 2185
+# Now 95T_UP in '.xls'
+de95T_up <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset", header=TRUE)
+colnames(de95T_up)
+ [1] "id"     "logFC"  "logCPM" "PValue" "FDR"    "X95C1"  "X95C2"  "X95C3" 
+ [9] "X95T1"  "X95T2"  "X95T3" 
+head(de95T_up, n=2)
+                        id    logFC   logCPM       PValue          FDR X95C1
+1 TRINITY_DN42864_c1_g1_i1 10.90111 6.529331 4.649629e-35 3.719401e-30 0.091
+2 TRINITY_DN73954_c0_g1_i1 10.38759 5.187235 1.134433e-27 2.592778e-23 0.170
+  X95C2 X95C3   X95T1  X95T2   X95T3
+1 0.079     0 109.103 99.779 137.430
+2 0.000     0 116.229 82.679  97.276
+dim(de95T_up)
+[1] 3971   11
+Tinxls <- de95T_up$id %in% go_xls$transcript_id
+length(Tinxls)
+[1] 3971
+head(Tinxls)
+sum(Tinxls)
+[1] 3971
+
+# now, xlsinTMM
+TMMmatrix <- read.delim("Trinity_trans.TMM.EXPR.matrix", header=TRUE)
+colnames(TMMmatrix)
+[1] "X"     "X95C1" "X95C2" "X95C3" "X95T1" "X95T2" "X95T3"
+head(TMMmatrix, n=2)
+                         X  X95C1  X95C2  X95C3 X95T1 X95T2 X95T3
+1 TRINITY_DN44017_c0_g1_i2 31.543 37.102 45.676 7.719 4.510 4.123
+2 TRINITY_DN48025_c0_g1_i1  3.858 10.536  3.345 1.927 6.002 4.866
+dim(TMMmatrix)
+[1] 165459      7
+# fewer records than go_xls ?????????????????????
+
+# now %in%
+xlsinTMM <- go_xls$transcript_id %in% TMMmatrix$X
+
+length(xlsinTMM)
+[1] 178727
+
+head(xlsinTMM)
+[1] TRUE TRUE TRUE TRUE TRUE TRUE
+sum(xlsinTMM)
+[1] 178727
+q()
+exit
+
+# finally, check if GOterms info in .xls file for transcript id's matching transcript id's in C & T.  Q: HOW TO DO ???????????
+# try p-220-223, Vbuffalo book, 
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+de95C_up <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset", header=TRUE)
+colnames(de95C_up)
+ [1] "id"     "logFC"  "logCPM" "PValue" "FDR"    "X95C1"  "X95C2"  "X95C3" 
+ [9] "X95T1"  "X95T2"  "X95T3" 
+dim(de95C_up)
+[1] 2185   11
+#head(de95C_up, n=3)
+go_xls <- read.delim("trinotate_annotation_report.xls", header=TRUE)
+colnames(go_xls)
+ [1] "X.gene_id"             "transcript_id"         "sprot_Top_BLASTX_hit" 
+ [4] "TrEMBL_Top_BLASTX_hit" "RNAMMER"               "prot_id"              
+ [7] "prot_coords"           "sprot_Top_BLASTP_hit"  "TrEMBL_Top_BLASTP_hit"
+[10] "Pfam"                  "SignalP"               "TmHMM"                
+[13] "eggnog"                "gene_ontology_blast"   "gene_ontology_pfam"   
+[16] "transcript"            "peptide"
+dim(go_xls)
+# now %in%, C_UP in go_xls
+#head(go_xls, n=3)
+Cinxls <- de95C_up$id %in% go_xls$transcript_id
+length(Cinxls)
+[1] 2185
+head(Cinxls)
+[1] TRUE TRUE TRUE TRUE TRUE TRUE
+sum(Cinxls)
+[1] 2185
+dim(go_xls)
+[1] 178727     17
+
+table(Cinxls)   ## expect 'true' = 2185, 'false' = 178727 - 2185 = 176542
+i <- match(de95C_up$id, go_xls$transcript_id)
+table(is.na(i))   ## expect zero
+FALSE 
+ 2185 
+length(i)
+table(de95C_up$id %in% go_xls$transcript_id)
+table(go_xls$transcript_id %in% de95C_up$id)
+ FALSE   TRUE 
+176175   2552 
+## perhaps some duplicatetranscript_is's in '.xls' for those in de95C_up$id ???????????
+length(i)
+[1] 2185
+head(i, 3)
+[1] 151477  79715  35124
+xlsC_up_logdf <- go_xls[i,]  ## check if get 2815 records ???????
+dim(xlsC_up_logdf)
+[1] 2185   17
+head(xlsC_up_logdf, 2)
+write.table(xlsC_up_logdf, "xlsC_up_logdf.txt")
+q()
+exit
+ls -al
+wc xlsC_up_logdf.txt
+   2186   97965 1405678 xlsC_up_logdf.txt
+head -n 2 xlsC_up_logdf.txt
+less xlsC_up_logdf.txt
+# looks like many of the 95C_UP matches with '.xls' files have 'GO-terms' ?????
+ 
+02/21/16:
+# but, TO DO, scp the xlsC_up_logdf.txt file to 'pro', examine in BBedit.
+# perhaps save 'transcript id colm from C_UP, '.xls', so can sort, spot check compare, make sure same 2185 transcript id's in buth files.
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/xlsC_up_logdf.txt .
+# displayed in bbedit editor, perhaps could grep 3rd field to determine percent of records with "." in "sprot_Top_BLASTX_hit" column.
+cd
+find . -name "*\.py" -and -type f
+find . -name "xlsC_up_logdf.txt" -and -type f
+
+cut -d ' ' -f 4 xlsC_up_logdf6rows.txt | head -n 4 > rows6col4.txt
+cut -d ' ' -f 4 xlsC_up_logdf.txt > xlsC_up_logdf_col4.txt
+grep -c '^\"\.' xlsC_up_logdf_col4.txt
+# now output count, giving new prompt, '>' ????????????????????????
+grep -c '^\.' xlsC_up_logdf_col4.txt
+# gave output, but '0' ??????????????????
+wc xlsC_up_logdf_col4.txt
+    2186    2186   87089 xlsC_up_logdf_col4.txt
+# as expected.
+
+02/22/16:
+sed 's/"."/./' xlsC_up_logdf_col4.txt > temp
+# worked, so try count "." lines
+grep -c '^\.' temp
+978
+# so 978 of 2185 records in '.xls' file common with 95C1 appear not to have any 'GO-terms' available for use by GOseq to use to annotate the DE transcripts from 95C-UP files.
+
+02/27-8/16:
+# 1st time seeing Vikas new paper, Manuscript_v17b.docx
+# Following several measurements they made, I should try to make.
+
+03/01/01:
+# p-6, calc total number reads, apparently from all samples, 95C1-3,T1-3
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+wc output95C1_GATCAG_L006_R1_001.trimmed.fastq
+  77525572   96906965 4292886820 output95C1_GATCAG_L006_R1_001.trimmed.fastq
+less output95C1_GATCAG_L006_R1_001.trimmed.fastq
+@HWI-ST1023:164:D1FJNACXX:6:1101:1189:2079 1:N:0:GATCAG
+GGGATGGTTACTGGAAGTGGTTTGCTGGCAACCTTGCCTCCGGTGGTGCTGCCGGTGCTTCCTCCCTGTTTTTCGTGTAC
++
+CCCFFFFDHHHHHJJJJEIIHHJIIGHIIJJIJJJIJJIJIJJDHI;FEGIIIII;BACECDDECDCE@CACBC@A19<A
+grep -c "^@HWI" output95C1_GATCAG_L006_R1_001.trimmed.fastq
+19381393
+less output95C2_TAGCTT_L007_R1_001.trimmed.fastq
+grep -c "^@HWI" output95C2_TAGCTT_L007_R1_001.trimmed.fastq
+19517268
+wc output95C2_TAGCTT_L007_R1_001.trimmed.fastq
+  78069072   97586340 4323022386 output95C2_TAGCTT_L007_R1_001.trimmed.fastq
+# *.readcount files seem accurate, so just use them for 4 remaining fastq Files
+less output95C3_GGCTAC_L007_R1_001.trimmed.fastq.readcount
+Sequences parsed: 21681817
+output95C3_GGCTAC_L007_R1_001.trimmed.fastq.readcount (END) 
+less output95T1_AGTCAA_L005_R1_001.trimmed.fastq.readcount
+Sequences parsed: 27915998
+output95T1_AGTCAA_L005_R1_001.trimmed.fastq.readcount (END) 
+less output95T2_AGTTCC_L005_R1_001.trimmed.fastq.readcount
+Sequences parsed: 24276992
+output95T2_AGTTCC_L005_R1_001.trimmed.fastq.readcoun
+less output95T3_ATGTCA_L006_R1_001.trimmed.fastq.readcount
+Sequences parsed: 27406970
+output95T3_ATGTCA_L006_R1_001.trimmed.fastq.readcount (END) 
+# so total reads for 6 samples:
+sumreads95CT <- sum(19381393 + 19517268 + 21681817 + 27915998 + 24276992 + 27406970)
+sumreads95CT
+[1] 140180438
+
+# calc num. transcripts & 'components' in Trinity.fasta
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+cd trinity_out_dir
+-rw-r--r-- 1 pterry amundsen   194832811 Dec 16 13:51 Trinity.fasta
+# so ~ **195 Mb**
+less Trinity.fasta
+>TRINITY_DN10610_c0_g1_i1 len=460 path=[946:0-169 948:170-236 943:237-459] [-1, 946, 948, 943, -2]
+CGCATGCTGTTTGTGCAGTGGTGCAGTTCAGAGCGTTGGTGTTGAGCCGGGAAATGGGTA
+TGCCTTATCTGACATAATTCACTGGGGGTAGCAATCCGGAATTCCACACCTACTAGCTGC
+GATTCTGAATTCAGCATCCAATAGCTTGCTCCATTTCACTGCAACCCATTGAGTAAAACA
+ATGAAGGAATTTTCCGGTGTGATAAGGTCTCGTAGTTGGTCTTCTATCAGTAGTCTCTTC
+TGTAGGCAGCAATGACAAGCTAGCATTACTTCTATATTCAGATCATGTGTAAAATTGTTA
+CTCATTCTTTTTTCCAATAAGACCCGTGTGCTATTTGCACAGCAGTGTGCTTAAGAGTCT
+TGGTGTTGAGTTGAGCGGGGATGTAAGGAAATGGGAATCAATGGGGCAGCAAACCGGAAT
+TTCACACTGACTAGCTGCAATTCTTAATTCGGCATCCAAG
+>TRINITY_DN10610_c0_g2_i1 len=458 path=[944:0-169 949:170-234 941:235-457] [-1, 944, 949, 941, -2]
+CGCATGCTGTTTGTGCAGTGGTGCAGTTCAGAGCGTTGGTGTTGAGCCGGGAAATGGGTA
+TGCCTTATCTGACATAATTCACTGGGGGTAGCAATCCGGAATTCCACACCTACTAGCTGC
+
+# looks like 1st colm transcript name (?). looks like 2nd colm has length of transcript.
+# num. transcripts
+grep -c '^>TRI' Trinity.fasta
+165459
+
+# how get num. components, possibly subsequent trinity step where have 1st 2 colms are transcript & 'gene' ????????????  Q: are 'genes' even listed in Trinity.fasta file ??????????????????
+
+# calc length of transcripts range from ??? to ???
+# calc average length, & N50 of transcripts ?????????????????
+# try do in R
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+ls -al
+less Trinity.fasta
+# perhap grep from linux shell the '^>TRI' rows before go into R ????
+
+grep '^>TRI' Trinity.fasta > Trinity.fasta.headers.txt
+less Trinity.fasta.headers.txt
+cut -f1-2 Trinity.fasta.headers.txt > Trinity.headers.col1-2.txt
+# this cut failed ???????? 
+cut -d' ' -f1,2 Trinity.fasta.headers.txt > Trinity.headers.col1-2.txt
+less Trinity.headers.col1-2.txt
+>TRINITY_DN10610_c0_g1_i1 len=460
+>TRINITY_DN10610_c0_g2_i1 len=458
+# 2nd cut worked!
+cut -d' ' -f2 Trinity.fasta.headers.txt > Trinity.headers.col2.txt
+less Trinity.headers.col2.txt
+len=460
+len=458
+# so 3rd cut worked
+wc Trinity.headers.col1-2.txt
+ 165459  330918 5658311 Trinity.headers.col1-2.txt
+# expected num. of lines
+wc Trinity.headers.col2.txt
+ 165459  165459 1365316 Trinity.headers.col2.txt
+logout
+
+STOPPED
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+#genes95C1 <- read.delim("95C1.genes.results", header=TRUE)
+#trinityheaders_col1_2 <- read.delim("Trinity.headers.col1-2.txt", header=FALSE)
+trinityheaders_col2 <- read.delim("Trinity.headers.col2.txt", header=FALSE)
+colnames(trinityheaders_col2)
+[1] "V1"
+head(trinityheaders_col2, n=3)
+       V1
+1 len=460
+dim(trinityheaders_col2)
+[1] 165459      1
+class(trinityheaders_col2)
+# a data.frame, so why 'dim' worked.
+sublengthschar <- sub(pattern="len=", replacement="", x=trinityheaders_col2$V1) 
+head(sublengthschar, n=3)
+[1] "460" "458" "335"
+# so elements are 'char'
+class(sublengthschar)
+[1] "character"
+# so no longer a data.frame
+sublengthsnum <- as.numeric(sublengthschar) 
+head(sublengthsnum, n=3)
+class(sublengthsnum)
+# now numeric vector
+length(sublengthsnum)
+[1] 165459
+summary(sublengthsnum)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  201.0   283.0   459.0   802.7  1005.0 18710.0 
+# skewed to right, a **lot**.     
+sum(sublengthsnum)
+[1] 132818157
+# C = N*L/G  from S. Ladunga, life891, 3/1/16 lect., slide 8,9
+# 140180438 = N, L= 80, G = 132818157
+C <- (140180438*80)/132818157
+C
+[1] 84.4345
+
+# perhaps a bar plot of the transcript lengths, get visual idea of the distribution of the transcript lengths. Ref: p-275-7 of Vbuffalo book.# #install.packages("ggplot2")
+sublengths.binned <- cut(sublengthsnum, 5)
+table(sublengths.binned)
+sublengths.binned
+     (182,3.9e+03]  (3.9e+03,7.6e+03] (7.6e+03,1.13e+04] (1.13e+04,1.5e+04] 
+            163675               1707                 63                  9 
+(1.5e+04,1.87e+04] 
+                 5 
+# so most length values from 182 to 3900 bases. Q: 182 != 201 ??????????                 
+library(ggplot2)
+#sublengthsnumdf <- as.data.frame(sublengthsnum)
+sublengthsnumdf <- data.frame(sublengthsnum)
+class(sublengthsnumdf)
+ggplot(sublengthsnumdf) + geom_bar(aes(x=sublengths.binned))
+ggplot(sublengthsnumdf) + geom_bar(aes(x=sublengthsnum))
+q()
+exit
+
+03/04/16:
+# talked to Vikas
+
+03/05/16:
+# see what can do with 'trinotate_annotation_report.xls' file, display, view gene_ontology_blast column.
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+-rw-r--r-- 1 pterry amundsen   78676610 Jan 20 11:13 trinotate_annotation_report.xls
+less trinotate_annotation_report.xls
+# p-196, Vbuffalo book
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+go_xls <- read.delim("trinotate_annotation_report.xls", header=TRUE)
+colnames(go_xls)
+dim(go_xls)
+[1] 178727     17
+head(go_xls$gene_ontology_blast, n=3)
+# apparently have gene_ontology_blast colm. So for transcript (3rd data row in file), TRINITY_DN10643_c0_g1_i1, 5 GO terms, 1 cellular, 4 biological ( 2 cellular, 1 protein, 1 resonse).
+# Q: If proceed, how organize this data ??????????????????
+# perhaps do %in% to get the 2185 rows of '.xls' file common with de95C_up. Then if Keenan/Vikas has **way** to display (also bring in de95T_up, i.e., the 2185 differentiated tx's for 95C)
+
+03/06/16:
+# To do:
+# assume '.xls' file ok
+# read thru https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression, Differential Expression Analysis Using a Trinity Assembly, see of can clarify/what should do. Note: trying to reconcile output of
+# GOseq.enriched, etc  (stat columns) with 
+# '95C-UP.subset'  (tx_IDs),
+# '.xls'  (**BOTH** 'gene_ID' & 'tx_ID), 
+# 'go_annotations.txt'  ('gene_IDs), 
+# 'gene.lengths.txt'  ('gene_IDs), 
+# 'Trinity_trans.TMM.EXPR.matrix  (tx_IDs) 
+# in terms of 'gene_ID' or 'tx_ID' use ????????????????????????????
+
+# Two/three initiatives
+# i) Vikas/Keenan building own display of DE tx/genes IDs with GO-terms ?????
+# ii) try run __runGOseq.R script found in edgeR.115118.dir ???????(troubleshooting, learn more)
+# iii) attempt go back thru Differential Expression Analysis Using a Trinity Assembly, see if can get this to display DE tx/genes IDs with GO-terms ???????
+
+03/09/16:
+# pursuant to initiatives above:
+# as per Keenan, from raw counts/edgeR, plot same data each axis, Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results file
+
+# TMM.EXPR.matrix (normalized, not raw counts), plot Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset 
+file (already pv <= 1e-3, logFC >= 2
+
+# repeat 95T-UP
+
+# compare tx_ID, gene_IDs, see what have.
+
+# Finally, run R script from analyze_diff_expr.pl, try see why failing?
+# Vikas email refs, find GO-terms sort of on own.
+
+03/11/16:
+# 1st, work with Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results file produced from 'run_DE_analysis.pl' step, using 
+-rw-r--r--  1 pterry amundsen 9495163 Dec 23 22:53 Trinity_trans.counts.matrix
+& edgeR 
+# to do: work in .../vbufalo/countsedgeRanal
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir
+ls -al
+-rw-r--r-- 1 pterry amundsen  15079499 Dec 24 10:18 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results
+less Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results
+logFC   logCPM  PValue  FDR
+TRINITY_DN31372_c0_g1_i1        -13.303565262659        9.83961096097471        6.64875466320565e-40    1.06371431230228e-34
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+cd vbufalo
+mkdir countsedgeRanal
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/countsedgeRanal
+cp ../../DEanalysis/edgeR.115118.dir/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results .
+
+#srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/countsedgeRanal
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+ctsedgeRDEres <-   read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results", header=TRUE)
+colnames(ctsedgeRDEres)
+[1] "logFC"  "logCPM" "PValue" "FDR"   
+ctsedgeRDEresrownames <- cbind(rownamescolm = rownames(ctsedgeRDEres), ctsedgeRDEres)
+rownames(ctsedgeRDEresrownames) <- NULL
+colnames(ctsedgeRDEresrownames)
+head(ctsedgeRDEresrownames, n=2)
+              rownamescolm     logFC   logCPM       PValue          FDR
+1 TRINITY_DN31372_c0_g1_i1 -13.30357 9.839611 6.648755e-40 1.063714e-34
+dim(ctsedgeRDEresrownames)
+[1] 159987      5
+
+summary(ctsedgeRDEresrownames$logFC)  # ???????
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-13.7700  -0.5443   0.8438   1.1230   2.8730  12.9700 
+# need sort in here ?????????
+#r <- order(-ctsedgeRDEresrownames$logFC)
+#ctsedgeRDEressort <- ctsedgeRDEresrownames$logFC[r, ]
+colnames(ctsedgeRDEresrownames)
+[1] "rownamescolm" "logFC"        "logCPM"       "PValue"       "FDR"         
+ctsedgeRDEressort <- ctsedgeRDEresrownames[order(-logFC), ]
+Error in order(-logFC) : object 'logFC' not found
+search()
+attach(ctsedgeRDEresrownames)
+ctsedgeRDEressort <- ctsedgeRDEresrownames[order(-logFC), ]
+# now works ????????????????????????????????
+detach(ctsedgeRDEresrownames)
+search()  ## ctsedgeRDEresrownames no longer attached.
+head(ctsedgeRDEressort, n=3)
+tail(ctsedgeRDEressort, n=3)
+dim(ctsedgeRDEressort)
+[1] 159987      5
+colnames(ctsedgeRDEressort)
+library(ggplot2)
+ggplot(ctsedgeRDEressort) + geom_point(aes(x=rownamescolm, y=logFC))
+ggplot(ctsedgeRDEressort) + geom_point(aes(x=logFC, y=logFC))
+# ***all*** the points along 45 deg line.
+
+# vbufalo, dplyr, %>%, p-203
+logFCgtrless2 <- ctsedgeRDEressort[ctsedgeRDEressort$logFC >= 2 | ctsedgeRDEressort$logFC <= -2, ] 
+## prompt just returned, 
+dim(logFCgtrless2)
+[1] 69492     5
+head(logFCgtrless2, n=2)
+tail(logFCgtrless2, n=2)
+ggplot(logFCgtrless2) + geom_point(aes(x=rownamescolm, y=logFC))
+
+# NOTE: p-6 of 9, Trinity DE analysis, criteria pv = 1e-3, FC >= 4
+# So, log2 2 = 1, log2 4 =2, already finding transcripts >= or <= 4 fold change, and still 69k of them. So do I need aonther criteria, PValue, or FDR ?????????
+qq()
+logout
+# p-5 of 9, most sig. FDR & FCs. p-4 of 9, DE at FDR <0.05 colored red.
+
+# Perhaps test criterion PValue <= 1e-3 (p-6 of 9), & FDR < 0.05 (p-4 of 9)
+
+03/12/16:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+ /DEanalysis/edgeR.115118.dir
+ls -al
+-rw-r--r-- 1 pterry amundsen  15079499 Dec 24 10:18 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results
+less Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results
+logFC   logCPM  PValue  FDR
+TRINITY_DN31372_c0_g1_i1        -13.303565262659        9.83961096097471        6.64875466320565e-40    1.06371431230228e-34
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+cd vbufalo
+mkdir countsedgeRanal
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/countsedgeRanal
+cp ../../DEanalysis/edgeR.115118.dir/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results .
+
+#srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/countsedgeRanal
+
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+getwd()
+# setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3")  # if need to ???????????????
+ctsedgeRDEres <-   read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results", header=TRUE)
+colnames(ctsedgeRDEres)
+[1] "logFC"  "logCPM" "PValue" "FDR"   
+ctsedgeRDEresrownames <- cbind(rownamescolm = rownames(ctsedgeRDEres), ctsedgeRDEres)
+rownames(ctsedgeRDEresrownames) <- NULL
+colnames(ctsedgeRDEresrownames)
+head(ctsedgeRDEresrownames, n=2)
+              rownamescolm     logFC   logCPM       PValue          FDR
+1 TRINITY_DN31372_c0_g1_i1 -13.30357 9.839611 6.648755e-40 1.063714e-34
+dim(ctsedgeRDEresrownames)
+[1] 159987      5
+
+summary(ctsedgeRDEresrownames$logFC)  # ???????
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-13.7700  -0.5443   0.8438   1.1230   2.8730  12.9700 
+# need sort in here ?????????
+#r <- order(-ctsedgeRDEresrownames$logFC)
+#ctsedgeRDEressort <- ctsedgeRDEresrownames$logFC[r, ]
+colnames(ctsedgeRDEresrownames)
+[1] "rownamescolm" "logFC"        "logCPM"       "PValue"       "FDR"         
+search()
+attach(ctsedgeRDEresrownames)
+ctsedgeRDEressort <- ctsedgeRDEresrownames[order(-logFC), ]
+# now works ????????????????????????????????
+detach(ctsedgeRDEresrownames)
+search()  ## ctsedgeRDEresrownames no longer attached.
+head(ctsedgeRDEressort, n=3)
+tail(ctsedgeRDEressort, n=3)
+dim(ctsedgeRDEressort)
+[1] 159987      5
+colnames(ctsedgeRDEressort)
+library(ggplot2)
+ggplot(ctsedgeRDEressort) + geom_point(aes(x=rownamescolm, y=logFC))
+ggplot(ctsedgeRDEressort) + geom_point(aes(x=logFC, y=logFC))
+# ***all*** the points along 45 deg line.
+
+# vbufalo, dplyr, %>%, p-203
+logFCgtrless2 <- ctsedgeRDEressort[ctsedgeRDEressort$logFC >= 2 | ctsedgeRDEressort$logFC <= -2, ] 
+## prompt just returned, 
+dim(logFCgtrless2)
+[1] 69492     5
+head(logFCgtrless2, n=2)
+tail(logFCgtrless2, n=2)
+summary(logFCgtrless2$logFC)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-13.770   2.199   3.234   2.405   4.457  12.970 
+summary(logFCgtrless2$PValue)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.004507 0.051040 0.126600 0.165900 0.596000 
+summary(logFCgtrless2$FDR)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.03849 0.19880 0.25740 0.39200 0.79070 
+# subset on logFC & PValue
+countslogFC2PV <- logFCgtrless2[logFCgtrless2$PValue <= exp(-3), ] 
+dim(countslogFC2PV)
+[1] 34528     5
+summary(countslogFC2PV$logFC)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-13.770  -2.197   4.310   2.525   5.564  12.970
+summary(countslogFC2PV$PValue)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+0.0000000 0.0002093 0.0044010 0.0112100 0.0188700 0.0497800
+# subset on logFC & FDR
+countslogFC2FDR <- logFCgtrless2[logFCgtrless2$FDR < 0.05, ]
+dim(countslogFC2FDR)
+[1] 19109     5
+summary(countslogFC2FDR$logFC)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-13.770  -2.583   4.554   2.604   6.433  12.970 
+summary(countslogFC2FDR$FDR)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+0.0000000 0.0003155 0.0054730 0.0124700 0.0219600 0.0499700
+
+# subset PV & FDR on logFC, probably just get to min. number above, FC2 + FDR of 19109 transcripts. 
+# Compare, with ....TMM.EXPR.matrix input (rather than raw counts) file. That generated 95C-UP (2185 transcripts) & 95T-UP (~3500 transcripts) files. I note the 'TMM.EXPR.matrix' file has tx_ID names only. I note, looking in 'trinotate_annotation_report.xls' file, can **see** the relation betw. gene_id & transcript_id.
+
+STOPPED
+
+# Perhaps compare ('summary') the summaries on 'Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results' file (immedly above) with the 95C-UP (2185 transcripts) & 95T-UP (~3500 transcripts) files? Also, see if tx_IDs in those files are a subset of those in 'Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results' file?
+# Trying to understand difference betw. 19109 & 2185 + ~ 3500 ~ 5700 tx_ids ?????????
+
+03/16/16:
+To try convert trinotate_annotation_report.xls to 3-column form that Vikas suggesting.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinotate/sqlitedb95C1-T3
+# original location of 
+-rw-r--r--  1 pterry amundsen 78676610 Feb 19 23:52 trinotate_annotation_report.xls
+# now working with it in 
+/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+head -n 10 trinotate_annotation_report.xls > top10xlsfile.txt
+cut -f 2 top10xlsfile.txt > top10xlsfilecol2.txt
+wc trinotate_annotation_report.xls
+  178728  6371013 78676610 trinotate_annotation_report.xls
+wc top10xlsfile.txt
+wc top10xlsfilecol2.txt
+less top10xlsfilecol2.txt  # dnstream manipulation, perhaps remove colm header?
+cut -f 14 top10xlsfile.txt > top10xlsfilecolm14.txt
+less top10xlsfilecolm14.txt
+
+cut -f 14 trinotate_annotation_report.xls > allxlsfilecolm14.txt
+wc allxlsfilecolm14.txt
+  178728   798280 18458070 allxlsfilecolm14.txt
+head -n 4 allxlsfilecolm14.txt
+grep -c "^\." top10xlsfilecolm14.txt  ## 6 as expected
+grep -c "^GO" top10xlsfilecolm14.txt  ## 3 as expected
+
+grep -c "^\." allxlsfilecolm14.txt  ## 120723
+grep -c "^GO" allxlsfilecolm14.txt  ## 58004
+## so sums to total lines - colm header, as anticipated.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+ colm14_xls <- read.delim("top10xlsfilecolm14.txt", stringsAsFactors=FALSE, header=TRUE)
+colnames(colm14_xls)
+[1] "gene_ontology_blast"
+dim(colm14_xls)
+[1] 9 1
+head(colm14_xls$gene_ontology_blast, n=3)
+# p-249, note possible alternative ???????
+#grep("^\.", colm14_xls, perl=TRUE)
+#grep("^.", colm14_xls, perl=TRUE)
+#colm14_xls$gene_ontology_blast[grep("^.", colm14_xls$gene_ontology_blast, perl=TRUE)]
+# no discrimination ??????????
+threetop10colm14GOlines <- colm14_xls$gene_ontology_blast[grep("^GO", colm14_xls$gene_ontology_blast, perl=TRUE)]
+# **found** the 3 rows starting with 'GO'
+
+03/17/16:
+# ref p-253, vbuffalo bk
+class(threetop10colm14GOlines)
+[1] "character"
+length(threetop10colm14GOlines)
+head(threetop10colm14GOlines, n=2)
+strsplit(threetop10colm14GOlines[1], "`")  ## worked
+teststrsplit <- strsplit(threetop10colm14GOlines[1], "`")
+class(teststrsplit)
+length(teststrsplit)
+teststrsplit
+dim(teststrsplit)  ## NULL
+lengths(teststrsplit)  ## 5 elt list. Apparently the 5 are in the only list elt ??????????
+lengths(teststrsplit[1])
+lengths(teststrsplit[[1]])
+
+teststrsplit[[1]][1]
+teststrsplit[[1]][2]
+
+STOPPED
+
+03/20/16:
+# 1 Q: can I select out the 2185 95C_UP records in common betw. Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+and trinotate_annotation_report.xls files.
+# DONE, 
+# ref: p-223, vbufallo book. But need to check if can access colms 2 & 14 from output of this 'match' approach.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+module load R/3.2  ## 3.2.1
+R
+# attempt analyze in R on crane ???????????
+xlsC_up_logdf <- read.delim("xlsC_up_logdf.txt", stringsAsFactors=FALSE, header=TRUE)
+colnames(xlsC_up_logdf)
+[1] "X.gene_id.transcript_id.sprot_Top_BLASTX_hit.TrEMBL_Top_BLASTX_hit.RNAMMER.prot_id.prot_coords.sprot_Top_BLASTP_hit.TrEMBL_Top_BLASTP_hit.Pfam.SignalP.TmHMM.eggnog.gene_ontology_blast.gene_ontology_pfam.transcript.peptide"
+# so this output unexpected, perhaps go back, generate xlsC_up_logdf again, see if can get 'colnames()' output as expected ?????????????????
+rm(xlsC_up_logdf)
+ls()
+xlsC_up_logdf <- read.table("xlsC_up_logdf.txt", header=T, sep=" ")
+colnames(xlsC_up_logdf)  ## total 17 colms
+# now colnames() output looks ok. 
+dim(xlsC_up_logdf)
+head(xlsC_up_logdf, n=2)
+head(xlsC_up_logdf$gene_ontology_blast, n=2)
+head(xlsC_up_logdf$transcript_id, n=2)
+head(rownames(xlsC_up_logdf), n=3)
+# if above shows can access data.frame colms ok, next to remove rows of dataframe based on colm 14 which have a "." in colm 14, i.e., no 'GOterms'.
+# try 2 or 3 examples from internet on top10xlsfile.txt
+
+top11xlsfiletest <- read.table("top11xlsfile.txt", header=T, sep=" ")
+# still error, '  more columns than column names' ???????????????
+head -n 3 xlsC_up_logdf.txt
+head -n 10 xlsC_up_logdf.txt > top10xlsC_up_logdf.txt
+top10xlsC_up_logdf <- read.table("top10xlsC_up_logdf.txt", header=T, sep=" ")
+colnames(top10xlsC_up_logdf)
+# now colnames() output looks ok. 
+
+head(top10xlsC_up_logdf, n=2)
+top10xlsC_up_logdfGO <-  top10xlsC_up_logdf[grep("^GO:", top10xlsC_up_logdf$gene_ontology_blast, perl=TRUE), ]
+dim(top10xlsC_up_logdfGO)  ## [1]  5 17
+dim(top10xlsC_up_logdf)  ## [1]  9 17
+## so finds 5 of 9 records to begin with 'GO:'
+##top10xlsC_up_logdfGO <- top10xlsC_up_logdf[grep1("^GO:", top10xlsC_up_logdf$gene_ontology_blast), ]
+#   could not find function "grep1"
+# so expect # so 978 of 2185 records not to have GO: in colm14. TO CHECK:
+xlsC_up_logdf <- read.table("xlsC_up_logdf.txt", header=T, sep=" ")
+colnames(xlsC_up_logdf)
+dim(xlsC_up_logdf)
+[1] 2185   17
+
+xlsC_up_logdfGO <-  xlsC_up_logdf[grep("^GO:", xlsC_up_logdf$gene_ontology_blast, perl=TRUE), ]
+dim(xlsC_up_logdfGO)  ## expect 1207, got [1] 1074   17 ??????????????
+write.table(xlsC_up_logdfGO, "xlsC_up_logdfGO.txt")
+q()
+
+## to do, scp 
+xlsC_up_logdfGO.txt over to 'pro', so can look at in BBedit. Then for xlsC_up_logdf.txt & xlsC_up_logdfGO.txt, try 'cut' colm 14, may be easier to count number of 'GO:' rows. Try resolve diff. 1207, 1074 above ??????
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/xlsC_up_logdfGO.txt .
+
+#cut -d ' ' -f 14 xlsC_up_logdf.txt | head -n 4 > rows6col4.txt
+cut -d ' ' -f 14 xlsC_up_logdf.txt | head -n 4
+cut -d '" "' -f 14 xlsC_up_logdf.txt | head -n 3
+# cut not working ????????????????????
+
+# so, perhaps, in R, create colm2, colm14 file (need one each for xlsC_up_logdf & xlsC_up_logdfGO. Check in R, if correct there, write.table each to file. Then scp them to 'pro' laptop. Then check for rows wi 'GO:' terms in colm14, try resolve diff. 1207, 1074 count above.
+
+03/21/16:
+# try this all this on **'pro'**, since all the files now om the 'pro'.
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+ls -al x*
+wc xlsC_up_logdf.txt
+    2186   97965 1405678 xlsC_up_logdf.txt  
+## as expected length, includes header for colms
+wc xlsC_up_logdfGO.txt
+    1075   73608 1182169 xlsC_up_logdfGO.txt
+R
+getwd()
+xlsC_up_logdf <- read.table("xlsC_up_logdf.txt", header=T, sep=" ")
+colnames(xlsC_up_logdf)
+dim(xlsC_up_logdf)
+head(xlsC_up_logdf$transcript_id, n=3)
+# 2185 factor levels, think should have stopped the factors ??????
+rm(xlsC_up_logdf)
+ls()
+xlsC_up_logdf <- read.delim("xlsC_up_logdf.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+colnames(xlsC_up_logdf)  ## looks ok now.
+dim(xlsC_up_logdf)
+head(xlsC_up_logdf$transcript_id, n=3)
+write.table(xlsC_up_logdf$transcript_id, "xlsC_up_logdfcolm2full.txt")
+write.table(xlsC_up_logdf$gene_ontology_blast, "xlsC_up_logdfcolm14full.txt")
+
+## Q: has numbered rows, quoted columns, perhaps can use 'sed' to remove ?????
+#xlsC_up_logdfGO <- read.table("xlsC_up_logdfGO.txt", header=T, sep=" ")
+xlsC_up_logdfGO <- read.delim("xlsC_up_logdfGO.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+colnames(xlsC_up_logdfGO)
+dim(xlsC_up_logdfGO)  ## [1] 1074   17
+head(xlsC_up_logdfGO$transcript_id, n=2)
+head(xlsC_up_logdfGO$gene_ontology_blast, n=2)
+write.table(xlsC_up_logdfGO$transcript_id, "xlsC_up_logdfcolm2fullGO.txt")
+write.table(xlsC_up_logdfGO$gene_ontology_blast, "xlsC_up_logdfcolm14fullGO.txt")
+
+## Now to check colm 14, in 'GO' output file. Do all rows befin with 'GO:' ????
+## yes, so need 
+i) clean up row numbers, quote marks in colm 2, colm 14 for 'GO:' files.
+# p-165, vbuffalo bk, to get **'GNU'**, perhaps do on crane ??????
+
+STOPPED
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+module load R/3.2  ## 3.2.1
+R
+getwd()
+xlsC_up_logdf <- read.delim("xlsC_up_logdf.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+colnames(xlsC_up_logdf)  ## looks ok now, but quotes around each name ????
+dim(xlsC_up_logdf)  ## [1] 2185   17
+head(xlsC_up_logdf$transcript_id, n=3)
+write.table(xlsC_up_logdf$transcript_id, "xlsC_up_logdfcolm2full.txt")
+write.table(xlsC_up_logdf$gene_ontology_blast, "xlsC_up_logdfcolm14full.txt")
+
+xlsC_up_logdfGO <- read.delim("xlsC_up_logdfGO.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+colnames(xlsC_up_logdfGO)
+dim(xlsC_up_logdfGO)  ## [1] 1074   17
+head(xlsC_up_logdfGO$transcript_id, n=2)
+head(xlsC_up_logdfGO$gene_ontology_blast, n=2)
+write.table(xlsC_up_logdfGO$transcript_id, "xlsC_up_logdfcolm2fullGO.txt")
+write.table(xlsC_up_logdfGO$gene_ontology_blast, "xlsC_up_logdfcolm14fullGO.txt")
+# Q: what to do about colm names ??????
+# now, to try clean, perhaps with 'sed',
+
+xlsC_up_logdfcolm2fullGO.txt
+xlsC_up_logdfcolm14fullGO.txt
+
+## 1st step
+sed -E 's/^("[^"]+)" //' xlsC_up_logdfcolm2fullGO.txt | head -n 2
+# why leaving 'header' '"x"' un dealt with ????????????????????
+# perhaps cause treating as a header ???????????
+sed -E 's/^("[^"]+)" //' xlsC_up_logdfcolm2fullGO.txt > xlsC_up_logdfcolm2fullGOhalfsed.txt
+"x"
+"TRINITY_DN35725_c0_g1_i1"
+## 2nd step
+sed -E 's/^(")//g' xlsC_up_logdfcolm2fullGOhalfsed.txt > xlsC_up_logdfcolm2fullGO3fourthssed.txt
+sed -E 's/("$)//' xlsC_up_logdfcolm2fullGO3fourthssed.txt > xlsC_up_logdfcolm2fullGOsedcomp.txt
+wc xlsC_up_logdfcolm2fullGOsedcomp.txt
+ 1075  1075 26872 xlsC_up_logdfcolm2fullGOsedcomp.txt
+## **still** have colm name 'x', otherwise, ready for step (ii). Since now just a vector, perhaps go in, remove this 'x' from 1st row of file with editor ???
+
+03/22/16:
+# ok, xlsC_up_logdfcolm14fullGO.txt file, remove '"'s and 'char row numbers, & '"x"' colm name.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+head -n 2 xlsC_up_logdfcolm14fullGO.txt
+sed -E 's/^("[^"]+)" //' xlsC_up_logdfcolm14fullGO.txt | head -n 2
+sed -E 's/^("[^"]+)" //' xlsC_up_logdfcolm14fullGO.txt > xlsC_up_logdfcolm14fullGO.txthalfsed.txt
+
+sed -E 's/^(")//g' xlsC_up_logdfcolm14fullGO.txthalfsed.txt > xlsC_up_logdfcolm14fullGO3fourthssed.txt
+sed -E 's/("$)//' xlsC_up_logdfcolm14fullGO3fourthssed.txt > xlsC_up_logdfcolm14fullGOsedcomp.txt
+# still, to remove colm header, 'x'
+
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/testing
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/xlsC_up_logdfcolm14fullGOsedcomp.txt .
+# removed colm header ('x') => xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt
+scp xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+less xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt 
+wc xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt
+  1074  11865 324025 xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt
+# ok, ready for 'strsplit', etc.
+
+# then p-253, vbuffalo, *for* loop using strsplit to put colm 14 GOterms into one per row, and *ctr* wi number Goterms per row, so can expand colm 2 later.
+
+module load R/3.2  ## 3.2.1
+R
+getwd()
+#xlsC_up_logdfcolm14fullGOsedcompminuscolhead <- read.delim("xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt", header=FALSE, sep=" ", stringsAsFactors=FALSE)
+
+#class(xlsC_up_logdfcolm14fullGOsedcompminuscolhead)
+[1] "data.frame"
+#head(xlsC_up_logdfcolm14fullGOsedcompminuscolhead, n=2)
+# created 32 colms ??????????????????????????
+# try
+#strsplit(xlsC_up_logdfcolm14fullGOsedcompminuscolhead[1], "`")
+Error in strsplit(xlsC_up_logdfcolm14fullGOsedcompminuscolhead[1], "`") : 
+  non-character argumentlength(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt)
+
+# so go back to form with quotes, when delim, inside that command, try assign colm name 'gene_ontology_blast', 1st try wi xlsC_up_logdfcolm14fullGO.txt
+xlsC_up_logdfcolm14fullGO <- read.delim("xlsC_up_logdfcolm14fullGO.txt", header=TRUE, sep=" ", stringsAsFactors=FALSE, col.names="gene_ontology_blast")
+class(xlsC_up_logdfcolm14fullGO)
+head(xlsC_up_logdfcolm14fullGO, n=2)
+# have one colm, 'gene_ontology_blast', but no '"'s in data.frame ????????
+strsplit(xlsC_up_logdfcolm14fullGO[1], "`")
+Error in strsplit(xlsC_up_logdfcolm14fullGO[1], "`") : 
+  non-character argument
+  
+# start again, try xlsC_up_logdfcolm14fullGO.txthalfsed.txt. Still has quotes arould colm 14 GOterms.
+module load R/3.2  ## 3.2.1
+R
+getwd()
+xlsC_up_logdfcolm14fullGOhalfsed <- read.delim("xlsC_up_logdfcolm14fullGO.txthalfsed.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+## Note 
+head -n 3 xlsC_up_logdfcolm14fullGO.txthalfsed.txt
+# has quotes on all the colm 14 rows ??????????????????????
+
+03/23/16:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+less xlsC_up_logdfcolm14fullGO.txthalfsed.txt 
+## has quotes on colm 14 data
+
+head -n 2 xlsC_up_logdfcolm14fullGO.txthalfsed.txt
+## still has quotes
+wc xlsC_up_logdfcolm14fullGO.txthalfsed.txt
+  1075  11866 326177 xlsC_up_logdfcolm14fullGO.txthalfsed.txt
+module load R/3.2  ## 3.2.1
+R
+getwd()
+## xlsC_up_logdfcolm14fullGOhalfsed <- read.delim("xlsC_up_logdfcolm14fullGO.txthalfsed.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+## test if don't have 'sep=" ",'
+xlsC_up_logdfcolm14fullGOhalfsed <- read.delim("xlsC_up_logdfcolm14fullGO.txthalfsed.txt", header=T, stringsAsFactors=FALSE)
+head(xlsC_up_logdfcolm14fullGOhalfsed, n=2)
+## no quotes ?????
+## rm(xlsC_up_logdfcolm14fullGOhalfsed)
+## ls()
+# GOterm rows now don't have quotes ???????????????
+
+colnames(xlsC_up_logdfcolm14fullGOhalfsed)
+"x"
+colnames(xlsC_up_logdfcolm14fullGOhalfsed) <- "gene_ontology_blast"
+colnames(xlsC_up_logdfcolm14fullGOhalfsed)
+dim(xlsC_up_logdfcolm14fullGOhalfsed)  ## [1] 1074   17
+class(xlsC_up_logdfcolm14fullGOhalfsed)
+[1] "data.frame"
+xlsC_up_logdfcolm14fullGOhalfsed[1]
+## many screens ????????
+head(xlsC_up_logdfcolm14fullGOhalfsed$gene_ontology_blast, n=2)
+xlsC_up_logdfcolm14fullGOhalfsed[1 , 1]
+## output row 1 **with** quotes ??????????????????????
+
+## as.character(xlsC_up_logdfcolm14fullGOhalfsed[1])
+#strsplit(as.character(xlsC_up_logdfcolm14fullGOhalfsed[1]), "`")
+strsplit(xlsC_up_logdfcolm14fullGOhalfsed[1,1], "`")
+## good output, now try capture in list, then convert to vector
+templist <- strsplit(xlsC_up_logdfcolm14fullGOhalfsed[1,1], "`")
+class(templist)
+templist
+unlist(templist)
+tempvec <- unlist(templist)
+class(tempvec)
+[1] "character"
+length(tempvec)
+[1] 19
+## left, demo copying tempvec into new vec to hold all 1074 GO:terms expanded.
+#GOtermvec[1] <- tempvec[1]
+Error in GOtermvec[1] <- tempvec[1] : object 'GOtermvec' not found
+# so how to fix ????????
+GOtermvecexpand <- vector(mode="character", length=25)
+length(GOtermvecexpand)
+GOtermvecexpand[1] <- tempvec[1]
+GOtermvecexpand
+## create for loop to copy the 19 elts of tempvec to GOtermvecexpand
+
+for (i in 1:length(tempvec)) {
+  GOtermvecexpand[i] <- tempvec[i]
+}
+GOtermvecexpand
+## ok, 19 elts copied over.
+
+STOPPED
+
+# slip a save to **github** in here
+cd ~/planets
+git status
+git add BdactyloidesthruGSEA081615.txt
+git commit -m "update 03/23/16 BdactyloidesthruGSEA081615.txt from pro"
+git status
+git push origin master
+git remote -v
+
+## before resume work on this file, need pull it down
+cd ~/planets
+git pull origin master
+
+
+
+## **next**, arrange 'outside for' loop to loop thru two rows in of xlsC_up_logdfcolm14fullGOhalfsed colm 14, so captured GO terms for two transcripts in vector GOtermvecexpand. Save GOterm count for each transcript in txexpandctr vector, 1704 elts needed.
+
+
+
+# Q: can I coerce ??????????
+test <- as.character(xlsC_up_logdfcolm14fullGOhalfsed$gene_ontology_blast)
+head(xlsC_up_logdfcolm14fullGOhalfsed, n=2)
+class(xlsC_up_logdfcolm14fullGOhalfsed)
+class(test)
+[1] "character"
+
+# Q: or use sed to add leading & trailing quotes ????????
+
+
+head(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt, n=2)
+strsplit(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt[1], "`")  ## worked
+teststrsplit1074 <- strsplit(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt[1], "`")
+
+
+
+
+
+## **when back in R**
+colnames(xlsC_up_logdfcolm2fullGOsedcomp.txt)[1] <- "transcript_id"
+colnames(test)[1] <- "transcript_id"
+
+
+xlsC_up_logdfcolm14fullGO.txt
+
+
+
+
+ii) write for loop to correlate tx_IDs (colm 2) wi 'GO:' termscolm 14
+iii) lastly separate 'GO: numbers from GO descriptions.
+
+
+
+
+
+
+
+
+
+
+
+
+# so my next step **to try** would be:
+vecGOterms <- unlist(teststrsplit)
+lengths(vecGOterms)
+class(vecGOterms)
+# IF WORKS, write for loop to coordinate tx_IDs xls file, colm 2 with expanded list GOterms, colm 14. 
+
+# now have pointer on tx_ID vector, take next up tx_ID, duplicate the num. times the length of list.
+# ready for next row in colm 14, etc.
+
+
+
+
+ggplot(logFCgtrless2) + geom_point(aes(x=rownamescolm, y=logFC))
+
+# NOTE: p-6 of 9, Trinity DE analysis, criteria pv = 1e-3, FC >= 4
+# So, log2 2 = 1, log2 4 =2, already finding transcripts >= or <= 4 fold change, and still 69k of them. So do I need aonther criteria, PValue, or FDR ?????????
+qq()
+logout
+
+
+
+
+
+
+
+
+
+# perhaps plot the other DE transcripts, where input was ...TMM.EXPR.matrix normalized transcripts. Q: how display ?????????????
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# calc % near full length (alignment coverage for other seqd genome, which to choose, how to do ??????????????????????????????
+# NOTE, fix my question about % reads aligned to transcripts ?????????????
+# % peptides from related species % arabidopsis (how do ????????????????)
+# calc completeness of 95C,T transcriptome assembly.
+# putative coding regions from transcripts gives ????? unique peptides ????? Q: how make assignments using swiss-prot, pfam db's, eggNOG & Gene Ontology, Q: my GOseq failed find assignments DE transcripts  ?????????????????????????
+# gene expression catalog ???????, 90%, found 56735 transcripts, 28738 components, 
+# p-8, heatmap, transcripts wi highests variances ...
+
+# transcripts examined for full length transcripts & seq conservation across species by performing BLASTX, vs proteomes seqd related species swiss-prot non-redundant db & arabidopsis.
+# functional annotation, trinotate, transdecoder, pfam, min peptide length. 
+# rsem ???????????
+# genotyping using rna-seq ??????????????????
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# now do the reverse ???
+q()
+exit
+
+
+q()
+exit
+
+
+
+
+
+
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/DEanalysis/edgeR.115118.dir
+
+
+
+
+
+
+
+
+
+******************************************************
+# Q: SHOULD I HAVE USED 'TPM' column above ????******????? p-5of 8, TPM values vs 'not' TPM values ?????????????????? p-6 of 8, est of TPM value to use ????
+# BUT **1ST***, line 3204, slurm_bld_tx_expn_matrix.sh, p-4 0f 8, DISTINGUISH 'transcript' & 'gene' ???????????????? perhaps need investigate diff. 'isoforms' & 'genes' files ??????????????????????
+*******************************************************
+# as per p-370, vbuffalo book, would like to find the number of aligned reads for 95C1 sample. To do, find name of bam file obtained from alignment step, run samtools 'view' command on it.
+# check on this, find reads file, check on # '^>', and 'names' of records
+# 'genes95C1$expected_count', is this column for counts ???????
+# if trying to compare DE genes, 95C1, 95T1, what threshold to use for DE genes, perhaps look at number of genes at different thresholds ???????
+
+
+
+
+
+# ala p-243, vbuffalo book, dplyr
+# install.packages("dplyr")
+library(dplyr)
+...
+# p-247
+
+
+
+
+# Q: what files expect in output ???????
 
 
 
