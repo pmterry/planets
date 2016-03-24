@@ -5432,8 +5432,6 @@ for (i in 1:length(tempvec)) {
 GOtermvecexpand
 ## ok, 19 elts copied over.
 
-STOPPED
-
 # slip a save to **github** in here
 cd ~/planets
 git status
@@ -5441,13 +5439,14 @@ git add BdactyloidesthruGSEA081615.txt
 git commit -m "update 03/23/16 BdactyloidesthruGSEA081615.txt from pro"
 git status
 git push origin master
-git remote -v
+# git remote -v
 
 ## before resume work on this file, need pull it down
 cd ~/planets
 git pull origin master
+## so github pretty much up to date.
 
-
+STOPPED
 
 ## **next**, arrange 'outside for' loop to loop thru two rows in of xlsC_up_logdfcolm14fullGOhalfsed colm 14, so captured GO terms for two transcripts in vector GOtermvecexpand. Save GOterm count for each transcript in txexpandctr vector, 1704 elts needed.
 
