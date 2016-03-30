@@ -5432,7 +5432,7 @@ for (i in 1:length(tempvec)) {
 GOtermvecexpand
 ## ok, 19 elts copied over.
 
-# slip a save to **github** in here
+# slip a save to ***github*** in here
 cd ~/planets
 git status
 git add BdactyloidesthruGSEA081615.txt
@@ -5448,23 +5448,84 @@ git pull origin master
 
 STOPPED
 
+03/26-8/16:
 ## **next**, arrange 'outside for' loop to loop thru two rows in of xlsC_up_logdfcolm14fullGOhalfsed colm 14, so captured GO terms for two transcripts in vector GOtermvecexpand. Save GOterm count for each transcript in txexpandctr vector, 1704 elts needed.
 
 
-
-# Q: can I coerce ??????????
-test <- as.character(xlsC_up_logdfcolm14fullGOhalfsed$gene_ontology_blast)
+# ref: 03/23/16
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+ls -al
+less xlsC_up_logdfcolm14fullGO.txthalfsed.txt 
+## has **quotes** on colm 14 data
+module load R/3.2  ## 3.2.1
+R
+getwd()
+xlsC_up_logdfcolm14fullGOhalfsed <- read.delim("xlsC_up_logdfcolm14fullGO.txthalfsed.txt", header=T, stringsAsFactors=FALSE)
 head(xlsC_up_logdfcolm14fullGOhalfsed, n=2)
+## **no quotes** ?????
+colnames(xlsC_up_logdfcolm14fullGOhalfsed)
+"x"
+colnames(xlsC_up_logdfcolm14fullGOhalfsed) <- "gene_ontology_blast"
+colnames(xlsC_up_logdfcolm14fullGOhalfsed)
+dim(xlsC_up_logdfcolm14fullGOhalfsed)  ## [1] 1074   17
 class(xlsC_up_logdfcolm14fullGOhalfsed)
-class(test)
+[1] "data.frame"
+dim(xlsC_up_logdfcolm14fullGOhalfsed)  ## [1] 1074    1
+xlsC_up_logdfcolm14fullGOhalfsed[1 , 1]
+## output tx row 1 **with** quotes ??????????????????????
+GO1txtemplist <- strsplit(xlsC_up_logdfcolm14fullGOhalfsed[1,1], "`")
+class(GO1txtemplist)
+GO1txtemplist
+unlist(GO1txtemplist)
+GO1txtempvec <- unlist(GO1txtemplist)
+class(GO1txtempvec)
 [1] "character"
+length(GO1txtempvec)
+[1] 19
 
-# Q: or use sed to add leading & trailing quotes ????????
+GOtermvecexpand <- vector(mode="character", length=7000)
+mode(GOtermvecexpand)
+GOtermvecexpandctr <- 0
+##mode(GOtermvecexpandctr)
+## NEED VECTOR TO HOLD COUNT OF NUMBER of tx_IDs need from colm2 ?????????
+txcolm2expandvec <- numeric(length=1075)
+txcolm2expandvec[1]
+length(txcolm2expandvec)
 
 
-head(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt, n=2)
-strsplit(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt[1], "`")  ## worked
-teststrsplit1074 <- strsplit(xlsC_up_logdfcolm14fullGOsedcompminuscolhead.txt[1], "`")
+##...
+for (j in 1:1074) {  ## outer 'for loop', loop thru 95C-UP colm14 GOterms 
+## access/copy a GOterms row
+GO1txtemplist <- strsplit(xlsC_up_logdfcolm14fullGOhalfsed[j,1], "`")
+## unlist to create temp vector
+GO1txtempvec <- unlist(GO1txtemplist)
+#print(GO1txtempvec)
+## add one tx row (of 1074 rows) of GOterms to expanded list for all tx's/GOterm lines for 95C-UP DE tx's GOterms in internal for loop.
+
+## later in here, check that won't exceed declared length of GOtermvecexpand vec before add additional GOterm character elts to it ??????
+
+for (i in 1:length(GO1txtempvec)) {
+  GOtermvecexpand[GOtermvecexpandctr + i] <- GO1txtempvec[i]
+}
+##stop("dummy error")
+## need ctr so know where to add to GOtermvecexpand vec
+GOtermvecexpandctr <- GOtermvecexpandctr + length(GO1txtempvec)
+#print(GOtermvecexpandctr)
+txcolm2expandvec[j] <- length(GO1txtempvec)
+##stop("dummy error")
+}
+sum(txcolm2expandvec)
+[1] 5769
+print(GOtermvecexpand[5765:5775])
+print(txcolm2expandvec[1:1075])
+stop("dummy error")
+##...
+
+## so have the 5769 GOterms for 1074 tx IDs. Next, build expanded colm2 (tx_IDs) from txcolm2expandvec using the 1074 values in this vetor and (to be read in) the colm 2 values (will there be trouble with 'quote' marks) ??????????????
+
+
 
 
 
