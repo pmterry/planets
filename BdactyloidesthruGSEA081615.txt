@@ -5784,7 +5784,8 @@ wc threecolmsexpandeddfvikasform.txt
 
 STOPPED
 
-
+##********************************************************************
+##********************************************************************
 04/08-09/16:
 ## start work with 95T_UP & trinotate 'xls' with '%>%' & dplyr
 ## look at what did for 95CUP & '.xls' to find subset of '.xls' tx's which up regulated in 95TUP.
@@ -6276,11 +6277,471 @@ TRINITY_DN42864_c1_g1_i1	GO:0005524	ATP binding
 tail -n 3 threecolm95Tupvikasform.txt
 ## So format looks fine for next step, 'blast2GO'.
 
+05/23/16:
+# slipped a save/push to ***github*** in here, then a pull down, before resume.
+
+
+##****************************************************************
+05/25/16:
+
+## Now, prepare '.xls' file for 3 colm tall blast2GO form (vikas).
+## ref: see lines 5790 to 6278 above.
+
+## 9 steps to accomplish
+## ref: start at line 5790
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/95TUPsubset
+## remove 'extra'.RData files from 95TUPsubset/
+ls -al
+rm may17_16.RData
+rm may18_16.RData
+rm may19_16.RData
+rm may20_16.RData
+rm may21_16.RData
+
+## create new dir, 'threecolmvikas_xls'
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+mkdir threecolmvikas_xls
+cd threecolmvikas_xls
+
+## start new '.RData' session when save image for this '.xls' processing.
+
+module load R/3.2  ## 3.2.5
+R
+# attempt analyze in R on crane ???????????
+getwd()
+#load(file="may21_16.RData")
+#ls()
+setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/95TUPsubset/")
+## line 5823
+
+## STEP 1
+xlsdf <- read.delim("trinotate_annotation_report.xls", header=TRUE)
+setwd("/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls")
+ls()
+## line 5891
+## STEP 2
+xlsdfGO <-  xlsdf[grep("^GO:", xlsdf$gene_ontology_blast, perl=TRUE), ]
+
+dim(xlsdfGO)  ## [1] 58004    17
+dim(xlsdf)  ## [1] 178727     17
+58004/178727  ## [1] 0.3245397
+## so, approx 1/3 of '.xls' rows have GOterms.
+## What to think ????????????????????????????????????????????????
+
+## STEP 3
+write.table(xlsdfGO, file="xlsdfGO.txt", sep="\t", col.names=TRUE)
+## now have subset of xlsdf which 'have' Go terms in colm 14
+
+save.image(file="may25_16.RData")
+q()
+ls -al
+wc xlsdfGO.txt  ##    58005  4073784 65583581 xlsdfGO.txt
+wc ../95TUPsubset/trinotate_annotation_report.xls
+  178728  6371013 78676610 ../95TUPsubset/trinotate_annotation_report.xls
+
+## ref line 5910, before do following steps, , do prev steps as need some info from there.
+
+05/26/16:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls
+ls -al
+module load R/3.2  ## 3.2.5
+R
+# attempt analyze in R on crane ???????????
+getwd()
+load(file="may25_16.RData")
+ls()
+
+tmpcolm14charvec <- xlsdfGO[ , c("gene_ontology_blast")]
+class(tmpcolm14charvec)  ## [1] "factor"
+length(tmpcolm14charvec)  ## [1] 58004
+head(tmpcolm14charvec, n=2)  ## no quotes
+## **if** not quotes around field,
+tmpcolm14charvec <- as.character(tmpcolm14charvec)
+class(tmpcolm14charvec)  ## [1] "character"
+#length(tmpcolm14charvec)
+head(tmpcolm14charvec, n=2)  ## now quotes
+
+## STEP 4
+
+
+##****************************************************************
+## ACTUALLY BUILDING GOtermvecexpand (long-form GOterms, colm14) AND txcolm2expandvec (needed to count number times repeat tx_IDs when build expanded colm2 tx_IDs) WI NESTED 'FOR' LOOPS.
+********************************************************************
+GOtermvecexpand <- vector(mode="character", length=324107)
+mode(GOtermvecexpand)
+GOtermvecexpandctr <- 0
+##mode(GOtermvecexpandctr)
+## NEED VECTOR TO HOLD COUNT OF NUMBER of tx_IDs need from colm2 ?????????
+txcolm2expandvec <- numeric(length=58004)  ## expect ~58000 for '.xls' file
+txcolm2expandvec[1]
+length(txcolm2expandvec)
+
+## ref: line 5921 above
+for (j in 1:58004) {  ## outer 'for loop', loop thru '.xls' file colm14 GOterms 
+## access/copy a GOterms row, splits on '`'
+GO1txtemplist <- strsplit(tmpcolm14charvec[j], "`")
+## unlist to create temp vector
+GO1txtempvec <- unlist(GO1txtemplist)
+#print(GO1txtempvec)
+## add one tx row (of 58004 rows) of GOterms to expanded list for all tx's/GOterm lines for trinotate_annotation_report.xls in internal for loop.
+
+## later in here, check that won't exceed declared length of GOtermvecexpand vec before add additional GOterm character elts to it ??????
+
+  for (i in 1:length(GO1txtempvec)) {
+    GOtermvecexpand[GOtermvecexpandctr + i] <- GO1txtempvec[i]
+  }
+#if(j > 50000) {
+#stop("dummy error")
+#}
+## need ctr so know where to add to GOtermvecexpand vec
+GOtermvecexpandctr <- GOtermvecexpandctr + length(GO1txtempvec)
+#print(GOtermvecexpandctr)
+txcolm2expandvec[j] <- length(GO1txtempvec)
+##stop("dummy error")
+}
+
+print(GOtermvecexpandctr)  ## [1] 324107
+#print(GOtermvecexpand[15090:15100])
+print(GOtermvecexpand[324105:324107])
+#txcolm2expandvec[5390:5400]
+txcolm2expandvec[58000:58004]
+
+sum(txcolm2expandvec)
+[1] 324107
+
+save.image(file="may25_16.RData")
+
+## to compare, last GOterm in tmpcolm14charvec wi last in GOtermvecexpand
+tail(tmpcolm14charvec, n=2)  ## matches last of GOtermvecexpand
+## GO:0042744^biological_process^hydrogen peroxide catabolic process"               
+## matches
+## last GO term in colm 14 is ***same*** as last one in GOtermvecexpand vector.
+tail(txcolm2expandvec, n=4)  ## [1] 10  6  6  5
+## Looks ok.
+
+## ref: line 5960
+##****************************************************************
+## so have the ***324107 GOterms in 'long' form in 'GOtermvecexpand'. GOterms for 58004*** tx IDs in 'GOtermvecexpand', and the number of each tx lines for expanded colm 2 in 'txcolm2expandvec'.
+##**************************************************************
+
+q()
+
+ref: line 5965
+## Next, build expanded colm2 (tx_IDs) from txcolm2expandvec using the 58004 values in this vector and tmpcolm2charvec, the colm 2 values.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls
+ls -al
+module load R/3.2  ## 3.2.5
+R
+# attempt analyze in R on crane ???????????
+getwd()
+load(file="may25_16.RData")
+ls()
+
+
+tmpcolm2charvec <- as.character(xlsdfGO$transcript_id)
+class(tmpcolm2charvec)  ## [1] "character"
+length(tmpcolm2charvec)  ## [1] 58004
+head(tmpcolm2charvec, n=3)
+[1] "TRINITY_DN42864_c1_g1_i1" "TRINITY_DN47196_c1_g1_i1"
+tail(tmpcolm2charvec, n=3)
+[3] "TRINITY_DN237_c0_g1_i1"   
+
+colnames(xlsdfGO)
+head(xlsdfGO, n=2)
+tail(xlsdfGO, n=1)
+## ok, 1st, last tx ID in tmpcolm2charvec vector ok.
+
+save.image(file="may25_16.RData")
+#q()
+ 
+ 
+## Use txcolm2expandvec (number each tx_id needed to match up with expanded list of GOterms) & tmpcolm2charvec (the 58004 tx_id's need to 'expand').
+
+length(txcolm2expandvec)  ## [1] 58004
+head(txcolm2expandvec, n=5)  ## [1] 5 5 2 5 5
+
+## create new vector with 324107 elements, use txcolm2expandvec vector to allocate appropriate number each tx_id from tmpcolm2charvec to a new vector.
+
+tx_idexpandedcolm2vec <- vector(mode="character", length=324107)
+class(tx_idexpandedcolm2vec)  ## [1] "character"
+tx_idexpandedcolm2vec[1:2]
+tx_idexpandedcolm2vecctr <- 0
+
+
+for (k in 1:58004) {  ## k stepping thru tx_idexpandedcolm2vec elements
+  indiv_tx_num_temp <- txcolm2expandvec[k]
+  for (l in 1:indiv_tx_num_temp) {
+    tx_idexpandedcolm2vecctr <- tx_idexpandedcolm2vecctr + 1
+    tx_idexpandedcolm2vec[tx_idexpandedcolm2vecctr] <- tmpcolm2charvec[k]
+  }
+#if (k > 50000) {
+#  stop("dummy error")
+#}
+}
+tx_idexpandedcolm2vecctr  ## [1] 324107
+tx_idexpandedcolm2vec[324105:324107]
+## looks like last tx_ID matches last in (xlsdfGO, n=1) and tmpcolm2charvec
+[1] "TRINITY_DN38713_c0_g2_i1" "TRINITY_DN38713_c0_g2_i1"
+[3] "TRINITY_DN38713_c0_g2_i1"
+
+## ref: 6032
+##**************************************************************
+## looks ok, have vec 324107 tx elts (from colm 2, tx_idexpandedcolm2vec) (presumably) matching expanded (long form) GOterms from colm 14 for trinotate_annotation_report.xls in 'GOtermvecexpand'.
+Perhaps DOUBLECHECK ?????????????????????????????
+##****************************************************************
+save.image(file="may25_16.RData")
+q()
+
+## ref: line 6042
+## ok, looks like have expanded colm 2, and colm 14 expanded, one GO:term per line. So each vector 324107 elements long. Perhaps DOUBLECHECK ?????????????????????????????
+
+05/27/16:
+## ref: line 6048
+##******************************************************************
+## now, try split GO: part of GO:term off from description part of GO:term. 1st, try with 'sed' outside of R to change "^" to "`" globally (so strsplit can handle). 
+##********************************************************************
+
+
+ssh -Y pterry@crane.unl.edu  
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls
+ls -al
+module load R/3.2  ## 3.2.5
+R
+# attempt analyze in R on crane ???????????
+getwd()
+load(file="may25_16.RData")
+ls()
+class(GOtermvecexpand)  ## [1] "character"
+GOtermvecexpand[324105:324107]
+length(GOtermvecexpand)  ## [1] 324107
+head(GOtermvecexpand, n=3)
+tail(GOtermvecexpand, n=3)
+## looks ok.
+
+## colm 14, GOtermvecexpand, one GOterm per line, not yet split.
+##  for example, a row:  [1] "GO:0005634^cellular_component^nucleus"                               
+                              
+#write.table(GOtermvecexpand, "GOtermvecexpand95T_up.txt", row.names=FALSE, col.names=FALSE)
+write.table(GOtermvecexpand, file="GOtermvecexpand_xls.txt", row.names=FALSE, col.names=FALSE)
+save.image(file="may25_16.RData")
+q()
+ls -al
+wc GOtermvecexpand_xls.txt
+  324107   943659 18864818 GOtermvecexpand_xls.txt
+head -n 4 GOtermvecexpand_xls.txt
+tail -n 4 GOtermvecexpand_xls.txt
+ok, looks ready for 'sed', i.e., no colm, row names, but have quotes.
+
+## Now, for 'sed', modify line 5654
+
+## try make 'global' for "^" changes to "`"
+sed 's/\^/`/g' GOtermvecexpand_xls.txt > GOtermvecexpand_xls_sed.txt
+## or p-166, vbuffalo, perhaps use 'E' parameter ????????
+wc GOtermvecexpand_xls_sed.txt
+head -n 3 GOtermvecexpand_xls_sed.txt
+## so looks like have globally replaced "^" by "`".
+
+## Next, read in GOtermvec95T_up15092.txt to R session, so can 'strsplit' on '`'.
+
+module load R/3.2  ## 3.2.5
+R
+# attempt analyze in R on crane ???????????
+getwd()
+load(file="may25_16.RData")
+ls()
+
+GOtermvec_xls_seddf <- read.delim("GOtermvecexpand_xls_sed.txt", header=FALSE, col.names=c("gene_ontology_blast"), stringsAsFactors=FALSE)
+class (GOtermvec_xls_seddf)
+colnames(GOtermvec_xls_seddf)
+dim(GOtermvec_xls_seddf)  ## [1] 324107      1
+head(GOtermvec_xls_seddf, n=3)
+## no quotes ?????
+
+## to convert to char vec before for loop
+GOtermvec_xls_sed <- as.character(GOtermvec_xls_seddf$gene_ontology_blast)
+class(GOtermvec_xls_sed)  ## [1] "character"
+head(GOtermvec_xls_sed, n=3)
+## have quotes
+
+save.image(file="may25_16.RData")
+
+#colm14GOterm_numexpandvec <- as.numeric(vector(length=324107))
+
+colm14GOterm_numexpandvec <- as.character(vector(length=324107))
+
+#class(colm14GOterm_numexpandvec)  ## [1] "character"
+#length(colm14GOterm_numexpandvec)  ## [1] 324107
+
+colm14GOterm_descexpandvec <- as.character(vector(length=324107))
+
+#class(colm14GOterm_descexpandvec)  ## [1] "character"
+#head(colm14GOterm_descexpandvec, n=2)  ## [1] "FALSE" "FALSE"
+#length(colm14GOterm_descexpandvec)  ## [1] 324107
+
+
+for (i in 1:324107) {
+  GO1colm14templist <- strsplit(GOtermvec_xls_sed[i], "`")
+#print(GO1colm14templist)
+## unlist to create temp vector
+## three elts from GOtermvec95T_up15092, 1st GO:???????, 2nd, discard this, 3rd description portion of row
+  GO3colm14tempvec <- unlist(GO1colm14templist)
+#print(GO3colm14tempvec)
+#stop("dummy error")
+## place each in its own 324107 elt vec.
+#######  colm14GOterm_expandvecctr <- colm14GOterm_expandvecctr + 1
+  colm14GOterm_numexpandvec[i] <- GO3colm14tempvec[1]
+  colm14GOterm_descexpandvec[i] <- GO3colm14tempvec[3]
+#if (i > 500) {
+#  stop("dummy error")
+#}
+}
+
+#print(GO3colm14tempvec)
+
+## look at new vecs ??????
+colm14GOterm_numexpandvec[1:4]
+colm14GOterm_numexpandvec[324105:324107]
+[1] "GO:0016688" "GO:0046872" "GO:0042744"
+
+colm14GOterm_descexpandvec[1:4]
+colm14GOterm_descexpandvec[324105:324107]
+
+save.image(file="may25_16.RData")
+q()
+
+## Ref: line 6181
+##*****************************************************************
+# ok, finally (i) create df with 3 colms (the 3 vecs, tx, GOnum, & GOdisc, (2) write to disk (see p-260, vbuffalo bk)
+##******************************************************************
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls
+ls -al
+module load R/3.2  ## 3.2.5
+R
+# attempt analyze in R on crane ???????????
+getwd()
+load(file="may25_16.RData")
+ls()
+
+## check that this is the expanded colm 2 tx IDs
+tx_idexpandedcolm2vec[1:3]
+tail(tx_idexpandedcolm2vec, n=3)
+length(tx_idexpandedcolm2vec)  ## [1] 324107
+## colm 14 GOterm number
+colm14GOterm_numexpandvec[1:3]
+colm14GOterm_numexpandvec[324105:324107]
+length(colm14GOterm_numexpandvec)  ## [1] 324107
+## colm 14 GOterm description
+colm14GOterm_descexpandvec[1:3]
+colm14GOterm_descexpandvec[324105:324107]
+length(colm14GOterm_descexpandvec)  ## [1] 324107
+
+threecolmxlsvikasform <- data.frame(tx_ids = tx_idexpandedcolm2vec, GOnums = colm14GOterm_numexpandvec, GOdisc = colm14GOterm_descexpandvec)
+dim(threecolmxlsvikasform)  ## [1] 324107      3
+colnames(threecolmxlsvikasform)
+head(threecolmxlsvikasform, n=3)
+tail(threecolmxlsvikasform, n=3)
+
+write.table(threecolmxlsvikasform, file = "threecolmxlsvikasform.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+save.image(file="may25_16.RData")
+
+##******************************************************************
+## after build & write df (3 colm 'vitas', blast2GO form), want to check that random tx's ***related*** to GOterms in xlsdfGO ???? as they are in this new df. threecolmxlsvikasform.
+##********************************************************************
+
+class(xlsdfGO)  ## [1] "data.frame"
+#head(rownames(xlsdfGO), n=5)
+[1] "122993" "42112"  "125191" "48421"  "86418" 
+## what/where from ?????????????????
+
+dim(xlsdf)  ## [1] 178727     17
+dim(xlsdfGO)  ## [1] 58004    17
+head(xlsdfGO, n=2)
+xlsdfGO[29002, ]  ## random row selected
+xlsdfGO[29002, 2]  ## [1] TRINITY_DN42079_c0_g1_i2
+xlsdfGO[29002, 14]
+[1] GO:0016021^cellular_component^integral component of membrane`GO:0009705^cellular_component^plant-type vacuole membrane`GO:0005215^molecular_function^transporter activity`GO:0006857^biological_process^oligopeptide transport
+## so take a random record number, say the middle one, 29002, compare to threecolmxlsvikasform for this tx ID and assoc'd GOterms.
+
+
+testtx_ID  <- threecolmxlsvikasform[threecolmxlsvikasform$tx_ids=="TRINITY_DN42079_c0_g1_i2", ]
+class(testtx_ID)  ## [1] "data.frame"
+dim(testtx_ID)  ## [1] 8 3
+testtx_ID
+                         tx_ids     GOnums                         GOdisc
+161898 TRINITY_DN42079_c0_g1_i2 GO:0016021 integral component of membrane
+161899 TRINITY_DN42079_c0_g1_i2 GO:0009705    plant-type vacuole membrane
+161900 TRINITY_DN42079_c0_g1_i2 GO:0005215           transporter activity
+161901 TRINITY_DN42079_c0_g1_i2 GO:0006857         oligopeptide transport
+161902 TRINITY_DN42079_c0_g1_i2 GO:0016021 integral component of membrane
+161903 TRINITY_DN42079_c0_g1_i2 GO:0005886                plasma membrane
+161904 TRINITY_DN42079_c0_g1_i2 GO:0005215           transporter activity
+161905 TRINITY_DN42079_c0_g1_i2 GO:0006857         oligopeptide transport
+
+## perhaps more than row 29002 in xlsdfGO has this tx ID ?????????????
+
+## matching 
+#xlsdfGO[1319, ]
+xlsdfGO[29002, 2]  ##  [1] TRINITY_DN42079_c0_g1_i2
+
+xlsdfGO[29002, 14]
+[1] GO:0016021^cellular_component^integral component of membrane`GO:0009705^cellular_component^plant-type vacuole membrane`GO:0005215^molecular_function^transporter activity`GO:0006857^biological_process^oligopeptide transport
+
+## Conclusion: perhaps more than row 29002 in xlsdfGO has this tx ID since this tx ID present 4 additional times in threecolmxlsvikasform  ?????????????
+
+## check for more than 1 row with this tx ID.
+xlsdfGO[xlsdfGO$transcript_id=="TRINITY_DN42079_c0_g1_i2", ]
+
+                  X.gene_id            transcript_id
+89855 TRINITY_DN42079_c0_g1 TRINITY_DN42079_c0_g1_i2
+89856 TRINITY_DN42079_c0_g1 TRINITY_DN42079_c0_g1_i2
+                                                 gene_ontology_blast
+89855 GO:0016021^cellular_component^integral component of membrane`GO:0009705^cellular_component^plant-type vacuole membrane`GO:0005215^molecular_function^transporter activity`GO:0006857^biological_process^oligopeptide transport
+
+89856             GO:0016021^cellular_component^integral component of membrane`GO:0005886^cellular_component^plasma membrane`GO:0005215^molecular_function^transporter activity`GO:0006857^biological_process^oligopeptide transport
+
+## Yes, 2 rows in xlsdfGO with TRINITY_DN42079_c0_g1_i2 tx_ID, so relationship tx_IDs & explained.
+
+save.image(file="may25_16.RData")
+q()
+
+## also, ***check outside*** R, threecolmxlsvikasform.txt
+wc threecolmxlsvikasform.txt
+  324107  1591873 20162525 threecolmxlsvikasform.txt
+head -n 3 threecolmxlsvikasform.txt
+TRINITY_DN10643_c0_g1_i1	GO:0005634	nucleus
+TRINITY_DN10643_c0_g1_i1	GO:0071472	cellular response to salt stress
+TRINITY_DN10643_c0_g1_i1	GO:0042631	cellular response to water deprivation
+
+tail -n 3 threecolmxlsvikasform.txt
+TRINITY_DN38713_c0_g2_i1	GO:0016688	L-ascorbate peroxidase activity
+TRINITY_DN38713_c0_g2_i1	GO:0046872	metal ion binding
+TRINITY_DN38713_c0_g2_i1	GO:0042744	hydrogen peroxide catabolic process
+
+## So format looks fine for next step, 'blast2GO'.
+
 STOPPED
 
+TO DO: github
 
 
-## Then, prepare '.xls' file for 3 colm tall blast2GO form (vikas).
+05/23/16:
+# slipped a save/push to ***github*** in here, then a pull down, before resume.
+
+
+
 
 
 04/08/16:
