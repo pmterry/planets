@@ -6732,22 +6732,51 @@ TRINITY_DN38713_c0_g2_i1	GO:0042744	hydrogen peroxide catabolic process
 
 ## So format looks fine for next step, 'blast2GO'.
 
+05/29/16:
+TO DO: github
+# slipped a save/push to ***github*** in here, then a pull down, before resume.
+## so github up to date.
+
+## 1st, dnloaded, installed JavaForOSX.pkg.
+
 STOPPED
 
-TO DO: github
+05/31/16:
+
+## Next, initially, dnload Blast2GO_macros_3_3.dmg to ****'macbook'**** (2 lbs laptop). Use **basic** 'key' for testing Blast2GO.
+## NOTE: tx_IDs IN '.xls' FILE **NOT** UNIQUE ????????????????????
+## **WHAT TO THINK** ??????????????????????
+
+## from meeting wi vikas this day:
+## start/load annotations, ref file, for me, the '.xls' 3 colm file
+## then, colm 1, from say 3 colm for 95T_up, but run 'cut/uniq' before use.
+## then, 'analysis,Enrichment analysis (fishwe's exact test), 'two-sided', 'run'
+## 
+
+06/01/16:
+cd ~/planets
+git status
+git add BdactyloidesthruGSEA081615.txt
+git commit -m "update 03/23/16 BdactyloidesthruGSEA081615.txt from pro"
+git status
+git push origin master
+# git remote -v
+
+## before resume work on this file, need pull it down
+cd ~/planets
+git pull origin master
+## so github pretty much up to date.
 
 
-05/23/16:
-# slipped a save/push to ***github*** in here, then a pull down, before resume.
+
+
+
+## 1st, need scp '3-colm' files from crane to 'macbook' laptop
 
 
 
 
 
-04/08/16:
-## Next, dnload basic Blast2GO to 'pro', try summarize GO categories in threecolmsexpandeddfvikasform.txt.
-## Blast2GO.macos_3_2.dmg, 9:57am => ~ 10:20am
-## Note: Blast2GO Installer giving error message, failing to install Blast2GO_macos_3_2.dmg.
-## sent email to support@blast2go.com requesting help.
+
 
 
