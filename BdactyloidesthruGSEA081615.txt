@@ -6747,31 +6747,211 @@ STOPPED
 ## NOTE: tx_IDs IN '.xls' FILE **NOT** UNIQUE ????????????????????
 ## **WHAT TO THINK** ??????????????????????
 
-## from meeting wi vikas this day:
-## start/load annotations, ref file, for me, the '.xls' 3 colm file
-## then, colm 1, from say 3 colm for 95T_up, but run 'cut/uniq' before use.
-## then, 'analysis,Enrichment analysis (fishwe's exact test), 'two-sided', 'run'
-## 
 
 06/01/16:
-cd ~/planets
-git status
-git add BdactyloidesthruGSEA081615.txt
-git commit -m "update 03/23/16 BdactyloidesthruGSEA081615.txt from pro"
-git status
-git push origin master
-# git remote -v
-
-## before resume work on this file, need pull it down
-cd ~/planets
-git pull origin master
-## so github pretty much up to date.
-
-
-
-
+## ***WORKING ON 'MACBOOK'***
 
 ## 1st, need scp '3-colm' files from crane to 'macbook' laptop
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls/threecolmxlsvikasform.txt .
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/95TUPsubset/threecolm95Tupvikasform.txt .
+
+## need colm1, uniq from threecolm95Tupvikasform.txt
+## cut, sort, uniq
+wc threecolm95Tupvikasform.txt
+   15092   75241  947897 threecolm95Tupvikasform.txt
+head -n 3 threecolm95Tupvikasform.txt
+cut -f1 threecolm95Tupvikasform.txt | sort -u > colm1_95Tupvikasform_uniq.txt
+ls -al
+wc colm1_95Tupvikasform_uniq.txt
+    2638    2638   65765 colm1_95Tupvikasform_uniq.txt
+head -n 3 colm1_95Tupvikasform_uniq.txt
+
+## from meeting wi vikas this day:
+cp threecolmxlsvikasform.txt threecolmxlsvikasform.annot
+cp colm1_95Tupvikasform_uniq.txt colm1_95Tupvikasform_uniq.annot
+
+## start/load annotations, ref file, for me, the '.xls' 3 colm file (threecolmxlsvikasform.annot)
+## then, colm 1, from say 3 colm for 95T_up, but run 'cut/sort/uniq' before use (colm1_95Tupvikasform_uniq.annot).
+## then, 'analysis,Enrichment analysis (fishwe's exact test), 'two-sided', 'run'
+## Q: should I have done 2-sided, since DE was onlt 'up' ???????????????????
+## start 4:32pm => 1:20pm, next day => 20:48 hrs to run on 'macbook'.
+
+06/02/16:
+## save blast2GO result:
+blast2go_fisher_20160602_2212.txt
+
+## Make Enriched Graph, Q: how to make use of it ?????????????????
+## Bar Chart, Q: looks like too much data, what to do ????????????????
+## pdf only avail. in 'PRO'version ????
+## tried 'reduce to most specific', down from 8693 pages to 366
+
+## Q: HOW TO PROCEED, WHAT TO THINK ??????????????????
+## user manual, p-33, fig 35 ??????????????????????
+
+06/06-07/16:
+## talked wi vikas
+## Q: B. dac genome size ????????
+## TRY google questions for blast2go
+## in blast2go_fisher_20160602_2212.txt, wants to filter for 'OVER' from colm 10, 'Over/Under', use 'awk' ????????? or R ?????????
+## then filter 'FDR', < 0.05
+## then, 'new' ref file, 3 colms, 1st 1,2,3,..., 2nd 'GO_ID' from filtered output, 3rd 'fdr', colm 4 (Q: TestSeqs, RefSeqs colms ?????????????????
+## next step unclear, ????????, perhaps use a item from one the drop down menus 'annot', 'charts', or 'graphs'. Problem: my basic version not even showing the 'choices' ??????????????????????????????????????
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac 
+wc blast2go_fisher_20160602_2212.txt
+     753 1489910 38555079 blast2go_fisher_20160602_2212.txt
+R
+getwd()
+Bl2GO_95T_xls <- read.delim("blast2go_fisher_20160602_2212.txt", stringsAsFactors=FALSE)
+dim(Bl2GO_95T_xls)  ## [1] 752  12, agrees wi 'wc'
+
+class(Bl2GO_95T_xls)
+head(Bl2GO_95T_xls, n=1)  ## TOO MANY TO DISPLAY ??????????????????
+colnames(Bl2GO_95T_xls)
+save.image(file="june07_16.RData")
+load(file="june07_16.RData")
+ls()
+
+#c10 <- "Over/Under"
+Bl2GO_95T_xls_OVER <- Bl2GO_95T_xls[grep("OVER", Bl2GO_95T_xls$Over.Under, perl=TRUE), ]
+dim(Bl2GO_95T_xls_OVER)  ## [1]  0 12, NO ROWS ??????????????????????
+c10 <- Bl2GO_95T_xls_OVER[[10]]
+class(c10)
+length(c10)  ## [1] 0, so 'grep' may not be working ????????????
+orig_c10 <- Bl2GO_95T_xls$Over.Under
+length(orig_c10)  ## [1] 752
+orig_c10[1:3]
+colnames(Bl2GO_95T_xls)
+c1 <- Bl2GO_95T_xls$GO.ID
+class(c1)
+length(c1)
+c1[1]
+head(rownames(Bl2GO_95T_xls), n=3)
+[1] "GO:1901566" "GO:1901564" "GO:0005737"
+## Q: GO_ID is 1st colm name, but also 'colm1' ???????????????
+c1_3 <- Bl2GO_95T_xls[ 1, 1:3]
+c1_3
+c1 <- Bl2GO_95T_xls[ 1, 1]
+c1
+c2 <- Bl2GO_95T_xls[ 1, 2]
+c2
+c3 <- Bl2GO_95T_xls[ 1, 3]
+c3
+## working like 'GO_ID' not 1st colm, ***THO*** listed 1st For
+colnames(Bl2GO_95T_xls)
+c9 <- Bl2GO_95T_xls[ 1, 9]
+c9
+[1] "OVER"
+
+#Bl2GO_95T_xls_OVER <- Bl2GO_95T_xls[grep("OVER", Bl2GO_95T_xls${c10}, perl=TRUE), ]
+Bl2GO_95T_xls_OVER <- Bl2GO_95T_xls[grep("OVER", Bl2GO_95T_xls[[9]], perl=TRUE), ]
+
+dim(Bl2GO_95T_xls_OVER)  ## [1] 632  12
+
+class(Bl2GO_95T_xls_OVER)
+## next, filter for FDR < 0.05
+## note: p-200, vbuffalo bk, stringsAsFactors=FALSE for data.frame creation.
+## p-202, drop=FALSE.
+Bl2GO_95T_xls_OVER_05 <- Bl2GO_95T_xls_OVER[Bl2GO_95T_xls_OVER[[3]] < 0.05, ]
+dim(Bl2GO_95T_xls_OVER_05)  ## [1] 632  12
+
+class(Bl2GO_95T_xls_OVER_05)
+## write to Disk
+
+#write.table(threecolmxlsvikasform, file = "threecolmxlsvikasform.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+write.table(Bl2GO_95T_xls_OVER_05, file = "Bl2GO_95T_xls_OVER_05.txt", quote=FALSE, sep="\t")
+save.image(file="june07_16.RData")
+
+R
+getwd()
+load(file="june07_16.RData")
+ls()
+
+head(rownames(Bl2GO_95T_xls_OVER_05), n=3)
+testrownamesdf <- Bl2GO_95T_xls_OVER_05
+head(rownames(testrownamesdf), n=3)
+dim(Bl2GO_95T_xls_OVER_05)  ## [1] 632  12
+testrownamesdf[ 1, 1:9]
+
+rownames(testrownamesdf) <- NULL
+testrownamesdf[ 1:2, 1:9]  ## each row now has an integer 1st, 
+colnames(testrownamesdf)  ## has "GO_ID" still 1st, ?????????????????
+head(rownames(testrownamesdf), n=3)  ## [1] "1" "2" "3", perhaps what want ??
+
+## now new 3 colm df
+FDRcolm <- Bl2GO_95T_xls_OVER_05[[3]]
+class(FDRcolm)  ## [1] "numeric"
+length(FDRcolm)  ## [1] 632
+head(FDRcolm, n=3)  ## matches Bl2GO_95T_xls_OVER_05.txt
+GO_ID <- rownames(Bl2GO_95T_xls_OVER_05)
+class(GO_ID)  ## [1] "character"
+length(GO_ID)  ## [1] 632
+head(GO_ID, n=3)  ## matches 1st colm for Bl2GO_95T_xls_OVER_05.txt
+intvec <- 1:632
+class(intvec)
+head(intvec, n=3)
+tail(intvec, n=3)
+## ok, now create df
+Bl2GO_95T_xls_OVER_05_3col <- data.frame(intvec = intvec, GO.ID = GO_ID, FDR = FDRcolm, stringsAsFactors=FALSE)
+class(Bl2GO_95T_xls_OVER_05_3col)
+dim(Bl2GO_95T_xls_OVER_05_3col)  ## [1] 632   3
+head(Bl2GO_95T_xls_OVER_05_3col, n=3)
+tail(Bl2GO_95T_xls_OVER_05_3col, n=3)
+
+now ## write to disk
+#write.table(threecolmxlsvikasform, file = "threecolmxlsvikasform.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+write.table(Bl2GO_95T_xls_OVER_05_3col, file = "Bl2GO_95T_xls_OVER_05_3col.txt", quote=FALSE, sep="\t", row.names=FALSE)
+save.image(file="june07_16.RData")
+q()
+wc Bl2GO_95T_xls_OVER_05_3col.txt
+     633    1899   16983 Bl2GO_95T_xls_OVER_05_3col.txt
+
+
+STOPPED
+06/08/16:
+
+## for 1 thing, cp this file to gethub, then pull down on 'pro' laptop
+
+## Then what ????????????????????????????
+## create a dir to locate Bl2GO_95T_xls_OVER_05_3col.txt on pro laptop.
+## open blast2GO on pro laptop, activate 'pro' key there, start looking thru menus, try see if can identify a menu item to display DE go terms from 
+## may have to change extn to '.annot' ???????????????????????????
+## Now, cp Bl2GO_95T_xls_OVER_05_3col.txt (thumbdrive) to 'pro' laptop, start blast2GO there with 'pro' key.
+
+
+
+
+## Check Vikas, see if his blast2GO showing these menu options ?????????????
+
+
+
+
+06/04/16:
+## read bit of 2 references.
+## blast2go ref: 0407034v2.pdf
+understand bit more about how fisher exact test employed.
+## GOstatsHyperG.pdf (Falcon & Gentleman)
+## Upshot: to check with Vikas, see what can make out of blast2gO run on 06/01/16 above ????????????????????
+
+
+
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/95TUPsubset
+ls -al
+
+
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls
+
+
+
 
 
 
