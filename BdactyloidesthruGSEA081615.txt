@@ -6913,20 +6913,225 @@ wc Bl2GO_95T_xls_OVER_05_3col.txt
 
 
 STOPPED
-06/08/16:
+06/08-9/16:
 
-## for 1 thing, cp this file to gethub, then pull down on 'pro' laptop
-
+## for 1 thing, cp this file to gethub, then pull down on 'pro' laptop. 
+## Both done.
 ## Then what ????????????????????????????
-## create a dir to locate Bl2GO_95T_xls_OVER_05_3col.txt on pro laptop.
-## open blast2GO on pro laptop, activate 'pro' key there, start looking thru menus, try see if can identify a menu item to display DE go terms from 
-## may have to change extn to '.annot' ???????????????????????????
-## Now, cp Bl2GO_95T_xls_OVER_05_3col.txt (thumbdrive) to 'pro' laptop, start blast2GO there with 'pro' key.
+## remake Bl2GO_95T_xls_OVER_05_3col.txt, this time with 'Term' colm taken from Bl2GO_95T_xls_OVER_05.txt
+## this recreation of file step still on ***'macbook'***
+
+cd macbook2016/keenanres16/Bdac
+R
+getwd()
+load(file="june07_16.RData")
+ls()
+#FDRcolm <- Bl2GO_95T_xls_OVER_05[[3]]
+Termcolm <- Bl2GO_95T_xls_OVER_05[[1]]
+class(Termcolm)
+length(Termcolm)
+head(Termcolm, n=3)
+tail(Termcolm, n=3)
+# paste for colm 1
+colm1 <- paste("95T", c(1:632), sep="")
+class(colm1)
+length(colm1)
+head(colm1, n=3)
+tail(colm1, n=3)
+# now df
+Bl2GO_95T_xls_OVER_05_3col <- data.frame(cnt95T = colm1, GO.ID = GO_ID, Term = Termcolm, stringsAsFactors=FALSE)
+class(Bl2GO_95T_xls_OVER_05_3col)
+dim(Bl2GO_95T_xls_OVER_05_3col)
+head(Bl2GO_95T_xls_OVER_05_3col, n=3)
+tail(Bl2GO_95T_xls_OVER_05_3col, n=3)
+# write to disk
+write.table(Bl2GO_95T_xls_OVER_05_3col, file = "Bl2GO_95T_xls_OVER_05_3col.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+save.image(file="june07_16.RData")
+q()
+wc Bl2GO_95T_xls_OVER_05_3col.txt
+     632    3605   33209 Bl2GO_95T_xls_OVER_05_3col.txt
+head -n 3 Bl2GO_95T_xls_OVER_05_3col.txt
+95T1    GO:1901566    organonitrogen compound biosynthetic process
+cp Bl2GO_95T_xls_OVER_05_3col.txt Bl2GO_95T_xls_OVER_05_3col.annot
+## transfer to 'pro' laptop to use input for blast2GO annoation (1st rename 3 col file there with 'FDR' in 3rd colm. Done)
+
+## back to ***macbook pro***
+
+## create a dir to locate Bl2GO_95T_xls_OVER_05_3col.txt on pro laptop, name:
+
+/Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity
+
+## open blast2GO on pro laptop, activate 'pro' key there (done, 11:30am, 06/08/16), 
+## Now, cp Bl2GO_95T_xls_OVER_05_3col.annot (email) to 'pro' laptop, also did Bl2GO_95T_xls_OVER_05.txt (thumbdrive), the copy with all the colmns.
+## file Bl2GO_95T_xls_OVER_05_3col.annot looks ok.
+
+start blast2GO there with 'pro' key (B2G-TERRPHIL-507D9DF50B485A74E18F0969A48638BB).
+
+STOPPED
+
+## ***To do***: doc annotation run from pencil sheet
+## looks like level2 will be one take text file data for histogram to compare 95T, 95C DE tx's
+
+## ***meanwhile*** run fisher exact test for 95C on 'pro' laptop, pro blast2GO key.
+
+## ***WORKING ON 'MACBOOK PRO'***
+
+## 1st, need scp '3-colm' files from crane to 'macbook pro' laptop
+
+#cd /Users/bterry/macbook2016/keenanres16/Bdac
+cd /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity/95C
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls/threecolmxlsvikasform.txt .
+wc threecolmxlsvikasform.txt
+  324107 1591873 20162525 threecolmxlsvikasform.txt
+head -n 1 threecolmxlsvikasform.txt  
+
+ssh -Y pterry@crane.unl.edu  ## line 4511
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolm95Cupvikasform.txt .
+wc threecolm95Cupvikasform.txt
+    5769   28098  358714 threecolm95Cupvikasform.txt
+head -n 1 threecolm95Cupvikasform.txt
+## need colm1, uniq from threecolm95Tupvikasform.txt
+## cut, sort, uniq
+cut -f1 threecolm95Cupvikasform.txt | sort -u > colm1_95Cupvikasform_uniq.txt
+ls -al
+wc colm1_95Cupvikasform_uniq.txt
+    1074    1074   26870 colm1_95Cupvikasform_uniq.txt
+head -n 3 colm1_95Cupvikasform_uniq.txt
+
+cp threecolmxlsvikasform.txt threecolmxlsvikasform.annot
+cp colm1_95Cupvikasform_uniq.txt colm1_95Cupvikasform_uniq.annot
+
+## start/load annotations, ref file, for me, the '.xls' 3 colm file (threecolmxlsvikasform.annot)
+
+
+
+## Fisher exact test ran in 20 sec ????????????????????????? for 95C on pro laptop ????????????????????????????
+## refer around line 6850 for proceeding on to the 'OVER' process, but not thinking, would have done 'OVER' & '0.05' before Fisher Exact Test ????
+
+
+
+06/12/16:
+
+## So, TO DO: get explanation for 'Fisher Exact Test' running for only '20 seconds' for 95C DE data ?????????????????????????????????
+## WHY: can't get graph mode to 'take' output from 'Fisher Exact Test' for 95C DE data ????????????????????????????????????????
+## TO DO: Look into using ggplot2 to plot the two output files from 95T & 95C 'Fisher Exact Test' as suggested by Vikas.
+
+06/15-16/16:
+## do some checking on blastoGO, try 95T with basic key on 'pro' laptop.
+## remove 'pro' key from pro laptop blast2GO.
+## pass colm1_95Tupvikasform_uniq.txt from macbook to pro laptop.
+## so work in dir: /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity/95Ttesting
+wc colm1_95Tupvikasform_uniq.txt
+    2638    2638   65765 colm1_95Tupvikasform_uniq.txt
+
+head -n 3 colm1_95Tupvikasform_uniq.txt
+TRINITY_DN10001_c0_g2_i1
+TRINITY_DN10002_c0_g2_i1
+wc threecolmxlsvikasform.annot
+  324107 1591873 20162525 threecolmxlsvikasform.annot
+
+head -n 2 threecolmxlsvikasform.annot
+TRINITY_DN10643_c0_g1_i1	GO:0005634	nucleus
+TRINITY_DN10643_c0_g1_i1	GO:0071472	cellular response to salt stress
+## ok, to run on blast2GO, basic key on pro laptop
+## start/load annotations  => **46** seconds
+## analysis/enrichment analysis (fishers exact test)
+## select test set => colm1_95Tupvikasform_uniq.txt
+## Q: 'select reference (optional)' ??????????????????????????????????
+## 0.05, FDR, two-sided
+
+## 11:33pm => 12:19am, 6/17/16, so **24:44** hr:min to run.
+## try display bar graph from FETest setting ????????????????
+## enriched bar chart, ***too dense to read***
+## TO DO: save as text
+/Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity/95Ttesting/blast2go_statistics_20160617_0917.txt
+
+STOPPED
+
+## IN HERE, some comments about QUESTIONS at this point.
+##
+##
+
+06/17/16:
+
+## Can this be used for charts/make statistics/ ????????????
+
+
+## reading response to my 1st submission of questions to B2GO help, ***CLEAR*** I don't understand for sure how to run FETest. Q: 'Blast2GO project', 'reference set', 'annotated project' ????????????????????????????????????????????? 
+## apparently 'reference set' is ***OPTIONAL*** ??????????????????????
+
+
+## When redo of 95T done, try ***redo of 95C*** on pro laptop with 'basic' b2GO key.
+## dir = /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity/95Crerun
+wc colm1_95Cupvikasform_uniq.txt
+    1074    1074   26870 colm1_95Cupvikasform_uniq.txt
+head -n 3 colm1_95Cupvikasform_uniq.txt
+TRINITY_DN10401_c0_g1_i1
+TRINITY_DN12120_c0_g2_i1
+wc threecolmxlsvikasform.annot
+  324107 1591873 20162525 threecolmxlsvikasform.annot
+head -n 2 threecolmxlsvikasform.annot
+TRINITY_DN10643_c0_g1_i1	GO:0005634	nucleus
+TRINITY_DN10643_c0_g1_i1	GO:0071472	cellular response to salt stress
+## ok, to run on blast2GO, basic key on pro laptop
+## start/load annotations  => 46 seconds
+## analysis/enrichment analysis (fishers exact test)
+## select test set => colm1_95Cupvikasform_uniq.txt
+## Q: 'select reference (optional)' ??????????????????????????????????
+## 0.05, FDR, two-sided
+## 1:02pm => !!:59pm, Sun, 06/19/16, 2 days, 10 hrs. 48min, ***58:48*** hrs:min
+
+STOPPED
+
+06/20/16:
+## To save appropriate txt files (in 95Crerun dir), 
+i) after FETest, and 
+-rw-r--r--   1 bterry  staff  19731770 Jun 20 00:10 blast2go_fisher_20160620_0009.txt
+## appears to have a count for tx names for each GOnumber in '#Test' set ?????
+wc blast2go_fisher_20160620_0009.txt
+     231  760973 19731770 blast2go_fisher_20160620_0009.txt
+head -n 2 blast2go_fisher_20160620_0009.txt
+philip-terry:95Crerun bterry$ head -n 2 blast2go_fisher_20160620_0009.txt
+GO-ID	Term	Category	FDR	P-Value	#Test	#Ref	#notAnnotTest	#notAnnotRef	Over/Under	TestSeqs	RefSeqs
+GO:0009521	photosystem	C	3.466948E-60	2.48598E-64	67	122	1007	52578	OVER	TRINITY_DN31869_c1_g1_i2, TRINITY_DN31869_c1_g1_i1, 
+
+## do I need the output from 'chart statistics' ???????
+
+ii) after 'show bar chart', still not the 'chart statistics', apparently need 'pro key' ????????????????
+
+## How do these differ ????????????????????
+
+## Talked to Vikas, TO DO: ***from*** B2GO Fisher E. Test output (saved txt files), for 95T, 95C input, proceed as follows:
+
+06/21/16:
+
+i) get saved FE Test txt output files for 95T, 95C. Note, will try to run 'Charts/Make Statistics, apparently requires 'B2GO pro key'. So will **try** to run on **Macbook** with 2nd 'pro key' dnloaded.
+
+## for 95T
+## refer line 6785, 6806, 
+## 1504 is 2x of wc of blast2go_fisher_20160602_2212.txt (753) Q: why diff ?????
+## perhaps blank lines betw each real line (Q: why wc would not count these ???)
+## now (looks like done prevly, redo, since also doing 95C), filter for 'Over/Under' (colm 9) => did, line 6851,
+...
+
+STOPPED
+
+## for 95C, From
+/Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity/95Crerun/blast2go_fisher_20160620_0009.txt
+
+## now push BdactyloidesthruGSEA081615.txt to github, pull to Macbook
+
+
+
+## on macbook, copied to:
 
 
 
 
-## Check Vikas, see if his blast2GO showing these menu options ?????????????
 
 
 
