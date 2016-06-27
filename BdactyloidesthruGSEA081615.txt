@@ -7112,6 +7112,7 @@ ii) after 'show bar chart', still not the 'chart statistics', apparently need 'p
 i) get saved FE Test txt output files for 95T, 95C. Note, will try to run 'Charts/Make Statistics, apparently requires 'B2GO pro key'. So will **try** to run on **Macbook** with 2nd 'pro key' dnloaded.
 
 ## for 95T
+## copy to 
 ## refer line 6785, 6806, 
 ## 1504 is 2x of wc of blast2go_fisher_20160602_2212.txt (753) Q: why diff ?????
 ## perhaps blank lines betw each real line (Q: why wc would not count these ???)
@@ -7120,14 +7121,282 @@ i) get saved FE Test txt output files for 95T, 95C. Note, will try to run 'Chart
 
 STOPPED
 
+## for 95T
+## copy from macbook 
+/Users/bterry/macbook2016/keenanres16/Bdac/blast2go_fisher_20160602_2212.txt
+## copy to 
+/Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95T_frommacbook/blast2go_fisher_20160602_2212.txt
+
+## now filter 95T b2go fisher exact test saved txt output 1st for 'Over.Under' (note prevly done, but redo, make more concise).
+## refer line 6804
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95T_frommacbook
+wc blast2go_fisher_20160602_2212.txt
+     753 1489910 38555079 blast2go_fisher_20160602_2212.txt
+R
+getwd()
+Bl2GO_95T_xls <- read.delim("blast2go_fisher_20160602_2212.txt", stringsAsFactors=FALSE)
+dim(Bl2GO_95T_xls)  ## [1] 752  12, agrees wi 'wc'
+class(Bl2GO_95T_xls)
+colnames(Bl2GO_95T_xls)  ## counting rownames as a colm ????????
+ [1] "GO.ID"          "Term"           "Category"       "FDR"           
+ [5] "P.Value"        "X.Test"         "X.Ref"          "X.notAnnotTest"
+ [9] "X.notAnnotRef"  "Over.Under"     "TestSeqs"       "RefSeqs"    
+save.image(file="dir95T_frommacbook_june21_16.RData")
+ls()
+
+Bl2GO_95T_xls_OVER <- Bl2GO_95T_xls[grep("OVER", Bl2GO_95T_xls[[9]], perl=TRUE), ]
+dim(Bl2GO_95T_xls_OVER)  ## [1] 632  12
+
+## ASIDE:
+Bl2GO_95T_xls_UNDER <- Bl2GO_95T_xls[grep("UNDER", Bl2GO_95T_xls[[9]], perl=TRUE), ]
+dim(Bl2GO_95T_xls_UNDER)  ## [1] 120  12
+## for now, don't finish filtering 'UNDER'
+
+## next, filter for FDR < 0.05
+Bl2GO_95T_xls_OVER_05 <- Bl2GO_95T_xls_OVER[Bl2GO_95T_xls_OVER[[3]] < 0.05, ]
+dim(Bl2GO_95T_xls_OVER_05)  ## [1] 632  12
+class(Bl2GO_95T_xls_OVER_05)
+## write to Disk
+write.table(Bl2GO_95T_xls_OVER_05, file = "Bl2GO_95T_xls_OVER_05.txt", quote=FALSE, sep="\t")
+save.image(file="dir95T_frommacbook_june21_16.RData")
+ls()
+[1] "Bl2GO_95T_xls"         "Bl2GO_95T_xls_OVER"    "Bl2GO_95T_xls_OVER_05"
+[4] "Bl2GO_95T_xls_UNDER"  
+getwd()
+
+Termcolm <- Bl2GO_95T_xls_OVER_05[[1]]
+class(Termcolm)  ## [1] "character"
+length(Termcolm)  ## [1] 632
+head(Termcolm, n=3)
+[1] "organonitrogen compound biosynthetic process"
+[2] "organonitrogen compound metabolic process"   
+[3] "cytoplasm"
+tail(Termcolm, n=3)
+# paste for colm 1
+colm1 <- paste("95T", c(1:632), sep="")
+class(colm1)  ## [1] "character"
+length(colm1)  ## [1] 632
+head(colm1, n=3)  ## [1] "95T1" "95T2" "95T3"
+tail(colm1, n=3)  ## [1] "95T630" "95T631" "95T632"
+
+# now df
+GO_ID <- rownames(Bl2GO_95T_xls_OVER_05)
+class(GO_ID)  ## [1] "character"
+length(GO_ID)  ## [1] 632
+head(GO_ID, n=3)  ## matches 1st colm for Bl2GO_95T_xls_OVER_05.txt
+
+Bl2GO_95T_xls_OVER_05_3col <- data.frame(cnt95T = colm1, GO.ID = GO_ID, Term = Termcolm, stringsAsFactors=FALSE)
+class(Bl2GO_95T_xls_OVER_05_3col)
+dim(Bl2GO_95T_xls_OVER_05_3col)  ## [1] 632   3
+
+head(Bl2GO_95T_xls_OVER_05_3col, n=3)
+tail(Bl2GO_95T_xls_OVER_05_3col, n=3)
+
+# write to disk
+write.table(Bl2GO_95T_xls_OVER_05_3col, file = "Bl2GO_95T_xls_OVER_05_3col.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+save.image(file="dir95T_frommacbook_june21_16.RData")
+ls()
+[1] "Bl2GO_95T_xls"              "Bl2GO_95T_xls_OVER"        
+[3] "Bl2GO_95T_xls_OVER_05"      "Bl2GO_95T_xls_OVER_05_3col"
+[5] "Bl2GO_95T_xls_UNDER"        "colm1"                     
+[7] "GO_ID"                      "Termcolm"    
+sessionInfo()
+R version 3.2.4 (2016-03-10)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+Running under: OS X 10.10.5 (Yosemite)
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+ q()
+
+wc Bl2GO_95T_xls_OVER_05_3col.txt
+     632    3605   33209 Bl2GO_95T_xls_OVER_05_3col.txt
+head -n 3 Bl2GO_95T_xls_OVER_05_3col.txt
+95T1	GO:1901566	organonitrogen compound biosynthetic process
+cp Bl2GO_95T_xls_OVER_05_3col.txt Bl2GO_95T_xls_OVER_05_3col.annot
+## Ready to run on macbook chart/make statistics with 2nd pro key.
+
+STOPPED
+
 ## for 95C, From
 /Users/bterry/macbookpro2015/keenanres15/trintoGSEA/B2GOactivity/95Crerun/blast2go_fisher_20160620_0009.txt
+## to:
+/Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95T_frommacbook/blast2go_fisher_20160602_2212.txt
 
-## now push BdactyloidesthruGSEA081615.txt to github, pull to Macbook
-
-
+## now **push** BdactyloidesthruGSEA081615.txt to github, **pull** to Macbook
 
 ## on macbook, copied to:
+/Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95C_frompro/blast2go_fisher_20160620_0009.txt
+
+## now filter 95C b2go fisher exact test saved txt output 1st for 'Over.Under'
+cd /Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95C_frompro
+wc blast2go_fisher_20160620_0009.txt
+     231  760973 19731770 blast2go_fisher_20160620_0009.txt
+
+R
+getwd()
+Bl2GO_95C_xls <- read.delim("blast2go_fisher_20160620_0009.txt", stringsAsFactors=FALSE)
+dim(Bl2GO_95C_xls)  ## [1] 230  12, agrees wi 'wc'
+class(Bl2GO_95C_xls)
+colnames(Bl2GO_95C_xls)  ## counting rownames as a colm ????????
+ [1] "GO.ID"          "Term"           "Category"       "FDR"           
+ [5] "P.Value"        "X.Test"         "X.Ref"          "X.notAnnotTest"
+ [9] "X.notAnnotRef"  "Over.Under"     "TestSeqs"       "RefSeqs"
+save.image(file="dir95C_frompro_june21_16.RData")
+ls()
+
+Bl2GO_95C_xls_OVER <- Bl2GO_95C_xls[grep("OVER", Bl2GO_95C_xls[[9]], perl=TRUE), ]
+dim(Bl2GO_95C_xls_OVER)  ## [1] 125  12
+## [1] 632  12 for 95T at this point ?????????????????????????????????
+
+06/22/16:
+## ASIDE:
+Bl2GO_95C_xls_UNDER <- Bl2GO_95C_xls[grep("UNDER", Bl2GO_95C_xls[[9]], perl=TRUE), ]
+dim(Bl2GO_95C_xls_UNDER)  ## [1] 105  12
+## for 95T, [1] 120  12
+## for now, don't finish filtering 'UNDER'
+
+## next, filter for FDR < 0.05
+Bl2GO_95C_xls_OVER_05 <- Bl2GO_95C_xls_OVER[Bl2GO_95C_xls_OVER[[3]] < 0.05, ]
+dim(Bl2GO_95C_xls_OVER_05)  ## [1] 125  12
+class(Bl2GO_95C_xls_OVER_05)
+## write to Disk
+write.table(Bl2GO_95C_xls_OVER_05, file = "Bl2GO_95C_xls_OVER_05.txt", quote=FALSE, sep="\t")
+save.image(file="dir95C_frompro_june21_16.RData")
+ls()
+[1] "Bl2GO_95C_xls"         "Bl2GO_95C_xls_OVER"    "Bl2GO_95C_xls_OVER_05"
+[4] "Bl2GO_95C_xls_UNDER"  
+getwd()
+
+Termcolm <- Bl2GO_95C_xls_OVER_05[[1]]
+class(Termcolm)  ## [1] "character"
+length(Termcolm)  ## [1] 125
+## for 95t, was [1] 632
+head(Termcolm, n=3)
+[1] "photosystem"             "thylakoid membrane"     
+[3] "photosynthetic membrane"
+tail(Termcolm, n=3)
+# paste for colm 1
+colm1 <- paste("95C", c(1:125), sep="")
+class(colm1)  ## [1] "character"
+length(colm1)  ## [1] 125
+head(colm1, n=3)  ## [1] "95C1" "95C2" "95C3"
+tail(colm1, n=3)  ## [1] "95C123" "95C124" "95C125"
+
+# now df
+GO_ID <- rownames(Bl2GO_95C_xls_OVER_05)
+class(GO_ID)  ## [1] "character"
+length(GO_ID)  ## [1] 125
+head(GO_ID, n=3)  ## matches 1st colm & row for Bl2GO_95C_xls_OVER_05.txt
+[1] "GO:0009521" "GO:0042651" "GO:0034357"
+
+Bl2GO_95C_xls_OVER_05_3col <- data.frame(cnt95C = colm1, GO.ID = GO_ID, Term = Termcolm, stringsAsFactors=FALSE)
+class(Bl2GO_95C_xls_OVER_05_3col)
+dim(Bl2GO_95C_xls_OVER_05_3col)  ## [1] 125   3
+
+head(Bl2GO_95C_xls_OVER_05_3col, n=3)
+  cnt95C      GO.ID                    Term
+1   95C1 GO:0009521             photosystem
+tail(Bl2GO_95C_xls_OVER_05_3col, n=3)
+125 95C125 GO:0000271 polysaccharide biosynthetic process
+
+# write to disk
+write.table(Bl2GO_95C_xls_OVER_05_3col, file = "Bl2GO_95C_xls_OVER_05_3col.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+save.image(file="dir95C_frompro_june21_16.RData")
+ls()
+[1] "Bl2GO_95C_xls"              "Bl2GO_95C_xls_OVER"        
+[3] "Bl2GO_95C_xls_OVER_05"      "Bl2GO_95C_xls_OVER_05_3col"
+[5] "Bl2GO_95C_xls_UNDER"        "colm1"                     
+[7] "GO_ID"                      "Termcolm" 
+sessionInfo()
+R version 3.2.4 (2016-03-10)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+Running under: OS X 10.10.5 (Yosemite)
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+q()
+
+wc Bl2GO_95C_xls_OVER_05_3col.txt
+     125     661    5889 Bl2GO_95C_xls_OVER_05_3col.txt
+## Note: for 95T, had
+     632    3605   33209 Bl2GO_95T_xls_OVER_05_3col.txt
+head -n 3 Bl2GO_95C_xls_OVER_05_3col.txt
+95C1	GO:0009521	photosystem
+
+cp Bl2GO_95C_xls_OVER_05_3col.txt Bl2GO_95C_xls_OVER_05_3col.annot
+## Ready to run on macbook chart/make statistics with 2nd pro key.
+
+## Try run b2go basic, won't, so remove, activate 2nd pro key (06/22/16)
+Activation key: B2G-TERRPHIL-2ABF66376DF4FEE4CDF8E3C4CC5C9DD7
+## start/load annotation/ loaded /Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95T_frommacbook
+/Bl2GO_95T_xls_OVER_05_3col.annot
+## charts/make statistics/annotation/next/ ***Q:*** what should choose this window ?????/checked molr fcn, biol'l process, cellular component => for each, left default number terms = Q: **50/run**
+## **Q:** how set 'level': 'GO distribution by level, ontology level 2'. 
+
+## talked to Vikas, looks like he set me on a good path:
+1. got the level 2 chart/make statistics done for both 95T & 95C. For now, saving txt, pdf files to ~/b2gWorkspace dir.
+
+-rw-r--r--    1 bterry  staff   3386 Jun 22 13:43 Bl2GO_95C_xls_OVER_05_3col_lev2.pdf
+-rw-r--r--    1 bterry  staff   3137 Jun 22 13:44 Bl2GO_95C_xls_OVER_05_3col_lev2.txt
+-rw-r--r--    1 bterry  staff   4066 Jun 22 13:35 Bl2GO_95T_xls_OVER_05_3col_lev2.pdf
+-rw-r--r--    1 bterry  staff  14074 Jun 22 13:34 Bl2GO_95T_xls_OVER_05_3col_lev2.txt
+
+2. suggest do ggplot2 for muli-histogram for 95T, 95C. But consider qualitative. Look for previous doc (see Vikas paper he prevly sent me). GO categories for drought (or what trt, ctl represent for 95T, 95C. Compare 95T to these. Q: definition of 'ctl' here ?????????
+
+## sort of, think of the biology. What did the trt do to GO terms. What are biol'l differences betw. trt & ctl ???????
+
+06/23/16:
+1st, set up a ggplot2, TO DO: figure out how to do.
+So, do bit looking into 95C, 95T level 2 chart/make statistics output from 2nd pro key on macbook.
+## create df for 95T, 95C by taking 1st 3 colms from Bl2GO_95C_xls_OVER_05_3col_lev2.txt & Bl2GO_95T_xls_OVER_05_3col_lev2.txt files.
+
+cd /Users/bterry/b2gWorkspace
+## initially check for duplication of GOnumbers. Note, MF, CC, BF sections of these outputs from b2go/charts/make stat. Perhaps treat these sections separately as b2go/charts/mak stats does. So need separate the 3 sections before start checking for uniqueness of GOnumbers. HOW? Looks like good solns in R (including plyr) for uniqueness if 1st separate the 3 sections.
+
+Perhaps try in R, could just manually count lines in each of the 3 sections, select from the df the row one wants for each of the 3 sections, for 95T, 95C.
+
+R
+getwd()
+# Bl2GO_95C_xls <- read.delim("blast2go_fisher_20160620_0009.txt", stringsAsFactors=FALSE)
+Bl2GO_95C_xls_chtstat_lev2 <- read.delim("Bl2GO_95C_xls_OVER_05_3col_lev2.txt", stringsAsFactors=FALSE)
+Bl2GO_95T_xls_chtstat_lev2 <- read.delim("Bl2GO_95T_xls_OVER_05_3col_lev2.txt", stringsAsFactors=FALSE)
+
+
+
+
+
+dim(Bl2GO_95C_xls)  ## [1] 230  12, agrees wi 'wc'
+class(Bl2GO_95C_xls)
+colnames(Bl2GO_95C_xls)  ## counting rownames as a colm ????????
+ [1] "GO.ID"          "Term"           "Category"       "FDR"           
+ [5] "P.Value"        "X.Test"         "X.Ref"          "X.notAnnotTest"
+ [9] "X.notAnnotRef"  "Over.Under"     "TestSeqs"       "RefSeqs"
+save.image(file="dir95C_frompro_june21_16.RData")
+ls()
+
+
+
+
+
+
+## save txt, 
+## refer line 6785, 6806, 
+## 1504 is 2x of wc of blast2go_fisher_20160602_2212.txt (753) Q: why diff ?????
+## perhaps blank lines betw each real line (Q: why wc would not count these ???)
+## now (looks like done prevly, redo, since also doing 95C), filter for 'Over/Under' (colm 9) => did, line 6851,
+...
+
+
+
+## now ready to 1st convert 
 
 
 
