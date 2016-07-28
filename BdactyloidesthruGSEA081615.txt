@@ -7356,12 +7356,399 @@ Activation key: B2G-TERRPHIL-2ABF66376DF4FEE4CDF8E3C4CC5C9DD7
 06/23/16:
 1st, set up a ggplot2, TO DO: figure out how to do.
 So, do bit looking into 95C, 95T level 2 chart/make statistics output from 2nd pro key on macbook.
+
+06/28-29/16:
+
 ## create df for 95T, 95C by taking 1st 3 colms from Bl2GO_95C_xls_OVER_05_3col_lev2.txt & Bl2GO_95T_xls_OVER_05_3col_lev2.txt files.
+
+cd /Users/bterry/b2gWorkspace
+
+R
+getwd()
+Bl2GO_95T_xls_OVER_05_3col_lev2 <- read.delim("Bl2GO_95T_xls_OVER_05_3col_lev2.pdf", stringsAsFactors=FALSE)
+Warning messages:
+1: In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
+  EOF within quoted string
+2: In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
+  embedded nul(s) found in input
+## Q: what to think, Looks like 4 lines are not 'data', so try 
+i) make copy of Bl2GO_95T_xls_OVER_05_3col_lev2.txt Bl2GO_95T_xls_OVER_05_3col_lev2_cp.txt
+ii) doc. where 3 groups of rows, BP, MF, CC will be after deletion
+## BP = 1-19, MF = 20-27, CC = 28-36
+ii) delete the 4 non table lines in the 95T copy file.
+iii) try import this file into R to 'work on it'.
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp <- read.delim("Bl2GO_95T_xls_OVER_05_3col_lev2_cp.txt", stringsAsFactors=FALSE)
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp)  ## [1] 35  4, should there not be 26 rows ????????????????????????????????????????????????????????
+class(Bl2GO_95T_xls_OVER_05_3col_lev2_cp)
+colnames(Bl2GO_95T_xls_OVER_05_3col_lev2_cp)  ## counting rownames as a colm ????????
+## So there **weren't** any colm names
+## TO DO: dim output above of 35 & 4 suggests may have 4 colms, so as per p-196, vbuffalo bk, create 4 headers as read in file.
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp <- read.delim("Bl2GO_95T_xls_OVER_05_3col_lev2_cp.txt", stringsAsFactors=FALSE)
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp)  ## [1] 36  4, as expect
+class(Bl2GO_95T_xls_OVER_05_3col_lev2_cp)
+colnames(Bl2GO_95T_xls_OVER_05_3col_lev2_cp)
+[1] "GO.id"   "GO.term" "X.Seqs"  "Seqs"   
+head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp, n=1)
+ls()
+save.image(file="dirb2gWorkspace_june28_16.RData")
+ls()
+## subset df for 1st 3 colms:
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3 <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp[ , 1:3, drop=FALSE]
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3) ## [1] 36  3
+class(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3)
+colnames(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3)
+[1] "GO.id"   "GO.term" "X.Seqs" 
+## need to subset the 3, BP, MF, CC.
+head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3, n=2)
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3[, "GO.id"]
+
+## now create 3 df's for 95T, BP (rows 1-19), MF (rows 20-27), CC (rows 28-36)  ## [1] 19  3
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3[1:19,, drop=FALSE]
+
+head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP, n=3)
+tail(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP, n=3)
+## now repeat for 95C
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3[20:27,, drop=FALSE]
+head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF, n=3)
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF)  ## [1] 8 3
+tail(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF, n=3)
+
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_CC <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3[28:36,, drop=FALSE]
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_CC)  ## [1] 9 3
+head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_CC, n=3)
+tail(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_CC, n=3)
+
+06/30/16:
+## now repeat for 95C
+cd /Users/bterry/b2gWorkspace
+
+R
+getwd()
+i) make copy of Bl2GO_95C_xls_OVER_05_3col_lev2.txt Bl2GO_95C_xls_OVER_05_3col_lev2_cp.txt
+ii) doc. where 3 groups of rows, BP, MF, CC will be after deletion
+## BP = 1-12, MF = 13-14, CC = 15-22
+ii) delete the 3 non table lines in the 95 copy file.
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp <- read.delim("Bl2GO_95C_xls_OVER_05_3col_lev2_cp.txt", stringsAsFactors=FALSE)
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp)  ## [1] 22  4, as expect
+class(Bl2GO_95C_xls_OVER_05_3col_lev2_cp)
+colnames(Bl2GO_95C_xls_OVER_05_3col_lev2_cp)
+[1] "GO.id"   "GO.term" "X.Seqs"  "Seqs"   
+head(Bl2GO_95C_xls_OVER_05_3col_lev2_cp, n=1)
+ls()
+save.image(file="dirb2gWorkspace_june28_16.RData")
+ls()
+
+## subset df for 1st 3 colms:
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3 <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp[ , 1:3, drop=FALSE]
+class(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3)
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3)  ## [1] 22  3
+head(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3, n=3)
+## now repeat for 95C
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3[1:12,, drop=FALSE]
+head(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP, n=3)
+tail(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP, n=3)
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP)  ## [1] 12  3
+
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3[13:14,, drop=FALSE]
+head(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF, n=2)
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF)  ## [1] 2 3
+tail(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF, n=2)
+
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_CC <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3[15:22,, drop=FALSE]
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_CC)  ## [1] 8 3
+head(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_CC, n=3)
+tail(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_CC, n=3)
+save.image(file="dirb2gWorkspace_june28_16.RData")
+ls()
+
+
+STOPPED
+
 
 cd /Users/bterry/b2gWorkspace
 ## initially check for duplication of GOnumbers. Note, MF, CC, BF sections of these outputs from b2go/charts/make stat. Perhaps treat these sections separately as b2go/charts/mak stats does. So need separate the 3 sections before start checking for uniqueness of GOnumbers. HOW? Looks like good solns in R (including plyr) for uniqueness if 1st separate the 3 sections.
 
 Perhaps try in R, could just manually count lines in each of the 3 sections, select from the df the row one wants for each of the 3 sections, for 95T, 95C.
+
+07/03/16:
+## compare the GO#s betw 95T & 95C for BP, MF, CC
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP)  ## [1] 12  3
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP)  ## [1] 19  3
+colnames(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP)
+colnames(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP)
+
+## p-222, vbuffalo
+table(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP$GO.id %in% Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP$GO.id)
+TRUE 
+  12 
+## so, all GO#s in 95C also in 95T 'BP'.
+## Q: perhaps try bar grph all 19 GO#s in combined graph, just put zero in for number of seqs for the 7 extra GO#s in 95T.
+## perhaps here, try produce 1st 'grouped bar plot' wi ggplot' for 'BP' GO terms (Q: probably 'character' data type issues ???????)
+## rerun 'untitled text 15' to refamiliarize with how create this grouped bar graph.
+save.image(file="dirb2gWorkspace_june28_16.RData")
+ls()
+
+07/04/16:
+## p-195, matloff
+load(file="dirb2gWorkspace_june28_16.RData")
+ls()
+colnames(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP)
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP[order(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP$GO.id),] 
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort
+
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP[order(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP$GO.id),]
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort
+
+## p-26, matloff, create C95 vector from GO.id colm of Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort df
+## then insert 7 GO.id colm elts found only in T95.
+
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort_wi7 <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort$GO.id
+class(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort_wi7)
+[1] "character"
+Cvec <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort_wi7
+length(Cvec)
+Cvec
+
+## finish creating Cvec19
+
+Cvec19 <- c("GO:0000003", Cvec[1:2], "GO:0022414", Cvec[3:5], "GO:0040007",  Cvec[6], "GO:0048511", "GO:0048518", Cvec[7:10], "GO:0051704", Cvec[11:12], "GO:0098754")
+class(Cvec19)
+length(Cvec19)
+Cvec19
+Cvec19GOnum <- Cvec19
+## looks like Cvec19GOnum has 95T order, 19 long. Next, grab #seqs from 95C df, then substitute in CvecSeqs the 7 locations using 'c' vector construction placing zero for those new 7 #Seqs values.
+
+07/05/16:
+colnames(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort)
+Cvec19seqs  <- Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_BP_GOsort$X.Seqs
+Cvec19seqs  ##  [1] 43 44  2  2  2 30  2  8 14  1  9  4
+class(Cvec19seqs)  ## [1] "integer"
+## now add the 7 addl elements, all zeros imitating prev code for GOnums colm.
+Cvec19seqs <- c(0, Cvec19seqs[1:2], 0, Cvec19seqs[3:5], 0, Cvec19seqs[6], 0, 0, Cvec19seqs[7:10], 0, Cvec19seqs[11:12], 0)
+Cvec19seqs
+save.image(file="dirb2gWorkspace_june28_16.RData")
+ls()
+
+## now, have GOnums & #Seqs vecs expanded to 19 elts for 95C data. Next, try construct df like 'Food, Music, People' (GOnums, 'Names') internet example, and 'bad, good, etc' are #Seqs for C95, T95.
+## see untitled text 10.
+
+07/07/16:
+class(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort)
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort)
+head(head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort, n=3)
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort
+
+Names <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort$GO.id
+C95 <- Cvec19seqs
+T95 <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort$X.Seqs
+
+grpdbargraphdf = data.frame(Names, C95, T95, stringsAsFactors=FALSE)
+grpdbargraphdf
+
+library(reshape)
+data.m <- melt(grpdbargraphdf, id.vars='Names')
+data.m
+
+install.packages("ggplot2")
+library("ggplot2")
+pdf("testgroupedbargraph.pdf")
+ggplot(data.m, aes(Names, value)) +   
+  geom_bar(aes(fill = variable), position = "dodge", stat="identity")
+dev.off()
+
+
+
+pdf("flipgroupedbargraph.pdf")
+ggplot(data.m, aes(Names, value)) +   
+  geom_bar(aes(fill = variable), position = "dodge", stat="identity") + coord_flip()
+dev.off()
+## worked, 
+
+## next task, go back replace GOnum with GOterm, try add main graph message ????
+
+Names <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort$GO.term
+grpdbargraphGOtermdf = data.frame(Names, C95, T95, stringsAsFactors=FALSE)
+grpdbargraphGOtermdf
+data.m <- melt(grpdbargraphGOtermdf, id.vars='Names')
+data.m
+pdf("flipgroupedbargraphGOterm.pdf")
+ggplot(data.m, aes(Names, value)) +   
+  geom_bar(aes(fill = variable), position = "dodge", stat="identity") + coord_flip() + labs(title = "Grouped Bar graph 95T vs 95C, B2G lev 2 ????")
+dev.off()
+
+## note: order of GO#s, GOterms in plots **different** betw two graphs ????????
+## To test: remove title from latter plot, see if any affect ????????
+pdf("flipgroupedbargraphGOterm_notitle.pdf")
+ggplot(data.m, aes(Names, value)) +   
+  geom_bar(aes(fill = variable), position = "dodge", stat="identity") + coord_flip()
+dev.off()
+## no help, same order as try 'with title' ????????????????????????
+## But each GO#, GOterm **found** on each graph
+
+## Q: trt = leaf spot ... ??????????????????, go ck vikas paper, try compare other reported GO terms for this trtmnt ???????????????
+## So next, do this graph for 'MF', 'CC'.
+
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF
+## p-222, vbuffalo
+table(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF$GO.id %in% Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF$GO.id)
+TRUE 
+   2 
+## so, all GO#s in 95C also in 95T 'MF'.
+
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF$GO.id
+Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF
+dim(Bl2GO_95C_xls_OVER_05_3col_lev2_cp_3_MF)  ## [1] 2 3
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_MF)  ## [1] 8 3
+## 5 of these 'extra' rows have very low number of sequences.
+## Q: perhaps try bar grph all 8 GO#s in combined graph, just put zero in for number of seqs for the 6 extra GO#s in 95T.
+save.image(file="dirb2gWorkspace_june28_16.RData")
+ls()
+
+## Q: MEANING OF MY 95C, 95T COMPARISON (THINKING OF KEENAN FIPS 2016 paper ???????????????????????????
+## Q: consider doing some of the meta data presented in this paper on 95C, 95T data set  ????????
+
+STOPPED
+
+07/18/16:
+## talked to Vikas, opinion: next, take 'grouped bar chart' data, the GOterms there with bit ratio for treated, try see if can relate leaf-spot affected genes in lit. to the genes in GO consortium for the GOterms wi big ratio in my for ex., BP 'grouped bar chart'.
+
+## Q: where find genes associated with GOterms? 
+
+07/20/16:
+## Goal: identify genes in diff'ly expressed tx's in 95T?
+
+## Plan:
+## After looking around Gene Ontology Consortium a bit, looks like searching starting from GOterm to genes say not practical. Looks like **lots** of genes for each GOterm. For example, 'single-organism process' is a term enriched for 95T vs 95C. Looks like no practical way to search for what genes included in this term? Perhaps possibly, take tx's in 95T 'diff'ly expressed' set compared to 95C, blast, subset the tx's assoc'd with GO# associated wi GOterm 'single-organism process'. Then if want to find an associated gene with tx's in this subset, perhaps blast vs nr nucleotide db (Q: make sure RNA, cDNA, relationship correct?). Finally, compare these genes with 'leaf spot' genes cited in Keenan FIPS paper, cited lit?
+
+## WAIT?
+## already have GO#s for each of 2638 DE 95T tx's. 'single-organism process' has GO# = 44699.
+## go back vitas 3-colm file, have GO# for each of 2638 unique DE tx's. So search file wi tx's wi this GO#. Then, blast seqs of such tx's to see what genes they 'hit'. Q: What if 'lev2' output from blast2go is 'parent of' some of these GO#s, thus, could not find subset of DE tx's which are 'single-organism process'? Q: what is a 'single-organism process'? Perhaps way relate GO# = 44699 to the GO#s assocd wi the DE tx's, i.e., perhaps blast2go, some other s/w ????????????????
+
+___________________________________________________________________________
+07/28/16:
+
+## SUMMARY, DOCUMENTATION, & ***WHAT TO DO NEXT***
+## talked Keenan today, 
+i) do get genes behind lev2 GO#s in grouped bar Chart
+ii) but redo plot after 1st normalizing 95T, 95C graphed values (median, then divide each value by median, < the median values >1, < median values, <1. Should at a glance see relative sizes each pair, 95T, 95C plotted together. 
+iii) then try relate pfam families with genes, and couple diseases, wi 'machine' to find relationships
+iv) vikas, TF db, motif, KEGG
+
+input for b2go, fisher ex. test (2 files)
+
+line 6651, 6657
+--threecolmxlsvikasform.txt
+
+line 7034
+--(wc threecolmxlsvikasform.annot
+  324107 1591873 20162525 threecolmxlsvikasform.annot)
+  
+line 7043
+--## select test set => colm1_95Tupvikasform_uniq.txt
+
+line 7047
+--## 11:33pm => 12:19am, 6/17/16, so **24:44** hr:min to run.
+
+line 7051 (blast2go_statistics_20160617_0917.txt => not fisher ??????????
+
+
+line 7128
+output b2go, fisher ex. test
+/Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95T_frommacbook/blast2go_fisher_20160602_2212.txt
+
+line 7130
+## now filter 95T b2go fisher exact test saved txt output 1st for 'Over.Under' 
+
+line 7133
+cd /Users/bterry/macbook2016/keenanres16/Bdac/b2go_chtmakstat/95T_frommacbook
+wc blast2go_fisher_20160602_2212.txt
+     753 1489910 38555079 blast2go_fisher_20160602_2212.txt
+
+line 7138
+Bl2GO_95T_xls <- read.delim("blast2go_fisher_20160602_2212.txt", stringsAsFactors=FALSE)
+
+line 7148
+Bl2GO_95T_xls_OVER <- Bl2GO_95T_xls[grep("OVER", Bl2GO_95T_xls[[9]], perl=TRUE), ]
+dim(Bl2GO_95T_xls_OVER)  ## [1] 632  12
+
+line 7156
+## next, filter for FDR < 0.05
+Bl2GO_95T_xls_OVER_05 <- Bl2GO_95T_xls_OVER[Bl2GO_95T_xls_OVER[[3]] < 0.05, ]
+dim(Bl2GO_95T_xls_OVER_05)  ## [1] 632  12
+
+line 7161
+write.table(Bl2GO_95T_xls_OVER_05, file = "Bl2GO_95T_xls_OVER_05.txt", quote=FALSE, sep="\t")
+
+line 7176
+# ***paste*** for colm 1
+colm1 <- paste("95T", c(1:632), sep="")
+
+line 7189
+Bl2GO_95T_xls_OVER_05_3col <- data.frame(cnt95T = colm1, GO.ID = GO_ID, Term = Termcolm, stringsAsFactors=FALSE)
+dim(Bl2GO_95T_xls_OVER_05_3col)  ## [1] 632   3
+
+line 7197
+write.table(Bl2GO_95T_xls_OVER_05_3col, file = "Bl2GO_95T_xls_OVER_05_3col.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+## has *************95T??******* number in 1st colm 
+
+line 7225
+## for 95C, From
+...
+
+line 7226-8 (confusion ?????????????????????????????????)
+...
+
+line 7308
+write.table(Bl2GO_95C_xls_OVER_05_3col, file = "Bl2GO_95C_xls_OVER_05_3col.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+line 7334 (95C)
+cp Bl2GO_95C_xls_OVER_05_3col.txt Bl2GO_95C_xls_OVER_05_3col.annot
+## Ready to run on macbook chart/make statistics with 2nd pro key.
+
+line 7345
+1. got the level 2 chart/make statistics done for both 95T & 95C. For now, saving txt, pdf files to ~/b2gWorkspace dir.
+
+Bl2GO_95T_xls_OVER_05_3col_lev2.txt
+
+
+line 7352
+2. suggest do ggplot2 for muli-histogram for 95T, 95C.
+## me, perhaps normalize 95T, 95C 1st, i.e., say take median each data set,
+calc. ratio each value compared to median\, then do grouped bar plot ????????
+
+
+STOPPED
+
+To finish: thru grouped bar graph
+
+...
+
+## mapping grouped bar graph GOterms back to specific set tx's from which they were built. Idea (?) Blast these tx seqs vs NR nucleotide db, find genes behind/underlying for example, 44699, 'single-organism process'. Is this a GOAL?
+
+95T...lev2 (44699, single-organism process)
+
+=> map 95T##'s to ...3col.txt file, colm1, (the subset under 44699, single-organism process)
+
+=> map assoc'd GO#s to tx's in threecolmxlsvikasform.annot
+
+=> map tx's to trinity.fasta, tx's & assocd seq.
+
+=> blast these seqs vs NR nucleotide db
+
+=> list top hit genes as those responsible for GO# = 44699, 'single-organism process' from grouped bar graph.
+
+
+_____________________________________________________________________________
+
+## do a push to github/planets
+
+
+
+## need locate DE file for 95T tx's, (think ~ 2600).
+
+
+
 
 R
 getwd()
