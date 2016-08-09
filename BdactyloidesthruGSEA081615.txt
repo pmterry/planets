@@ -7631,8 +7631,10 @@ ___________________________________________________________________________
 ## SUMMARY, DOCUMENTATION, & ***WHAT TO DO NEXT***
 ## talked Keenan today, 
 i) do get genes behind lev2 GO#s in grouped bar Chart
-ii) but redo plot after 1st normalizing 95T, 95C graphed values (median, then divide each value by median, < the median values >1, < median values, <1. Should at a glance see relative sizes each pair, 95T, 95C plotted together. 
-iii) then try relate pfam families with genes, and couple diseases, wi 'machine' to find relationships
+ii) but redo plot after 1st normalizing 95T, 95C graphed values (calc median, then divide each value by median, values > median, their values  >1, values < median, their new values now  <1. Should at a glance see relative sizes each pair, 95T, 95C plotted together. 
+iii) then try relate pfam families with genes, and couple diseases, wi HMM alg (?) to find relationships. Q: exactly what is idea ?????????????????
+## for example, NB ARC (possible gene resisting leaf spot disease), search pfam for, then clustal, MSA, then HMM Build, then HMM search trinity.fasta for B. dactyloides version of NB ARC, then check if such seqs in DE tx's for 95T. ?????????????????????
+
 iv) vikas, TF db, motif, KEGG
 
 input for b2go, fisher ex. test (2 files)
@@ -7741,13 +7743,88 @@ To finish: thru grouped bar graph
 
 _____________________________________________________________________________
 
-## do a push to github/planets
+## do a push to github/planets, done.
+
+
+08/01/16:
+## several tasks above incomplete, but here, try do 'median' normalization before grouped bar graph plot for 'BP' GO#s, then GOterms.
+
+cd b2gWorkspace
+r
+load(file="dirb2gWorkspace_june28_16.RData")
+ls()
+class(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort)
+dim(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort)
+head(Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort, n=3)
+Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort
+
+grpdbargraphdf
+
+NamesGOid <- Bl2GO_95T_xls_OVER_05_3col_lev2_cp_3_BP_GOsort$GO.id
+NamesGOid
+## need median normalize C95, T95 before make df, grpdbargraphGOiddf
+C95
+medC95 <- median(C95)
+medC95
+vnormC95 <- C95/medC95
+vnormC95
+
+T95
+medT95 <- median(T95)
+medT95
+vnormT95 <- T95/medT95
+vnormT95
+## Q: this should work even if medians are 2 & 15. Since each value is relative to each median (like in 'median units', should give relatable size bars, can compare ???????????????????????
+
+grpdbargraphGOidmeddf = data.frame(NamesGOid, vnormC95, vnormT95, stringsAsFactors=FALSE)
+grpdbargraphGOidmeddf
+
+## next, lines 7541 - 43, create median normaln for C95, T95, then grpdbargraphGOidmeddf, then melt, & ggplot.
+
+## now do the 'melt' preceding the ggplot.
+
+library(reshape)
+dataGOidmed.m <- melt(grpdbargraphGOidmeddf, id.vars='NamesGOid')
+dataGOidmed.m
+
+install.packages("ggplot2")
+library("ggplot2")
+pdf("xaxisgroupedbargraphGOidmed.pdf")
+ggplot(dataGOidmed.m, aes(NamesGOid, value)) +   
+  geom_bar(aes(fill = variable), position = "dodge", stat="identity")
+dev.off()
+## working fine, now flip it
+
+pdf("flipgroupedbargraphGOidmed.pdf")
+ggplot(dataGOidmed.m, aes(NamesGOid, value)) +   
+  geom_bar(aes(fill = variable), position = "dodge", stat="identity") + coord_flip()
+dev.off()
+
+
+## refer 07/28/16, talk wi Keenan (notes above)
+
+## mapping grouped bar graph GOterms back to specific set tx's from which they were built. Idea (?) Blast these tx seqs vs NR nucleotide db, find genes behind/underlying for example, 44699, 'single-organism process'. Is this a GOAL?
+
+95T...lev2 (44699, single-organism process)
+
+=> map 95T##'s to ...3col.txt file, colm1, (the subset under 44699, single-organism process)
+
+=> map assoc'd GO#s to tx's in threecolmxlsvikasform.annot
+
+=> map tx's to trinity.fasta, tx's & assocd seq.
+
+=> blast these seqs vs NR nucleotide db
+
+=> list top hit genes as those responsible for GO# = 44699, 'single-organism process' from grouped bar graph.
+
+
+
+
+
 
 
 
 ## need locate DE file for 95T tx's, (think ~ 2600).
-
-
 
 
 R
