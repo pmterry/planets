@@ -7818,7 +7818,81 @@ dev.off()
 => list top hit genes as those responsible for GO# = 44699, 'single-organism process' from grouped bar graph.
 
 
+08/08/16:
+pushed this file to github
 
+08/09/16:
+## in Bl2GO_95T_xls_OVER_05_3col_lev2_cp.txt, for row 'GO:0044699' get colm 4, 'seqs', 235 of them ??????
+sort
+uniq
+select matching records from colm 1 of Bl2GO_95T_xls_OVER_05_3col.txt
+
+select matching GO#s records from colm 2 of threecolmxlsvikasform.txt
+
+select matching tx's from trinity.fasta (Q: location, is there one on macbook ??)
+
+## ref: line 4679
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+ls -al
+less Trinity.fasta
+>TRINITY_DN10610_c0_g1_i1 len=460 path=[946:0-169 948:170-236 943:237-459] [-1, 946, 948, 943, -2]
+CGCATGCTGTTTGTGCAGTGGTGCAGTTCAGAGCGTTGGTGTTGAGCCGGGAAATGGGTA
+TGCCTTATCTGACATAATTCACTGGGGGTAGCAATCCGGAATTCCACACCTACTAGCTGC
+
+## so looks like can match tx's in Trinity.fasta with colm 1 of threecolmxlsvikasform.txt
+
+## should now have the records in Trinity.fasta which produced specific GO#/GOterm in lev2 file above.
+
+# perhap grep from linux shell the '^>TRI' rows before go into R ????
+
+08/16/16:
+Talked to keenan,
+NB ARC domain, a family of proteins. Search pfam for this name, get seqs, then these vs trinotate db (or trinity if no seqs in trinotate db ???), try find B. dactyloides wi HMMER, perhaps creates MSA like output (??) Perhaps search vs tx's from say a GOterm from lev2 b2GO ????????
+
+
+08/28/16:
+## reading thru tab.0124.pdf (read 1st 8 pages) at /Users/bterry/macbook2016/keenanres16/Bdac/pfam/tab.0124.pdf
+
+## find lot of work has been done on disease resistance in plants. Also, note, at http://www.ncbi.nlm.nih.gov/books/NBK7286/ at ncbi, article: Overview of Intracellular Compartments and Trafficking Pathways, helpful, since, intracellular compartments impt in disease resistance in plants.
+
+## so back to plan of 08/16/16 above.
+
+## need get list of protein families Keenan says has (i.e., in addition to NB ARC domain. **TO DO.**
+
+
+STOPPED
+
+09/12/16:
+## Can't get globus going, so try scp -r for copying $WORK home dir from crane to new 3 Tb extl hdrive connected to 'pro' laptop.
+
+cd /Volumes
+cd Volumes
+cd /Volumes/My Passport for Mac
+
+
+scp -r pterry@crane.unl.edu:/work/amundsen/pterry/ .
+## start 12:28pm.
+## progress showing on screen.
+> 429*8
+[1] 3432
+> (429*8)
+[1] 3432
+> (429*8)/60
+[1] 57.2
+> 
+## so ~ 2 and 1/2 days to complete.
+## connection closed after only ~ 6 GB copied.
+
+10/20/16:
+## **upgraded** to bioconductor 3.4 today
+source("https://bioconductor.org/biocLite.R")
+    biocLite("BiocUpgrade")
+## written for r 3.3.1 which i have on macbook.
+
+10/31/16:
+## do a push to github... planets from 'macbook'
 
 
 
