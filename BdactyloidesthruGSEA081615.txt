@@ -7884,6 +7884,9 @@ scp -r pterry@crane.unl.edu:/work/amundsen/pterry/ .
 > 
 ## so ~ 2 and 1/2 days to complete.
 ## connection closed after only ~ 6 GB copied.
+## that is, stopped this, succeeded with globus, before 10/31/16. e.g., copied to 'pro' keenan's office, then to 3Tb extl hdrive, then time capsule backed up pro. 
+TO DO: bit of checking to see if can find, recover couple files from these 'attic' copies.
+
 
 10/20/16:
 ## **upgraded** to bioconductor 3.4 today
@@ -7892,7 +7895,659 @@ source("https://bioconductor.org/biocLite.R")
 ## written for r 3.3.1 which i have on macbook.
 
 10/31/16:
-## do a push to github... planets from 'macbook'
+## do a push to github... from ~/planets from 'macbook'
+
+11/03/16:
+## Try do on macbook. Create a dir., /Users/bterry/macbook2016/keenanres16/Bdac/pca
+
+Try to do pca analysis on file Trinity used for their pca
+attempt. See above, 12/21/15, slurm_comp_reps_for_each_sample_PCA.sh. So file to do pca on is Trinity_trans.counts.matrix. So, copy file from 'attic' archive from 3T extl hdrive.
+/Volumes/My Passport for Mac/attic/Trin21test/95C1-3T1-3/qc_comp_reps/Trinity_trans.counts.matrix
+## to 
+/Users/bterry/macbook2016/keenanres16/Bdac/pca
+ls -al
+-rw-r--r--   1 bterry  staff  9495163 Oct 25 22:09 Trinity_trans.counts.matrix
+## Now, code similar to stat873, fall, 2016, for lab3prob3a &/or 3b.
+
+philip-terry-2:pca bterry$ wc Trinity_trans.counts.matrix
+  165460 1158219 9495163 Trinity_trans.counts.matrix
+  
+## see r code script, Trtrctspca.R  
+
+## Note: perhaps check 3Tb external drive /Volumes/My Passport for Mac/attic/Trin21test/95C1-3T1-3/qc_comp_reps dir for output from running Trinity_trans.counts.matrix.R output.
+## I note there using 'log2', why here ???????????????????????
+## writes the 'loadings', and 'scores' to a file (**NOT** finding these two files in qc_comp_reps dir ??????????)
+## note, I generated DE output ('up' from 95T & 95C). Perhaps could run printcomp on an input file containing these ?????????????????
+pca$loadings  ## so almost no difference in components
+## of eigenvectors, PC1, or PC2. Would this be expected ??????????????
+> dim(scoresm)  ## = pca$scores
+[1] 165459      6
+## Q: if try make vikas ggplot, do I 1st try reduce number records in pca$scores file to plot ???????????????
+
+11/04/16:
+Talked to Vikas about use pca on Trinity_trans.counts.matrix file. Questions to be answered:
+i) clarify how analyze variance loadings (eigenvector 'components'). How use the sign on the components?
+ii) do split, Q: how would work, since each tx counts listed for all 6 samples ????????? Perhaps use my DE up regulated list of tx's for 'C', 'T' samples? 
+iii) vikas, R script in methods section, take say top 1000 tx's, perhaps log2 ???, with highest variance, run princomp on. Q: similar to DE objective ???? See his paper 'Nature scientific Reports, 6:34908, 2016' supplementary methods section, p-2 for R script to do.
+iv) > pca$loadings, Cumulative Var    0.2    0.4    0.6    0.8    1.0, Eskridge ????????
+v) biplot, scale on top, RHS of plot ???????
+## on a biplot, what are the lines, eigenvectors ???????????????
+vi) email vikas, internet address to access his paper ??????
+vii) scree plot
+
+## Q: what was trinity s/w trying to achieve with a pca plot ??????????????
+
+11/05/16:
+## ok, work on HMMER and Bdac trinity data.
+## info from Keenan, steps
+## 1. pfam, dnload gene family (NB ARC)
+## 2. pfam google search ?????
+## 3. coronation (??) & model, LHS of web page => **how** keenan get to this page ?????????????
+## b. then dnload raw HMMER ???, NB ARC
+## 4. HMMER search trinity.fa
+## ?. HMMBUILD
+
+## Proceed wi vikas idea, run pca top 1000 tx's with highest variation.
+11/07/16:
+## Wait, talked to K. Eskridge, 1st need to check quality of data in Trinity_trans.counts.matrix file. If ok, perhaps go for most variable 1000 tx's, but not as Vikas did.
+
+11/08/16:
+## Apply **Chebyshev's theorem**: the proportion of any distribution that lies within k std devs of the mean is at least: 1 - 1/k^2, where k is a +ve number greater than 1. This theorem applies to all distributions of data.
+
+For Trinity_trans.counts.matrix file, calc.
+
+(|xbar_1 - xbar_2|)/sqrt(V(xbar_1 - xbar_2)
+
+for each row in the file. I note the std dev in denominator is additional, perhaps to allow comparison betw. the various rows ???????????????????
+
+try v buffalo & add new colm ???????
+data$size      <- 0   # Use the same value (0) for all rows
+
+## bar plot of the std devs,  see http://stats.libretexts.org/Textbook_Maps/General_Statistics/Map%3A_Introductory_Statistics_(Shafer_and_Zhang)/02%3A_Descriptive_Statistics/2.5%3A_The_Empirical_Rule_and_Chebyshev's_Theorem
+for Example
+## or v buffalo, p-217
+## or think recall one in an R club presentation ????????
+
+11/14/16:
+## .R file working on last few days, rename from TRtxctspca.R to TRtxctspca_testing.R. Then, copy to TRtxctspca.R, focus this toward direction now want to go.
+
+11/16/16:
+## Try use Chebychev theorem to find DE tx's (> 6 stdevs in either direction)
+## Mlog2_52C1dfmin6sdev has 13 records, T > C DExpression.
+## Mlog2_52C1dfplus6sdev has 28 records, C > T DExpression.
+## I note for this 28, several of the '95T' records have all zeros? Q: should one next compare these subsets to Trinity DE files? Perhaps especially test these sequences with HMMER & pfam database? 
+## Q: failed for p-216, v. buffalo, to plot ggplot2 combined with 'cut' fcn ?????????????????
+
+11/18/16:
+## Before do stuff of 11/16/16, try do 
+## Q: test calc meandif row, since values large compared to log2 input data ??
+## Try princomp, biplot on 13+28 = 41 rows mentioned in 11/16/16 above.
+## 1st, perhaps create df wi row names, & 1-char symbol for the 41 rows
+## 2nd, need matrix with 6 colms, here, total 41 rows, include colm names, 
+## 3rd, princomp (lab3probb3.R,and8.pdf, hand8.pdf, stat 873)
+## list scores, loadings, sqrt(sdev), the eigenvalues
+## and heatmap
+## df like vikas,
+data <- data.frame(Symb,PC1,PC2)
+...
+p+geom_text_repel(size=7)
+ggsave(...
+
+biplot(...
+
+11/20/16:
+## in Trtxctspca.R, results & plans:
+
+## 13 'T' < 6 stdevs grouped in one cluster as expected (A-M)
+## 28 'C' > 6 stdevs grouped in one cluster as expected (N-9)
+## Will need REDO not excluding '95C1' < mean rows, since some
+## of 'DE' tx's have zeros in all 3 'T' repeats.
+## TODO: compare 'DE' expressed tx's here with those from 
+## Trinity s/w.
+## Agreenent with 'biplot' plot, eigenvalue 'components'
+## grouped same place as their variables on ggplot plot.
+## still 'cut' in vbuffalo, p-216 ?????????????????
+## Sc2, St2, Sp2, use ???????????????????? *****??????******
+
+## **TO DO**: doc eskridge comments of 11/21/16
+## ...
+
+1123/16:
+## perhaps find 'DE' by Trinity, see if any overlap with the 28 or 13 found > 6 stdev with Chebychev approach (Q: where documented ????????????)
+## the files to be compared are:
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pca
+
+-rw-r--r--   1 bterry  staff   308395 Oct 25 23:18 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+
+-rw-r--r--   1 bterry  staff   547935 Oct 25 23:18 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+
+## so run Trtxctspca.R down thru producing 28, 13 tx's < or > than 6 stdev's (Chebychev).
+## read in these two Trinity DE files wi 'read.delim', and compare them to the '28 & 13' wi %in%
+
+# xlsC_up_logdf <- read.delim("xlsC_up_logdf.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+C-UP <- read.delim("Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset", header=T, sep=" ", stringsAsFactors=FALSE)
+colnames(de95C-UP)
+dim(C-UP)
+Chebminus_C-UP <- rownames(Mlog2_52C1dfmin6sdev) %in% C-UP$id
+Chebplus_C-UP <- rownames(Mlog2_52C1dfplus6sdev) %in% C-UP$id
+
+
+## TO DOC: & rerun Chebychev wi all input, OR **minus** rowsums < 10 ??????? Trtxctspca_rsums.R
+## to accomplish: try subset, characterize with rowSums fcn. 
+## i) test doing a rowSums with multiple row dataframe. Ref: http://stackoverflow.com/questions/23568142/row-and-column-sums-in-r
+
+## ii) then do for 165k dataset. do 'summary' of vector (see what have), then add this vector as a colm to the data set, do before 'for' loop. Then 
+## iii) subset the 165k df for rows >= 10
+## iv) dim
+## v) run for loop. Careful, wi new 'rsums' colm, to correctly handle new colms while running for loop.
+
+## 11/28/16:
+## issue with 'Inf's & 'NA's in Mlog2_rsums
+## so, actually a record where variance for both 'C' & 'T' samples is ZERO!!
+## So, TO DO, remove the **61** records with Inf in colm 8, 'meandif'. Found with search inside BBEdit.
+## summary(Mlog2_thenotInf[,8])
+##Min.   1st Qu.    Median      Mean   3rd Qu.      Max.      NA's 
+##-629.6000   -3.9870   -1.7750   -2.9200   -0.1007  215.2000         2 
+## so, remove the 'Inf's.
+## so, still two rows of NA's, not in original input file, 
+## TO DO, remove, then proceed to comparison with Trinity's C_UP, T_Up sets
+
+## vi) compare '>' and '<' tx sets with Trinity's C_UP, T_Up sets.
+
+11/30/16:
+
+STOPPED
+
+DOC stuff this day ...
+## table of overlap betw. C_UP (2185), T_UP (3971), and BBEDitNAmin6sdev (292) & BBEDitNAplus6sdev (49).
+
+               C_UP(2185)         T_UP(3971)
+
+minus(292)        0                193(66%)
+
+plus(49)       44(90%)                0
+
+## So, get NO overlap betw. DE for 'C', 'T'
+## But, only subset of Chebychev > or < 6 stdev's vs Trinity DE's ?????????
+## explanation: ?????????????????????????????
+## Note: rwoSums >= 10, 61 rows wi 'Inf' (discarded), two rows 'NA's, discarded.
+
+## next princomp, 
+See Trtxctspca_rsums.R, 
+## one thing left, ck **Vikas**, remove rownames (here numbers) from plot ?????
+
+12/04/16:
+Try barplot (p-216, vbuffalo) using vbuffalo code, & input data file
+## Result: **FAILS** also for **PREspecified** cut data ????????????????????
+
+## so found sdvec with the sd values to use with 'cut' (ref p-216, Vbuffalo)
+## ## ok, have 49 rows > 6 stdevs as previously found for DE '95C' rows.
+
+## Now, try find out if can ggplot as p-216
+## success!
+
+## For now, move on from this Chebychev plot, left, **TO DO**, as per Vikas, try doc this plot a bit more.
+
+12/08/16:
+## try heatmap(of what?, perhaps BBEDitNArbind data ???????), as per R club, #4 meeting. Here, not using heatmap pgm, but looks like should work find when no need to cluster, but note, some comments in Galili user2016 video ( transformation, etc. considerations?)
+
+## 1st need rbind long form for 292 ('T') + 49 ('C') gtr 6 stdev count rows. Start from BBEDitNA dataframe.
+
+12/12/16:
+## Plotted Chevychev 6 sample colms several ways, don't know what to make of the data? Using Trtxctspca_rsums.R
+## Perhaps for the 341 rows, can look into bit more by scatter plot for the data input to the ggplot system. Plot input data pre-log2 (sorted by meandif), pre & after scale, post log2, before and after scale, sorted & not sorted.
+## learn how use heatmap.2 without clustering. Do pca for C_UP, T_UP. Vikas for pca plot, problem with not seeing rownames in plot ????????????
+
+
+12/13/16:
+## Talked to Keenan, now Hmmer, 
+## dnloaded NB-ARC.hmm, placed in dir Bdac/pfam on macbook.
+## 1st, on crane, to run hmmsearch wih this .hmm family with my Trinity.fasta file, expect blast type output, get best ones, p-value, ...
+## Note: looks like I need nhmmer (for DNA), not hmmsearch (for protein)
+
+
+12/14-15/16:
+12/18/16:
+## off working wi ggplot of pca, will return to Hmmer tomorrow when expect get 3.1b2 installed on crane cluster.
+
+12/19/16:
+## Comments,
+## crane has HMMER ver 3.1b2, the latest. Note: **need learn where** hmmer files installed, want to see if can open dna_target.fa ('exec' file type in mac dnload, see p-31) Upshot: someone gave wrong permissions on /util/src/BCRF/hmmer/3.1b2/tutorial/dna_target.fa file (but in 'terminal', can do head(dna_target.fa), displays as fasta file.
+## Note: 'module show hummer/3.1' not helping, refers me to 'module spider hummer/3.1' which not helping either ???????????????????
+
+## UserGuide.pdf, looks like ok try p-31, for 1st step described by Keenan.
+## create new dir inside $WORK, for 'Hmmer work' initially try run with 'srun' 
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+#cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/95TUPsubset
+cd /work/amundsen/pterry/
+ls -al
+cd ... **same level** as Trin21test
+mkdir hmm_pfam
+## see p-31, Userguide.pdf
+## > nhmmer MADE1.hmm tutorial/dna target.fa > MADE1.out
+## ck location most recent Trinity.fasta  ## created 9/14/16, location:
+#cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+cd hmm_pfam/
+grep -c "^>" Trinity.fasta  ## 165459, why working on crane ?????
+
+#scp NB-ARC.hmm to hmm_pfam dir ????????? or 'globus' ????????, or dnload direct to crane ?????????????
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+scp NB-ARC.hmm pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+## Q: setting parameters for srun ??????????????
+cd /work/amundsen/pterry/hmm_pfam
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+
+nhmmer NB-ARC.hmm /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta > Trinity_nhmmer.out
+Error: Invalid alphabet type in hmm for nhmmer. Expect DNA or RNA
+cp /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta .
+mv Trinity.fasta Trinity.fa
+nhmmer NB-ARC.hmm /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir/Trinity.fasta > Trinity_nhmmer.out
+Error: Invalid alphabet type in hmm for nhmmer. Expect DNA or RNA
+## Q: perhaps I have a protein .hmm, need a DNA/RNA one ?????????
+
+## extract best ones from out file, (pvalue)
+## make MSA (clustalw ??), perhaps, p-26, try 'hmmalign' ???
+## hmmBuild ??, new .hmm, p-30 ????, starting wi an .hmm ??????????
+## hmmSearch (??), of Trinity.fasta, new seqs, (or use nhmmer ??)
+## now compare with DE tx's, C_UP, T_UP, or the 341 from Chebychev analysis ??
+
+STOPPED
+
+12/22/16:
+## talked to Keenan, Vikas, Upshot: 
+i) Will need to revisit what did with Trinity analysis, for example, 
+ii) 'trimmed' files, were they 80 nucleotides (??), if so, short of 100 aa long TransDecoder.LongOrfs. ??????????????????
+## but wait, if Trinity.fasta.transdecorder.pep concatenates tx's > 100 aa's, what to think ?????????????
+iii) try hmmsearch, so see if can run on crane using Trinity.fasta.transdecoder.pep ???????????????????????????????
+
+## det. number '>' in two pep files, trinity.fasta ??
+grep -c "^TRI" Trinity_trans.counts.matrix
+165459
+grep -c "^>" Trinity.fasta
+165459
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+## from /work/amundsen/pterry/Trin21test/95C1-3T1-3/ dir,
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3
+cd transdecoder/
+ls -altop
+## find Trinity.fasta.transdecoder.pep ??
+grep -c "^>" Trinity.fasta.transdecoder.pep  ## ***74489***
+## find longest_orfs.pep ??
+cd Trinity.fasta.transdecoder_dir/
+grep -c "^>" longest_orfs.pep  ## 158367
+## my two 'pep' files are fasta, not MSA ????
+## so 1st, try as per Keenan, hmmsearch one at a time, the two .pep files above.
+cd ..
+pwd
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+hmmsearch NB-ARC.hmm Trinity.fasta.transdecoder.pep > hmmsrchshortpep.out
+less hmmsrchshortpep.out
+wc hmmsrchshortpep.out
+##   20512  119872 1735266 hmmsrchshortpep.out
+## now what to do with this output ????????
+## initially, perhaps scp it to macbook, examine what have. Think need create a fasta file of top hits (how decide) ???????????
+## from /work/amundsen/pterry/hmm_pfam/hmmsrchshortpep.out file
+
+12/23/16:
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/hmmsrchshortpep.out .
+ls -al
+## Hmmer User's Guide, p-21-27, discussing 'hmmsearch' output
+## 1st sec, 'header', 2nd, 'sequence top hits', list of ranked top hits (sorted by E-value, most significant hit first), formatted in a BLAST-like style.
+## last 2 colms, Q: will there be an issue relation names in these colms back to 
+Trinity.fasta.transdecoder.pep file when try subset that file by lowest E-value rows from hmmsrchshortpep.out ?????????????????????????? Perhaps not, if when subset on a tx name, take all domains for that tx when subset ???????????
+## E-value is based on the sequence bit score, which is the second number. ... log-odds score ... ???????????????????
+## 3rd colm, 'bias'. The only time you really need to pay attention to the bias value is when it’s **large**, on the same order of magnitude as the sequence bit score.
+## ... turn the biased-composition score correction off ?????????????
+## The next three colms are again an E-value, score, and bias, but only for the **single** best-scoring domain in the sequence, rather than the sum of all its identified domains.
+## The **idea** is that we might be able to detect that a sequence is a member of a multidomain family because it contains multiple weakly-scoring domains, even if no single domain is solidly significant on its own.
+## p-23
+## So ***operationally***, 
+if both E-values are significant (<< 1), the sequence is likely to be homologous to your query.
+ if the full sequence E-value is significant but the single best domain E-value is not, the target sequence is **probably** a multidomain remote homolog; but be wary, and watch out for the case where it’s just a repetitive sequence.
+## ... 'envelope' ...  ????????????????????
+## The two columns headed #doms are two different estimates of the number of distinct domains that the target sequence contains. ... These two numbers should be about the **same**.
+## ***3rd*** output section: 
+## Domain annotation for each sequence (and alignments):
+## p-24
+## The ! or ? symbol indicates whether this domain does or does not satisfy **both** per-sequence and per-domain inclusion thresholds.
+## 'conditional E-value  ?????????????????????
+## 'independent E-value' 
+## p-25
+## ??????????????????????
+## Operationally:
+## If the independent E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
+## The next **four** columns give the endpoints of the reported local alignment with respect to both the query model (“hmm from” and “hmm to”) and the target sequence (“ali from” and “ali to”).
+## ... symbology ...
+## ... envelope ...
+## Operationally, ...
+## ... las colm ...
+## p-26
+## p-27
+## summary Statistics
+
+12/24/16:
+## ok, try take highest scoring hit in hmmsrchshortpep.out, relate back to Trinity.fasta.transdecoder.pep.
+## so need to scp over (Trinity.fasta.transdecoder.pep from crane (/work/amundsen/pterry/hmm_pfam)
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/Trinity.fasta.transdecoder.pep .
+ls -al
+## Q: what are m & g in 'm.106285' & 'g.106285'. Apparently **1st** appeared in Trinity.fasta.transdecoder.pep file ??????????????????????????????
+## For highest scoring E-value in hmmsrchshortpep.out file, TRINITY_DN48137_c0_g1_i3|m.50031, can relate 1st domain in 3rd section alignment 181 to 463 to line 385075, 
+>TRINITY_DN48137_c0_g1_i3|m.50031 TRINITY_DN48137_c0_g1_i3|g.50031  ORF TRINITY_DN48137_c0_g1_i3|g.50031 TRINITY_DN48137_c0_g1_i3|m.50031 type:3prime_partial len:810 (+) TRINITY_DN48137_c0_g1_i3:99-2525(+)
+## Q: don't understand all in the prev. line ????????????????????
+## Q: i3, i6, i2, i9, are these domains ???????? each domain from 181 to 462 or 3.  Appear to only be small differences between them ??????????????????
+## found TRINITY_DN48137_c0_g1_i3|m.50031 on just one line in Trinity.fasta.transdecoder.pep file. 
+## SO WHAT TO DO ?????????
+## Should be able to take 'Sequence' colm from sec 2 of hmmsearch, do %in% to find the sec 2 hits from hmmsrchshortpep.out in Trinity.fasta.transdecoder.pep file, the rows want to build Stockholm MSA file with hmmalign.
+## Q: or do I want to get just the 'domains' specified in the 3rd sec of hmmsrchshortpep.out for each of the 'hits' ??????????????
+## a Q for Keenan ????????????????????????????????????
+********TO DO*******
+## Note: **still** need analyze scores in 'full', 'best 1 domain' as discussed p-21 to 27 of HMMER User's Guide.
+
+12/24/16:
+## TRY EXAMPLE AT:
+http://stackoverflow.com/questions/21263636/how-to-read-fasta-into-dataframe-and-extract-subsequences-of-fasta-file-in-r
+
+# created an rstudio project, 'pfam'
+#fatodftest.R
+
+fatodf_input.fasta
+>NM_000016 700 200 234
+ACATATTGGAGGCCGAAACAATGAGGCGTGATCAACTCAGTATATCAC
+>NM_000775 700 124 236
+CTAACCTCTCCCAGTGTGGAACCTCTATCTCATGAGAAAGCTGGGATGAG
+>NM_003820 700 111 222
+ATTTCCTCCTGCTGCCCGGGAGGTAACACCCTGGACCCCTGGAGTCTGCA
+
+
+getwd()  ## /Users/bterry/macbook2016/keenanres16/Bdac/pfam dir
+library("Biostrings")
+#fastaFile <- readDNAStringSet("my.fasta")
+fastaFile <- readDNAStringSet("fatodf_input.fasta")
+seq_name = names(fastaFile)
+class(seq_name)
+seq_name
+sequence = paste(fastaFile)
+sequence
+class(sequence)
+df <- data.frame(seq_name, sequence)
+df
+# successful creating desired df
+
+12/26/16:
+## **Try** subset sequence colm of df using values in new colms 'start', 'end', and create new colm for these seqs.
+
+
+12/27/16:
+## next task, subset Trinity.fasta.transdecoder.pep file by the 908 tx hits in section 2 of hmmsrchshortpep.out. Get subset, of Trinity.fasta.transdecoder.pep, the 908 rows, and domain subsets if possible (Ck: Keenan, if what want ?????)
+## 1st, need to convert fasta to df.
+## 2nd task, shorten Trinity.fasta.transdecoder.pep fasta names to part before 1st space char.
+## write.table ...
+## work in fatodftest.R file
+## So will create new file in this process, Trinity.fasta.transdecoder.pep.txt
+## Sequences in colm 2 ***not*** accurate. Got ERROR from readDNAStringSet fcn, perhaps nonstandard sequence codes (~ 7 million of them) ????????
+
+12/28/16:
+Try use BBEdit, &/or pcfb book, see if can 'see' such characters in Trinity.fasta.transdecoder.pep file.
+## created first5.pep
+## next, p-21, pcfb book, 
+## Find box, (>.*)
+## replace box, 'a .'
+## then, replace all
+## Now, try read into R in RStudio, use fatodftest.R code file.
+d <- read.delim("first5.pep", header=FALSE, col.names="seqs")
+class(d)  ## a df
+dim(d)
+head(d)  ## each sequence not on same line ????????
+
+12/29/16:
+## try BBedit first5.pep so each seq on a single line, worked. 
+## First box has \w(\r)\w. Replace box has 'nothing'. 
+## To test with 1st 6 ref/seqs, first7.pep, in case '*' at end of seq works diff. There, no '*' at end. When do on real data file, will need be **spot** checking several seqs, make sure they same as in Trinity.fasta.transdecoder.pep file.
+## first6.pep file, with '>' line to '.', and each seq on 1 line. 
+## now, using fatodftest.R
+## first6.pep placed in 6 elt char vector, good, 
+## next, get the refs for these 6 into a character vector in R, and subset the references to the part before the 1st 'space' char.
+
+12/29/16:
+
+## skip trying to select out '>' lines in BBedit, by removing sequence lines, since don't know what to do with '*' in only some sequence lines ??????????
+## instead, try grep from linux command line
+#grep -c "^>" Trinity.fasta.transdecoder.pep  ## ***74489***
+grep "^>" first6ref.pep > first6ref.out
+cat first6ref.out  ## ok, what Expect
+## next, read into R, remove all after 1st space, create character vector with the refs.
+## done.
+## finally create df, refSeqID_seq, looks ok.
+## next, create 'real' df from Trinity.fasta.transdecoder.pep, expect 74489 rows. 
+
+12/30/16:
+## create vector of seqs in Trinity.fasta.transdecoder.pep, prepping for dataframe.
+## starting wi Trinity.fasta.transdecoder.pep, copy to Trinity.fasta.transdecoder.copyseq.pep
+## next convert '>' lines to '.'
+## need check 'grep' & 'case sensitive'
+## 'find' box: (>.*)
+## 'replaceall' box: '.'  ## 74489 replacements
+## then to put each serquence on 1 line
+## 'find' box: \w(\r)\w
+## 'replaceall' box: 'nothing'  ## 309012 replacements
+grep -c "\." Trinity.fasta.transdecoder.copyseq.pep  ## 74489 as expect
+wc Trinity.fasta.transdecoder.copyseq.pep
+  **149924**  149924 20567382 Trinity.fasta.transdecoder.copyseq.pep
+## Q: why not = 2*74489 = [1] **148978** lines ??????
+## Q: TOO MANY LINES ?????????????????????????????????
+## 854 **extra** seq lines ?????????????????
+## Q: might some of seq lines be still on multiple lines ?????????????
+## Q: need to ***CHECK*** ???????????????????
+## Q: **Note**, in BBEdit, findall for ^\. gave 74489, & ^\w gave 74489
+## Q: why 'wc' not getting 2*74489 ?????????????????????? 
+## Q: to CHECK, try perhaps in for loop in R ?????????????????????????
+## see if when get vecFullSeq from for loop, if have all seqs, & they agree with Trinity.fasta.transdecoder.copyseq.pep
+
+## now, to R session, fatodftest.R, to create char vector of the seqs from Trinity.fasta.transdecoder.pep (after '>' to '.' & each seq on one line (tho with 'wc' result, unexplained, compared to '^\w' search ??????).
+
+dseq <- read.delim("Trinity.fasta.transdecoder.copyseq.pep", header=FALSE, col.names="seqs", stringsAsFactors=FALSE)
+class(dseq)  ## dataframe
+dim(dseq)  ## ## [1] 149924      1  ## why not 2*74489 = [1] 148978 ??????????
+head(dseq, n=6)  ## output looking as anticipated
+tail(dseq)
+
+12/31/16:
+## **stop** this approach for moment since can't think of way it will find why 
+> ctdot
+[1] 74489
+> ctword
+[1] 75435
+## **discrepancy** betw ctdot, ctword ?????????????????????
+## see if python script, seqread.py, p-212, cpfb book can help ?????????????
+## creatred python dir at /Users/bterry/macbook2016/keenanres16/Bdac/pfam/python
+on Macbook
+cp first6ref.pep to python dir, change name to first6ref.fta.
+cd python
+python seqread.py first6ref.fta
+
+01/01/17:
+##Try see ':'s in first6ref.fta in BBEdit.
+## see 3 per reference name, so ':' put in by seqread.py wiii be 4th in a ref.  ## But check outpiut of seqread.py to verify.
+## so test run seqread.py with first6ref.fta to see if can output to file.
+python seqread_pmt.py first6ref.fta > first6ref.out
+## first6ref.out has 4 ':'s per ref name, total 24 in 6 ref file, first6ref.fta.
+## Test linux command line 'cut' command on first6ref.out,
+cut -d: -f1,2,3,4 first6ref.out > first6ref.f1234.out
+cut -d: -f5 first6ref.out > first6ref.f5.out
+## note, a **space** at end each ref & a 'space' berfore each sequence in the outputs of 'cut'. Test eliminating using BBedit. **Worked** with 'space' in find window, 'nothing in 'replaceall' window.
+
+## Now ready try seqread_pmt.py with input Trinity.fasta.transdecoder.pep
+## cp Trinity.fasta.transdecoder.pep to python dir, change extension to '.fta', then run with seqread_pmt.py
+python seqread_pmt.py Trinity.fasta.transdecoder.fta > Trinity.fasta.transdecoder.out
+## now do cut on Trinity.fasta.transdecoder.out
+cut -d: -f1,2,3,4 Trinity.fasta.transdecoder.out > Trinity.fasta.transdecoder.f1234.out
+wc Trinity.fasta.transdecoder.f1234.out
+   74489  670401 15166530 Trinity.fasta.transdecoder.f1234.out
+cut -d: -f5 Trinity.fasta.transdecoder.out > Trinity.fasta.transdecoder.f5.out
+wc Trinity.fasta.transdecoder.f5.out
+   74489   74489 21109971 Trinity.fasta.transdecoder.f5.out
+
+## then check in BBedit, for 'space' char in front of 'f5' seq file, to remove it (done), and examine if what expect is in row 1 & row 74489. Looks like seqs at line 1 & 74489 match, but careful, if try compare a seq which **crosses** 2 lines in fta (pep), BBedid search function does **not** report a match.
+
+## ok, next task read in f1234, f5 files to R, convert to vectors, Need shorten refs to characters before 1st, create df with these two columns. Need shorten refs to characters before 1st 'space'. ... 908, then domains, need alifrom, ali to colms from hmmsrchshortpep.out
+
+## for f5, used for loop to get seqs vector from dataframe read in (Q: is there a recommended way ??)
+## for f1234, do a for loop, etc.
+## check from linux command line, BBedit this written df file, Trinity.fasta.transdecoder.pep.df.txt.
+wc Trinity.fasta.transdecoder.pep.df.txt
+   74490  148980 16496269 Trinity.fasta.transdecoder.pep.df.txt
+head -n 3 Trinity.fasta.transdecoder.pep.df.txt  ## 
+**no** '*' end of seqs colm ???????
+## but ***present*** in refSeqID_seq before it written to file Trinity.fasta.transdecoder.pep.df.txt **********************************
+tail -n 3 Trinity.fasta.transdecoder.pep.df.txt
+## Q: comparing refSeqID_seq inside R, 1st, 744789th (last) row, with Trinity.fasta.transdecoder.pep.df.txt 1st & last row, DISCREPANCIES ????
+
+## TO DO, compare with Trinity.fasta.transdecoder.pep, see if at least the refSeqID_seq version is accurate ????????????????
+
+01/02/16:
+
+## write this df to file, a stopping point.
+write.table(RefSeqID_seq, file="Trinity.fasta.transdecoder.pep.df.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE) 
+
+philip-terry-2:pfam bterry$ head -n 3 Trinity.fasta.transdecoder.pep.df.txt
+RefSeqID	seq
+TRINITY_DN10001_c0_g1_i1|m.106285	MYRRSSHRKTSSDVDASAAANNASDNNNTNTTSHTMKRTSTAYVSDMKDTNMDAVNATMAADGSAHHTSSSRAGAVAGSTRKTRRRMSSVSSARRRGSHSSSSTSSSKAADRMHDSGVMSSSSNSKTSRRSSMRRRNTSTSSTDMTKVTATYNAGTAARAAAAANDRNRRHTRSDGSSRDDDKDNSGVDMTCASVRADSVTKKMDRAATTVSNDAASVRARVSRSWHHAASHVWRNVRKHVHVSAMGGGTGKMSGGNAADWKRMARATDARWKAGTAAYNGHTDSVYCCDNKATGSRDRTRVWDTYKCKVYGGNHRTANTMRRVSHASMNGTKVGNDYTVADYHDASCYDSMVTGSSDYTCVWDTGDYVMYRRGHAGVDVCDDKYSCSKDAMKVWDRKTGNCRTKGHRGVNAVRGNVSASGDGVAKWNTGVSKDSDRGAAVSDDAKYVAGGNDHVVYKDASTGVHSRVKHDGVRSDANGRVSGSYDSVSDYTGTYAVYKNWTTSWSAKSDYRRVVATSDGRTDGHNVGAVGK
+
+philip-terry-2:pfam bterry$ tail -n 3 Trinity.fasta.transdecoder.pep.df.txt
+TRINITY_DN9999_c0_g1_i1|m.75417	VNRAWAKHRSVNTGVVCGHAVWACVDTNRYNRRKSKDAKAAGVKMGNGAVGAYMGAGGMYYVGYSMMYMAGMHMGYMMMYMGGAVGAAGSNGKAARYA
+TRINITY_DN9999_c0_g2_i1|m.75420	VNRAWAKHRSVNTGVVCGHAVWACVDTHRYNSSKSKDAKAAGVKMGNGAVGAYMGAGGMYYVGYSMMYMAGMHMGYMMMYMGGAVGAAGSNGKAARYA
+TRINITY_DN99_c0_g2_i1|m.125359	MASASSSSVDGYRRTDAGTGSTSSHAWWRACAVAAAHGAKHVAWSSSTSATVSSDGRSSARHRRDGG
+
+## Compare to Trinity.fasta.transdecoder.pep
+1st ref, Seq
+
+>TRINITY_DN10001_c0_g1_i1|m.106285 TRINITY_DN10001_c0_g1_i1|g.106285  ORF TRINITY_DN10001_c0_g1_i1|g.106285 TRINITY_DN10001_c0_g1_i1|m.106285 type:complete len:728 (+) TRINITY_DN10001_c0_g1_i1:361-2544(+)
+MYRRQSILSHRPKTSSDVDAESAAAQNNAFSDNNNTNTTPIQPSPPHTMKRTISQTFPAP
+YVSDMKDTNMLDAVNEATMAADGSAHHQQTSSFSRAFGAVAGSFTRQKTRRRMSSVSSPI
+PAQRRRGSIHSLFESLPSSTSSQSKPAADQRMPLQHQDSGIPVFQMQQSQPSSSNSKTFS
+PFRRLSSMRRRPNTSTSSTDMTKPVFTAPTYPNQALPGTAARQAAAAANQDRQNQLRREQ
+EHTRSFLDGLIPSSRDDDLKDNESGVDMTCASPIVRADSVTEKKMIDPFQRLPAELATTV
+LSNLDAASLVRAERVSRSWHEHAASPHVWRNVFLRKHEPEVHVSPAPIQMGGLGTGKMSG
+GNPAPAQDWKRMFQARATIDARWKAGTPAAIYLNGHTDSVYCCQFDENKAITGSRDRTIR
+VWDLQTYKCIKVYGGPNHRPTANTPPPMEERPERVISHASMNGTKVGNDIYTVPADYHDA
+SILCLQYDSEIMVTGSSDYTCIVWDITGDEYVPMYRLRGHEAGVLDVCLDDKYIISCSKD
+AMIKVWDRKTGNCLRTLKGHRGPVNAVQLRGNFLVSASGDGVAKLWNLETGVSIKDFPSE
+DRGLAAVEFSDDAKYVLAGGNDHVVYKFDASTGELVHSRVKHDGLVRSLFLDAFNGRIVS
+GSYDQSIQVSDYETGQTYAVYKNWTTSWILSAKSDYRRVVATSQDGRTLILDFGHNVPGA
+ELLVGFK*
+
+last ref/Seq (line 458936)
+>TRINITY_DN99_c0_g2_i1|m.125359 TRINITY_DN99_c0_g2_i1|g.125359  ORF TRINITY_DN99_c0_g2_i1|g.125359 TRINITY_DN99_c0_g2_i1|m.125359 type:3prime_partial len:100 (+) TRINITY_DN99_c0_g2_i1:68-364(+)
+MASPASSPSSVDGYRERTDLAGTLGSTSSHAPWWRQACAVAAAPPLPHPGAKEQQHPEPQ
+VQAWSSPSPTSAPITVSSFDGRPSSAELRHPRRDQGGPP
+
+
+## From refSeqID_seq dataframe in R
+> head(refSeqID_seq, n=3)
+                           refSeqID
+1 TRINITY_DN10001_c0_g1_i1|m.106285
+2 TRINITY_DN10001_c0_g2_i1|m.106290
+3 TRINITY_DN10002_c0_g1_i1|m.106280
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       v_s
+1 MYRRQSILSHRPKTSSDVDAESAAAQNNAFSDNNNTNTTPIQPSPPHTMKRTISQTFPAPYVSDMKDTNMLDAVNEATMAADGSAHHQQTSSFSRAFGAVAGSFTRQKTRRRMSSVSSPIPAQRRRGSIHSLFESLPSSTSSQSKPAADQRMPLQHQDSGIPVFQMQQSQPSSSNSKTFSPFRRLSSMRRRPNTSTSSTDMTKPVFTAPTYPNQALPGTAARQAAAAANQDRQNQLRREQEHTRSFLDGLIPSSRDDDLKDNESGVDMTCASPIVRADSVTEKKMIDPFQRLPAELATTVLSNLDAASLVRAERVSRSWHEHAASPHVWRNVFLRKHEPEVHVSPAPIQMGGLGTGKMSGGNPAPAQDWKRMFQARATIDARWKAGTPAAIYLNGHTDSVYCCQFDENKAITGSRDRTIRVWDLQTYKCIKVYGGPNHRPTANTPPPMEERPERVISHASMNGTKVGNDIYTVPADYHDASILCLQYDSEIMVTGSSDYTCIVWDITGDEYVPMYRLRGHEAGVLDVCLDDKYIISCSKDAMIKVWDRKTGNCLRTLKGHRGPVNAVQLRGNFLVSASGDGVAKLWNLETGVSIKDFPSEDRGLAAVEFSDDAKYVLAGGNDHVVYKFDASTGELVHSRVKHDGLVRSLFLDAFNGRIVSGSYDQSIQVSDYETGQTYAVYKNWTTSWILSAKSDYRRVVATSQDGRTLILDFGHNVPGAELLVGFK*
+
+> tail(refSeqID_seq, n=3)
+                             refSeqID
+74487 TRINITY_DN9999_c0_g1_i1|m.75417
+74488 TRINITY_DN9999_c0_g2_i1|m.75420
+74489  TRINITY_DN99_c0_g2_i1|m.125359
+                                                                                                                                                            v_s
+74487 VNRAWAEKPHRISVNLTGVVCQFFGLFLHFALFVWACVDTNRYNRRKISKDAEKLAAGIVEKMIGNGAIVPPPGQAYMQPGAGQGMYYQVPPQGYSMQPMYMQPAPGQQQQFMHPQQMGQQQYMMPMQYPMGQQGPAVGAAGPSNGKAARYA*
+74488 VNRAWAEKPHRISVNLTGVVCQFFGLFLHFALFVWACVDTHRYNSSKISKDAEKLAAGIVEKMIGNGAIVPPPGQAYMQPGAGQGMYYQVPPQGYSMQPMYMQPAPGQQQQFMHPQQMGQQQYMMPMQYPMGQQGPAVGAAGPSNGKAARYA*
+74489                                                       MASPASSPSSVDGYRERTDLAGTLGSTSSHAPWWRQACAVAAAPPLPHPGAKEQQHPEPQVQAWSSPSPTSAPITVSSFDGRPSSAELRHPRRDQGGPP
+
+## LOOKS like the refSeqID_seq version in R is ***accurate***, so WHAT TO THINK OF THE STEP OF ***WRITING*** refSeqID_seq to Trinity.fasta.transdecoder.pep.df.txt file ???????????????????
+
+## Q: can I do next step to subset from Trinity.fasta.transdecoder.pep the 908 hits from hmmsearch output (hmmsrchshortpep.out), then subset those 908 to domains, from fields 'alifrom, ali to' colms from hmmsrchshortpep.out. Without being able to reliably save the dataframe to a file? Note: saved python results, not much to regenerate dataframe from them.
+
+STOPPED
+
+## next, try subset the 908 hmmsearch hits reported in hmmsrchshortpep.out.
+## Perhaps, make copy of hmmsrchshortpep.out, 
+hmmsrchshortpepcopy.out
+
+## then in BBEdit, in sec 2, select lines 15 thru 924 (total 908 lines, remove dashed line (16), save as hmmsrchshortpepsec2.out
+## ***Still*** need check what doc. indicated needed to check for the 'scores' betw. 'fullm seq' & 'best 1 domain' ???????
+## refer 12/23/16 above, following 5 (last 5) have 'bias' same order of magnitude as the sequence bit score. Thus need remove these from sec2
+
+TRINITY_DN45340_c0_g1_i1|m.120072   TRINITY_DN45340_c0_g1_i1|g.12007
+TRINITY_DN47593_c0_g1_i2|m.54878    TRINITY_DN47593_c0_g1_i2|g.54878
+TRINITY_DN47466_c0_g1_i1|m.146536   TRINITY_DN47466_c0_g1_i1|g.14653
+TRINITY_DN45259_c1_g1_i1|m.66031    TRINITY_DN45259_c1_g1_i1|g.66031
+TRINITY_DN45259_c1_g1_i2|m.66034    TRINITY_DN45259_c1_g1_i2|g.66034
+
+## **YET TO DO**
+
+## 702-4 rows, possible multidomain remote homolog (Q: what to do with these ????????????????????????????)
+
+## Q: defn (<< 1) => ***where*** to stop including rows ??????????????
+## Q: hmmsearch keeping all 'full' E-score rows < 10, but this criterion throwing many berfore that.
+
+## #doms, should be about the **same** (Q: is 2 vs 1 similar enough ???????
+## down to row 791, 'about same'
+
+## Note row 791, --- inclusion threshold ------, Q: is ***this*** where should not include any more rows ?????????????????????????????????
+
+## ***3rd*** output section: 
+## The ! or ? symbol indicates whether this domain does or does not satisfy **both** per-sequence and per-domain inclusion thresholds.
+
+## If the independent E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
+
+## perhaps grep all the '  1  !' lines as ones 'to include' ???????????? But since tx name not in the line, may neet grep all the '>>' lines in sec3 also. Will need connect these names wi the '  1  !' lines to include. May have to connect with section 2 rows plan to 'include' ??????????????????
+
+## The next **four** columns give the endpoints of the reported local alignment with respect to both the query model (“hmm from” and “hmm to”) and the target sequence (“ali from” and “ali to”).
+## if plan to select 'domain', then will need associate (“ali from” and “ali to”) with 'hit' name ??????????????????
+
+## summary Statistics
+## Q: 907, 'over threshold', ***different*** from preceding criteria ???????????
+
+
+## Then try read into R, see if can subset by column (sequence) the dataframe (refSeqID_seq, by its column, refSeqID, thus get names of the 908 hit seqs? Finally do %in% to subset Trinity.fasta.transdecoder.pep for these 908 hit seqs (or whatever to subset the df ??????????????????
+
+
+
+
+vecFullSeq <- vector(mode="character", length=148984)  ## 6 elts longer than expected number of of seq strings
+vecFullSeq
+for(i in 1:12) {
+  if((i %% 2) == 0) {
+    vecFullSeq[i/2] <- dseq[i,1]
+  }
+}
+class(vecFullSeq)
+vecFullSeq
+
+
+
+
+
+
+
+## then, try build two vectors from this in R, preparing to put in df, then subset 908 seqs (merge wi hmmsrchshortpep.out file df to get domain location info.
+
+
+
+
+## if working, try coerce to vector, then cp every 2nd elt of 10 elt vector to new 5 elt vector ??????
+unlist(d)
+
+12/29/16:
+BBedit 
 
 
 
@@ -7961,14 +8616,3 @@ ls -al
 
 
 cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/threecolmvikas_xls
-
-
-
-
-
-
-
-
-
-
-
