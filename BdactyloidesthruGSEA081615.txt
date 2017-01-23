@@ -8229,7 +8229,7 @@ if both E-values are significant (<< 1), the sequence is likely to be homologous
 ## ... symbology ...
 ## ... envelope ...
 ## Operationally, ...
-## ... las colm ...
+## ... last colm ...
 ## p-26
 ## p-27
 ## summary Statistics
@@ -8471,7 +8471,7 @@ VQAWSSPSPTSAPITVSSFDGRPSSAELRHPRRDQGGPP
 74488 VNRAWAEKPHRISVNLTGVVCQFFGLFLHFALFVWACVDTHRYNSSKISKDAEKLAAGIVEKMIGNGAIVPPPGQAYMQPGAGQGMYYQVPPQGYSMQPMYMQPAPGQQQQFMHPQQMGQQQYMMPMQYPMGQQGPAVGAAGPSNGKAARYA*
 74489                                                       MASPASSPSSVDGYRERTDLAGTLGSTSSHAPWWRQACAVAAAPPLPHPGAKEQQHPEPQVQAWSSPSPTSAPITVSSFDGRPSSAELRHPRRDQGGPP
 
-## LOOKS like the refSeqID_seq version in R is ***accurate***, so WHAT TO THINK OF THE STEP OF ***WRITING*** refSeqID_seq to Trinity.fasta.transdecoder.pep.df.txt file ???????????????????
+## LOOKS like the refSeqID_seq version in R is ***accurate***, so WHAT TO THINK OF THE STEP OF ***WRITING*** refSeqID_seq to Trinity.fasta.transdecoder.pep.df.txt file, i.e., not accurate in this file ???????????????????????
 
 ## Q: can I do next step to subset from Trinity.fasta.transdecoder.pep the 908 hits from hmmsearch output (hmmsrchshortpep.out), then subset those 908 to domains, from fields 'alifrom, ali to' colms from hmmsrchshortpep.out. Without being able to reliably save the dataframe to a file? Note: saved python results, not much to regenerate dataframe from them.
 
@@ -8482,7 +8482,7 @@ STOPPED
 hmmsrchshortpepcopy.out
 
 ## then in BBEdit, in sec 2, select lines 15 thru 924 (total 908 lines, remove dashed line (16), save as hmmsrchshortpepsec2.out
-## ***Still*** need check what doc. indicated needed to check for the 'scores' betw. 'fullm seq' & 'best 1 domain' ???????
+## ***Still*** need check what doc. indicated needed to check for the 'scores' betw. 'full seq' & 'best 1 domain' ???????
 ## refer 12/23/16 above, following 5 (last 5) have 'bias' same order of magnitude as the sequence bit score. Thus need remove these from sec2
 
 TRINITY_DN45340_c0_g1_i1|m.120072   TRINITY_DN45340_c0_g1_i1|g.12007
@@ -8496,7 +8496,7 @@ TRINITY_DN45259_c1_g1_i2|m.66034    TRINITY_DN45259_c1_g1_i2|g.66034
 ## 702-4 rows, possible multidomain remote homolog (Q: what to do with these ????????????????????????????)
 
 ## Q: defn (<< 1) => ***where*** to stop including rows ??????????????
-## Q: hmmsearch keeping all 'full' E-score rows < 10, but this criterion throwing many berfore that.
+## Q: hmmsearch keeping all 'full' E-score rows < 10, but this criterion throwing many before that.
 
 ## #doms, should be about the **same** (Q: is 2 vs 1 similar enough ???????
 ## down to row 791, 'about same'
@@ -8515,6 +8515,388 @@ TRINITY_DN45259_c1_g1_i2|m.66034    TRINITY_DN45259_c1_g1_i2|g.66034
 
 ## summary Statistics
 ## Q: 907, 'over threshold', ***different*** from preceding criteria ???????????
+
+01/03/17:
+*****************************************
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add BdactyloidesthruGSEA081615.txt
+git commit -m "update 01/03/17 BdactyloidesthruGSEA081615.txt from macbook"
+git status
+git push origin master
+# git remote -v
+## so updated BdactyloidesthruGSEA081615.txt to github, planets repo.
+******************************************
+
+## next task, check all **indept** E-valuesin sec3, decide his criterion which hits to retain. Looks like grep of '  1  ! rows would make easier.
+## perhaps try in BBEdit with hmmsrchshortpepcopy.out file. Found 770. Go ahead, do linux command line grep, place in file hmmsrchshortpepcopy.1!.out
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+
+grep "^   1 \!.*" hmmsrchshortpepcopy.out > hmmsrchshortpepcopy.1bang.out
+## 770 records
+
+## but wait, want to relate "^   1 \!.*" rows to tx  names, so perhaps grep "   1", get all these lines, then gep all the ">>" lines, associate these in dataframe, then subset the "^   1 \!.*" rows.
+
+grep "^   1.*" hmmsrchshortpepcopy.out > hmmsrchshortpepcopy.1.all.out
+     907   14512   92514 hmmsrchshortpepcopy.1.all.out
+
+grep "^>>.*" hmmsrchshortpepcopy.out > hmmsrchshortpepcopy.sec3names.out
+     907    5442  109747 hmmsrchshortpepcopy.sec3names.out
+
+## now need decide on a subset of these rows from sec3. create a df of just these tx names. Then subset prev df refSeqID_seq from Trinity.fasta.transdecoder.pep produced thru python using this sec 3 subset.
+## SO next, NEED DECIDE ON A CRITERIA TO SELECT THIS SUBSET ????????
+
+## so go thru the various criteria, come up with a way to decide on the subset of hits want to apply to df refSeqID_seq ????????
+
+01/08/16:
+## list of criteria
+
+STOPPED
+
+## **sec2** of hmmsearch Output
+## note, 908 records in sec2
+
+## Hmmer User's Guide, p-21-27, discussing 'hmmsearch' output
+## refer line 8203 above, from 12/23/16:
+
+##(1)
+## 3rd colm, 'bias'. The only time you really need to pay attention to the bias value is when it’s **large**, on the same order of magnitude as the sequence bit score.
+## so, read into R, hmmsrchshortpepsec2.out,  but remove line ------ inclusion threshold ------, line 791, so ****790**** hits above this line remain, this file a new  name, hmmsrchshortpepsec2minusinclline.out. So, 907 hits plus header.
+
+01/09-10/16:
+## Then, read into R, use fatoftest.R to code.
+sec2df <- read.delim("hmmsrchshortpepsec2minusinclline.out", header=TRUE, sep="", stringsAsFactors=FALSE)
+
+## then compare 'full' score, 'full' bias colms ('assume' don't need do for 'best 1 domain' ?????????????)
+## would like an appropriate output to quickly see if bias is **large**.
+sec2df["biasprob"] <- integer(length(sec2df$score))
+dim(sec2df)
+head(sec2df)
+diffvec <- sec2df$score - sec2df$bias
+head(diffvec)
+length(diffvec)
+for(i in 1:length(diffvec) {
+  if(diffvec(i) < 10) {
+    sec2df(i)$biasprob <- 1
+  }
+}
+
+
+01/11/17:
+## and 398, 399 may not be correct, so go ***spot check*** some
+## diffvec values, say 100, 200, ... 900, see if their difference
+## is correct. ????????????????????????????????
+## also, for NA in row 400, check if can find that row in Trinity.fasta.transdecoder.pep file, correct its name in hmmsrchshortpepsec2minusinclline.out ('sequence' name probably ok, 'description' name has 2 spaces then a zero after name) ??????????????
+
+## so, some ambiguity after row 401 in file 
+## hmmsrchshortpepsec2minusinclline.out
+## it the row with extra zero in DESCRIPTION
+## column, TRINITY_DN916_c0_g2_i1|g.5414  O
+
+01/12-13/17:
+## WHAT TO DO ????????
+## perhaps, edit line 400 in his file
+## last zero & preceding two 'spaces' ??????)
+## do from copy of hmmsrchshortpepsec2minusinclline.out
+## hmmsrchshortpepsec2minusinclline.fix.out (fixed line 400)
+
+## perhaps read.delim this file, process so can do diffvec.
+## then redo diffvec <- sec2df$score - sec2df$bias
+## & see if diffvec now correct, no row 400 'NA'
+## now, 907 elements as expected, no NA's
+## now can proceed with determination of rows with bias
+## near 'score' (see 01/09-10/17 above)
+## put into fatodftest.R, date 01/12/17
+## count rows with 1's, 0's
+## count the '1's, the rows with bias too close to the score.
+## subset all rows wi biasprob == 1
+## result:  gave ***6*** rows, row 898 being the 1st, 907 the last
+## with 'bias' too close to 'score'.
+
+##(2)
+## So ***operationally***, 
+if both E-values are significant (<< 1), the sequence is likely to be homologous to your query.
+
+## So, use file hmmsrchshortpepsec2minusinclline.fix.out, find rows where both colms 'full' or 'best 1 domain' E-vaues are say less than .0001 ***???????***
+sec2dffix_crit2 <- sec2dffix[sec2dffix$E.value < 0.0001 & sec2dffix$E.value.1 < 0.0001, ]
+dim(sec2dffix_crit2)  ## [1] 711  11
+## ok, 711 rows by criterion (2)
+
+##01/14/17:
+##(3), exp & N
+## The two columns headed #doms are two different estimates of the number of distinct domains that the target sequence contains. ... These two numbers should be about the **same** (***how*** close ??????)
+sec2dffix_crit3 <- sec2dffix[sec2dffix$exp <= 1.5*sec2dffix$N, ]
+dim(sec2dffix_crit3)  ## [1] 763  11
+## Q: choice of '1.5 ???
+## will want to ***check*** if final set of hits after all the criteria is a subset of these 763 domains ????????????????????????
+
+## ***sec 3*** of hmmsearch Output
+## see line 8218 above
+
+##(4)
+## The ! or ? symbol indicates whether this domain does or does not satisfy **both** per-sequence and per-domain inclusion thresholds.
+## all domains
+hmmsrchshortpepcopy.1.all.out  ## 907 'domains', as sec2
+
+01/15/17:
+##(5)
+## Operationally:
+## If the independent E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
+
+## so, see how many of the 5 criteria, can do by computer ????
+## looks like need read into R the ....1.all.out file to calc how many rows have 'independent E-value' less than say 0.0001 ??????????????
+
+## perhaps read this file into R, do 
+## NOTE: addl random spurious characters in file ??????????????????
+
+sec3df1.all <- read.delim("hmmsrchshortpepcopysec3.1.all.out", header=FALSE, sep="",  stringsAsFactors=FALSE)
+dim(sec3df1.all) ## [1] 907  16
+
+sec3df1.all.4col <- sec3df1.all[, -c(1, 3:5, 7:9, 12:16)]
+dim(sec3df1.all.4col)  ## [1] 907   4
+head(sec3df1.all.4col, n=3)
+#data_frame <- setNames(data_frame, c("premium","change","newprice"))
+sec3df1.all.4col <- setNames(sec3df1.all.4col, c("bang", "i-Evalue", "alifrom", "alito"))
+head(sec3df1.all.4col, n=3)
+
+## looks ready to subset rows by values less than 0.0001 in i-Evalue colm.
+
+# for completeness, see if subset by '!' matches # rows found by grep at linux command line.
+sec3df1.all.4col_critbang <- sec3df1.all.4col[sec3df1.all.4col$bang == "!", ]
+dim(sec3df1.all.4col_critbang)  ## [1] 770   4, agrees wi linux command grep 
+
+01/16/17:
+***********************************************************
+**TO DO**, (see pencil version)
+Summary table for the 5 criteria;
+...
+**************************************************
+
+## ok, prepare df & fasta file of 706 hits for hmmalign step.
+
+## have refSeqID_seq df from Trinity.fasta.transdecoder.pep file, 74489 rows, has shortened names field, just part before 1st 'space'.
+## have sec3df1.all.4col df, 907 rows
+## To Do: get sec3df1.all.names df from hmmsrchshortpepcopy.sec3names.out file.
+## in BBedit, remove '>> ' from LHS of file, rename file to hmmsrchshortpepcopy.sec3names.LHS.out
+## Search/Find box = (>> ), replace box is empty, click 'replace all'
+
+## Read into R
+
+d_r_sec3 <- read.delim("hmmsrchshortpepcopy.sec3names.LHS.out", header=FALSE, col.names="refs", stringsAsFactors=FALSE)   
+class(d_r_sec3)  ## dataframe
+dim(d_r_sec3)  ## [1] 907     1
+head(d_r_sec3, n=3)  ## output looking as anticipated
+tail(d_r_sec3, n=3)
+v_r_sec3 <- vector(mode="character", length=907)
+class(v_r_sec3)
+head(v_r_sec3, n=3)
+for(i in 1:907) { 
+  v_r_sec3[i] <- d_r_sec3[i,1]
+}
+class(v_r_sec3)
+head(v_r_sec3, n=3)
+tail(v_r_sec3, n=3)
+length(v_r_sec3)  ## [1] 907
+
+## remove part of name past 1st 'space'. (see line 211, fatodfest.R file)
+#here try remove all after 1st space for RefS
+refSeqID_sec3 <- sub(" .*", "", v_r_sec3)
+head(refSeqID_sec3)
+## ok
+
+## create df of sec3df1.all.4col plus refSeqID_sec3, total 907 rows.
+##my.dataframe["new.col"] <- a.vector
+sec3df1.all.5col <- sec3df1.all.4col
+sec3df1.all.5col["refs"] <- refSeqID_sec3
+dim(sec3df1.all.5col)  ## ## [1] 907   5
+head(sec3df1.all.5col, n=3)
+## looks ok
+
+01/17/17:
+## subset this dataframe to the 706 rows meeting crit 5. Call it sec3df1.all.5col.names.crit5 (see line 373, fatodftest.R)
+sec3df1.all.5col.names.crit5 <- sec3df1.all.5col[sec3df1.all.5col$i_Evalue < 0.0001, ]
+dim(sec3df1.all.5col.names.crit5)  ## [1] 706   4
+
+## now subset refSeqID_seq df to these 706 rows wi innerjoin to sec3df1.all.5col.names.crit5
+## see http://stackoverflow.com/questions/1299871/how-to-join-merge-data-frames-inner-outer-left-right
+## Q: does join field need to be numeric? p-222, vbuffalo, apparently not?
+## merge(df1, df2, by = "CustomerId") 
+## 1st, need change colm name refs to refSeqID in sec3df1.all.5col.names.crit5
+#colnames(X)[2] <- "superduper"
+colnames(sec3df1.all.5col.names.crit5)[5] <- "refSeqID"
+head(sec3df1.all.5col.names.crit5)
+## ok
+merged706hits <- merge(sec3df1.all.5col.names.crit5, refSeqID_seq, by = "refSeqID")
+class(merged706hits)
+dim(merged706hits)
+head(merged706hits, n=3)
+## ok
+## next, create a colm with the 'domain' for this hit, specified by colms alifrom & alito.
+
+## substr(x,start,stop)
+merged706hits$domain <- substr(merged706hits$v_s, merged706hits$alifrom, merged706hits$alito)
+dim(merged706hits)
+head(merged706hits)
+tail(merged706hits)
+
+## ***Q:*** in v_s colm, some sequences only start after bunch of 'space' characters ??????????????????????????
+
+## Q: after create fasta file, will need to check how seqs displayed ?????????????????????????
+## prepare fasta file from a dataframe file, for hmmalign, using seqRFLP package. See http://stackoverflow.com/questions/23374100/convert-table-into-fasta-in-r
+
+## convert df to fasta file, WORK OUT HOW ?????????????
+install.packages("seqRFLP")
+library("seqRFLP")
+names <- c("seq1","seq2","seq3","seq4")
+sequences<-c("EPTFYQNPQFSVTLDKR","SLLEDPCYIGLR","YEVLESVQNYDTGVAK","VLGALDLGDNYR")
+df <- data.frame(names,sequences)
+df
+df.fasta = dataframe2fas(df, file="df.fasta")
+## Q: NOT on separate lines ????????????????? Can I use this output ????????????
+
+######## fataframe2fas() example
+dd <- dataframe2fas(paste("AAACCCTTAAAAAAATTA
+TTTTCTATTGGTTTCTTGGGGGGGTT", 1:10, sep = ""))
+dd
+## Q: would have to set up input data to use ???????????
+## 
+
+## Another website, http://stackoverflow.com/questions/23374100/convert-table-into-fasta-in-r
+col1 <- c("seq1", "seq2")
+col2 <- c("ATCGATCGATCG", "GCCATGCCATTG")
+dftest <- data.frame(col1, col2)
+dftest
+X <- dftest
+Xfasta <- character(nrow(X) * 2)
+Xfasta
+Xfasta[c(TRUE, FALSE)] <- paste0(">", X$col1)
+Xfasta
+Xfasta[c(FALSE, TRUE)] <- as.character(X$col2)
+## Q: NOW putting in sequences as example expect ???????????????
+writeLines(Xfasta, "filename.fasta")  ## looks ok.
+
+01/18/17:
+## so, ready, try create fasta from refSeqID & domain columns of merged706hits df **after** remove all columns but these two.
+colnames(merged706hits)
+## to do, remove columns 2 thru 6
+#sec3df1.all.4col <- sec3df1.all[, -c(1, 3:5, 7:9, 12:16)]
+merged706hits2col <- merged706hits[, -c(2:6)]
+dim(merged706hits2col)
+head(merged706hits2col)
+## ok
+merged706hits2colfasta <- character(nrow(merged706hits2col) * 2)
+head(merged706hits2colfasta, n=3)
+merged706hits2colfasta[c(TRUE, FALSE)] <- paste0(">", merged706hits2col$refSeqID)
+head(merged706hits2colfasta, n=3)
+merged706hits2colfasta[c(FALSE, TRUE)] <- as.character(merged706hits2col$domain)
+head(merged706hits2colfasta, n=3)
+writeLines(merged706hits2colfasta, "merged706hits2col.fasta")  ## looks ok.
+
+01/19/17:
+## **TO DO**: some checking on content of merged706hits2col.fasta file, **then** on to 'hmmalign'
+## to do: scp merged706hits2col.fasta to crane
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+## note, ran hmmsearch on crane in /work/amundsen/pterry/hmm_pfam
+## so, 
+scp merged706hits2col.fasta pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/
+
+## see line 8174
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+
+##hmmsearch NB-ARC.hmm Trinity.fasta.transdecoder.pep > hmmsrchshortpep.out
+##less hmmsrchshortpep.out
+##wc hmmsrchshortpep.out
+##   20512  119872 1735266 hmmsrchshortpep.out
+
+cd /work/amundsen/pterry/hmm_pfam
+hmmalign NB-ARC.hmm merged706hits2col.fasta > hmmalignmerged706.out
+exit
+-rw-r--r--  1 pterry amundsen   1233031 Jan 19 11:04 hmmalignmerged706.out
+
+wc hmmalignmerged706.out  ##    5662   16972 1233031 hmmalignmerged706.out
+less hmmalignmerged706.out
+## now what to do with this output ????????, run hmmBuild
+## perhaps scp back to macbook so can 'examine' the file a bit.
+logout
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/hmmalignmerged706.out .
+ls -al
+-rw-r--r--   1 bterry  staff   1233031 Jan 19 11:23 hmmalignmerged706.out
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam
+mv hmmalignmerged706.out hmmalignmerged706.sto
+
+## refer: p-20, HMMER User's Guide
+## may need change extension to 'hmmalignmerged706.sto'???? Done. 
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/amundsen/pterry/hmm_pfam
+
+hmmbuild NB-ARC.hmm hmmalignmerged706.sto > NB-ARC_TrinityBdac.hmm
+ls -al
+-rw-r--r--  1 pterry amundsen       763 Jan 19 21:55 NB-ARC_TrinityBdac.hmm
+## much smaller than 
+## is this output file name ok ???????????
+much less NB-ARC_TrinityBdac.hmm than NB-ARC.hmm ?????????????????
+-rw-r--r--  1 pterry amundsen    110770 Jan 19 21:55 NB-ARC.hmm
+exit
+less NB-ARC_TrinityBdac.hmm
+## NOTE: this file 'sort of some summary file' (????????????), see p-20, HMMER User's Guide. Q: anything to note in this 'summary' ??????????????
+## *****NOTE*****: new hmm saved **as** NB-ARC.hmm.
+-rw-r--r--  1 pterry amundsen    110770 Jan 19 21:55 NB-ARC.hmm
+## see p-21, HMMER User's Guide !!!!!!!!!!!!!!!!!!!!!!!!!!
+less NB-ARC.hmm
+
+STOPPED
+01/20/17:
+## now, new hmmsearch of Trinity.fasta.transdecoder.pep (from Trunity.fasta ??) file with 'new' NB-ARC.hmm
+## ***Ask*** about new hmmsearch ??????????????????????????
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/amundsen/pterry/hmm_pfam
+
+hmmsearch NB-ARC.hmm Trinity.fasta.transdecoder.pep > hmmsrchshortpeprefined2ndtry.out
+ls -al
+exit
+less hmmsrchshortpeprefined2ndtry.out
+wc hmmsrchshortpeprefined2ndtry.out
+  20654  111756 1719995 hmmsrchshortpeprefined2ndtry.out
+## next, refer when ran hmmsearch above for how the work with hmmsrchshortpeprefined2ndtry.out (line 8191 above)
+scp to macbook, BBedit, etc.
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/hmmsrchshortpeprefined2ndtry.out .
+ls -al
+
+01/23/17:
+## do github save (see 01/03/17)
+
+## Then what, search output file hits wi **blastp** ????????????
+## identify/relate the tx names of hits ???????????????
+
+
+
+## initially, perhaps scp it to macbook, examine what have. Think need create a fasta file of top hits (how decide, perhaps 'crit5) ???????????
+## from /work/amundsen/pterry/hmm_pfam/hmmsrchshortpeprefined2ndtry.out file.
+
+## p-1722, blastx, 
+#module load blast/2.2.29  ## is this up to date ?????????????????
+#blastx -query Trinity.fasta -db $TRINOTATE_SP -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastx.outfmt6
+
+# note: new query for blastp will be the hits from '2nd' hmmsearch output (hmmsrchshortpeprefined2ndtry.out), for example, sec3, i_Evalue < ***.0001*** ?????????????????
+## Q: p-773, Cell Reports, new trinotate pub, **what** protein db('s) to use ???????????
 
 
 ## Then try read into R, see if can subset by column (sequence) the dataframe (refSeqID_seq, by its column, refSeqID, thus get names of the 908 hit seqs? Finally do %in% to subset Trinity.fasta.transdecoder.pep for these 908 hit seqs (or whatever to subset the df ??????????????????
