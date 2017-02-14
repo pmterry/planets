@@ -8642,7 +8642,7 @@ hmmsrchshortpepcopy.1.all.out  ## 907 'domains', as sec2
 01/15/17:
 ##(5)
 ## Operationally:
-## If the independent E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
+## If the **independent** E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
 
 ## so, see how many of the 5 criteria, can do by computer ????
 ## looks like need read into R the ....1.all.out file to calc how many rows have 'independent E-value' less than say 0.0001 ??????????????
@@ -8881,10 +8881,567 @@ scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/hmmsrchshortpeprefined2n
 ls -al
 
 01/23/17:
-## do github save (see 01/03/17)
+## github saved (see 01/03/17) BdactyloidesthruGSEA081615.txt
 
 ## Then what, search output file hits wi **blastp** ????????????
 ## identify/relate the tx names of hits ???????????????
+
+01/25/17:
+## ala Bryant et al., 2017, Cell RFeports 18, 762 (new Trinotate paper), p-773, '... comprehensive protein database formed by **merging** (HOW??) Swiss-
+Prot (Boeckmann et al., 2005) with UniRef90 (UniProt Consortium, 2015) protein
+databases downloaded from UniProt ...'.
+## TO test, dnload (www.uniprot.org/), UniProkKB, (unprot-all.fasta.gz, 553,474, dnloads ~ 4 min, 113.9MB) & UniRef (uniref-all.fasta.gz, 49,122,202. Q: after ~25 min, *only* **.gz.part** file in 'download' dir, 158.9MB ????????), to pfam/uniprot dir., examine? 
+## Q: ***what to do*** ??????????????????????
+gunzip uniprot-all.fasta.gz
+-rw-r--r--   1 bterry  staff   255M Jan 25 22:59 uniprot-all.fasta
+wc -l uniprot-all.fasta 
+ 4131225 uniprot-all.fasta
+## Note: sequence this fasta file, seq split into 60 char lines ????????
+
+01/26/17:
+## Talked to Adam on getting uniref90.fasta.gz file downloaded.
+
+philip-terry-2:uniprot bterry$ curl -O -C - ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/uniref/uniref90/uniref90.fasta.gz
+** Resuming transfer from byte position 345661440
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+ 65 10.3G   65 6934M    0     0   447k      0  6:44:42  4:24:16  2:20:26     0curl: (56) Recv failure: Network is down
+## looks like when restarted this 'curl' session at house, unable to finish?
+## TO DO: Go check with him tomorrow, try get it to 'crane' where plan to use anyway. Q: still quetion, whether to upload hmmsearch hits to www.uniprot.org, blast them on that site?
+
+01/27/17:
+Completed dnload of 
+-rw-r--r--  1 bterry  staff    11G Jan 27 13:14 uniref90.fasta.gz
+Expanded it
+-rw-r--r--  1 bterry  staff    21G Jan 27 13:14 uniref90.fasta
+
+## So like to get uniref90.fasta and 
+-rw-r--r--  1 bterry  staff   255M Jan 25 22:59 uniprot-all.fasta
+on Crane, so can do blastp.
+Waiting till Mon, see if Adam, JJ want to put one or both of these there? Else I will wget, or curl them to crane?
+
+## mean time, I need to prepare the query fasta file from the 2nd hnnsearch output, hmmsrchshortpeprefined2ndtry.out, **crit 5** in sec 3.
+
+
+## So, TO DO:
+
+*****************************************
+ref, line 8644 above, 01/03/17:
+
+01/29/17:
+## preparing 'query' for blastp vs uniprotKB, uniRef90 (refer Bryant et al., Cell Reports 18, 762 2017), p-773.
+
+## need create two files from sec 3 of hmmsrchshortpeprefined2ndtry.out
+
+grep "^   1.*" hmmsrchshortpeprefined2ndtry.out > hmmsrchshortpeprefined2ndtry.1.all.out
+-rw-r--r--   1 bterry  staff    91K Jan 29 10:58 hmmsrchshortpeprefined2ndtry.1.all.out
+wc hmmsrchshortpeprefined2ndtry.1.all.out
+     913   14608   93126 hmmsrchshortpeprefined2ndtry.1.all.out
+
+grep "^>>.*" hmmsrchshortpeprefined2ndtry.out > hmmsrchshortpeprefined2ndtry.sec3names.out
+-rw-r--r--   1 bterry  staff   108K Jan 29 11:18 hmmsrchshortpeprefined2ndtry.sec3names.out
+wc hmmsrchshortpeprefined2ndtry.sec3names.out
+     913    5478  110473 hmmsrchshortpeprefined2ndtry.sec3names.out
+
+## upgrade rstudio to 
+RStudio 1.0.136 - Mac OS X 10.6+ (64-bit) 	71.2 MB 	2016-12-21 	12d6d6ade0203a2fcef6fe3dea65c1ae
+## 12d6d6ade0203a2fcef6fe3dea65c1ae, so matches
+
+## read in hmmsrchshortpeprefined2ndtry.1.all.out
+
+## see line 8653 (361, crit 5)
+sec3df.2ndtry1.all <- read.delim("hmmsrchshortpeprefined2ndtry.1.all.out", header=FALSE, sep="",  stringsAsFactors=FALSE)
+dim(sec3df.2ndtry1.all) ## [1] 913  16, as expect.
+head(sec3df.2ndtry1.all, n=3)
+
+## ref: line 8656 (366, fatodftest.R)
+sec3df.2ndtry.1.all.4col <- sec3df.2ndtry1.all[, -c(1, 3:5, 7:9, 12:16)]
+dim(sec3df.2ndtry.1.all.4col)  ## [1] 913   4
+head(sec3df.2ndtry.1.all.4col, n=3)
+#data_frame <- setNames(data_frame, c("premium","change","newprice"))
+sec3df.2ndtry.1.all.4col <- setNames(sec3df.2ndtry.1.all.4col, c("bang", "i-Evalue", "alifrom", "alito"))
+head(sec3df.2ndtry.1.all.4col, n=3)
+
+## ref, line 8680
+## To Do: get sec3df.2ndtry.1.all.names df from hmmsrchshortpeprefined2ndtry.sec3names.out file.
+## in BBedit, remove '>> ' from LHS of file, rename file to hmmsrchshortpeprefined2ndtry.sec3names.LHS.out
+## Search/Find box = (>> ), replace box is empty, click 'replace all'
+
+## from line 8686 (from line 381-400 -> line 472)
+d_r_sec3 <- read.delim("hmmsrchshortpeprefined2ndtry.sec3names.LHS.out", header=FALSE, col.names="refs", stringsAsFactors=FALSE)   
+class(d_r_sec3)  ## dataframe
+dim(d_r_sec3)  ## [1] 913     1
+head(d_r_sec3, n=3)  ## output looking as anticipated
+tail(d_r_sec3, n=3)
+v_r_sec3 <- vector(mode="character", length=907)
+class(v_r_sec3)
+head(v_r_sec3, n=3)
+for(i in 1:913) { 
+  v_r_sec3[i] <- d_r_sec3[i,1]
+}
+class(v_r_sec3)
+head(v_r_sec3, n=3)
+tail(v_r_sec3, n=3)
+length(v_r_sec3)  ## [1] 913
+
+## remove part of name past 1st 'space'. (see line 211, fatodfest.R file)
+#here try remove all after 1st space for RefS
+refSeqID_sec3 <- sub(" .*", "", v_r_sec3)
+head(refSeqID_sec3)
+## ok
+
+## see line 8708
+## create df of sec3df.2ndtry.1.all.4col plus refSeqID_sec3, total 913 rows.
+## create df of sec3df.2ndtry.1.all.4col plus refSeqID_sec3, total 913 rows.
+##my.dataframe["new.col"] <- a.vector
+sec3df.2ndtry.1.all.5col <- sec3df.2ndtry.1.all.4col
+sec3df.2ndtry.1.all.5col["refs"] <- refSeqID_sec3
+dim(sec3df.2ndtry.1.all.5col)  ## ## [1] 913   5
+head(sec3df.2ndtry.1.all.5col, n=3)
+## looks ok
+
+## refer line 410-417, fatodftest.R, subset df on crit 5
+##01/17/17:
+## subset this dataframe to the 706 rows meeting crit 5.
+sec3df1.2ndtry.all.5col.names.crit5 <- sec3df.2ndtry.1.all.5col[sec3df.2ndtry.1.all.5col$i_Evalue < 0.0001, ]
+dim(sec3df1.2ndtry.all.5col.names.crit5)  ## [1] 769   5
+head(sec3df1.2ndtry.all.5col.names.crit5, n=3)
+## need change colm name refs to refSeqID in sec3df1.all.5col.names.crit5
+colnames(sec3df1.2ndtry.all.5col.names.crit5)[5] <- "refSeqID"
+head(sec3df1.2ndtry.all.5col.names.crit5)
+## ok
+
+## now subset refSeqID_seq df to these 769 rows wi innerjoin to sec3df1.all.5col.names.crit5
+
+## 1st, need regenerate refSeqID_seq df (lines 174-214, fatodftest.R)
+
+01/30/17:
+## to accomplish, copy lines 175 thru 219 from fatodftest.R to 01/30/17 in fatodftest.R.
+## done, (lines 516 561, fatodftest.R)
+
+## refer line 8730 (or lines 419-429, 442-456, fatodftest.R)
+merged706hits <- merge(sec3df1.all.5col.names.crit5, refSeqID_seq, by = "refSeqID")
+class(merged706hits)
+dim(merged706hits)
+head(merged706hits, n=3)
+## ok
+## next, create a colm with the 'domain' for this hit, specified by colms alifrom & alito.
+
+## substr(x,start,stop)
+merged706hits$domain <- substr(merged706hits$v_s, merged706hits$alifrom, merged706hits$alito)
+dim(merged706hits)
+head(merged706hits)
+tail(merged706hits)
+
+## then see lines 442-456, fatodftest.R for rest.
+
+##  'query' file, merged769hits2col.fasta, for blastp vs uniprotKB, uniRef90 (refer Bryant et al., Cell Reports 18, 762 2017), p-773.
+
+01/31/17:
+## prepare to blastp (E <= 1e-5) NB-ARC derived hits originally from Trinity.fasta, in merged769hits2col.fasta file against uniprotKB, & uniRef90.
+## get the two files to crane (HCC).
+#philip-terry-2:uniprot bterry$ curl -O -C - ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/uniref/uniref90/uniref90.fasta.gz
+## Think Adam wget this file to my crane work dir. To check,
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/vbufalo/95TUPsubset
+cd /work/amundsen/pterry
+ls -lh  ## ok, uniref90 file there.
+-rw-r--r--  1 pterry amundsen  11G Jan 27 13:39 uniref90.fasta.gz
+## tried to dnload from ftp site the uniprotKB. When dnloaded what thought might be the site, 1st ref. line in fasta file did **not** match 1st ref line in what downloaded from website gui (553474 whatever, reviewed version ????, http://www.uniprot.org/uniprot/?query=*&fil=reviewed%3Ayes)
+## Ck keena, JJ, why no match ??????????????????????????
+## so just scp the uniprot-all.fasta over to crane from macbook.
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+ls -lh
+scp uniprot-all.fasta pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/
+uniprot-all.fasta                                   51%  133MB   0.0KB/s - stalled -Write failed: Broken pipe
+lost connection
+## Now what, perhaps try from on campus ?????????????
+
+## 02/01/17:, tried on campus, **completed** in 1:31 min. **To do**, check same number bytes on macbook, crane for this file.
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/amundsen/pterry
+ls -lh
+mv uniref90.fasta.gz hmm_pfam
+
+02/01/17:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam/
+ls -al  ## uniprot-all.fasta number bytes *match* that on macbook from which scp came.
+mkdir blastpuniprotKB
+mv uniprot-all.fasta blastpuniprotKB
+cd blastpuniprotKB
+ls -lh
+## now, ready run blastp from *slurm*, so create a slurm file.
+need scp merged769hits2col.fasta to /work/amundsen/pterry/hmm_pfam/
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+ls -lh
+scp merged769hits2col.fasta pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/
+## scp slurm script to /home/amundsen/pterry/scripts
+
+02/02/17:
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp slurm_blastp_uniprotKB.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/amundsen/pterry/scripts
+ls -lh
+sbatch slurm_blastp_uniprotKB.sh 6571798 10:38am => ??:??am, 
+squeue -u pterry  ## R
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+## Q: ???????????????????????????
+cd /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+less job.6571798.err
+
+BLAST Database error: No alias or index file found for protein database [uniprot-all.fasta] in search path [/lustre/work/amundsen/pterry/hmm_pfam/blastpuniprotKB::]
+job.6571798.err (END) 
+
+more job.6571798.err
+more job.3128028.out
+# no error messages apparent in .err or .out Files
+# Q: how to examine directory, determine what have ??????????????
+# Note: 4 GOseq.depleted or GOseq.enriched files have only headers, no data in rows below ???????????????????????
+# To do, check out the 4 pdf files ????????????
+
+sacct -j  3128028 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2016-01-25T15:38:52 2016-01-25T15:40:59 
+2016-01-25T15:38:52 2016-01-25T15:40:59 
+# 2 min 7 sec
+
+
+02/07/17:
+## ok, JJ setting up crane to blastp, uniprotKB, uniref90.
+## talked to Adam, some of doc on HCC for biodata module needs updating ????
+## will need check wi JJ on how use uniprotKB ??????????????????? 
+## need to create slurm_blastp_uniref90.sh file, to use module biodata.
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp slurm_blastp_uniref90.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam
+mkdir blastpuniref90
+cd /home/amundsen/pterry/scripts
+ls -lh
+sbatch slurm_blastp_uniref90.sh 6644714  2:19pm => ??:??am, 
+squeue -u pterry  ## ????
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniref90
+ls -lh
+less job.6644714.err
+Static data resources for bioinformatics 1.0.
+     Contact the Bioinformatics Core Research Facility (bcrf-support@unl.edu) for questions/support.
+/var/spool/slurmd/job6644714/slurm_script: line 14: blastp: command not found
+job.6644714.err (END) 
+
+## talked to JJ, indicated how deal with blastp error. So fix in slurm_blastp_uniref90.sh, try run again.
+
+## tomorrow, uniprotKB 'db' file should be ready ($BLAST/uniprot_sprot). Check in dir. for these db files, dir. is 
+ls $UNIPROT_KB  ## failed on tusker ??????????????
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp slurm_blastp_uniref90.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /home/amundsen/pterry/scripts
+ls -lh
+sbatch slurm_blastp_uniref90.sh 6645338  4:52pm => ??:??am, 
+squeue -u pterry  ## a PD
+           6645338     batch TJob_bla   pterry PD       0:00      1 (Resources)
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniref90
+ls -lh
+less job.6645338.err
+Static data resources for bioinformatics 1.0.
+     Contact the Bioinformatics Core Research Facility (bcrf-support@unl.edu) for questions/support.
+job.6645338.err (END) 
+## Now job has R status, so apparently working ????????????????????
+           6645338     batch TJob_bla   pterry  R       3:09      1 c1315
+squeue -u pterry  ## 10:00pm,
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+## So, no longer running ????
+ls -lh
+less job.6645338.err  ## same info message as earlier.
+
+sacct -j  6645338 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2017-02-07T16:52:56 2017-02-07T19:40:41 
+2017-02-07T16:52:56 2017-02-07T19:40:41 
+## so ran ~ 2hr & 49 min.
+
+less blastpuniref90.outfmt6
+TRINITY_DN1004_c0_g1_i1|m.81778 UniRef90_A0A0A9INA7     68.889  180     55      1
+       1       180     197     375     2.65e-75        251
+TRINITY_DN11662_c0_g1_i1|m.153215       UniRef90_A0A1D5WZU6     84.615  26      4
+       0       1       26      441     466     2.16e-08        55.1
+## looks like 12 columns, need go find defs for the colmns (done). And then the annotation of the uniref90 seqs hit ??????????????
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniref90
+ls -lh
+wc -l blastpuniref90.outfmt6
+799 blastpuniref90.outfmt6
+head -n 3 blastpuniref90.outfmt6
+tail -n 3 blastpuniref90.outfmt6
+
+
+02/09/17:
+## fix/finish slurm_blastp_uniprotKB.sh
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp slurm_blastp_uniprotKB.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam/
+ls -lh  ## ck if blastpuniprotKB dir exists?
+cd /home/amundsen/pterry/scripts
+ls -lh
+sbatch slurm_blastp_uniprotKB.sh 6670504 10:37am => ??:??am, 
+squeue -u pterry  ## a R
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           6670504     batch TJob_bla   pterry  R       1:41      1 c1903
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+ls -lh
+less job.6670504.err  ## just JJ's contact info if problem.
+
+sacct -j  6670504 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2017-02-09T10:36:14 2017-02-09T10:38:34 
+2017-02-09T10:36:14 2017-02-09T10:38:34 
+## 2 min, 20 sec., so much **faster**, uniprotKB db than uniref90 db.
+
+wc -l blastpuniprotKB.outfmt6
+771 blastpuniprotKB.outfmt6, nearly same as uniref90 ??????
+
+head -n 3 blastpuniprotKB.outfmt6
+tail -n 3 blastpuniprotKB.outfmt6
+## Q: **what** next ???????
+
+## names hits **different** vs uniprotKB & uniref90 db's.
+## So, **how** compare hits between them ???????????????????????
+
+## definitely need select hits E <= 10^-5. Can this be done from unix command line ??????????????
+## TO try: awk, ref:
+http://unix.stackexchange.com/questions/188095/remove-lines-where-a-fields-value-is-less-than-or-equal-to-3-sed-or-awk
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/blastpuniprotKB/blastpuniprotKB.outfmt6 .
+cp blastpuniprotKB.outfmt6 copyblastpuniprotKB.outfmt6
+wc -l blastpuniprotKB.outfmt6
+     771 blastpuniprotKB.outfmt6
+awk '($11 < 0.00001) ' copyblastpuniprotKB.outfmt6 > copyblastpuniprotKB00001.txt
+wc -l copyblastpuniprotKB00001.txt
+     655 copyblastpuniprotKB00001.txt
+head -n 3 copyblastpuniprotKB00001.txt
+
+STOPPED
+
+02/10/17:
+## Next, compare trinity DE'd lists with rows in blastp output (colm 1). Matches would be DE'd tx's for NB-ARC proteins. Will  need to **reduce** colm 1 of copyblastpuniprotKB00001.txt to just the tx id to compare with DE'd files for trt, ctl.
+## Q: are NB-ARC proteins/genes available other than as hmm ??????????
+
+## **JJ** info:
+[pterry@login.crane pterry]$ module load biodata
+Static data resources for bioinformatics 1.0.
+     Contact the Bioinformatics Core Research Facility (bcrf-support@unl.edu) for questions/support.
+[pterry@login.crane pterry]$ ls $UNIPROT_KB
+complete                  idmapping      proteomics_mapping   taxonomic_divisions genome_annotation_tracks  pan_proteomes  reference_proteomes  variants
+[pterry@login.crane pterry]$ echo $UNIPROT
+/work/HCC/BCRF/uniprot/2017_1
+[pterry@login.crane pterry]$ Write failed: Broken pipe
+philip-terry-2:uniprot bterry$ 
+## so, apparently uniprot files were versions for **Jan, 2017**
+## Q: is there a **directory** where the uniprotKB & uniref90 dnloads are, tho apparently compressed ????????????????????
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry
+## DE'd trinity files 'scp'd from 'pro' to crane, num. of bytes agree on 'pro', crane. 
+Better doc. where I put on crane (/work/amundsen/pterry)
+
+02/11/17:
+scp two DE'd files over to 
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+
+-rw-r--r--  1 pterry amundsen 302K Feb 10 09:40 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+-rw-r--r--  1 pterry amundsen 536K Feb 10 09:42 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset .
+
+scp pterry@crane.unl.edu:/work/amundsen/pterry/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset .
+
+-rw-r--r--   1 bterry  staff       308395 Feb 11 20:46 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+-rw-r--r--   1 bterry  staff       547935 Feb 11 20:50 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+## size matches size on crane.
+wc -l copyblastpuniprotKB00001.txt  ##      655 copyblastpuniprotKB00001.txt
+wc -l Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+    2186 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+wc -l Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+    3972 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+
+## ok, now working on colm 1 of copyblastpuniprotKB00001.txt
+cut -f 1 copyblastpuniprotKB00001.txt > copyblastpuniprotKB00001.col1.txt
+head -n 3 copyblastpuniprotKB00001.col1.txt
+wc -l copyblastpuniprotKB00001.col1.txt
+
+## trying sed to remove '|...' for each line, 
+sed -n "_|.*$__p" sedtest.txt
+sed: 1: "_|.*": invalid command code _
+sed -n "/|.*$//p" sedtest.txt
+sed: 1: "/|.*$//p": invalid command code /
+sed -n "_|.*$_s__p" sedtest.txt
+sed: 1: "_|.*": invalid command code _
+sed -n "/|.*$/s//p" sedtest.txt
+sed -n "/m\..*$/s//p" sedtest.txt
+sed: 1: "/m\..*$/s//p": unterminated substitute in regular expression
+
+## **for moment**, give up on sed for this task, looks like bbedit can do.
+
+02/12/17:
+## ref: p-28, haddock & dunn book
+copy copyblastpuniprotKB00001.col1.txt to get copyblastpuniprotKB00001.col1.bbedit.txt
+## Open copyblastpuniprotKB00001.col1.bbedit.txt in BBedit, then search/find, then, of course 'grep' & 'case sensitive' checked, in 'find' box, '\w+)\|.+', and in replace box, '\1'. 655 rows replaced as expect.
+
+sort copyblastpuniprotKB00001.col1.bbedit.txt | uniq | wc -l  ##      634
+sort copyblastpuniprotKB00001.col1.bbedit.txt | uniq -c | wc -l  ## 634 ?????
+sort copyblastpuniprotKB00001.col1.bbedit.txt | uniq -c > testuniq
+## not working as p-243, shotts bk ???????????????
+sort copyblastpuniprotKB00001.col1.bbedit.txt | uniq > uniprotKBcol1uniq.txt
+wc -l uniprotKBcol1uniq.txt  ##      634 uniprotKBcol1uniq.txt
+
+## working on Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+
+cut -f 1 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset > C_UPcol1.txt
+head -n 3 C_UPcol1.txt  ## need remove colm 1 label, 'id', *done*.
+wc -l C_UPcol1.txt  ##     2185 C_UPcol1.txt
+
+STOPPED
+
+sort C_UPcol1.txt | uniq > C_UPcol1.uniq.txt
+head -n 3 C_UPcol1.uniq.txt
+wc -l C_UPcol1.uniq.txt  ##  2185 C_UPcol1.uniq.txt
+
+#comm -12 file1 file2
+comm -12 uniprotKBcol1uniq.txt C_UPcol1.uniq.txt > comm_uniprotKBcol1vsC_UPcol1
+wc -l comm_uniprotKBcol1vsC_UPcol1  ##        6 comm_uniprotKBcol1vsC_UPcol1
+head comm_uniprotKBcol1vsC_UPcol1
+
+## working on 
+Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+cut -f 1 Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset > T_UPcol1.txt
+head -n 3 T_UPcol1.txt  ## ## need remove colm 1 label, 'id', *done*.
+wc -l T_UPcol1.txt  ##     3971 T_UPcol1.txt
+
+sort T_UPcol1.txt | uniq > T_UPcol1.uniq.txt
+head -n 3 T_UPcol1.uniq.txt
+wc -l T_UPcol1.uniq.txt  ##      3971 T_UPcol1.uniq.txt
+
+comm -12 uniprotKBcol1uniq.txt T_UPcol1.uniq.txt > comm_uniprotKBcol1vsT_UPcol1
+
+wc -l comm_uniprotKBcol1vsT_UPcol1  ##        18 comm_uniprotKBcol1vsT_UPcol1
+cat comm_uniprotKBcol1vsT_UPcol1
+
+philip-terry-2:uniprot bterry$ cat comm_uniprotKBcol1vsC_UPcol1
+
+TRINITY_DN42138_c0_g1_i6
+TRINITY_DN43935_c0_g1_i1
+TRINITY_DN43935_c0_g1_i4
+TRINITY_DN44006_c0_g1_i2
+TRINITY_DN45879_c0_g1_i1
+TRINITY_DN47540_c0_g2_i3
+
+philip-terry-2:uniprot bterry$ cat comm_uniprotKBcol1vsT_UPcol1
+TRINITY_DN14867_c0_g1_i1
+TRINITY_DN14867_c0_g2_i1
+TRINITY_DN33129_c0_g1_i1
+TRINITY_DN42138_c0_g1_i3
+TRINITY_DN43726_c0_g1_i1
+TRINITY_DN47538_c0_g1_i6
+TRINITY_DN47735_c2_g1_i1
+TRINITY_DN48027_c1_g1_i10
+TRINITY_DN48035_c1_g2_i2
+TRINITY_DN48048_c1_g2_i1
+TRINITY_DN48048_c1_g2_i10
+TRINITY_DN48048_c1_g2_i16
+TRINITY_DN48048_c1_g2_i2
+TRINITY_DN48048_c1_g2_i4
+TRINITY_DN48248_c0_g2_i8
+TRINITY_DN48341_c1_g1_i4
+TRINITY_DN48414_c4_g2_i1
+TRINITY_DN8064_c0_g1_i1
+
+## Now, identify uniprotKB hits (their annotation) by trinity 'transdecoder' proteins, run thru NB-ARC hmm, & matching names in common with DE'd tx's, (Q: how, perhaps just enter their names at uniprotKB web site) ??????
+
+## Start with copyblastpuniprotKB00001.txt coming from outfmt6 output from blastp run. 655 records Evalue <= 0.00001
+## Take tx names from comm_uniprotKBcol1vsC_UPcol1,comm_uniprotKBcol1vsT_UPcol1 files, search copyblastpuniprotKB00001.txt for matching records, record matching uniprotKB hit names.
+## 1st, T_UPcol1
+wc -l copyblastpuniprotKB00001.txt  ##      655 copyblastpuniprotKB00001.txt
+## Note, apparently only 634 unique records.
+## 1st, the 6 hits from comm_uniprotKBcol1vsC_UPcol1
+
+TRINITY_DN42138_c0_g1_i6|m.29512	sp|Q9M667|RPP13_ARATH	line 211
+TRINITY_DN43935_c0_g1_i1|m.113624	sp|Q9SX38|DRL4_ARATH	line 241
+TRINITY_DN43935_c0_g1_i4|m.113631	sp|Q9SX38|DRL4_ARATH	line 243
+TRINITY_DN44006_c0_g1_i2|m.127971	sp|Q39214|RPM1_ARATH	line 251
+TRINITY_DN45879_c0_g1_i1|m.19009	sp|Q6L438|R1A6_SOLDE	line 306
+TRINITY_DN47540_c0_g2_i3|m.55414	sp|Q39214|RPM1_ARATH	line 400
+
+## then, the 18 hits from comm_uniprotKBcol1vsT_UPcol1
+
+TRINITY_DN14867_c0_g1_i1|m.150615	sp|Q9M667|RPP13_ARATH	line 13
+TRINITY_DN14867_c0_g2_i1|m.150617	sp|Q9M667|RPP13_ARATH	line 14
+TRINITY_DN33129_c0_g1_i1|m.8542	sp|Q7XA39|RGA4_SOLBU	line 95
+TRINITY_DN42138_c0_g1_i3|m.29503	sp|Q9M667|RPP13_ARATH	line 208
+TRINITY_DN43726_c0_g1_i1|m.91712	sp|Q9FG90|DRL33_ARATH	line 238
+
+02/13/17:
+TRINITY_DN47538_c0_g1_i6|m.54233	sp|Q7XA42|RGA1_SOLBU	line 388
+TRINITY_DN47735_c2_g1_i1|m.123183	sp|Q7XA40|RGA3_SOLBU	line 422
+TRINITY_DN48027_c1_g1_i10|m.143658	sp|Q7XA40|RGA3_SOLBU	line 440
+TRINITY_DN48035_c1_g2_i2|m.144326	sp|Q39214|RPM1_ARATH	line 454 note: dupl, hits same sp number, '|m....' different ???????????????????
+TRINITY_DN48048_c1_g2_i1|m.144363	sp|Q39214|RPM1_ARATH	line 459
+TRINITY_DN48048_c1_g2_i10|m.144401	sp|Q39214|RPM1_ARATH	line 460
+TRINITY_DN48048_c1_g2_i16|m.144423	sp|Q39214|RPM1_ARATH	line 465
+TRINITY_DN48048_c1_g2_i2|m.144366	sp|Q39214|RPM1_ARATH	line 468
+TRINITY_DN48048_c1_g2_i14|m.144411	sp|Q39214|RPM1_ARATH	line 463
+TRINITY_DN48248_c0_g2_i8|m.69449	sp|Q39214|RPM1_ARATH	line 506
+TRINITY_DN48341_c1_g1_i4|m.46848	sp|Q39214|RPM1_ARATH	line 518
+TRINITY_DN48414_c4_g2_i1|m.136104	sp|Q7XA40|RGA3_SOLBU	line 535
+TRINITY_DN8064_c0_g1_i1|m.148651	sp|Q38834|R13L4_ARATH	line 625
+
+## so only 9 *different* uniprotKB hits out of 24 hits.
+## dnloaded basket of 9, just a fasta file. So how best to access annotation for these 9 ???????????????????
+## Dnloaded brief annatation. Q: can I see more detailed annotation other than one hit at a time in a dnload ????????????
+
+02/14/17:
+## comments, considerations
+i) understanding the system in plants for defending against disease (is there a review, etc ??)
+ii) uniref90 blastp results (note number hits almost same as vs uniprotKB)
+iii) access long form of annotation for hits from uniprotKB site, annotation score ?????
+iv) Evalue for blastp, p-value for trinity/trinotate DE'd genes, should I go, document ????
+v) looking forward, direction of research ???????
+
+# slip a save to ***github*** in here
+
+STOPPED
+
+
+
+
+
+Q: duplication??, how merge ???????????, perhaps append ???????
 
 
 
