@@ -8669,8 +8669,13 @@ dim(sec3df1.all.4col_critbang)  ## [1] 770   4, agrees wi linux command grep
 01/16/17:
 ***********************************************************
 **TO DO**, (see pencil version)
-Summary table for the 5 criteria;
-...
+Summary table for the 5 criteria (hmmsrchshortpepsec2minusinclline.fix.out);
+## note, transferred pencil notes on 02/19/17, so other possible file (forget which ??)
+1) 898 of 907 'pass bias score'
+2) both E-values (E.value, E.value.1) < .0001, 711 rows pass, see line 8617)
+3) exp & N, 763 rows pass, see p-86239 
+4) sec 3, '|  !', hmmsrchshortpepcopy.1bang.out, 770 rows, see p-8536
+5) i-Evalue criterion, test result later, see line 9011, 769 rows pass.
 **************************************************
 
 ## ok, prepare df & fasta file of 706 hits for hmmalign step.
@@ -9427,15 +9432,351 @@ TRINITY_DN8064_c0_g1_i1|m.148651	sp|Q38834|R13L4_ARATH	line 625
 
 02/14/17:
 ## comments, considerations
-i) understanding the system in plants for defending against disease (is there a review, etc ??)
+i) understanding the system in plants for defending against disease (is there a review, etc found at least 2, 1-s2.0-S0168952512001709-main.pdf, 1-s2.0-S0885576512000033-main.pdf) in /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot dir. 
 ii) uniref90 blastp results (note number hits almost same as vs uniprotKB)
-iii) access long form of annotation for hits from uniprotKB site, annotation score ?????
+iii) access long form of annotation for hits from uniprotKB site, annotation score. Look thru, decide which to select for dnload.
 iv) Evalue for blastp, p-value for trinity/trinotate DE'd genes, should I go, document ????
-v) looking forward, direction of research ???????
+## Vikas, do p-value for DE'd tx's. (me, benefit ??????????????)
+v) looking forward, direction of research **TO dO**, make a plan!!!!
 
-# slip a save to ***github*** in here
+# slipped a save to ***github*** in here for this file,  BdactyloidesthruGSEA081615.txt.
+
+02/19/17:
 
 STOPPED
+## Q: can I use a linux command line join to find uniprotKB hits for tx names in  Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95T-UP.subset
+ file ?????????
+## which file to 'join' with  '95T-UP', 95C-UP files ????????
+95C-UP 'join' comm_uniprotKBcol1vsC_UPcol1
+95T-UP 'join' comm_uniprotKBcol1vsT_UPcol1
+## 'join' colm name? 
+## Q: p-249, shotts book, looks like need sort each file *&* each input file needs to be the same length ***?????????????????????????***
+## *rather* than pursue 'join' further for this task, perhaps go to ...
+but 1st, create unique files for all files not unique ???????
+## *OR*, given there are only 9 different uniprotKB names, or 6 + 18 tx names (run uniq on comm_uniprotKBcol1vsC_UPcol1, comm_uniprotKBcol1vsT_UPcol1 to determine number unique number tx names), 
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+sort comm_uniprotKBcol1vsC_UPcol1 | uniq | wc -l  ##      6
+sort comm_uniprotKBcol1vsT_UPcol1 | uniq | wc -l  ##      18
+
+## To determine if any tx names in common between the lists, tho may be none technically in common, but some **just** difference at end of tx name.
+cat comm_uniprotKBcol1vsC_UPcol1 comm_uniprotKBcol1vsT_UPcol1 > CandTuniqtest
+sort CandTuniqtest | uniq | wc -l  24
+
+## ok, for C_UP, & T_UP, separately in BBedit, manually select the 6 or 18 records so have the logFC values for these 6 + 18 tx names.
+
+## bkmark: 
+uniprotKB, my 9 hits
+http://www.uniprot.org/uniprot/?query=job:M20170214F725F458AC8690F874DD868E4ED79B88A2CA71D
+
+
+03/05/17:
+Recheck Keenan,
+--logFC, base important ??????
+--plan do blastp for transdecoder output from trinity tx's, but just for the tx names in C_UP, T_UP ??????
+--how do The blast, say only top hit, can one pick a 'outfmt' format to give some of the graphical, etc. output can get by say blastp online? An other kind of blast for nucleotides (tx's directly ???????).
+--try do blat (or Magic-BLAST, BLAST RNA-seq mapping tool ????) on a related seqd genome (brachypodium, model for grasses, Nature 463, 763-768 (11 February 2010), Genome sequencing and analysis of the model grass Brachypodium distachyon)
+ (mower, phylogenetic paper for Bdac) ?????????????? Might provide addl insight ????????
+--Rouxel review, table 2, fungal avirulence genes, perhaps could identify addl (R) genes for these avirulence genes ?????????????????
+--addl domains, NB-LRR ????????????
+
+03/07/17:
+## ok, set up following project: start with the transdecoder amino acid seq output from Trinity.fasta, Trinity.fasta.transdecorder.pep. Separately merge (Subset) C_UP (2185) & T_UP (3971) tx's with these 74489 rows. ***To check*** '.py' code, think used to convert fasta to df format, so should already exist the df form file produced from Trinity.fasta.transdecorder.pep (Trinity.fasta.transdecorder.out, line 8389 above).
+
+Blastp each merged subset in turn vs uniprotKB db. In resulting 'outfmt6' outout format, colm2 will be the uniprotKB target for a particular original tx. Submit each target hit (its name) to uniprotKB online db, to get annotation for the hit, and thus annotation for that Trinity.fasta tx. Try catalogue, make sense of the resulting body annotations for C_UP, T_UP tx's.
+
+Initially get 'head' for the three files (Trinity.fasta.transdecorder.pep df form, & C_UP, T_UP), so can figure how to subset from the 74489, for C_UP, T_UP. Perhaps, 1st, find Trinity.fasta.transdecorder.pep file after conversion to dataframe format. Then merge in turn, C_UP with Trinity.fasta.transdecorder.pep df form, and then T_UP with Trinity.fasta.transdecorder.pep df form.
+
+03/15/17:
+## use C_UPT_UPforblastp.R file to prepare (see p-8390, Bdac... file) Trinity.fasta.transdecoder.f1234.out output dataframe for merging with C_UP & T_UP, and blastp vs uniprotKB. The ...f1234.out file from run of seqread_pmt.py to convert transdecoder ....pep fasta file to dataframe.
+## 1st need remove everything past 1st '|' for each row of Trinity.fasta.transdecoder.f1234.out. To accomplish, test with 1st three rows with reg expn '(\w+)\|.+' in find box, '\1' in 'replace all' box . Worked, 'case sensitive' & 'grep' selected.
+So, repeat on Trinity.fasta.transdecoder.f1234.copy.out. 74489 modified, so success.
+## Next, read in Trinity.fasta.transdecoder.f1234.copy.out & Trinity.fasta.transdecoder.f5.copy.out into R with C_UPT_UPforblastp.R code.
+
+03/17/17:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry
+find . -name 'Trinity.fasta' -print
+
+[pterry@login.crane trinity_out_dir]$ pwd
+/work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+
+-rw-r--r-- 1 pterry amundsen 194832811 Dec 16  2015 Trinity.fasta
+
+cd /work/amundsen/pterry/Trin21test/95C1-3T1-3/trinity_out_dir
+
+cp /work/amundsen/pterry/Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset .
+## **note**: Trinity.fasta is fasta file, so to test (p-222, vbuffalo) to see if all of Trinity_trans.counts.matrix.95C_vs_95T.edgeR.DE_results.P1e-3_C2.95C-UP.subset
+rows are in Trinity.fasta, would 1st need convert Trinity.fasta to dataframe.
+
+## table(merge...  ## p-222, vbuffalo, [1] 854  1331
+## merged C_UP with refSeqID_seq dataframes, [1] 1698    2
+## to *check* number unique rows in colm 1 of mergedC_UP df.
+length(unique(mergedC_UP$refSeqID))  ## [1] 1331, so looks like duplicates explains difference.
+
+## left, convert mergedC_UP df to fasta file, write to file.
+
+writeLines(mergedC_UP2colfasta, "mergedC_UP2col.fasta")  ## looks ok.
+## ready for blastp vs uniprotKB
+
+STOPPED
+wc -l mergedC_UP2col.fasta
+    3396 mergedC_UP2col.fasta
+ ##grep -c "^>" Trinity.fasta  ## 165459, why working on crane ?????
+grep -c "^>" mergedC_UP2col.fasta  ## 1698, consistent with 'wc -l'
+
+03/17/17:
+## prepare a mergedT_UP2col.fasta for treatment DE'd tx's.
+wc -l mergedT_UP2col.fasta
+    8336 mergedT_UP2col.fasta  ## [1] 4168, double of as expect.
+grep -c "^>" mergedT_UP2col.fasta  ## 4168 as expect.
+*****************************************************
+## **to try** spot check ref, seq in mergedC_UP2col.fasta, mergedT_UP2col.fasta files with refSeqID_seq.txt file or the prev 'Trinity.fasta.transdecorder.pep'file ?????????????????????
+
+## spot these two from mergedT_UP2col.fasta
+>TRINITY_DN10001_c0_g2_i1
+>TRINITY_DN10002_c0_g2_i1
+## Found in Trinity.fasta.transdecorder.pep, seq same between files, so for now, **assume** mergedT_UP2col.fasta references & seqs faithfully found in Trinity.fasta.transdecorder.pep.
+*****************************************************
+find . -name 'Trinity.fasta.transdecorder.pep' -print
+find . -name 'mergedT_UP2col.fasta' -print
+## looks like don't have Trinity.fasta.transdecorder.pep file on macbook (but do in pfam dir ???????????????)
+
+## to **compare** size blastp input file merged769hits2col.fasta with output file blastpuniprotKB.outfmt6
+grep -c "^>" merged769hits2col.fasta  ## 769
+wc -l merged769hits2col.fasta  ## 1538
+grep -c "^TRI" blastpuniprotKB.outfmt6  ## 771
+wc -l blastpuniprotKB.outfmt6  ## 771
+## *****Q*****: 2 extra lines in blastpuniprotKB.outfmt6 ?????????????????
+## Perhaps try find ****explanation**** for the difference ?????????????????
+
+03/19-20/17:
+
+## then **ready** for blastp vs uniprotKB
+## see prev slurm blastp vs uniprotKB in dir for reference.
+/Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+
+## created slurm_blastp_uniprotKB_T_UP.sh in 'uniprot' dir
+## to do, scp to crane, scripts dir
+## scp mergedT_UP2col.fasta to crane 'pfam' dir.
+## created slurm_blastp_uniprotKB_C_UP.sh in 'uniprot' dir
+## to do, scp to crane, scripts dir
+## scp mergedC_UP2col.fasta to crane 'pfam' dir.
+
+## Reference 02/09/17: above for running these 'slurm' files on crane.
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp slurm_blastp_uniprotKB_T_UP.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+pwd
+scp mergedT_UP2col.fasta pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam/
+ls -lh  ## ck if blastpuniprotKB dir exists?
+cd /home/amundsen/pterry/scripts
+ls -lh
+sbatch slurm_blastp_uniprotKB_T_UP.sh 7101537 10:03am => ??:??am, 
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           7101537     batch TJob_bla   pterry  R      36:27      1 c1209
+36.27 at 1:32pm, so started approx 1:00pm ?????????????????????
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+ls -lh
+less job.7101537.err  ## just JJ's contact info if problem.
+
+sacct -j  7101537 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2017-03-20T12:53:21 2017-03-20T13:29:58 
+2017-03-20T12:53:21 2017-03-20T13:29:58 
+## 1:30 - 12:53 = 37 min run
+
+## for T_IP, how best try gather annotation for hits vs uniprotKB ????????
+## **To do**, compare number records blastp input, output.
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/blastpuniprotKB/blastpT_UPuniprotKB.outfmt6 .
+wc -l ../mergedT_UP2col.fasta
+    8336 ../mergedT_UP2col.fasta
+wc -l blastpT_UPuniprotKB.outfmt6
+    4432 blastpT_UPuniprotKB.outfmt6
+## Q: why more than half of mergedT_UP2col.fasta ???????????????
+grep -c "^>" ../mergedT_UP2col.fasta  ## 4168, half 'wc -l', ok
+grep -c "^TRI" blastpT_UPuniprotKB.outfmt6  ## 4432, same as 'wc -l', ok
+## Q: relation input, output file, should not output file have same grep output as grep input ?????????????????????????????
+## now what, would like to relate DE'd T_UP tx names with annotation of their uniprotKB hits. **How** best to accomplish for 4432 tx names in blastpT_UPuniprotKB.outfmt6 ??????????????????????????????????
+## GO, B2GO, etc.? Manually, some automated fashion? Perhaps email query to uniprotKB site ???????????????????????
+## Q: blastp with duplicate tx names ??????????????
+## UGA person & info on disease resistence in plants ????????????
+
+03/23/17:
+Talked to Keenan,
+Try to 'ID' defense related proteins in blastpT_UPuniprotKB.outfmt6. 
+
+## Following response from uniprotKB contact email, try use uniprotKB 'batch retrieval tool' to retrieve annotations for uniprotKB identifiers in blastpT_UPuniprotKB.outfmt6.
+## 1st, cut colm2 from linux command line to blastpT_UPuniprotKBcol2IDs.txt 
+
+
+Then inside BBedit, grep part between the '|' characters. ...
+cp blastpT_UPuniprotKB.outfmt6 to blastpT_UPuniprotKBcol2IDs.txt
+
+cut -f 2 blastpT_UPuniprotKB.outfmt6 > blastpT_UPuniprotKBcol2IDs.txt
+head -n 3 blastpT_UPuniprotKBcol2IDs.txt  
+wc -l blastpT_UPuniprotKBcol2IDs.txt  
+    4432 blastpT_UPuniprotKBcol2IDs.txt
+
+Of course 'grep' & 'case sensitive' checked, in 'find' box, 'sp\|(\w+)\|\w+', and in replace box, '\1'. 4432 rows replaced as expect.
+
+wc -l blastpT_UPuniprotKBcol2IDs.txt  ## 4432 as expect.
+
+sort blastpT_UPuniprotKBcol2IDs.txt | uniq > blastpT_UPuniprotKBcol2IDs.uniq.txt
+head -n 3 blastpT_UPuniprotKBcol2IDs.uniq.txt
+wc -l blastpT_UPuniprotKBcol2IDs.uniq.txt  ##      3971 T_UPcol1.uniq.txt
+    3259 blastpT_UPuniprotKBcol2IDs.uniq.txt
+## so several duplicate uniprotKB ID's in blastpT_UPuniprotKB.outfmt6
+
+03/24/17:
+## perhaps blastpT_UPuniprotKBcol2IDs.uniq.txt file the one to submit to 'batch retrieval tool' on uniprotKB werbsite.
+
+03/29/17:
+## Then, need to become familiar with the options for filtering of the results.
+## response from 2nd email Q to help@uniprot.org.
+## 'Leucine-rich repeat (44)' has **two** links, one a description of the domain, the 2nd to the 44 uniprotKB ID's.
+## so attempt try organize a bit these 44 ID's.
+## at least 32 of 44 IDs are from plant.
+
+03/30/17:
+
+04/05/17:
+
+STOPPED
+
+## I note the amount of work done with plants and fungal pathogens in S. Childs preprint: 'A soybean resistance allele from PI 423972 at the Rpp4 locus'.
+
+## to group the 44 LRR proteins into categories, then look bit more at description IDs in each category, see if can conclude qqch about the categories ???????????
+
+LRR receptors (may be able to subset further ???)
+O22938, Q9FRS6, Q9LIG2, Q9C9H7(?), Q1MX30, Q2R2D5, COLGH2, COLGK4, COLGP4, Q9LT96, Q9LJF3, Q42371
+
+## colms to populate
+ID(entry)
+protein names
+gene names
+organism
+length
+function
+subellular location
+a.a. modifications (???)
+domains
+all kinds of references to other db's
+
+## see /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot/from_uniprotKB
+/uniprot-yourlist%3AM2017040583C3DD8CE55183C76102DC5D3A26728BC9218FD.tab
+
+Test: O22938
+ID: O22938
+protein names: Leucine-rich repeat receptor-like tyrosine-protein kinase PXC3 (EC 2.7.10.1) (Protein PXY/TDR-CORRELATED 3)
+gene names: PXC3 At2g41820 T11A7.8
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 890
+function: ATP + a [protein]-L-tyrosine = ADP + a [protein]-L-tyrosine phosphate
+GO Molr fcn: transmembrane receptor protein tyrosine kinase activity
+subellular location: Cell membrane
+GO cellular component: 
+integral component of membrane (tair, plasma membrane)
+a.a. modifications: N-linked GlcNac (14 residues, glycoprotein)
+domains: 
+LRR(18), protein kinase(1)
+
+Test: Q9FRS6
+ID: Q9FRS6
+protein names: Leucine-rich repeat receptor-like protein kinase PXL1 (EC 2.7.11.1) (Protein PHLOEM INTERCALATED WITH XYLEM-LIKE 1)
+gene names: PXL1 At1g08590 F22O13.7
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 1029
+function: ATP + a protein = ADP + a phosphoprotein.
+## Note: Involved in the regulation of procambium maintenance and polarity during vascular-tissue development (PubMed:17570668). Phosphorylates HIRD11 and LHCA1 in vitro (PubMed:25602612).
+Go Molr fcn: protein serine/threonine kinase activity
+subellular location: cell membrane
+GO cellular component: integral component of membrane, plasma membrane
+a.a. modifications: N-linked GlcNac (14 residues, glycoprotein), phosphoserine/threonine/tyrosine (7 residues)
+## Q: if a protein kinase, why 7 residues ??????????????????????????
+domains: 
+LRR(22), protein kinase(1)
+
+Test: Q9LIG2
+ID: Q9LIG2
+protein names: Receptor-like protein kinase At3g21340 (EC 2.7.10.1) (EC 2.7.11.1) (Leucine-rich repeat receptor-like protein kinase At3g21340)
+## 2 names ?????
+gene names: At3g21340 MHC9.2
+## Q: ???????????
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 899
+function: ATP + a protein = ADP + a phosphoprotein.
+## Probable receptor with a dual specificity kinase activity acting on both serine/threonine- and tyrosine-containing substrates.
+Go Molr fcn: transmembrane receptor protein tyrosine kinase activity
+subellular location: cell membrane, Single-pass type I membrane protein
+GO cellular component: integral component of membrane
+a.a. modifications: a.a. modifications: N-linked GlcNac (10 residues, glycoprotein), phosphoserine (1), phosphothreonine (1)
+## Q: ## Q: if a protein kinase, why phosphoserine (1), phosphothreonine (1) & 1 residue apart ?????????????????????????
+domains: 
+LRR(3), protein kinase(1)
+
+...
+
+
+
+
+'R' protein
+Q7XA39, Q9STES, Q7XBQ9, ...
+
+04/10/17:
+## see /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot/from_uniprotKB
+/uniprot-yourlist%3AM2017041083C3DD8CE55183C76102DC5D3A26728BCB8BE7T.tab
+
+Test: Q7XA39
+ID: Q7XA39
+protein names: Putative disease resistance protein RGA4
+gene names: RGA4 (RGA4-blb)	RGA4 177O13.34 CB3A14.8
+organism: Solanum bulbocastanum (Wild potato)
+length: 988
+function: Disease resistance protein. Resistance proteins guard the plant against pathogens that contain an appropriate avirulence protein via a direct or indirect interaction with this avirulence protein. That triggers a defense system which restricts the pathogen growth.
+Go Molr fcn: ATP binding, ADP binding
+GO Biol'l process: defense response
+subellular location: ?????????????????????????????????
+a.a. modifications: ???????????????????????????
+domains: NB-ARC(1), LRR(14)
+
+Test: Q9STE5
+ID: Q9STE5
+protein names: Putative disease resistance RPP13-like protein 2
+## Q: split before 'gene names' ?????
+gene names: RPP13L2 At3g46710 T6H20.260
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 847
+function: Potential disease resistance protein. ??????????????????????
+Go Molr fcn: ATP binding
+GO Biol'l process: plant-type hypersensitive response, signal transduction
+subellular location: 
+GO cellular component: plasma membrane
+a.a. modifications: ????????????????????????????????
+domains: NB-ARC(1), LRR(5)
+
+04/12/17:
+Test: Q7XBQ9
+ID: Q7XBQ9
+protein names: 
+
+
+
+LRR-repeat (without receptor in name ?????)
+Q9FJV1, ...
+
+## Looks like mainly 3 or 4 categories of proteins in this list of 44. Each group appears to be well documented.
+## Q: what now ????????
 
 
 
