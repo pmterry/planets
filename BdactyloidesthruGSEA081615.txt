@@ -9766,17 +9766,294 @@ a.a. modifications: ????????????????????????????????
 domains: NB-ARC(1), LRR(5)
 
 04/12/17:
+## so updated BdactyloidesthruGSEA081615.txt to github, planets repo.
+
 Test: Q7XBQ9
 ID: Q7XBQ9
-protein names: 
+protein names: Disease resistance protein RGA2 (Blight resistance protein RPI) (RGA2-blb)
+## Q: split before 'gene names' ?????
+gene names: RGA2 177O13.40 CB3A14.5 RB RPI-BLB1
+organism: Solanum bulbocastanum (Wild potato)
+length: 970
+function: Disease resistance protein. Resistance proteins guard the plant against pathogens that contain an appropriate avirulence protein via a direct or indirect interaction with this avirulence protein. That triggers a defense system which restricts the pathogen growth. Confers a broad resistance to all known races of P.infestans.
+Go Molr fcn: ATP binding
+GO Biol'l process: defense response
+subellular location: ??????????????????
+Expression:
+Induction: Constitutively expressed. ?????????????????????????????
+a.a. modifications: ????????????????????????????????
+domains: NB-ARC(1), LRR(14)
+Sequence similarities: belongs to the disease resistance NB-LRR family
+
+04/13/17:
+Test: Q7XA42
+ID: Q7XA42
+protein names: Putative disease resistance protein RGA1 (RGA3-blb)
+gene names: RGA1 177O13.37 CB3A14.4
+organism: Solanum bulbocastanum (Wild potato)
+length: 979
+function: Disease resistance protein. Resistance proteins guard the plant against pathogens that contain an appropriate avirulence protein via a direct or indirect interaction with this avirulence protein. That triggers a defense system which restricts the pathogen growth.
+Miscellaneous
+Belongs to a four-gene family located at the same locus. Although the four genes are expressed in the resistant haplotype, only RGA2 confers the resistance to P.infestans. In the susceptible haplotype, RGA1 and RGA3 are likely to be pseudogenes created by deletions and mutations, while RGA2 contains also several modifications.
+Go Molr fcn: ATP binding
+GO Biol'l process: defense response
+subellular location: ?????????????????????????????????????
+Expression:
+Induction: Constitutively expressed. ?????????????????????????????
+a.a. modifications: ?????????????????????????????????????????
+domains: NB-ARC(1), LRR(12)
+Sequence similarities: belongs to the disease resistance NB-LRR family
+
+Test: Q9FI14
+ID: Q9FI14
+...
+
 
 
 
 LRR-repeat (without receptor in name ?????)
+## ***NOTE***: don't see much help wi the following documentation ??????????????
 Q9FJV1, ...
 
-## Looks like mainly 3 or 4 categories of proteins in this list of 44. Each group appears to be well documented.
-## Q: what now ????????
+## see /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot/from_uniprotKB
+/uniprot-yourlist%3AM20170413F725F458AC8690F874DD868E4ED79B88AFC94CV.tab
+
+Test: Q1PE04
+ID: Q1PE04
+protein names: F-box/LRR-repeat protein 25
+gene names: FBL25 At5g02920 F9G14.230
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 258   ## Q: what to think ??????????????????
+function: ???????????????????????????????????
+subellular location: ????????????????????????????
+domains: F-box(1), LRR(4)
+
+Test: Q9M0E1
+ID: Q9M0E1
+protein names: F-box/LRR-repeat protein At4g29420
+gene names: At4g29420 F17A13.240
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 446
+function: ?????????????????????????????????
+GO Biol'l process: cytokinin activated signaling pathway, hormone transport
+subellular location: plasmodesma
+domains: F-box(1), LRR(8)
+
+Test: Q5VMP0
+ID: Q5VMP0
+protein names: F-box/LRR-repeat MAX2 homolog (F-box and leucine-rich repeat MAX2 homolog) (Protein DWARF 3)
+gene names: D3 Os06g0154200 LOC_Os06g06050 OSJNBa0085L11.6-1
+organism: Oryza sativa subsp. japonica (Rice)
+length: 720
+function: ***lot of explanation, not related to disease*** ??????????
+...
+
+Test: Q9FJV1
+ID: Q9FJV1
+protein names: F-box/FBD/LRR-repeat protein At5g56570
+gene names: At5g56570 MIK19.1
+organism: Arabidopsis thaliana (Mouse-ear cress)
+length: 439
+function: ??????????????????????????????????????
+domains: F-box(1), LRR(2), FBD(1)
+
+## so, have ? + ? + 6 of the 44.
+## try isolate, see of any have useful doc. ??
+
+## Looks like mainly 2 categories of proteins in this list of 44. Each group appears to be well documented.
+
+04/24/17:
+## Q: what now? Repeat blastp for 95C_UP (the subset of DE'd tx's).
+04/25/17:
+## to check, for '.outfmt6' files in /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+ls -lh  ## have blastpT_UPuniprotKB.outfmt6
+## but none for C_UP
+cd /work/amundsen/pterry/hmm_pfam
+ls -lh  ## have mergedT_UP2col.fasta
+## but no mergedC_UP2col.fasta on crane.
+## so need find this on macbook, or how to create it ???????
+## line 9565 above,
+## scp mergedC_UP2col.fasta to crane 'pfam' dir.
+
+04/27/17:
+## Apparently never did ??????????????????????????
+## try do some checking 1st
+## check before line 9520, which is
+writeLines(mergedC_UP2colfasta, "mergedC_UP2col.fasta")  ## looks ok.
+## check precursor to mergedC_UP2col.fasta, looks like may be in pfam dir, perhaps created in pfam project in RStudio ???????
+## yes, following line is line 121 in C_UPT_UPforblastp.R
+## ready for blastp vs uniprotKB
+## refer to lines 9572 => 9642, this file
+## 
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp slurm_blastp_uniprotKB_C_UP.sh pterry@crane.unl.edu:/home/amundsen/pterry/scripts/
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam
+pwd
+scp mergedC_UP2col.fasta pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/amundsen/pterry/hmm_pfam/
+ls -lh  ## ck if blastpuniprotKB dir exists?
+cd /home/amundsen/pterry/scripts
+ls -lh
+sbatch slurm_blastp_uniprotKB_C_UP.sh 7329536  13:10pm => ??:??am, 
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           7101537     batch TJob_bla   pterry  R      36:27      1 c1209
+36.27 at 1:32pm, so started approx 1:00pm ?????????????????????
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+ls -lh
+less job.job.7329536.err  ## just JJ's contact info if problem.
+
+sacct -j  7329536 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2017-04-27T16:44:36 2017-04-27T16:55:36 
+2017-04-27T16:44:36 2017-04-27T16:55:36 
+## 55:36 - 44:36 = 11 min run
+## 1:30 - 12:53 = 37 min run
+
+## for C_IP, how best try gather annotation for hits vs uniprotKB ????????
+## **To do**, compare number records blastp input, output.
+
+cd /work/amundsen/pterry/hmm_pfam/blastpuniprotKB
+ls -lh
+less blastpC_UPuniprotKB.outfmt6
+
+cd /Users/bterry/macbook2016/keenanres16/Bdac/pfam/uniprot
+scp pterry@crane.unl.edu:/work/amundsen/pterry/hmm_pfam/blastpuniprotKB/blastpC_UPuniprotKB.outfmt6 .
+wc -l ../mergedC_UP2col.fasta
+    3396 ../mergedC_UP2col.fasta
+wc -l blastpC_UPuniprotKB.outfmt6
+    1785 blastpC_UPuniprotKB.outfmt6
+## Q: why more than half of mergedC_UP2col.fasta ???????????????
+## perhaps dups in blastpC_UPuniprotKB.outfmt6 ???????
+grep -c "^>" ../mergedC_UP2col.fasta  ## 1698, half 'wc -l', ok
+grep -c "^TRI" blastpC_UPuniprotKB.outfmt6  ## 1785, same as 'wc -l', ok
+## Q: relation input, output file, should not output file have same grep output as grep input ?????????????????????????????
+## now what, would like to relate DE'd C_UP tx names with annotation of their uniprotKB hits. **How** best to accomplish for 1785 tx names in blastpC_UPuniprotKB.outfmt6 ??????????????????????????????????
+## GO, B2GO, etc.? Manually, some automated fashion? Perhaps email query to uniprotKB site ???????????????????????
+## Q: blastp with duplicate tx names ??????????????
+## UGA person & info on disease resistence in plants ????????????
+
+04/28/17:
+## Following response from uniprotKB contact email, try use uniprotKB 'batch retrieval tool' to retrieve annotations for uniprotKB identifiers in blastpT_UPuniprotKB.outfmt6.
+## 1st, cut colm2 from linux command line to blastpC_UPuniprotKBcol2IDs.txt 
+
+Then inside BBedit, grep part between the '|' characters. ...
+cp blastpC_UPuniprotKB.outfmt6 to blastpC_UPuniprotKBcol2IDs.txt
+
+cut -f 2 blastpC_UPuniprotKB.outfmt6 > blastpC_UPuniprotKBcol2IDs.txt
+head -n 3 blastpC_UPuniprotKBcol2IDs.txt  
+sp|Q9XED7|R51A2_MAIZE
+sp|Q9HE10|DSC3_SCHPO
+sp|Q54VU4|Y8013_DICDI
+wc -l blastpC_UPuniprotKBcol2IDs.txt  
+    1785 blastpC_UPuniprotKBcol2IDs.txt
+
+Of course 'grep' & 'case sensitive' checked, in 'find' box, 'sp\|(\w+)\|\w+', and in replace box, '\1'. 1785 rows replaced as expect.
+
+wc -l blastpC_UPuniprotKBcol2IDs.txt  ## 1785 as expect.
+    1785 blastpC_UPuniprotKBcol2IDs.txt
+
+sort blastpC_UPuniprotKBcol2IDs.txt | uniq > blastpC_UPuniprotKBcol2IDs.uniq.txt
+head -n 3 blastpC_UPuniprotKBcol2IDs.uniq.txt
+A0A096SRM5
+A0QAU8
+A0SPJ3
+wc -l blastpC_UPuniprotKBcol2IDs.uniq.txt  
+    1190 blastpC_UPuniprotKBcol2IDs.uniq.txt
+## 1785 down to 1190 when reduce to unique. So 1785 - 1190 = 595 dup's
+## so several duplicate uniprotKB ID's in blastpC_UPuniprotKB.outfmt6
+
+## perhaps blastpC_UPuniprotKBcol2IDs.uniq.txt file the one to submit to 'batch retrieval tool' on uniprotKB werbsite.
+
+## 'LLR domain' has 31 hits of the 1190 blastp unique hits uploaded with 'batch retrieval tool' to uniprotKB.
+
+## use 'comm' with T_UP & C_UP files submitted to uniprotKB with 'batch retrieval tool'. Are any of them in common?
+comm -12 blastpC_UPuniprotKBcol2IDs.uniq.txt blastpT_UPuniprotKBcol2IDs.uniq.txt > common.txt
+wc -l common.txt
+     132 common.txt
+wc -l blastpC_UPuniprotKBcol2IDs.uniq.txt
+    1190 blastpC_UPuniprotKBcol2IDs.uniq.txt
+wc -l blastpT_UPuniprotKBcol2IDs.uniq.txt
+    3259 blastpT_UPuniprotKBcol2IDs.uniq.txt
+## perhaps check LLR domain ID's in common for C_UP, T_UP ????
+cd ..
+ls -lh *.tab  ## none currently in 'pfam' or 'uniprot' dir.
+## So, put in 'basket' from uniprotKB 1st the 31 C_UP hits, dnload. Rename to C_UP_LRR_uniprotKBhits.tab  (done)
+## **To do**:  get a basket of the 44 for T_UP. 
+## resubmit blastpC_UPuniprotKBcol2IDs.uniq.txt with 'batch retrieval tool' uniprotKB to get list of 44 LRR hits for T_UP.
+## rename to T_UP_LRR_uniprotKBhits.tab
+## for C_UP_LRR_uniprotKBhits.tab & T_UP_LRR_uniprotKBhits.tab,
+## remove header
+C_UP_LRR_uniprotKBhitsnohead.tab & T_UP_LRR_uniprotKBhitsnohead.tab
+Since 1st colm has uniprotKB ID's (after remove header line) cut 1st colm each, 
+
+cut -f 1 C_UP_LRR_uniprotKBhitsnohead.tab > C_UP_LRR_uniprotKBhitsnoheadcol1.tab
+head -n 3 C_UP_LRR_uniprotKBhitsnoheadcol1.tab  
+Q9LY03
+Q9Y4C4
+Q8LPB4
+wc -l C_UP_LRR_uniprotKBhitsnoheadcol1.tab  
+      31 C_UP_LRR_uniprotKBhitsnoheadcol1.tab
+
+cut -f 1 T_UP_LRR_uniprotKBhitsnohead.tab > T_UP_LRR_uniprotKBhitsnoheadcol1.tab
+head -n 3 T_UP_LRR_uniprotKBhitsnoheadcol1.tab  
+Q8MVR1
+Q6P1G2
+Q0GKD5
+wc -l T_UP_LRR_uniprotKBhitsnoheadcol1.tab  
+      44 T_UP_LRR_uniprotKBhitsnoheadcol1.tab
+
+## Now ready sort, uniq, C_UP, T_UP, then comm
+
+sort C_UP_LRR_uniprotKBhitsnoheadcol1.tab | uniq > C_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+head -n 3 C_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+C0LGF5
+C0LGH8
+C0LGI2
+wc -l C_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab  
+      31 C_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+
+sort T_UP_LRR_uniprotKBhitsnoheadcol1.tab | uniq > T_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+head -n 3 T_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+C0LGH2
+C0LGK4
+C0LGP4
+wc -l T_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab  
+      44 T_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+
+comm -12 C_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab T_UP_LRR_uniprotKBhitsnoheadcol1.uniq.tab
+C0LGP4
+Q2R2D5
+Q39214
+Q42371
+Q7XA39
+Q7XBQ9
+Q9FI14
+Q9LIG2
+Q9SKB2
+Q9SX38
+## so 10 ID's in common. Perhaps check fcn these proteins ????
+## 5 receptor
+## 5 disease
+## looks like for LRR proteins, not significant distinction disease, receptor ratio between T_UP, C_UP. WHAT TO THINK ???????????
+
+STOPPED
+## **if** use this data, recheck that the uniprotKB ID's match with tx's from DE'd C_UP & T_UP tx's.
+## Q: is there other possible info from uniprotKB of use ?????????
+
+05/02/17:
+talked to Keenan, mentioned uniprotKB result for 95_UP DE'd tx's. Mentioned 95-55 is resistant organism. Also tested **'prestige'**, a plant not resistent to the disease. So, may run trt & ctl for prestige thru trinity analysis, compare with result for 95-55.
+
+
 
 
 
