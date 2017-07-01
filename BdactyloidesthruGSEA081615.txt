@@ -10053,7 +10053,8 @@ STOPPED
 05/02/17:
 talked to Keenan, mentioned uniprotKB result for 95_UP DE'd tx's. Mentioned 95-55 is resistant organism. Also tested **'prestige'**, a plant not resistent to the disease. So, may run trt & ctl for prestige thru trinity analysis, compare with result for 95-55.
 
-
+05/17/17:
+Updated to github.
 
 
 

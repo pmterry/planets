@@ -1,0 +1,681 @@
+wheatprojdoc060117.txt
+
+06/01/17:
+## talked to Vikas, to do:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /home/baenziger/pterry
+-bash: cd: /home/baenziger/pterry: No such file or directory
+
+## ck Adam, get new HCC acct working
+## unclear how Vikas works on this acct, Adam created pterry dir. (OK, Vikas, group works this way) under baenziger in both home & work directories (apparently they don't routinely do ???????). 
+So, need **check** wi Vikas, how they work with their directories, and any 'common' dir. ?????????????????????????
+
+## plans for using bedtools to achieve correct numbering for *two part* wheat chromosomes (16 Gb genome). I note the 'locations' were in columns, similar to data.frame structure. Perhaps relatively easy to import into R, manipulate there?
+
+## Vikas to put following file into tusker/share. I can copy it from there.
+## Check Adam, my globus not working ??????????????????
+
+Sykes, et al., see discussion, p-356, 
+## step 1: PPR.hmm on 
+iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+-----------------------------------------------
+Contains the protein sequence of all high-confidence (HC) gene models that have been positioned on the IWGSC sequence assembly, without splice variants. Only the representative gene model per locus is given.
+
+06/05/17:
+ssh -Y pterry@tusker.unl.edu
+# Rrq096mN
+cd /home/baenziger/pterry
+cd /home/baenziger/shared/RefSeq_v1_Annotation/proteins/
+ls -lh
+[pterry@login.tusker proteins]$ pwd
+/home/baenziger/shared/RefSeq_v1_Annotation/proteins
+
+[pterry@login.tusker proteins]$ ls -lh
+total 25M
+-rw-r--r-- 1 vbelamkar2 baenziger 25M Apr 11 08:45 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+-rw-r--r-- 1 vbelamkar2 baenziger 118 Apr 11 08:45 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip.md5.txt
+logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry
+mkdir wheatproj
+cd wheatproj
+cd /work/baenziger/pterry/wheatproj
+
+scp pterry@tusker.unl.edu:/home/baenziger/shared/RefSeq_v1_Annotation/proteins/iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip .
+ls -lh
+
+scp pterry@tusker.unl.edu:/home/baenziger/shared/RefSeq_v1_Annotation/proteins/iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip.md5.txt .
+ls -lh
+## Q: how do md5 ?????????????
+md5sum <filetocheck> 
+md5sum iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+3acdf6120fcff98d8e65500b24362fe7
+cat iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip.md5.txt
+The MD5 checksum value is: 3acdf6120fcff98d8e65500b24362fe7
+## so checks out.
+unzip iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip > iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+## looks like unzip just removes the 'zip' & leaves the '.fa' file, redirect does *not* work, it trying to replace the '.fa' file it just created.
+
+unzip iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+ls -lh
+less iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+>TraesCS1A01G000100.1
+MRVIALSAGVTPSLRIGLPMCKCRSHGTFLLFGLQSSHLNICYYHQDLPRRPLCPGSRPG
+FCSGRRALLLIGAWRSSRWPGVGRAL*
+>TraesCS1A01G000200.1
+MVNNLWPMEQCRQGKSAKRIRNFGKRICSEDWAQGSRPRTRRLSADCSCCSRGKSRSPRA
+GQGTDQESPLRGLSPSMKQSTQNWYGQGESDYLIKTKHCDGPRGN*
+## Q: '*' character ??????????????????????????????????????????????????
+
+## OK, what need for input to hmmsearch ?????????????????
+## what kind of file is Trinity.fasta.transdecoder.pep  ????????????????
+## p-21, Hmmer manual, a 'fasta' file.
+## so perhaps I have an appropriate input file.
+
+
+
+## plan for using Hmmer for identifying PPR proteins in new wheat genome
+## dnload PPR.hmm (done, from http://pfam.xfam.org/family/ppr#tabview=tab6)
+
+## need couple species controls, check Sykes ref, possibly arabidopsis, rice ????? => **see** 1st few sentence 'Discussion' sectiom, rice, brachypodium, & sorghum
+
+## read over Sykes paper again, get 'controls' used there ?????
+
+06/04/17:
+## Hmmer steps:
+## Hmmer User's Guide, p-21-27, discussing 'hmmsearch' output
+
+06/06/17: 
+## line 8189, my **1st** hmmsearch in Bdac... file
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -lh
+wc iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+  921676   921676 48634703 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+# grep -c "^>" longest_orfs.pep  ## 158367
+grep -c "^>" iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa  ## 110790
+## apparently on average, fasta seqs *ave* 7 lines ??????????????
+
+## need scp PPR.hmm to crane
+
+scp PPR.hmm pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+# hmmsearch NB-ARC.hmm Trinity.fasta.transdecoder.pep > hmmsrchshortpep.out
+hmmsearch PPR.hmm iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa > PPR.out
+## ran almost *instantly*
+ls -lh
+-rw-r--r-- 1 pterry amundsen   6704453 Jun  6 17:14 PPR.out
+less PPR.out
+wc PPR.out
+ 118172  689922 6704453 PPR.out
+
+## now what to do with this output ????????
+## initially, perhaps scp it to macbook, examine what have. Think need create a fasta file of top hits (how decide) ???????????
+## Q: check Vikas AWK script ???????????????????????????????????????
+## from /work/baenziger/pterry/wheatproj/PPR.out file
+logout
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/PPR.out .
+ls -lh
+## Hmmer User's Guide, p-21-27, discussing 'hmmsearch' output
+## line 8203 (Bdac...)
+## note: PPR.out has *no* 'description' colm entries, hmmsrchshortpep.out *does* ????????
+## line 8208, ## 3rd colm, 'bias' ...
+## line 8210, The next three colms are again an E-value, score, and bias, but only for the **single** best-scoring domain in the sequence, rather than the sum of all its identified domains.
+## line 8213, ## So ***operationally***,
+if both E-values are significant (<< 1), the sequence is likely to be homologous to your query.
+
+06/12/17:
+## Note: p-544, cheng ref., 0.1 for *full*, 100 for *domain* ??????
+## Q: few comments:
+## PPR.out, line 1540, 'inclusion threshold'
+## p-9, sci. reports, RFL genes  >= 10 p-class ppr motifs, (note: sec 2, PPR.out, line 542, # domains < 10) So, should num. domains affect cutoff for hmmsearch hits ?????????????????
+## p-533, cheng ref., PPR proteins, 2 to 30 tandem repeats ??????????????
+## p-533, cheng ref., PPR.out, line 1562, criteria cutoff, 
+(-E 0.1),
+(-E 100)
+## compare, hmmer doc, p-23, cutoff E-value <= 10.0, catches *all* 1595 lines sec 2, PPR.out 
+## hmmer doc, p-24, sec 3, ...
+
+## talked to Vikas, would like to take hits in PPR.out file using cheng, p-544 criterion of 'full' E-value <= 0.1. This line 1562 and above in sec 2.
+
+06/13/17:
+## So, to do, start  wi PPR.out file
+i) remove sec 1 above sec 2
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+head -n 1562 PPR.out | tail -n 1
+
+ii) get sec 2 rows of PPR.out, lines 1562 & above
+head -n 1562 PPR.out | tail -n 1546 | head -n 1
+head -n 1562 PPR.out | tail -n 1546 > PPRsec2_1562.txt
+## Left, remove line 1524, 'inclusion threshold' in new file
+## try unix commands before doing wi BBedit, remaining, 1523 lines.
+head -n 1523 PPRsec2_1562.txt > top.txt
+tail -n 22 PPRsec2_1562.txt > bottom.txt
+
+cat top.txt bottom.txt > tmp.txt
+wc -l tmp.txt  ## expect 1545
+    1545 tmp.txt
+
+## examine tmp.txt in BBedit, if line above, below 'inclusion threshold' line ok, (looks good) then
+mv tmp.txt PPRsec2_1562.txt  ## done, now 1545 in length
+wc -l PPRsec2_1562.txt
+    1545 PPRsec2_1562.txt  ## ok, have 9 colms
+
+iii) cut colm 9, the 'sequence' colm.
+#cut -f 9 PPRsec2_1562.txt | head -n 3
+#cut -d ' ' -f 24 PPRsec2_1562.txt > PPRsec2_1562seqname.txt
+## *not* working, varying number spaces in lines.
+## so, try read into **R**, get 'sequence' colm that way ?????????
+
+#xlsC_up_logdf <- read.delim("xlsC_up_logdf.txt", header=T, sep=" ", stringsAsFactors=FALSE)
+## inside rStudio & R
+setwd("~/macbook2017/vikas17/wheatproj")
+#PPRsec2_1562 <- read.delim("PPRsec2_1562.txt", header=FALSE, sep=" ", stringsAsFactors=FALSE)
+dim(PPRsec2_1562)  ## [1] 2290   27 ?????????????????????????????
+head(PPRsec2_1562, n=3)
+tail(PPRsec2_1562, n=3)
+rm(PPRsec2_1562)
+PPRsec2_1562 <- read.delim("PPRsec2_1562.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(PPRsec2_1562)  ## [1] 1545    1   ???????????????????????????????
+head(PPRsec2_1562, n=3)
+1    3.1e-147  471.5  44.9    3.7e-09   38.7   0.1   21.3 21  TraesCSU01G134400.1   
+## so, right number rows, all in ***one*** colm ??????????????????
+class(PPRsec2_1562)  ## [1] "data.frame"
+## now what? Can I separate fields into df wi 9 fields ?????????????
+
+#write.table(RefSeqID_seq, file="Trinity.fasta.transdecoder.pep.df.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE) 
+write.table(PPRsec2_1562, file="Testwrite.txt", quote=FALSE, sep="\t", row.names=FALSE) 
+
+## talked to Vikas about working with sec 2, hmmsearch output in PPRsec2_1562.txt.
+cat PPRsec2_1562.txt|perl -pe 's/.+(Traes.+)/\1/'| head -n 3
+TraesCSU01G134400.1   
+TraesCS6B01G108900.1  
+TraesCS6A01G081600.2 
+## so, looks like successful peeling off colm 9.
+cat PPRsec2_1562.txt|perl -pe 's/.+(Traes.+)/\1/' | > PPRsec2 _1562_Seqscolm.txt
+## gives error ???????????????
+cat PPRsec2_1562.txt|perl -pe 's/.+(Traes.+)/\1/'| head -n 1545 > PPRsec2_1562_Seqscolm.txt
+## 1st & last rows look ok.
+iv) sort | uniq | length, see if still have same number as in PPRsec2_1562.txt (i.e., are there any duplicates)? Name this file PPRseqnames.txt 
+
+sort PPRsec2_1562_Seqscolm.txt |uniq | wc -l  ##     1545  as expected if each record in unique.
+
+## next use Vikas getsubsetfatofa.awk (getseq.awk) pgm to subset the records selected by hmmsearch in iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa file to file PPR.out.
+
+06/14/17:
+## 1st need scp iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa file from crane to macbook.
+
+scp ...
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa .
+-rw-r--r--   1 bterry  staff  48634703 Jun 14 10:27 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -al
+
+## currently 644,
+-rw-r--r--@ 1 bterry  staff   1.7K Jun 12 11:40 getseq.awk
+## so not executable, Q: the '@' ?????????????????
+#chmod u=rwx,g=rx,o=r myfile
+chmod 755 getseq.awk
+ls -lh
+## Q: what wrong? Looks like at https://stackoverflow.com/questions/9991858/how-to-run-a-awk-file
+## 1st line script needs to be right ?????????????????????
+
+philip-terry-2:wheatproj bterry$ ./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa PPRsec2_1562_Seqscolm.txt | head -n 3
+>TraesCS1A01G031600.1
+MDCCCRACRTDLALAFFGRLLRTGLQAGQVVFNTLLKGLCHTKRADEALDVLLHRMPELG
+CTPDVVAYNTVIHGFFREGQVGKACDMFHGMAQKGVMPNVVTYNSVIDGLCKARAMDKAE
+## so worked.
+
+## To try 
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa PPRsec2_1562_Seqscolm.txt > PPRhmmsearchsubset.fa
+wc -l PPRhmmsearchsubset.fa
+   18284 PPRhmmsearchsubset.fa
+grep -c "^>Tr" PPRhmmsearchsubset.fa   # 1545 as expect
+
+python seqread.py first6ref.fta
+python findcol3.py PPRsec2_1562.txt
+## no output ???, perhaps try with make up some file data ??????????????
+python findcol3.py
+## failed on PPRsec2_1562.txt ????????????????????????????????????????
+
+## OK, ready for next step, 
+
+Vikas email, submit PPRhmmsearchsubset.fa to pfam at:
+http://pfam.xfam.org/search#tabview=tab1
+## problem, 500 or 5000 limit number sequences ??????????????????????????
+
+06/15/17:
+## so try say 1st 500 seqs. Q: how select 1st 500 'name' lines ????????????
+grep "^>Tr" PPRhmmsearchsubset.fa > namelines.txt
+wc -l namelines.txt  ##     1545 namelines.txt
+## so 1st 500 seqs in PPRhmmsearchsubset.fa ends on line 5839
+head -n 5839 PPRhmmsearchsubset.fa > PPRhmmsearchsubset1to500.fa
+submit PPRhmmsearchsubset1to500.fa to pfam at:
+http://pfam.xfam.org/search#tabview=tab1
+## 2:16pm, approx wait time, 1hr 34 min.
+## Output to browser screen, number of links ??????????
+## email
+# Your job id was: 0563853C-51FF-11E7-AAEB-FFCADBC3747A
+# You can retrieve the **full** results by going to:
+# http://www.ebi.ac.uk/Tools/hmmer/results/score/0563853C-51FF-11E7-AAEB-FFCADBC3747A
+## complicated output, **HMMSCAN**
+# If you have any comments or questions about the use of this service,
+# please contact us at: hmmer-help@ebi.ac.uk
+
+## check Vikas, what to do with this output?
+
+
+## try put couple files in /work/baenziger/share
+PPRhmmsearchsubset.fa
+PPRhmmsearchsubset1to500.fa
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj
+ls -lh
+cd ..
+cd ..
+cd shared
+ls -lh
+mkdir terry
+cd terry
+mkdir hmm
+cd hmm
+pwd
+logout
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+
+scp PPRhmmsearchsubset.fa pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm
+scp PPRhmmsearchsubset1to500.fa pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm
+
+## log back in, check /work/baenziger/shared/terry/hmm dir.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/shared/terry/hmm
+ls -al  ## sizes are same.
+
+06/17/17:
+Talked to vikas about:
+## search refs for method to subset PLS, P subsets of PPRs ??????******??????
+## try cheng paper, which others ???????????????????
+## check where mentions particular genes having RF capability ??????????
+## 1st 500 results from online hmmscan for PPRhmmsearchsubset1to500.fa.
+## Idea: set up pipeline to get the output got in *email* for multiple species. Course, catenate results with more than 500 rows submitted to pfam.
+## **pipeline**:
+For each species:
+i) hmmsearch the .fa file
+# hmmsearch PPR.hmm iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa > PPR.out
+## so for wheat, done, result PPR.out
+
+ii) get colm 10 from hmmsearch output using vikas **one** line command
+
+philip-terry-2:wheatproj bterry$ grep "Traes" PPR.out|tr -s " " "\t"|awk -F'\t' -v OFS='\t' '$2<0.1 {print $10}' > PPR.out.E0p1.txt
+## 1545 records, colm 10.
+## *same* as PPRsec2_1562_Seqscolm.txt, also 1545 records
+
+## *testing* getting hmmsearch output into 'handleable' form.
+grep "Traes" PPR.out|tr -s " " "\t"|awk -F'\t' -v OFS='\t' '$2<0.1 {print $2, $3, $4, $5, $6, $7, $8, $9, $10}' > test.txt
+## looks like got colms 2 thru 10 sep'd wi '\t'
+
+Test read.delim into R? Then try 'dim' number colms? Will I have to try remove removed 1st '\t' in Bbedit before read.delim? (done above)
+testdf <- read.delim("test.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(testdf)  ##  [1] 1545    9  as expected.
+head(testdf, n=3)   ## looks ok
+
+06/18/17:
+
+iii) getseq.AWK script to subset input .fa file
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa PPRsec2_1562_Seqscolm.txt > PPRhmmsearchsubset.fa
+wc -l PPRhmmsearchsubset.fa
+   18284 PPRhmmsearchsubset.fa
+grep -c "^>Tr" PPRhmmsearchsubset.fa   # 1545 as expect
+
+## for wheat, proceed with use PPRsec2_1562_Seqscolm.txt rather than switching to PPR.out.E0p1.txt produced by Vikas. They the same. 
+
+06/19/17:
+
+iv) upload subset fasta to pfam online for hmmscan search.
+## need do 4 times, including repeat of 1 to 500.
+
+## so resubmit PPRhmmsearchsubset1to500.fa to hmmscan online pfam.
+http://pfam.xfam.org/search#tabview=tab1
+## cp/rename 1st, PPRhmmsearchsubset1to500.fa to PPRhmmsearchsubset1to500_2nd.fa
+Your job is queued behind 5123 other searches. (approximate wait time: 2 hours and 51 minutes)
+## **error** in receiving results, says on browser, no email message.
+## so start another run, with PPRhmmsearchsubset1to500_3rd.fa, started 9:50am.
+Your job is queued behind 9146 other searches. (approximate wait time: 5 hours and 5 minutes)
+## done by 1 pm.
+http://www.ebi.ac.uk/Tools/hmmer/results/AD5CAB18-54FE-11E7-859B-21AF53F04F9B/score
+## email results only approx half that vikas recovered ???????????????????
+## to send ***email*** to  hmmer-help@ebi.ac.uk
+## my questions:
+
+i) having trouble 'capturing' all of the output from an online pfam hmmscan result sent via email. the last line captured is:
+>TraesCS1D01G198900.1 193 226 193 226 &n
+So, wondering if I am not capturing all the output?
+
+ii) looks like the results in the browser not formatted similarly. Is there some standard way I should be following in accessing the output results?
+
+## prepare 501 to 1000 .fa file for submission to pfam online hmmscan run.
+## namelines.txt, line in PPRhmmsearchsubset.fa
+>TraesCS3A01G131000.1   501    1st line 5840
+>TraesCS5B01G195700.1   1000   line after seq  11826
+## 5987, for 'tail'
+#head -n 5839 PPRhmmsearchsubset.fa > PPRhmmsearchsubset1to500.fa
+
+head -n 11826 PPRhmmsearchsubset.fa | tail -n 5987 > PPRhmmsearchsubset501to1000.fa
+## check, verify in PPRhmmsearchsubset.fa, looks ok, names and line numbers correlate in PPRhmmsearchsubset.fa & PPRhmmsearchsubset1to500.fa
+
+06/21/17:
+Vikas request **two** files copy to 'shared' dir, one, PPRhmmsearchsubset.fa, prevly there.
+## 2nd
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+scp hmmscanOP_1-500.txt pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm
+ls -al
+
+## talked to vikas:
+## to do: read the refs again, try figure out how get hmm specific for 'P' motif
+## check 'sci reports'
+## check 'Sykes'
+## finish 'cheng'
+
+## ready to submit to pfam hmmscan online, but 1st, wait for response to email, and read the refs again, try figure out what to do with hmmscan output ????????????????????????
+
+06/24/17:
+Talked to vikas today. Upshot: 
+vikas ran MSA for PPRhmmsearchsubset.fa with clustal/omega, then phylogeny, which 'connected' with clustal/omega run.
+To graph this, he used 'figtree' (to dnload, install).
+## To do: I want to repeat this, learn myself.
+## To do: re-read sykes ref, task want to accomplish for wheat proj.
+## To do: read BMC genomics, 2014, 15 950.
+## now protocol for what want do next:
+--get 'cloned' RFSs (see sykes, p-2, sci reports, 1st full paragraph ?????????????
+06/25/17:
+In Sykes paper, p-354, section 'Phylogenetic Analysis of the RFL Cluster', refers to supplementary table S1, 143 rows, *multiple* species.
+
+In sci. reports paper, page 2, 1st full paragraph, refers to CMS/Rf systems in supp. table S1 (*all* rice species).
+
+06/26/17:
+Talked to vikas:
+To do: from srep35152-s1.pdf, table S1, take the 42 rows (see p-2, srep35152.pdf), the values in colm 3, 'NCBI reference', get the protein sequences from batch entrez search.
+## 1st get colm 3 out of table S1. For now, use BBedit, but later like to put in unix command line with pipes ???????????????
+## in BBedit, 3 steps
+Find: \w+ \w+ \w+ (.+)
+Replace: \1
+## manually, write in 'group' for rows 19-2, for 41-42, remove rest 'species', then write in group 
+Find: ^group (.+)
+Replace: \1
+## now, if manually removed line1, 3-7, 40-42 trailer parts from 'cultivar name', could then do cut of new colm2
+## try cut
+cut -d ' ' -f 2 srep35152-s1_tableS1_copy.txt | head -n 3  ## ok
+cut -d ' ' -f 2 srep35152-s1_tableS1_copy.txt | head -n 42 > NCBIrefcolm.txt
+## NCBIrefcolm.txt looks ok, 42 rows, has a blank 43 row ??????????????, so removed before proceed.
+
+06/27/17:
+## now for batch entrez search at NCBI, upload NCBIrefcolm.txt
+## Note: some issues with 'batch entrex' output ?????????
+## Q: AB179840 has 3 proteins, 2nd hypothetical tho matches dupl AB179840 , 1st matches on table S1, 3rd hypothetical, no aa seq given ??????????
+## Q: note, batch conversion nucleotide to protein does not appear to match protein name from table S1 ???????
+## Q: perhaps, manually try match each 'ncbi ref' with protein(s) coded for, select one matches table S1. What about 'ncbi ref' without protein name in table S1 ???????
+## Q: or, to try find 'cloned' RF(L) proteins, look t p-2, sci peports, ref papers, try get 'a few' cloned genes ?????????????????????????
+
+## talked to vikas, to manually examine table S1, 'sci reports' paper, each row in 'NCBI ref' colm. Sort of curate which select for 'restorer for CMS' genes to use in phylogeny with wheatproj PPR proteins (detd from PPR.hmm on wheatproj gene proteins. So, from NCBIrefcolm.txt file,
+
+AB106867 /product="PPR protein"
+AB110016 /product="Rf1"  (Q: ????????????????????????)
+
+AB195686 /product="PPR protein"
+AB470408 /product="pentatricopeptide repeat-containing protein"
+         /function="fertility restorer"
+
+AB470409 /product="pentatricopeptide repeat-containing protein"
+AB470406 /product="pentatricopeptide repeat-containing protein"
+
+AB470407 /product="pentatricopeptide repeat-containing protein"
+DQ311053 /product="PPR protein"
+
+DQ311054 /product="PPR protein"
+DQ311052 /product="PPR protein"
+
+AB179840 /product="restorer for CMS", /gene="Rf-1A", /protein_id="BAD20283.1"
+AB179840 /product="hypothetical protein", /gene="Rf-1D", /protein_id="BAD20284.1"
+AB179840 /gene="Rf-1B", /note="hypothetical protein", /pseudo
+
+AB112811 /product="PPR protein", /function="fertility restoration of CMS", /gene="Rf-1C", /protein_id="BAD13711.1"
+
+AB110443 /product="fertility restorer", /gene="Rf-1", /protein_id="BAD08214.1"
+AB110443 /product="hypothetical protein", /gene="PPR794", /protein_id="BAD08211.1"
+
+AB110443 /product="hypothetical protein", /gene="PPR683", /protein_id="BAD08212.1"
+AB110443 /product="hypothetical protein", /gene="PPR762", /protein_id="BAD08213.1"
+
+AB110444 /product="hypothetical protein", /protein_id="BAD08215.1"
+
+AB110444 /product="hypothetical protein", /protein_id="BAD08216.1"
+AB110444 /product="fertility restorer", /protein_id="BAD08217.1"
+
+AB900791 /product="pentatricopeptide repeat-containing protein", /gene="PPR454", /protein_id="BAQ15368.1", /note="fertility restorer for Wild-abortive (WA) type
+                     cytoplasmic male sterility (CMS)"
+AB900792 /product="pentatricopeptide repeat-containing protein", /gene="PPR782a", /protein_id="BAQ15369.1", /note="fertility restorer for Wild-abortive (WA) type cytoplasmic male sterility (CMS)"
+
+AB900793 /product="pentatricopeptide repeat-containing protein", /gene="PPR782b",  /protein_id="BAQ15370.1" /note="fertility restorer for Wild-abortive (WA) type cytoplasmic male sterility (CMS)"
+
+AB900794 /product="pentatricopeptide repeat-containing protein", /gene="PPR458", /protein_id="BAQ15371.1", /note="fertility restorer for Wild-abortive (WA) type
+                     cytoplasmic male sterility (CMS)"
+
+Os10g0495400 uniprotKB, a seq., but Status Unreviewed
+-Annotation score:no score -Protein predicted.
+
+Os10g0495200 uniprotKB, a seq., but Status Unreviewed
+-Annotation score:no score -Protein predicted.
+
+Os10g0495100 uniprotKB not coming up, Oryzabase, Search Condition : Keyword(Os10g0495100), link to => big file for AP008216.2
+
+KJ680250 /product="PPR protein PPR9-782-ZH", /gene="Rf4", /protein_id="AIC74552.1", /note="recessive fertility restorer allele for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+
+KJ680249 /product="PPR protein PPR9-782-M", /gene="Rf4", /protein_id="AIC74551.1", /note="fertility restorer allele for wild abortive
+                     cytoplasmic male sterility (CMS-WA)"
+
+KJ680248 /product="PPR protein PPR9-782-I", /gene="Rf4", /protein_id="AIC74550.1", /note="fertility restorer allele for wild abortive
+                     cytoplasmic male sterility (CMS-WA)"
+KJ680247 /product="truncated PPR protein PPR9-409-Z", /gene="Rf4", /protein_id="AIC74549.1", /note="recessive fertility restorer allele for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+
+KJ680253 /product="PPR protein PPR10-469-93", /gene="Rf4-like", /protein_id="AIC74555.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+KJ680252 /product="PPR protein PPR10-454-Z", /gene="Rf4-like", /protein_id="AIC74554.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+
+KJ680251 /product="PPR protein PPR10-454-M", /gene="Rf4-like", /protein_id="AIC74553.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+
+KJ680246 /product="PPR protein PPR8-780-M", /gene="Rf4-like", /protein_id="AIC74548.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+ 
+KJ680245 /product="PPR protein PPR7-458-ZH", /gene="Rf4-like", /protein_id="AIC74547.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+KJ680244 /product="PPR protein PPR7-458-Z", /gene="Rf4-like", /protein_id="AIC74546.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+
+KJ680243 /product="PPR protein PPR7-458-I", /gene="Rf4-like", /protein_id="AIC74545.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+KJ680242 /product="PPR protein PPR7-454-M", /gene="Rf4-like", /protein_id="AIC74544.1", /note="similar to the fertility restorer Rf4 for wild
+                     abortive cytoplasmic male sterility (CMS-WA)"
+
+AB179840 *DUPL* OF ABOVE. 
+
+AK066315 Q: what to think ???????????????? 
+
+06/30/17:
+## so, 'FR' & lengths to select from 42 rows from table S1, 'sci reports'
+AB470408 266/35 = 7.6
+AB179840 790/35 = 22.57
+AB112811 794/35 = 22.69
+AB110443 791/35 = 22.6
+AB110444 266/35 = 7.6
+AB900791 455/35 = 13
+AB900792 782/35 = 22.34
+AB900793 782/35 = 22.34
+AB900794 458/35 = 13.09
+KJ680249 782/35 = 22.34
+KJ680248 782/35 = 22.34
+
+## talked to vikas, would like to next create a fasta file of these 11, append  to PPRhmmsearchsubset.fa (perhaps 1st, do gbLocks MSA for just the 11, see how well they align). 
+http://molevol.cmima.csic.es/castresana/Gblocks_server.html
+## see JMower course, plant systematics, lab 3, 02/05/16, sec II, 'Trimming alignments'.
+
+07/01/17:
+
+## try append the 11 together 1st, then a reg expn to shorten the names on the name rows
+
+STOPPED
+
+
+
+Then do clustal/omega (ensembl) MSA, 'command A', save to txt file, they run thru phylogeny, finally display with figtree, want see how compares to 'phylotree.txt.png' produced above. Looking for location the new Rf's in 3rd 'area' of that tree ????????
+
+## so, create 11 fasta files, copy each to new file, shorten name line in each file, & reflect in name new file.
+
+
+## may 1st add 3 from sykes (see below) ????? before ...
+## create MSA wi hmmalign (stockholm format output)
+## hmmbuild => hmm
+## run on PPRhmmsearchsubset.fa, see if can pull out 'RF's' from this file.
+
+
+## to check 3 on p-353, sykes
+## following blasted vs ... ???????
+## here, perhaps include in prepn of an hmm the following, but how  ???????????????????
+
+i) brachypodium, gi|357139997 => ... gene prediction ???????????
+
+ii) rice, gi|33859441
+
+iii) maize, gi|662249846
+
+
+## Q: how best get some 'RF's' from other species ??????????????
+
+
+STOPPED
+
+
+
+--take 1545 wheat PPRs (PPRhmmsearchsubset.fa) *plus* cloned RFLs
+--muscle (MSA)
+--BBedit, 'clean' data
+--phylogeny
+--plot phylogeny (figtree)
+
+
+
+v) take output from email response (initially not from browser output ???), perhaps subset by colm 7, 'hmm name', but Q: about colm 6, 'hmm acc' ???????
+## Q: how get all the email output (vikas did ?????*****?????). Q: can one get this output like email from the website ?????????
+## Q: looks like at least one can dnload each of the results **separately** for each of the 500 names in the input to online hmmscan. Looks like **can't** get the form of the email output thru website? Q: currently if try 'print' the email output, it shorter than what vikas got ???????********???????????????
+
+## At least concatenate output of multiple submissions to hnnscan, take the 'email' output.
+
+ 
+
+
+
+
+iv) sort | uniq | length, see if still have same number as in PPRsec2_1562.txt (i.e., are there any duplicates)? Name this file PPRseqnames.txt 
+TO CHECK that input fasta file, iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa, has these as its 'fasta names' ???????
+v) apply Vikas getseq.awk to iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa & PPRseqnames.txt to get subset of fasta file from sec 2 of PPR.out. I note output from getseq.awk is a fasta fie.
+## Note: if dataframe format will be needed, check my prev. method convert fasta to dataframe, then use 'merge', ref., p-224, vbuffalo book ????????????
+
+## Q: try figure out what Vikas thinking with his blast & phylogeny analysis to 'identify gene models', that is, check ref articles how to find find RFL genes ??????????????????????
+
+STOPPED
+
+ if the full sequence E-value is significant but the single best domain E-value is not, the target sequence is **probably** a multidomain remote homolog; but be wary, and watch out for the case where it’s just a repetitive sequence.
+## so Q:, PPR proteins repetitive domains, & two E-Values significantly diff. here, **not** in hmmsrchshortpep.out ****?????????????****
+## line 8217, The two columns headed #doms are two different estimates of the number of distinct domains that the target sequence contains. ... These two numbers should be about the **same**.
+## note, betw. hmmsrchshortpep.out & PPR.out, **order** magnitude diff. in the two numbers. Though they are about the same.
+
+06/11/17:
+## PPR.hmm, 'inclusion threshold' on line 1540. 
+## Q: p-9, sci reports ref, PPR.out drops to <10 at line 542 ??? (Q: confusion, does the 10 domains mean RFLs with at least 10 domains in sec 2 should be retained ????????????)
+## (Q: p-533, mentions PPR proteins 2 to 30 tandem repeats ??????????)
+## inclusion threshold, line 1539 has only 2.2 & 1 for its two estimates of number of domains.
+*******************************************
+## Q: OK, so how to decide among these criteria ???????????????????
+*********************************************
+
+## **sec 3**, line 1598
+## Q: how use sec 3 ???????????*************?????????????????????????
+*********************************************************************
+## Q: perhaps for PPR.out data, for now, don't use sec 3 ??????????????????????
+**********************************************************************
+
+## line 8221, The ! or ? symbol indicates whether this domain does or does not satisfy **both** per-sequence and per-domain inclusion thresholds.
+## Q: is this good criterion for whatever use sec 3 for ??????????????????
+## line 8227, If the independent E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
+## Q: (<< 1), what value ?????????????????????
+## line 8228, The next **four** columns give the endpoints of the reported local alignment with respect to both the query model (“hmm from” and “hmm to”) and the target sequence (“ali from” and “ali to”).
+## think recall I used these endpoints for qqch ????????????????????????????
+## Q: **no** vertical '|' in PPR.out, though in hmmsrchshortpep.out ??????????????????????????????????
+## Q: where is line 385075, perhaps in Trinity.fasta.transdecoder.pep file ?????, YES
+## line 8250, SO WHAT TO DO ?????????
+## Should be able to take 'Sequence' colm from sec 2 of hmmsearch, do %in% to find the sec 2 hits from hmmsrchshortpep.out in Trinity.fasta.transdecoder.pep file, the rows want to build Stockholm MSA file with hmmalign.
+## Q: or do I want to get just the 'domains' specified in the 3rd sec of hmmsrchshortpep.out for each of the 'hits' ??????????????
+## Q: but PPR.out many more domains per hit ????????????***********??????????
+
+06/08-09/17:
+the plant journal (2016) 85, 532-47, file name = cheng...journal.pdf
+## Q: p-544, ***HMMs*** ??????????????******?????????????????
+## also Vikas refs Scientific Reports 6 35152 2016  ## *to see*
+## unl classic libr not working ????????????????????????????????????????
+## and Vikas BMC paper earlier ?????????  ## *to see*
+
+## get all appropriate (above appropriate cutoff) PPR's from PPR.out. 
+
+## Vikas rec. way using pfam to separate P & PLS subsets of PPR ??????
+## then get RFL's, see new refs from Vikas ????????
+## Sci Reports, 6:35152, 2016, p-6, fig 3, Q: non-RFL genes mixed in with RFL genes ????????????????????????????????????????????
+## same ref, p-2, 4 methods **identify RFL proteins within P-class** ??????????
+
+06/11/17:
+
+STOPPED
+## so need a plan to find RF/RFL (???) genes in wheatproj.
+## could start with PPR.hmm from pfam since easy.
+## so finish surveying hmmsearch criteria for output (i.e., in PPR.out file). ## Note criteria, p-544, cheng paper.
+
+
+## line 8822, hmmalign the **1st** output from 1st hmmsearch 
+
+## line 8848, (Q: note, looks like maybe there should *not* be 'redirection' command ">" when run hmmbuild command ?????????????, see p-20, output '.hmm' file name will be name given in hmmbuild command ?????????????
+
+## line 8875, 2nd run of hmmsearch with 'refined' '.hmm'
+
+## line 8937, blastp, Q: do I want to do vs uniprotKB ***??????????***
+## line 9099, slurm blastp (FAILED)
+## ran uniref90, WHAT VALUE ??????????????????, listed in recent trinotate paper ???????,
+## line 9214, ran slurm blastp *uniprotKB* 
+## line 9231, nearly same number hit as uniref90
+## line 9237, names hits different
+## line 9257, compare trinity DE'd wi blastp output from NB-ARC proteins.
+## line 9356, ran 'comm' command
+## to line 10056 (Q: later to review)
+
+STOPPED
+
+
+
