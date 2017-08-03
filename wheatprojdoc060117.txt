@@ -1452,10 +1452,94 @@ ii) then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
 ## **1 day 12 hrs***
 ## potl FR section of phylogram, to test wi the '14', ck vikas, 'color' icon grayed out ???????????????????????
 
+07/24/17:
+## so updated BdactyloidesthruGSEA081615.txt wheat...060117.txt to github, planets repo.
 
+07/29/17:
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML829/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+## the output from french site.
+-rw-r--r--@  1 bterry  staff  45412 Jul 25 11:46 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt
 
+## from cyverse site,
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML829/cyverse/PPRhmmsearchsubset_P_prots820plus9.fa.aln.hmmaln.phy_phyml_cyverse_tree.txt
+## the output from cyverse site.
+-rw-r--r--@  1 bterry  staff  45412 Jul 30 00:19 PPRhmmsearchsubset_P_prots820plus9.fa.aln.hmmaln.phy_phyml_cyverse_tree.txt
+## ***same*** number bytes in file from both phylogeny sites.
 
+## might try dnload figtree, Q: subtle, were there couple sites,need choose correct one. But, find printout where dnloaded from previously, **same** URL. I note, figtree 1.4.3 previously installed on 'pro', 
 
+07/30/17:
+## try dnload, install figtree v1.4.3.dmg
+## when try run, gives **error** as previously, figtree v1.4.3 quit unexpectedly, ...
+so in morning, scp twp tree files to 'pro' (still running os 10.10 & figtree v1.4.3 successfully), view in figtree, then mark 'Trae' 1,2,3,6,7 & the 9 rice 'FRs', see how they compare. 
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML829/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml
+
+scp pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm
+
+## go check if looks ok in 'shared' dir ??
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/shared/terry/hmm
+## ck if number bytes same as before scp
+ls -al  ## ok, 
+-rw-r--r-- 1 pterry amundsen   45412 Jul 30 10:31 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+
+## Now, set up a dir on 'pro', scp thid file over, and run in figtree. 
+## create macbook macbookpro2017/vikas17/pyML829 dirs
+cd ~
+mkdir macbookpro2017
+cd macbookpro2017
+mkdir vikas17
+cd vikas17
+mkdir pyML829
+cd ~/macbookpro2017/vikas17/pyML829
+scp pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt .
+ls -lh
+
+## now, on 'pro', load tree file, pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt, in figtree.
+##, locate 'Trae' 1,2,3,6,7 on tree
+## 1 by self, r1,r2,r3,r4,r6,r7,r8,r9 near 2 & 3, r5 near 6 & 7 (????). So, split of the 9 rice proteins into two groups of sizes 1 & 8. 
+
+## For 829 PhyML phylogram, 820 wheat proteins grouping similarly to PhyML 820 phylogram. For 829 PhyML phylogram, nine rice proteins group into two groups, r5 groups with 'Trae' 6, 7, 8, 10. Other 8 rice proteins group with 2,3,4,5,9,11,12,13,14 Trae wheat proteins (9 group). THOUGH the rice proteins group by selves on the shorter branch beside the '9 group'. What to think?
+
+## Q: don't see 'aLRT' on branches ??????????????????
+
+## If believe rice proteins good FR proteins, then perhaps grab (how many) wheat proteins near the rice eight group?
+## Probably in any case, look for more proven FR proteins from other species.
+## Would help to understand more about these proteins, correlate domains with proteins displaying near the eight rice proteins.
+
+08/02/17:
+## talked to Vikas
+## so, highlighted two branches as possible FR's, red (8 rice FRs colocate) blue, (1 rice FR co-locates). 
+## figtree, **save as** 820plus9nexustree_colors on 'pro'. A nexus file wih the colored rows representing the possible FR's co-locating near the rice FR's, either the group of 8, or the group of 1.
+## rename to:
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+## REQUEST: this file to **'shared'** dir on crane.
+scp ...to crane 'shared' from 'pro', done.
+scp ... to dir on Macbook:
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML829/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/shared/terry/hmm
+ls -al  ## two files of interest look fine.
+
+-rw-r--r-- 1 pterry amundsen   70689 Aug  2 22:05 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+-rw-r--r-- 1 pterry amundsen   45412 Jul 30 10:31 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML829/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml
+
+scp pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt .
+ls -lh
+-rw-r--r--@  1 bterry  staff  45412 Jul 25 11:46 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+-rw-r--r--   1 bterry  staff  70689 Aug  2 22:39 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+
+STOPPED
+
+## TO DO, subset the red & blue rows separately. Refer to as nearricesubsetof8 (red) & nearricesubsetof1 (blue).
+## ref. see line 642 above ????????????????
+## try a 2nd method for grouping (see Sci Reps paper, srep35152.pdf)
 
 
 
