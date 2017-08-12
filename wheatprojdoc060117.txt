@@ -1533,9 +1533,58 @@ cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML
 scp pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt .
 ls -lh
 -rw-r--r--@  1 bterry  staff  45412 Jul 25 11:46 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree.txt
--rw-r--r--   1 bterry  staff  70689 Aug  2 22:39 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+-rw-r--r--   1 bterry  staff  70689 Aug  2 22:39 pprhmmsearchsubse t_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+
+## saved wheatprojdoc060117 to github.
+## macbook froze, had to hit power button to recover. Afterward cursor seemed ok again, so tried to install figtree again, FAILED again. Note is error message mentions 'java' application. PERHAPS THIS WHERE COULD WORK. PERHAPS CALL **APPLECARE**. 1-800-275-2273. www.apple.com/support/macbook, july 05, 2015.
+
+
+07/05/17:
+phoned applecare, result: Demonstrated > java 1.6 installed. At URL,
+https://java.com/en/download/help/version_manual.xml
+...
+The JRE and JDK are separate and can coexist on your system. Only **one** JRE can be installed on Mac. There can be multiple JDKs installed on a system, as many as you wish.
+
+JRE Version Command Line on Mac
+
+Type the following in a Terminal window:
+
+philip-terry-2:planets bterry$ /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -version
+java version "1.8.0_144"
+Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
+philip-terry-2:planets bterry$ 
+
+## so, apparently evidence > ver 1.6 installed.
+
+## **or** in the **java control panel**
+
+Your system has the recommended version of Java.
+Java 8  update 144
+
+## or at URL:
+https://support.apple.com/en-us/HT204036
+
+Note: You can also download legacy Java SE 6 from Apple if you’re using an app that specifically requires this unsupported, out-of-date version.
+
+Perhaps see if Vikas can get figtree to work on his mac sierra' If can then, perhaps I try load **legacy** ver of java, see if that allows figtree to  install. Q: apparently both versions cannot coexist ????????????????/
 
 STOPPED
+
+08/09/10:
+
+## looking thru 2nd paragraph, p-2, srep35152.pdf ref., ref 8 there, looking for verified RF gene/protein for more detailed comparison to possible red or blue wheat proteins. 
+## Q: trying get seq from ensembl ??????????????
+
+08/10/17:
+
+## talked to vikas,
+## Rf-1, try get GFF file from ensembl plants, use fig 3 notation try get seq. for 'RF-1 RF protein.
+## from ftp://ftp.ensemblgenomes.org/pub/plants/release-36/gff3/oryza_sativa/, see File: Oryza_sativa.IRGSP-1.0.36.chromosome.1.gff3.gz	1401 KB 	6/7/17
+## TO DO: open, check for addresses like fig 3, sci reports ref.
+## note: refs 26, 27 ???????????????????//
+## Look in sci reports for a second method to find RF proteins (read fig 1 ???)
+
 
 ## TO DO, subset the red & blue rows separately. Refer to as nearricesubsetof8 (red) & nearricesubsetof1 (blue).
 ## ref. see line 642 above ????????????????
