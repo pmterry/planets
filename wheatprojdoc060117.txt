@@ -1580,19 +1580,573 @@ STOPPED
 
 ## talked to vikas,
 ## Rf-1, try get GFF file from ensembl plants, use fig 3 notation try get seq. for 'RF-1 RF protein.
-## from ftp://ftp.ensemblgenomes.org/pub/plants/release-36/gff3/oryza_sativa/, see File: Oryza_sativa.IRGSP-1.0.36.chromosome.1.gff3.gz	1401 KB 	6/7/17
+## from ftp://ftp.ensemblgenomes.org/pub/plants/release-36/gff3/oryza_sativa/, see File: File:Oryza_sativa.IRGSP-1.0.36.chromosome.10.gff3.gz
+	566 KB 	6/7/17
 ## TO DO: open, check for addresses like fig 3, sci reports ref.
-## note: refs 26, 27 ???????????????????//
+## put in dir orysa_sativa+gff3
+gunzip ...
+
+## note: refs 26, 27 ???????????????????
+
+08/11/17:
+## copied to github, version this file copied to extl hdrive, 08/11/17
+
 ## Look in sci reports for a second method to find RF proteins (read fig 1 ???)
 
+## Look in sci reports, fig 3, ensembl plants, are the 'Os_10_17173' refs into gff3 file ????????????????
 
+08/13/17:
 ## TO DO, subset the red & blue rows separately. Refer to as nearricesubsetof8 (red) & nearricesubsetof1 (blue).
+## see line 1633
 ## ref. see line 642 above ????????????????
+
+## to do, (from 642 - 676 above)
+## subset colored rows in file from figtree, 
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt ## ('P' proteins)
+
+## Note: ## pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt has NEXUS phylogenetic tree starting at line 837. So, just use 1st 837 lines to get 'colored' rows.
+
+cat pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt | head -n 835 > pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt
+
+## check number 'Treas' rows, in, '835' (835 as expected) in bbedit. Matches number in PPRhmmsearchsubset.fa (??????????????????????????????????)
+grep -c "Traes" pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt   # 820 as expect
+
+## now reg expn to get 'colored' subset ('P') list. 
+
+grep '.*Traes.*ff\]$' pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt | head -n 4  ## worked
+
+grep '.*Traes.*ff\]$' pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt | wc
+      22      22     899  ## correct for Traes 'blues'
+## note, has *one* of 9 rice RFs nearby
+grep '.*Traes.*ff\]$' pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt > pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue.txt
+
+grep '.*Traes.*00\]$' pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt | wc
+     122     122    5002
+
+grep '.*Traes.*00\]$' pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835.txt > pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red.txt
+
+## now pull out of 'red' & 'blue' 'P' proteins the name will use to go back and get their aa seq.
+
+.+(Traes.+\d).+color.+  ## works bbedit, but lines not 'found' by this *remain*.
+## so try,
+
+# cat PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 30
+
+cat pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue.txt|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 22
+
+cat pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue.txt|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 22 > pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt
+
+cat pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red.txt|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 122 > pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt
+
+08/14/17:
+
+## check for duplicates [TO DO ????????]
+sort PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560_aftperl_listfile |uniq | wc -l  ##          820  as expected if each record in unique.
+
+07/06/17:
+## now, subset PPRhmmsearchsubset_P_prots820plus9.fa fasta file with the 
+with 'red' (122 proteins) & 'blue' (22 proteins) from figtree color. 
+
+## file to subset with 'blue' & 'red' proteins is 
+PPRhmmsearchsubset_P_prots820plus9.fa
+
+## need copy down from extl hdrive, done.
+
+## to do, use Vikas getsubsetfatofa.awk (getseq.awk) pgm to subset the records selected by figtree ('color' rows, possibly 'PF' proteins) in 'blue' or 'red' listfiles in PPRhmmsearchsubset_P_prots820plus9.fa. Output to 
+PPRhmmsearchsubset_P_prots820plus9_blue.fa or PPRhmmsearchsubset_P_prots820plus9_red.fa
+
+STOPPED
+
+
+## getseq.AWK script to subset input .fa file
+## getseq.AWK script to subset input .fa file
+## ref: line 1657 above
+
+## cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+## ./getseq.awk PPRhmmsearchsubset.fa PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560_aftperl_listfile  > PPRhmmsearchsubset_P_prots820.fa
+## grep -c "^>Tr" PPRhmmsearchsubset_P_prots820.fa   # 820 as expect
+
+cd /Users/bterry/macbookpro2017/vikas17/tmp081117reparemacbook
+
+./getseq.awk PPRhmmsearchsubset_P_prots820plus9.fa pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt > PPRhmmsearchsubset_P_prots820plus9_blue.fa
+
+# grep -c "^>Tr" PPRhmmsearchsubset_P_prots820.fa   # 820 as expect
+
+grep -c "^>Tr" PPRhmmsearchsubset_P_prots820plus9_blue.fa   # 22 as expect
+
+## now for the red
+
+./getseq.awk PPRhmmsearchsubset_P_prots820plus9.fa pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt > PPRhmmsearchsubset_P_prots820plus9_red.fa
+
+grep -c "^>Tr" PPRhmmsearchsubset_P_prots820plus9_red.fa   # 122 as expect
+
+08/15/17:
+## I ***note*** for pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt file, 
+## 119 of 122 rows either chr 1,2,or 6. And 8 rice RF proteins near, **but** by themselves. Pattern ***similar*** rice p-4, sci. reports ref. paper.
+
+## talked to Vikas,
 ## try a 2nd method for grouping (see Sci Reps paper, srep35152.pdf)
+## **Note**: for red set, chr 1,2,6 have 119 of the 122 rows.
+
+08/17/17:
+orthofinder plan:
+## prepare to run on crane ??????????
+## get 9 rice RF genes in a fasta file.
+FRknownseqs_shtname_9.fa
+PPRhmmsearchsubset_P_prots820.fa
+grep -c "^>" FRknownseqs_shtname_9.fa   # 9 as expect
+grep -c "^>" PPRhmmsearchsubset_P_prots820.fa   # 820 as expect
+
+## ref: https://github.com/davidemms/OrthoFinder
+## Aside: try run these two files in orthoMCL online (Q: can't find online site ??????????, ck if vikas can find ??????????????????
+
+08/18/17:
+## scp the two orthofind input files to dir ???? on crane.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry
+mkdir ofinder  ## where plan to place orthofinder input files.
+/work/baenziger/pterry/wheatproj/ofinder
+
+## scp the two files 
+cd /Users/bterry/macbookpro2017/vikas17/tmp081117reparemacbook
+
+scp rice9.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/ofinder
+scp wheat820P.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/ofinder
+
+## Adam on crane
+## installed OrthoFinder-1.1.8.tar.gz
+## to test, Q: are dependencis needed here ??????????
+module avail
+   blast/2.4     ## Q: is this blast ok ????????????????????
+   mcl/14.137
+
+module spider orthofinder  
+
+STOPPED
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/ofinder
+ls -lh
+cd ..
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj
+module load blast/2.4   ## ## Q: is this blast ok ????????????????????
+module load mcl/14.137
+module load orthofinder/1.1
+OrthoFinder-1.1.8/orthofinder -h ## OrthoFinder should print its 'help' text.
+bash: OrthoFinder-1.1.8/orthofinder: No such file or directory
+????????????????????????????????????????????????????????????????
+orthofinder -h  ## outputs help info.
+## example test
+# OrthoFinder-1.1.8/orthofinder -f ExampleDataset
+orthofinder -f ExampleDataset
+...
+IOError: [Errno 2] No such file or directory: '/lustre/work/baenziger/pterry/wheatproj/ExampleDataset/SimpleTest.phy'
+???????????????????????????????????????????????????????????
+## perhaps need ExampleDataset/SimpleTest.phy in dir wheatproj ???????
+
+cd /work/baenziger/pterry/wheatproj
+## orthofinder -f fasta_files_directory [-t number_of_threads]
+orthofinder -f ofinder
+[pterry@c0912.crane wheatproj]$ orthofinder -f ofinder
+OrthoFinder version 1.1.8 Copyright (C) 2014 David Emms
+
+    This program comes with ABSOLUTELY NO WARRANTY.
+    This is free software, and you are welcome to redistribute it under certain conditions.
+    For details please see the License.md that came with this software.
+
+16 thread(s) for highly parallel tasks (BLAST searches etc.)
+1 thread(s) for OrthoFinder algorithm
+
+## what to think ???????????????
+## if run **slurm** what parameters to choose ????????????????????
+## match number tasks with number_of_threads
+orthofinder -f ofinder [-t number_of_threads]
+
+cd /Users/bterry/macbookpro2017/vikas17/tmp081117reparemacbook
+scp slurm_ofinder_wheatproj_inp820and9.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+less slurm_ofinder_wheatproj_inp820and9.sh
+## ck if present slurm_muscle_wheatproj_refin820.sh
+ls -lh
+
+08/19/17:
+sbatch slurm_ofinder_wheatproj_inp820and9.sh 8443947  12:15am => ??:??am, 
+squeue -u pterry  ## a PD
+
+cd /work/baenziger/pterry/wheatproj
+less job.8443839.out
+Unrecognised argument: [-t
+
+ERROR: An error occurred, please review previous error messages for more information.
+job.8443791.out (END) 
+## try [ -t 4], if still fails (does), skip specifying number of threads.
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           8443947     batch TJob_ofi   pterry  R       0:46      1 c3713
+## ok, running
+
+cd /work/baenziger/pterry/wheatproj
+ls -al
+less job.8443947.out
+cat job.8443947.out
+## looks like orthogroup output produced.
+
+[pterry@login.crane Results_Aug19]$ ls -al
+total 92
+drwxr-xr-x 4 pterry amundsen  4096 Aug 19 00:57 .
+drwxr-xr-x 4 pterry amundsen  4096 Aug 19 00:14 ..
+-rw-r--r-- 1 pterry amundsen   932 Aug 19 00:57 Orthogroups.csv
+-rw-r--r-- 1 pterry amundsen    43 Aug 19 00:57 Orthogroups.GeneCount.csv
+-rw-r--r-- 1 pterry amundsen    44 Aug 19 00:57 Orthogroups_SpeciesOverlaps.csv
+-rw-r--r-- 1 pterry amundsen 25932 Aug 19 00:57 Orthogroups.txt
+-rw-r--r-- 1 pterry amundsen 25863 Aug 19 00:57 Orthogroups_UnassignedGenes.csv
+drwxr-xr-x 4 pterry amundsen  4096 Aug 19 00:57 Orthologues_Aug19
+-rw-r--r-- 1 pterry amundsen     0 Aug 19 00:57 SingleCopyOrthogroups.txt
+-rw-r--r-- 1 pterry amundsen  1407 Aug 19 00:57 Statistics_Overall.csv
+-rw-r--r-- 1 pterry amundsen  1773 Aug 19 00:57 Statistics_PerSpecies.csv
+drwxr-xr-x 2 pterry amundsen  4096 Aug 19 00:57 WorkingDirectory
+[pterry@login.crane Results_Aug19]$ 
+## anything useful in  WorkingDirectory ?????????????????????
+## so look inside Orthogroups.csv
+less Orthogroups.csv
+cat Orthogroups.csv
+less Orthogroups_UnassignedGenes.csv
+less Orthogroups.txt
+less Statistics_Overall.csv
+cat Statistics_Overall.csv
+less Statistics_PerSpecies.csv
+cat Statistics_PerSpecies.csv
+less Orthogroups_SpeciesOverlaps.csv
+        rice9   wheat820P
+rice9   1       1
+wheat820P       1       1
+Orthogroups_SpeciesOverlaps.csv (END) 
+## ok, want to see if 39 wheat proteins in Orthogroups.csv are a subset of 122 'red' proteins from ML phylogeny previously.
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/ofinder/Results_Aug19/Orthogroups.csv .
+
+## to do: compare results of ML phylogeny estimate of RF proteins in 820 wheat P proteins (red, 122, blue, 22). Determine how many of Orthogroups.csv wheat proteins (39) (formatted as vectors in Ogroups_copy.csv) are in the red & blue P subsets.
+## So, need files 
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt
+R
+## from Ogroups_copy.csv
+wheat820P <- c(TraesCS1A01G054500.1, TraesCS1A01G054700.2, TraesCS1A01G067400.1, TraesCS1A01G067600.1, TraesCS1B01G071600.1, TraesCS1B01G072400.1, TraesCS1B01G072900.2, TraesCS1B01G074600.1, TraesCS1B01G075000.1, TraesCS1B01G085300.1, TraesCS1B01G085900.1, TraesCS1D01G056200.1, TraesCS1D01G058200.1, TraesCS1D01G068400.1, TraesCS1D01G068500.1, TraesCS1D01G068800.1, TraesCS1D01G068900.1, TraesCS5B01G250800.1, TraesCS6A01G014500.1, TraesCS6A01G014600.1, TraesCS6A01G014800.1, TraesCS6A01G014900.1, TraesCS6A01G015000.1, TraesCS6A01G083000.1, TraesCS6A01G311600.1, TraesCS6B01G021200.1, TraesCS6B01G021500.1, TraesCS6B01G021600.1, TraesCS6B01G045200.1, TraesCS6B01G114300.1, TraesCS6D01G017700.1, TraesCS6D01G017800.1, TraesCS6D01G047700.1, TraesCS6D01G076500.1, TraesCS6D01G290900.1, TraesCS7D01G487500.1, TraesCSU01G089700.1, TraesCSU01G089800.1, TraesCSU01G090200.1)
+## How read in red, blue files ???????????
+
+08/20/17:
+## methods, 
+i) https://stackoverflow.com/questions/3695677/how-to-find-common-elements-from-multiple-vectors
+ii) p-222, v buffalo
+
+## try read into R
+setwd("~/macbookpro2017/vikas17/tmp081117reparemacbook/r_stuff")
+ ## p-196, v buffalo
+#testdf <- read.delim("test.txt", header=FALSE, stringsAsFactors=FALSE)
+bluedf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("blue"))
+dim(bluedf)  ##  [1] 22  1  as expected.
+head(bluedf, n=3)   ## looks ok
+class(bluedf)
+reddf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("red"))
+dim(reddf)  ##  [1] 22  1  as expected.
+head(reddf, n=3)   ## looks ok
+class(reddf)
+#wheat820P <- c(TraesCS1A01G054500.1, TraesCS1A01G054700.2, TraesCS1A01G067400.1, TraesCS1A01G067600.1, TraesCS1B01G071600.1, TraesCS1B01G072400.1, TraesCS1B01G072900.2, TraesCS1B01G074600.1, TraesCS1B01G075000.1, TraesCS1B01G085300.1, TraesCS1B01G085900.1, TraesCS1D01G056200.1, TraesCS1D01G058200.1, TraesCS1D01G068400.1, TraesCS1D01G068500.1, TraesCS1D01G068800.1, TraesCS1D01G068900.1, TraesCS5B01G250800.1, TraesCS6A01G014500.1, TraesCS6A01G014600.1, TraesCS6A01G014800.1, TraesCS6A01G014900.1, TraesCS6A01G015000.1, TraesCS6A01G083000.1, TraesCS6A01G311600.1, TraesCS6B01G021200.1, TraesCS6B01G021500.1, TraesCS6B01G021600.1, TraesCS6B01G045200.1, TraesCS6B01G114300.1, TraesCS6D01G017700.1, TraesCS6D01G017800.1, TraesCS6D01G047700.1, TraesCS6D01G076500.1, TraesCS6D01G290900.1, TraesCS7D01G487500.1, TraesCSU01G089700.1, TraesCSU01G089800.1, TraesCSU01G090200.1)
+## won't work for char data
+sed 's/^/"/' testOgroups.txt
+sed 's/^/"/' whtOgroup.txt | sed 's/$/", /' > whtOgroupsed.txt
+
+## before do any more, try read whtOgroup.txt into R.
+whtOgroupdf <- read.delim("whtOgroup.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("whtOgrp"))
+dim(whtOgroupdf)  ##  [1] 39  1  as expected.
+head(whtOgroupdf, n=3)   ## looks ok
+class(whtOgroupdf)
+intersect(whtOgroupdf$whtOgrp, bluedf$blue)  ## 7 proteins
+intersect(whtOgroupdf$whtOgrp, reddf$red)  ## 29 prots
+## so, 39 - 36 = 3 prots not in common.
+## now venn diagram or 'UpSetR', Gehlenborg ??????????
+
+08/23/17:
+*********************************************************************
+Brought this file back from 'pro' today, so when decide, will backup to github.
+**********************************************************************
+
+Talked to vikas yesterday:
+1) would like to create 1 file of 820+9. See what happens for following:
+i) run online with orthoMCL
+ii) run on orthofinder
+## if result same as when ran separate files 820 & 9, then don't do (2) below.
+2) run 820 wheat P seqs vs those for a rice genome P's (how get???). Include the '9' RF's from previous runs. See if find more orthogroups (only got 1 wi 820 & 9 ?????????
+
+08/25/17:
+talked to vikas.
+## vikas request to 'shared' dir on crane, 
+a) the 36 wheat proteins found as RF's in orthoFinder run on 820 & 9 files above.
+b) previously did not have 829 file, only 820 & 9, so copy two input files for orthoFinderb to 'shared'.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -lh  ## ck dir contents?
+cd ofinder
+## rice9.fa, wheat820P.fa
+cd /work/baenziger/shared/terry/hmm
+cp /work/baenziger/pterry/wheatproj/ofinder/*.fa .  ## ok, done
+
+
+08/26/17:
+## before do any more, try read whtOgroup.txt into R.
+whtOgroupdf <- read.delim("whtOgroup.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("whtOgrp"))
+dim(whtOgroupdf)  ##  [1] 39  1  as expected.
+head(whtOgroupdf, n=3)   ## looks ok
+class(whtOgroupdf)
+
+bluedf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("blue"))
+dim(bluedf)  ##  [1] 22  1  as expected.
+head(bluedf, n=3)   ## looks ok
+class(bluedf)
+reddf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("red"))
+dim(reddf)  ##  [1] 22  1  as expected.
+head(reddf, n=3)   ## looks ok
+class(reddf)
+
+Ofinder_blue <- intersect(whtOgroupdf$whtOgrp, bluedf$blue)  ## 7 proteins
+Ofinder_red <- intersect(whtOgroupdf$whtOgrp, reddf$red)  ## 29 prots
+## so, 39 - 36 = 3 prots not in common with RF phylogenetic ML analysis proteins.
+write.table(Ofinder_blue, file="Ofinder_blue.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names="blue")
+write.table(Ofinder_red, file="Ofinder_red.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names="red")
+
+cat Ofinder_blue.txt Ofinder_red.txt > Ofinder_blueandred36.txt
+## to copy to 'shared' on crane: Ofinder_blueandred36.txt
+
+scp Ofinder_blueandred36.txt pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm  ## ok, done
+
+08/27/17:
+
+1) would like to create 1 file of 820+9. See what happens for following:
+i) run online with orthoMCL
+ii) run on orthofinder
+
+1st, cp rice9.fa & wheat820P.fa from /Users/bterry/macbook2017/vikas17frompro/tmp081117reparemacbook/
+## to /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp
+cat rice9.fa wheat820P.fa > rice9wheat820P.fa
+ls -al
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -lh  ## ck dir contents?
+mkdir ofinder1
+cd ofinder1
+
+## scp rice9wheat820P.fa to ofinder1
+scp rice9wheat820P.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/ofinder1
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/ofinder1
+ls -lh  ## ck dir contents?
+## now change slurm, scp over to crane
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp
+scp slurm_ofinder1_wheatproj_inp829.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+## now run the slurm Job
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj
+cd /home/baenziger/pterry/scripts
+
+sbatch slurm_ofinder1_wheatproj_inp829.sh 8532901  1:08pm => ??:??am, 
+squeue -u pterry  ## a PD
+
+less job.8532901.err
+Traceback (most recent call last):
+  File "/util/opt/anaconda/4.3/envs/orthofinder-1.1.8/bin/orthofinder", line 1499, in <module>
+    clustersFilename_pairs, statsFile, summaryText, orthogroupsResultsFilesString = DoOrthogroups(options, dirs, seqsInfo)    
+  File "/util/opt/anaconda/4.3/envs/orthofinder-1.1.8/bin/orthofinder", line 1239, in DoOrthogroups
+    summaryText, statsFile = Stats(ogs, speciesNamesDict, dirs.speciesToUse, dirs.resultsDir, iResultsVersion)
+  File "/util/opt/anaconda/4.3/envs/orthofinder-1.1.8/bin/orthofinder", line 673, in Stats
+    writer_sp.writerow(["Percentage of orthogroups containing species"] + [percentFormat % (100.*sum([iSp in og_sp for og_sp in speciesPresence])/len(properOGs)) for iSp in iSpecies])
+ZeroDivisionError: float division by zero
+job.8532901.err (END) 
+
+## ***what to think*** ??????????????????????
+
+less job.8532901.out
+cat job.8532901.out
+less Orthogroups.csv
+        rice9wheat820P
+Orthogroups.csv (END) 
+## looks like ***no*** proteins reported in orthogroup ?????????????????
+
+[pterry@login.crane Results_Aug27]$ cat Statistics_Overall.csv
+Number of genes	829
+Number of genes in orthogroups	0
+Number of unassigned genes	829
+Percentage of genes in orthogroups	0.0
+Percentage of unassigned genes	100.0
+Number of orthogroups	0
+## NO genes in orthogroups
+## So, have not proven that that using only **1** input .fa (rice9wheat820P.fa) file caused the failure to find any proteins in Orthogroups.csv output file. 
+
+## for now, move on to try the **one** file (rice9wheat820P.fa) with orthoMCL online run. Tho I don't see a ratioale to do this, but if orthomcl only allows 1 file? Perhaps run a 2nd with ric9.fa & wheat820P.fa ???????
+## dir is:
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp
+## orthomcl: http://orthomcl.org/orthomcl/proteomeUpload.do
+## submitted 9:30pm, 08/27/17.
+
+08/28/17:
+## result from orthomcl with one input file, /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/rice9wheat820P.fa
+## results in /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/omclonline/orthomclResult-2V0ZL87G4ZTZ/orthologGroups file.
+
+## talked to vikas, he went and found one of the rice 9 proteins (row) in this output file, 
+
+AB110443	OG5_131220	osat|NP_001064958	0	-181	89	99
+
+## noted OG5_131220 orthomcl_group same for all 9 rice RF proteins. Q: why only 828 records ???????????????????
+## anyway, search in bbedit for OG5_131220 rows gives 144 rows, similar to number for 'blue' & 'red' results from phylogenetic ML analysis. 
+
+## so, *to do*, compare this 144 with the 144 'blue' & 'red' phylogenetic ML analysis proteins. If roughly same set, then **two independent** ways to identify. Also, score what chromosomes these hits are on. Q: are they preponderantly on 1, 2, & 6 ??????????
+
+08/29/17:
+
+## so need:
+--144 rows from orthoMCL
+--red & blue protein lists from phylogenetic ML analysis
+
+## for reference, place intersect.R in dir.:
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff
+## cp to this dir:
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt
+## now, from /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/orthomclResult-2V0ZL87G4ZTZ
+## cp over orthologGroups to /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff
+## now make copy of orthologGroups, then subset inside bbedit to oGroups144.txt
+
+
+grep '.*OG5_131220.*$' oGroups144.txt > Test
+## deleted oGroups144.txt, renamed test to oGroups144.txt.
+
+## next, cut 1st colm from oGroups144.txt, then ready for r code for intersect test.
+## from /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff
+
+cut -f 1  oGroups144.txt | head -n 3
+cut -f 1  oGroups144.txt > oGroups144col1.txt  ## ok, 144 rows
+
+## now for the intersect from R code
+whtOMCLgroupdf <- read.delim("oGroups144col1.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("whtOgrp"))
+dim(whtOMCLgroupdf)
+head(whtOMCLgroupdf, n=3)
+class(whtOMCLgroupdf)
+
+bluedf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("blue"))
+dim(bluedf)
+head(bluedf, n=3)
+
+reddf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("red"))
+dim(reddf)
+head(reddf, n=3)
+
+Ofinder_blue <- intersect(whtOMCLgroupdf$whtOgrp, bluedf$blue)
+Ofinder_red <- intersect(whtOMCLgroupdf$whtOgrp, reddf$red)
+
+## check
+red_blue_overlap <- intersect(reddf$red, bluedf$blue)
+length(red_blue_overlap)  ## 0 as expect
+
+write.table(Ofinder_blue, file="OfinderMCL_blue.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names="blue")
+write.table(Ofinder_red, file="OfinderMCL_red.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names="red")
+
+## so, 10 of 22 'blue' phylogenic ML proteins match with OfinderMCL OG5_131220 orthomcl_group proteins, 122 of 122 'red' phylogenic ML proteins match with OfinderMCL OG5_131220 orthomcl_group proteins (135 OfinderMCL proteins). For the 'red', 122/820 and 122 (of 135)/820 orthoMCL match. Statistically, this degree of matching would not appear to be by chance. So if one can view othoMCL & phylogeny ML as independent methods, then the matching proteins related. 
+
+## next step. Doc chromosomes for the 'red' 122?
+## next step, perhaps do orthoMCL for the 820 wheat P proteins vs one of the rice protein genome proteins (1st do hmmPPR.hmm for the rice proteins to select P subset), or don't subset 1st, let orthoMCL find as many orthogroups as can? Guess just put all in one file? That is, try broaden search for RF proteins?
+
+08/30/17:
+## talked to vikas 
+1) ## **to do** request put 147 wheat proteins on 'shared'. Q: how got 147? 122 (match 'red') + 10 (match 'blue'). Q: how get the additional 15? Perhaps the remaining 3 from orthoMCL, + ?? (perhaps remaining 12 nonmatching from 'blue' ?????????
+  
+## combine 135 proteins from oGroups144col1.txt (**remove** 9 rice rows. Last 12 needed are the 'blue' phylogenetic proteins not intersecting with oGroups144col1.txt proteins. 
+## to get these, try setdiff(x,y) in R (order parameters matters) where x = blue file, y = intersect blue with oGroups144col1.txt output (10 rows)
+
+08/31/17:
+## will become setdiff12blue.R after run in rstudio.
+
+setwd("~/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff")
+whtOMCLgroupdf <- read.delim("oGroups144col1.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("whtOgrp"))
+dim(whtOMCLgroupdf)
+head(whtOMCLgroupdf, n=3)
+class(whtOMCLgroupdf)
+bluedf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("blue"))
+dim(bluedf)
+head(bluedf, n=3)
+Ofinder_blue <- intersect(whtOMCLgroupdf$whtOgrp, bluedf$blue)
+length(Ofinder_blue)
+class(Ofinder_blue)
+## if vector (char vector), use as is ???????????????????????????????????????????????
+class(bluedf$blue)
+twelve <- setdiff(bluedf$blue, Ofinder_blue)
+class(twelve)
+length(twelve)  ## 12
+write.table(twelve, file="twelve_nocolnam.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+write.table(whtOMCLgroupdf, file="oGroups144col1_nocolnam.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+## grep out 9 rice rows
+grep '.*OG5_131220.*$' oGroups144.txt > Test
+grep 'Tr' oGroups144col1_nocolnam.txt > oGroups144col1_nocolnam_norice9.txt
+
+## then cat twelve_nocolnam.txt to oGroups144col1_nocolnam_norice9.txt giving oGroups135plus12blue_norice9.txt
+
+cat oGroups144col1_nocolnam_norice9.txt twelve_nocolnam.txt > oGroups135plus12blue_norice9.txt
+
+sort oGroups135plus12blue_norice9.txt |uniq | wc -l  ## 147
+
+
+## next move oGroups135plus12blue_norice9.txt to 'shared' for vikas.
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff
+
+scp oGroups135plus12blue_norice9.txt pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm
+
+## go check 'shared' dir
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/shared/terry/hmm
+ls -lh  ## ck dir contents?
+
+sort oGroups135plus12blue_norice9.txt > sort147.txt  ## counted 3 rows for each chromosome.	
+
+## try update to github here.
+
+STOPPED
+
+
+2) ## vikas, GFF3, get start, end, (including introns ?????) introns, exons, 
+3) ## display location all proteins (genes) all chromosomes same plot. (Q: how do ????
+4) ## gene structure (vikas, online s/w) Q: think this more detailed than (3) above ?????
+5) ## sequence logos (online)
+6) expression data
+
+
+
+## Q: any info on OG5_131220 orthomcl_group ?????????????????
+
+## now venn diagram or 'UpSetR', Gehlenborg ??????????
 
 
 
 
+
+
+
+
+ 
+ 
+ 
  
  
 ## stockholm to fasta format, try internet page ????????????????
@@ -1728,7 +2282,7 @@ STOPPED
 ## Q: or do I want to get just the 'domains' specified in the 3rd sec of hmmsrchshortpep.out for each of the 'hits' ??????????????
 ## Q: but PPR.out many more domains per hit ????????????***********??????????
 
-06/08-09/17:
+08/08-09/17:
 the plant journal (2016) 85, 532-47, file name = cheng...journal.pdf
 ## Q: p-544, ***HMMs*** ??????????????******?????????????????
 ## also Vikas refs Scientific Reports 6 35152 2016  ## *to see*
