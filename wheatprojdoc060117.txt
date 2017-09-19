@@ -2120,16 +2120,758 @@ ls -lh  ## ck dir contents?
 
 sort oGroups135plus12blue_norice9.txt > sort147.txt  ## counted 3 rows for each chromosome.	
 
-## try update to github here.
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 08/31/17 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
+
+09/01/17:
+## spoke wi vikas
+I have downloaded the gff3 file and it is available here: /work/baenziger/shared with Filename: iwgsc_refseqv1.0_HighConf_2017Mar13.gff3.zip.
+
+I have also downloaded an annotation file available for the reference genome (iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB.zip).
+
+## Q: what get from each ??????????????????????
+
+09/02/17:
+## initially, det. how use the gff3 file. Perhaps scp over to mbook.
+
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/shared/terry/hmm
+cd /work/baenziger/shared
+
+cd /work/baenziger/shared/terry/hmm
+cp /work/baenziger/shared/iwgsc_refseqv1.0_HighConf_2017Mar13.gff3.zip .
+cp /work/baenziger/shared/iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB.zip .
+## scp gff3 to /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3
+
+scp pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm/iwgsc_refseqv1.0_HighConf_2017Mar13.gff3.zip .
+ls -lh
+unzip iwgsc_refseqv1.0_HighConf_2017Mar13.gff3.zip
+ls -al
+less iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+head -n 3 iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+## looks like 9 fields, perhaps look for 'Traes...' rows in 147, 'gene' rows for these names ??????????????
+wc -l iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+ 1743281 iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+sort oGroups135plus12blue_norice9.txt |uniq > testsort147.txt
+less iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+## 1st protein name: TraesCS1A01G031600
+grep -c "TraesCS1A01G031600" iwgsc_refseqv1.0_HighConf_2017Mar13.gff3  ## 4 rows
+grep "TraesCS1A01G031600" iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+## try grep just 'gene' line ??????
+grep '.*gene.*TraesCS1A01G031600.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+## worked, got just the gene line.
+## next, perhaps can create a shell script with such a command for each of 147 rows in sort147.txt ?????????????????
+
+09/03/17:
+## **annotation** file for the reference genome
+scp pterry@crane.unl.edu:/work/baenziger/shared/terry/hmm/iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB.zip .
+ls -lh
+unzip iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB.zip
+ls -al
+less iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+head -n 2 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+pcp256668pcs:wheatgff3 bterry$ head -n 2 
+iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+Gene-ID	is_repr	AHRD-Quality-Code	Blast-Hit-Accession	Human-Readable-Description	Pfam-IDs-(Description)	Interpro-IDs-(Description)	GO-IDs-(Description)-via-Interpro	Gene-or-TE-TE?-U (via-function)	Pfam-IDs	Interpro-IDs	GO-IDs-via-Interpro
+TraesCS1A01G000100.1	1	-**	sp|P0AGJ7|TRML_ECOLI	tRNA (cytidine(34)-2'-O)-methyltransferase				G			
+pcp256668pcs:wheatgff3 bterry$
+## A Q: ***possible*** search annotation file for all PPR proteins, compare to the 147 'RF' proteins ??????????????????????????????????????
+
+## continue planning to analyze gff3 file:
+## attempt to subset 'gene' gff3 rows of iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+grep '.*gene.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3 | wc -l  ##   110790
+## think could handle with R ??????????
+grep '.*gene.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3 > gff3_genes.txt
+wc -l gff3_genes.txt
+  110790 gff3_genes.txt
+cut -f 1,3,4,5 gff3_genes.txt > gff3_genes_col1345.txt
+head -n 3 gff3_genes_col1345.txt
+cut -f 9 gff3_genes.txt > gff3_genes_col9.txt
+head -n 3 gff3_genes_col9.txt  ## looks like 'Trae' numbers 'incrementing' ????
+cat gff3_genes_col9.txt|perl -pe 's/^ID=(Tr.+);.+/\1/' | wc -l  ##   110790 as expect.
+cat gff3_genes_col9.txt|perl -pe 's/^ID=(Tr.+);.+/\1/' | head -n 110790 > gff3_genes_col9names.txt
+wc -l gff3_genes_col9names.txt
+  110790 gff3_genes_col9names.txt  ## a expect
+## to check fidelity,
+head -n 3 gff3_genes_col9.txt
+head -n 3 gff3_genes_col9names.txt
+tail -n 3 gff3_genes_col9.txt
+tail -n 3 gff3_genes_col9names.txt
+## so lengths same, and head, tail same, so can proceed
+sort gff3_genes_col9names.txt |uniq | wc -l   ## 110790 as expect
+head -n 3 gff3_genes.txt
+head -n 3 gff3_genes_col9names.txt
+tail -n 3 gff3_genes.txt
+tail -n 3 gff3_genes_col9names.txt
+wc -l gff3_genes.txt  ##   110790 gff3_genes.txt
+wc -l gff3_genes_col9names.txt  ##   110790 gff3_genes_col9names.txt
+## now, paste back together colms 1,3,4,5 with colm9.
+paste gff3_genes_col1345.txt gff3_genes_col9names.txt > gff3_1345_9names.txt
+head -n 3 gff3_1345_9names.txt
+tail -n 3 gff3_1345_9names.txt
+## preceding checks look ok.
+
+2) ## vikas, ***above***, got GFF3, get start, end, (including introns ?????) introns, exons, 
+## Note: word 'intron' ***not*** in GFF3 file (checked with 'less' command) ??????????
+
+
+STOPPED
+
+3) ## display location all proteins (genes) all chromosomes same plot. (Q: how do ????, vikas had example ????????????????
+4) ## in 'annotation' file, perhaps try 
+--select rows matching 'gene' names in gff3 (approx 110k rows), then look for 'ppr' in human readable description column?
+--select 147 rows tentative 'RF' proteins, see what their human readable description column says?
+
+09/04/17:
+
+## sent vikas email stating gff3 issue, possible solns, request any suggestion ???
+
+less iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+wc -l iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+ 1743281 iwgsc_refseqv1.0_HighConf_2017Mar13.gff3  ## note 110790 'genes' rows
+
+09/05/17:
+talked to vikas:
+
+i. subset gff3_1345_9names.txt wi grep -x -f, pattern file will be sort147.txt file after remove ".digit' from rhs each row.
+## to display locations on chromosomes, check into ggplot2 'facets' ?????????
+## Q: can **IGV** browser be used to display ?????? Perhaps if in gff3 format ????????
+## Q: perhaps need subset ***the original gff3*** file wi the 147 RF names to display in GSDS or IGV or UCSC (checked ucsc site, currently **not** handle gff3 format)????????????
+## try grep -x -f on (Q: with the name multiple times in some rows, to **test** if might be a problem ????????
+## looks like practice wi top few lines of the gff3 file wi lines wi multiple names in.
+
+
+ii. annotation file protein names have ".digit' at end of its names, which start off the rows. Apparently tab separated colms. Try just one name to start, may be multiple rows with each protein name ????????? Perhaps reduce number rows before subset with the 147 'RF' protein file. determine how many row, perhaps play around with 'cut' and 1st few rows of annotation file to determine  ???????
+
+wc -l iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+  107502 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+iii. plot gene structures from gff3 (vikas has link for this, http://gsds.cbi.pku.edu.cn/)
+
+09/06/17:
+## one add'l **idea**: phylogeny on just the 147, GSDS site can then display (me: unclear ??????)
+
+## working on (i) from previous day
+## 1st, remove '.digit' from rhs sort147.txt, before try subset original gff3 file with it (i.e., using grep -x -f)
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff
+
+cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | wc -l  ## 147, ok
+cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 3
+TraesCS1A01G031600  ## looks good
+cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 147 > sort147_nodotnum.txt
+
+## now ready try grep -x -f pat.txt sample.txt
+## 1st, try on '31600' lines of iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+
+grep -x -f sort147_nodotnum.txt samp31600_8rows.gff3 | wc -l   ## 0
+grep -f sort147_nodotnum.txt samp31600_8rows.gff3 | wc -l    ## 8, so not specific ???
+grep -f sort147_nodotnum.txt samp31600_8rows.gff3
+## perhaps check if just 'TraesCS1A01G031600' can successfully match in samp31600_8rows.gff3
+
+grep '.*TraesCS1A01G031600.*' samp31600_8rows.gff3 | wc -l  ## worked!
+## but, -f option not working, what to try ????????????????
+## python list & for loop ??????????????????????
+name in 
+09/07/17:
+## 1st try code from Zeynep
+bash Philip.bash sort147_nodotnum.txt
+bash: Philip.bash: No such file or directory  ## what wrong  ?????
+## perhaps try
+bash Philip.sh sort147_nodotnum.txt  ## this ran
+## ok, try modify Philip.sh to Philip_no_else.sh
+bash Philip_no_else.sh sort147_nodotnum.txt
+## ok, try modify Philip_no_else.sh to Philip_no_echo.sh
+bash Philip_no_echo.sh sort147_nodotnum.txt
+## ok, looks like worked on this test sample gff3 file.
+## now try to save output to a file
+bash Philip_no_echo.sh sort147_nodotnum.txt > testbashtofile.gff3
+## looks like worked. Now try on actual gff3 file, iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+## Philip_realgff3.sh
+bash Philip_realgff3.sh sort147_nodotnum.txt > realbashtofile.gff3
+## ran in less than 20 min, 789 rows, Q: should I delete last 3 pattern outputs since no chromosome specified before pass to GSDS display  (or IGV) ?????
+
+09/08/17:
+## submit realbashtofile.gff3 to http://gsds.cbi.pku.edu.cn, request png output
+## Q: what looking at ????????
+## different number of 'names' left side of png display ??????????
+## Q: other possible displays from GSDS (phylogenetic tree) ??????????????
+## Q: if want qqch like Vikas had with gene locations on chromosome, not getting it here ????????
+## Q: to get such a display, perhaps check the faceting with ggplot2 using my 5 colm df for 'gene' rows for the 147  ??????
+## Q: or IGV ????????????????
+
+## talked to vikas
+i. plot chr(y axis) vs start position (x axis). Could subset 5 colm from gff3 (already gff3 subset to 'genes' rows) with 147 RF names, then take appropriate colms from gff3_1345_9names.txt, 1st & 2nd, to plot with ggplot2 script from vikas.
+ii. subset the annotation file for the 147 RF proteins/genes. See what the descriptions say.
+
+09/09/17: to subset 
+## so try to do (i) 1st. Working with GenomeWidePlot.R from vikas, but 1st need file with 
+
+wc -l gff3_1345_9names.txt
+  110790 gff3_1345_9names.txt
+## try modify Philip_realgff3.sh, use to subset gff3_1345_9names.txt wi the 147 RF genes from sort147_nodotnum.txt.
+## rename, modify this '.sh' file in Philip_5colmgff3.sh
+bash Philip_5colmgff3.sh sort147_nodotnum.txt > gff3_1345_9names_147.txt  ## ok
+## Note, last 3 rows have no chromosome number, but a start number ??????????????????????????????????
+## cut colms 1 & 3 for input to GenomeWidePlot.R.
+
+cut -f 1,3 gff3_1345_9names_147.txt > gff3_cols13_147.txt
+head -n 3 gff3_cols13_147.txt
+
+## then remove last 3 rows, no chr number ???????????????????????
+gff3_cols13_144.txt
+## finally, remove 1st 3 char each row in gff3_cols13_144.txt with 
+
+cat gff3_cols13_144.txt|perl -pe 's/chr(.+)/\1/' | head -n 3  ## ok
+cat gff3_cols13_144.txt|perl -pe 's/chr(.+)/\1/' | head -n 144 > gff3_cols13_144nochr.txt
+
+## now try modify GenomeWidePlot.R to use here ??????
+## to GenomeWidePlot_pmt.R
+## note 3 rows chr 5, 3 rows chr 7. Keep ????????????????????????????????
+## GenomeWidePlot_pmt.R  ## result: basically for the chroms with the most putative Rf genes, #'s 1, 2, 6, the genes are clustered!
+## What was vikas suggesting for the change to 'geom_point' in the ggplot code ???????
+## A change which would be nice is the number of genes on the plot to indicate the clustering ???????????????
+## so perhaps vikas thinking of cluster bars & I would add the number in the cluster ??????????
+
+09/10/17:
+## use vikas email to summarize result of GenomeWidePlot_pmt.R run on gff3_cols13_144nochr.txt.
+
+Would say, basically for the chroms with the most putative Rf genes, #'s 1, 2, 6, the genes are clustered! 
+
+***NOTE:*** CLUSTERS NEAR SAME LOCATION FOR EACH NUMBERED CHROMOSOME FOR A, B, & D CHROMOSOME DUPLICATIONS!
+
+chrom   # prots      # prots
+        on chrom     in cluster
+1A       23            22
+1B       28            26
+1D       30            29
+2A       8              7
+2B       6              4
+2D       8              7
+5A       1
+5B       2
+5D       1
+6A       11             7(?)
+6B       12             5,4(?)
+6D       11             8
+7B       1
+7D       2
+
+## now for (ii) above, the annotation file
+
+wc -l iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+  107502 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+## try modify Philip_realgff3.sh, use to subset iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB wi the 147 RF genes from sort147_nodotnum.txt.
+## rename, modify this '.sh' file in Philip_realannotation.sh
+bash Philip_realannotation.sh sort147_nodotnum.txt > wheatannotationvs147.txt  ## ok
+wc -l wheatannotationvs147.txt
+     147 wheatannotationvs147.txt
+## all 147 rows are PPR 'human-readable description' colm.
+## To do: read into R so can more easily 'see' the colms.
+
+cut -f 5 wheatannotationvs147.txt | head -n 147 > colm5.txt
+## looks like colm 5 is 'Human-Readable_Description' colm. All rows have 'Pentatricopeptide repeat-containing protein' in colm 5
+## colm 6, Pfam-IDs-(Description), Q: what to think ?????????????????????
+## colm ?,Interpro-IDs-(Description). Q: Q: what to think ?????????????????????
+## colm 9, (via-function), all 'G's, ????????????????????//
+## colm 10, Pfam-IDs
+## colm 11, Interpro-IDS
+## colm 12, GO-IDs_via-Interpro
+
+## so annotation file result: almost all colm 5 'Human-Readable_Description' are 'Pentatricopeptide repeat-containing protein'.
+## test
+cut -f 5 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB > allcolm5_annotation.txt
+## can see much annotation, not PPR
+## perhaps search on colm 5 for 'Pentatricopeptide', get a sense if many more than 147 in allcolm5_annotation.txt ??????
+grep -c "Pentatricopeptide" allcolm5_annotation.txt  ## 1602
+grep "Pentatricopeptide" allcolm5_annotation.txt > colm5Pentatricopeptide.txt
+## basically 1602 rows of 'Pentatricopeptide repeat-containing protein' in iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+## ~ 1.5% of the rows, WHAT TO THINK ???????????????????????????????
+
+09/11/17:
+## talked to vikas
+09/12/17:
+i. run GenomeWidePlot_pmt.R again, this time with 
+#geom_jitter(alpha=I(0.1)) +
+## test different settings starting with '0.1'
+## done, helps, may want try later, perhaps not helping current goal enough ??????
+## also, modify 
+ geom_point(colour="red", size=2) +
+## try values of 0.5, 1.0, 1.5
+## tried 0.5, helps, still can see points, but can close by points also. Note, 2A chrom, should be 7 points, still only see 4. 1D, should see 29, only seeing 22
+## Q: why vikas comment out ????????????????????????????????/
+
+ii. det. size of clusters for chrom's !A, 1B, 1D, 2A, 2B, 2D, 6A, 6B, 6D, for now just use start positions. To do, for example for 1A, read gff3_cols13_144nochr.txt file into R, grep '1A' in colm 1, the 23 rows, sort by colm 2, small to large, then head 22, removes location outlier. Then, 
+
+## do in R if reg expn will work, else, try unix command line ????????????????
+df_col13_144nochr <- read.delim("gff3_cols13_144nochr.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("chrom", "start"))
+dim(df_col13_144nochr)
+head(df_col13_144nochr, n=3)
+df_1A <- df_col13_144nochr[grep("^1A", col13_144nochr_df$chrom), ]
+dim df_1A  ## will be used vikas plot for 22, TO DO, so delete row 23 before plot 
+## sort df_1A with the 22 before vikas plot (tho presumably don't need)
+## need min, max for row 1 & 2 of df_minmaxchr1.
+
+chrom <- vector(mode="character", length=6)
+start <- vector(mode="numeric", length=6)
+
+09/14/17:
+df_minmaxchr1 <- data.frame(chrom, start)
+df_minmaxchr1[1,1] <- "1A"
+df_minmaxchr1[2,1] <- "1A"
+df_minmaxchr1[3,1] <- "1B"
+df_minmaxchr1[4,1] <- "1B"
+df_minmaxchr1[5,1] <- "1D"
+df_minmaxchr1[6,1] <- "1D"
+head(df_minmaxchr1)
+
+from https://stackoverflow.com/questions/1296646/how-to-sort-a-dataframe-by-columns
+## dd[order(-dd$z, dd$b),]
+df_1A <- df_1A[order(df_1A$start), ]
+tail(df_1A, n=3)  ## check that last row is the outlier value ?????
+## need remove row 23 1st
+dim(df_1A)  ## expect 22 2 ?????????????
+df_1A <- df_1A[-c(23), ]
+dim(df_1A)  ## expect 22 2 ?????????????
+
+df_minmaxchr1[1,2] <- min(df_1A$start, na.rm=T)
+df_minmaxchr1[2,2] <- max(df_1A$start, na.rm=T)
+head(df_minmaxchr1)
+
+09/13/17:
+## TO finish last 4 rows of df_minmaxchr1
+## WILL need df_1B & df_1D.
+
+df_1B <- df_col13_144nochr[grep("^1B", df_col13_144nochr$chrom), ]
+dim(df_1B)  ## will be used vikas plot for 26, TO DO, so delete 2 rows before plot 
+df_1B <- df_1B[order(df_1B$start), ]
+tail(df_1B, n=3)  ## check that last 2 rows are the outlier values ?????
+
+## need remove last 2 rows 1st
+df_1B <- df_1B[-c(27, 28), ]
+dim(df_1A)  ## expect 26 2 ?????????????
+
+df_minmaxchr1[3,2] <- min(df_1B$start, na.rm=T)
+df_minmaxchr1[4,2] <- max(df_1B$start, na.rm=T)
+head(df_minmaxchr1)
+
+## now for df_1D
+
+df_1D <- df_col13_144nochr[grep("^1D", df_col13_144nochr$chrom), ]
+dim(df_1D)  ## will be used vikas plot for 29, TO DO, so delete 1 row before plot 
+
+df_1D <- df_1D[order(df_1D$start), ]
+tail(df_1D, n=3)  ## check that last row is the outlier value ?????
+
+## need remove last row 1st
+df_1D <- df_1D[-c(30), ]
+dim(df_1D)  ## expect 29 2 ?????????????
+
+df_minmaxchr1[5,2] <- min(df_1D$start, na.rm=T)
+df_minmaxchr1[6,2] <- max(df_1D$start, na.rm=T)
+head(df_minmaxchr1)
+
+## TO calc **'range'** of '1A' cluster, & of '1B' & '1D'. 
+>range(y,na.rm=TRUE)
+
+[1] -4 43
+
+[1] 47
+
+## define dataframe
+
+chr_ran <- vector(mode="character", length=3)
+str_ran <- vector(mode="numeric", length=3)
+df_rangchr1 <- data.frame(chr_ran, str_ran)
+df_rangchr1[1,1] <- "1A"
+df_rangchr1[2,1] <- "1B"
+df_rangchr1[3,1] <- "1D"
+
+rang <- range(df_1A$start,na.rm=TRUE)
+class(rang)
+rang
+df_rangchr1[1,2] <- diff(rang)
+
+rang <- range(df_1B$start,na.rm=TRUE)
+df_rangchr1[2,2] <- diff(rang)
+
+rang <- range(df_1D$start,na.rm=TRUE)
+df_rangchr1[3,2] <- diff(rang)
+head(df_rangchr1)
+
+## TO DO: now for some plotting
+
+## will need to convert df_minmaxchr1 to terminology in GenomeWidePlot.R (the 'data' df there) before proceed with that plot.
+
+## for example, 'data' df, colms 'chrom' & 'pos'
+data <- df_minmaxchr1
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+
+## following from GenomeWidePlot_pmt.R
+##********************
+#Converting BP scale from bp to Mb
+data$Mb=data$pos*0.000001
+head(data)
+
+library(RColorBrewer)
+library(ggplot2)
+library(reshape)  ## h wickham ???????????????
+
+#Plot
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=0.5) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+  theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+##*********************************************
+
+## Yet to plot, df_1A, df_1B, df_1D
+head(df_1A)
+dim(df_1A)
+tail(df_1A)
+
+## for example, 'data' df, colms 'chrom' & 'pos'
+data <- df_1A
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+
+## following from GenomeWidePlot_pmt.R
+##********************
+#Converting BP scale from bp to Mb
+data$Mb=data$pos*0.000001
+head(data)
+
+#Plot
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=0.5) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+  theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+##*********************************************
+
+## plotting with geom_point = 2 gave expected 22 points. Plotting with geom_point = 0.5 gave 26 points != 22 ??????????????????????????????
+## note: clustering in 3 locations, **not** uniformly distributed across the 43 Mb for df_1A.
+
+in df_1A, 1st 2, next 9, next 7 & last 4 in the total of 22. 
+
+#rang <- range(df_1A$start,na.rm=TRUE)
+#rang1 <- range(df_1A[1:2, ], na.rm=TRUE)  ## fails
+rang1minmax <- range(df_1A$start[1:2], na.rm=TRUE)  ## works
+head(rang1minmax)
+rang1 <- diff(rang1minmax)
+rang1  ## [1] 6964
+
+rang2minmax <- range(df_1A$start[3:11], na.rm=TRUE)  ## works
+head(rang2minmax)
+rang2 <- diff(rang2minmax)
+rang2  ## [1] 1,337,765
+
+rang3minmax <- range(df_1A$start[12:18], na.rm=TRUE)  ## works
+head(rang3minmax)
+rang3 <- diff(rang3minmax)
+rang3  ## [1] 363,314
+
+rang4minmax <- range(df_1A$start[19:22], na.rm=TRUE)  ## works
+head(rang4minmax)
+rang4 <- diff(rang4minmax)
+rang4  ## [1] 240,790
+
+## to do, plot the 4 groups in 1A
+
+09/16/17:
+________________________________________________________________________________________
+## ***an aside*** for a moment, try get python to do what did with shell script above, do in dir. /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3/python
+
+bash Philip_no_echo.sh sort147_nodotnum.txt > testbashtofile_pydir.gff3
+## ok, same output as testbashtofile.gff3 on 09/07/17 above.
+## now try repeat with python, initially with 'print' statement.
+python3 adam2.py
+   File "adam2.py", line 13, in <module>
+    if name in line2.split('\t')[8]:
+IndexError: list index out of range
+## don't see what wrong ?????????????????????????
+## anyway, replace line 13 by
+##      if name in line2:
+## result: found the 4 31600 lines, but ***not*** the 31700 lines. The shell script on these two input files found the 8 lines expected ???????????????????????????
+## end ***aside*** for now.
+_______________________________________________________________________________________
+
+## TO DO: perhaps plot the 4 sets of ranges, one at a time, in df_1A, may have some genes clustered **within** the groups.
+df_1Agrp1 <- df_1A[1:2, ]
+dim(df_1Agrp1)  ## [1] 2 2
+head(df_1Agrp1)  ## looks ok.
+
+## for example, 'data' df, colms 'chrom' & 'pos'
+data <- df_1Agrp1
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+
+## following from GenomeWidePlot_pmt.R
+##********************
+#Converting BP scale from bp to Mb
+data$Mb=data$pos*0.000001
+head(data)
+
+#Plot
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=2) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+  theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+STOPPED
+
+df_1Agrp2 <- df_1A[3:11, ]
+dim(df_1Agrp2)  ## ## [1] 9 2
+head(df_1Agrp2)  ## looks ok.
+
+## for example, 'data' df, colms 'chrom' & 'pos'
+data <- df_1Agrp2
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+
+#Converting BP scale from bp to Mb
+data$Mb=data$pos*0.000001
+head(data)
+
+#Plot
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=2) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+
+theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+ 
+df_1Agrp3 <- df_1A[12:18, ]
+dim(df_1Agrp3)  ## [1] 7 2
+head(df_1Agrp3)  ## looks ok.
+
+## for example, 'data' df, colms 'chrom' & 'pos'
+data <- df_1Agrp3
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+
+#Converting BP scale from bp to Mb
+data$Mb=data$pos*0.000001
+head(data)
+
+#Plot
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=2) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+  theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+df_1Agrp4 <- df_1A[19:22, ]
+dim(df_1Agrp4)  ## [1] 7 2
+head(df_1Agrp4)  ## looks ok.
+
+## for example, 'data' df, colms 'chrom' & 'pos'
+data <- df_1Agrp4
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+
+#Converting BP scale from bp to Mb
+data$Mb=data$pos*0.000001
+head(data)
+
+#Plot
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=2) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+  theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+09/17/17:
+
+## To finish displaying for 1B (26 genes), & 1D (29 genes), the 'cluster' portion of the genes, compare distribution to 1A chromosome (22 genes).
+
+## for df_1B (26 genes)
+head(df_1B)
+dim(df_1B)  ## [1] 26  2
+tail(df_1B)
+data <- df_1B
+head(data)
+colnames(data)[2] <- "pos"
+head(data)
+data$Mb=data$pos*0.000001
+head(data)
+
+ggplot(data, aes(x=Mb, y=chrom)) + theme_classic() +
+  geom_point(colour="red", size=2) +
+  #scale_x_continuous(breaks = seq(0, 60, 10)) +
+  theme(axis.text.x = element_text(colour = 'black', face="bold", size = 20, vjust=0.5)) +
+  theme(axis.text.y = element_text(colour = 'black', face="bold", size = 20)) +
+  theme(axis.title.x = element_text(colour = 'black', face="bold", size = 25, vjust=-0.2)) +
+  theme(axis.title.y = element_text(colour = 'black', face="bold", size = 25, angle=90)) +
+  xlab("Length of chromosome (Mb)") +
+  ylab("Chromosome") +
+  geom_jitter(alpha=I(0.1)) +
+  theme(plot.background=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+        panel.border=element_blank()) +
+  #theme(axis.ticks.x = element_blank()) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_discrete(expand = c(0,0))
+
+## now calc ranges of the 4 groups of genes in df_1B seen in plot.
+
+rang1_1Bminmax <- range(df_1B$start[1:8], na.rm=TRUE)  ## works
+head(rang1_1Bminmax)
+rang1_1B <- rang1_1Bminmax
+rang1_1B
+rang1_1B <- diff(rang1_1Bminmax)
+rang1_1B  ## [1] 1179582  ## so 1179 Kb, pretty wide compared to fig 3, sci reports ??
+
+rang2_1Bminmax <- range(df_1B$start[9:19], na.rm=TRUE)  ## works
+head(rang2_1Bminmax)
+rang2_1B <- diff(rang2_1Bminmax)
+rang2_1B  ## [1] 1835062
+
+rang3_1Bminmax <- range(df_1B$start[20:24], na.rm=TRUE)  ## works
+head(rang3_1Bminmax)
+rang3_1B <- diff(rang3_1Bminmax)
+rang3_1B  ## [1] 1142607
+
+rang4_1Bminmax <- range(df_1B$start[25:26], na.rm=TRUE)  ## works
+head(rang4_1Bminmax)
+rang4_1B <- diff(rang4_1Bminmax)
+rang4_1B  ## [1] 94820
+
+09/18/17:
+## Talked to vikas, to do's:
+i. count of different wheat RF's on different chromosomes (vikas has script)
+ii. relation RF's of different chromosomes. Use phylogeny. May already have this data? Recall the 'blue' & 'red' subsets of phylogeny tree. Should be able to find those subsets, just go in, at 'leaves', see which protein/gene names are on leaves on same nodes.
+iii. multiple chromosome displays (send links to vikas)
+--https://biodatamining.biomedcentral.com/articles/10.1186/1756-0381-6-18 (Phenogram)
+--https://stackoverflow.com/questions/33727432/how-to-plot-positions-along-a-chromosome-graphic (ggplot)
+iv. send vikas input file for overhead plot of location of genes on chromosome (yet to find) 
+v. tandem gene duplication distance (see soybean paper)
+vi. PAG, jan 13-17, 2018 (possible abstract of work with new wheat genome)
+
+## finish (iv) done.
+
+## next, read (iii), look for file, how display to do (ii).
+
 
 STOPPED
 
 
-2) ## vikas, GFF3, get start, end, (including introns ?????) introns, exons, 
+
+
+
+## To do: compare with sizes in fig 3, sci.reports ref. There, spanning ~ 500kb base pair region on chromosome 10. RF regions only ~ 100 Kb. 
+## To Do: Compare with the 3 regions immedly above
+## To Do: compare with the 36 RFproteins from orthofinder ????????????????
+## To **check**: if genes in ref regions fig 3, sci reports in my 9 'RF' genes ?????????????
+
+
+
+
+## perhaps plot start & stop ?????????????????????????
+
+## could **check** distribution of 1602 - 144 "Pentatricopeptide" if can get their start positions from gff3 file ?????
+
+
+
+## try some code from Adam
+
+ 
+for line patternfile.txt
+  name = line.strip()
+  for line2 in gff3file.txt
+    if name in line2.split('\t')[8]
+      print line2
+      
+
+
+
+
+STOPPED
+
+
+
+
+
 3) ## display location all proteins (genes) all chromosomes same plot. (Q: how do ????
-4) ## gene structure (vikas, online s/w) Q: think this more detailed than (3) above ?????
-5) ## sequence logos (online)
-6) expression data
+5) ## gene structure (vikas, online s/w) Q: think this more detailed than (3) above ?????
+6) ## sequence logos (online)
+7) expression data
 
 
 
