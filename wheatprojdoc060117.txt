@@ -2939,7 +2939,7 @@ working with wheatflowdocnotes.txt, ppointtmp.txt, and then wheatflowdocnotestoc
 
 10/26/17:
 ## from 09/22/17 above, task number **vii**, **redo** phylogeny thru hmm for .../r_stuff/oGroups144.txt, but for subset 122 (match red) plus 10 (match blue) for hmm part. Note: previously decided to include 12 additional blue rows not matching orthoMCL. Finally, add back rice9 at hmmalign step, run phyML online (French), finally display in figtree, locate what rice 9 seqs near. So for muscle step, start with 122 + 10 + 12 + 9 = 153 rows.
-## Note: orthoMCL result has 135 rows of wheat proteins in orthoGroup 'OG5_131220' which also contained the rice 9 RF proteins. So, 3 rows not match in blue, red groups from phylogram. For now, don't include these 3 in 'redo' phylogeny (following 'Notes_Alignment_UsingHMMs.txt' from vikas)
+## Note: orthoMCL result has 135 rows of wheat proteins in orthoGroup 'OG5_131220' which also contained the rice 9 RF proteins (total 144). So, 3 rows not match in blue, red groups from phylogram. For now, don't include these 3 in 'redo' phylogeny (following 'Notes_Alignment_UsingHMMs.txt' from vikas)
 
 ## ref. 07/22/17
 i) rerun realign step as per vikas 'Notes_Alignment_UsingHMMs.txt' thru PhyML step, , but with the 'seq.fa' file including the 153 seqs referenced above. So will need run 144 + 9 starting with muscle. 
@@ -3219,17 +3219,355 @@ http://www.atgc-montpellier.fr/job_status/index.php?path=20171029-195838_Rr84/cm
 hmmalign --trim ...
 #=GR 
 gblocks
-might all he '8's affect choices on trimming
+might all he '*'s affect choices on trimming
 BIOS 942, proj2, multidomain to one domain ????????????
 BIOS 942, proj2, ... structure/fcn relationships ... ??????
 
 ## **discrepancy**, here in 153, rice9 all together, previous 820plus9, 5th rice seq. by self, 'blue' seqs selected.
 ## To do, redisplay 820plus9 in figtree, check if 5th rice seq. really 'out by self' ????
+## 
 
-## github save
+## to view /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML153/22plus122plus9_fa_aln_hmmaln_phy_phyml/22plus122plus9_fa_aln_hmmaln_phy_phyml_tree.txt in figtree
 
 
+## github saved
 
+11/01/17:
+## talked to vikas, went over what need to do to publish
+## 5 figures
+fig1: 1545, sec 2.1.2, but get location of rice 9 on plot
+fig2: 820plus9, locate the rice9 in image in file: ./hmmpipeline/FRprotseqs/phyml/pyML829/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+fig3: ve nn diagram
+fig4: 156 phylogeny, venn diagram with 4 colors
+fig4b: ????
+fig5: genome wide distn, phenogram ??
+fig6: intron/exon => gff3 ???????????
+
+## additional to dos:
+--sec 2.1.2, for 1545 wheat seqs plus 9, check figtree plot of this, locate where rice 9 plot ?? .../FRprotseqs/PPRhmmsearchsubset_plus9_clustaltree_colored
+ (DO ***THURS***, IF PROBLEM, CHECK WITH VIKAS) 
+***ALL RICE9 IN*** RED SECTION, SEC 2.1.2 
+Q: not finding plot **1545** with **both** blue & red colors, but appears to be same plot as FRprotseqs/PPRhmmsearchsubset_plus9_clustaltree_colored, so location rice9 would be same.
+--also for image in sec 2.2 (tho think same 1545 as previous line), locate rice 9 ??
+pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors_scrnshot.png
+Has 1545, two colors, TO FIND, WHERE FILE WHICH CAN LOAD INTO FIGTREE, GET THIS IMAGE ????
+--on 'pro', pyML829/pph...820plus9...nexus_2colors.txt, => AB900794  ***single*** rice9 off by self, in 22 blue.
+
+--TO DO:  http://pfam.xfam.org/search#tabview=tab1
+Q: vikas said we did, I not remembering ???????????????????
+
+--'Notes' steps on '156' seqs n, (add 3 non intersecting from orthoMCL)
+***THURS***: TRY plot 153 in figtree, ***colorize*** 
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML153/22plus122plus9_fa_aln_hmmaln_phy_phyml/22plus122plus9_fa_aln_hmmaln_phy_phyml_tree.txt in figtree on 'pro'.
+
+
+Q: relative to 122, 10, 12, identify relative position to rice9.
+PRACTICE WITH VIKAS ??????????????????????
+
+--location plots (yet to put in Rmd, vikas likes 'phenogram' he did
+
+11/03/17:
+## talked to vikas, few notes:
+--three wheat seqs to exclude from planned above 156 'Notes' steps (...99600, ...10800, ...196200). BUT DOC IN FIG LEGEND LATER). So call it, 156-3 'Notes' run.
+--made some comments on how use figtree. 
+root tree, midpoint
+Node labels, aLRT, sig digits = 2
+## note, vikas colored 153 tree tree, the rice9 seqs in figtree 'orange', saved file.
+
+11/06/17:
+After looking thru items on 11/01 & 11/03, prioritize **while in TX** 
+--Rmd doc, fill out, etc.
+--run 156_3 thru vikas 'Notes' steps
+Others involving figtree, etc., do in do when back in Lincoln.
+
+## To run 'Notes' steps on 156_3 set of sequences
+
+## 1st, find the 3 seqs in oGroups144col1.txt which don't intersect with blue or red sets.
+
+from ##08/31/17:
+
+
+setwd("~/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/r_stuff")
+whtOMCLgroupdf <- read.delim("oGroups144col1.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("whtOgrp"))
+dim(whtOMCLgroupdf)
+head(whtOMCLgroupdf, n=3)
+class(whtOMCLgroupdf)
+bluedf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_blue_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("blue"))
+dim(bluedf)
+head(bluedf, n=3)
+
+reddf <- read.delim("pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("red"))
+dim(reddf)
+head(reddf, n=3)
+
+intermed <- setdiff(whtOMCLgroupdf$whtOgrp, reddf$red)
+head(intermed, n=3)
+length(intermed)  ## 22, as expect
+
+out3 <- setdiff(intermed, bluedf$blue)
+class(out3)
+length(out3)  ## 12 as expect, 9 + 3
+head(out3, n=3)
+out3
+ [1] "TraesCS6A01G014500.1" "TraesCS6A01G014900.1" "TraesCS6B01G114300.1" "AB110443"            
+## so the 3 wheat names are the orthoMCL seqs **not** in 'red' or 'blue' sets.
+ ## note: longest of these only ~ 400 aa's.
+
+## 1st, prepare the 165_3 seqs
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML156_3
+
+## prepare 135xtra3.fa from PPRhmmsearchsubset_P_prots820.fa.aln.hmmaln.fa in dir /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs using bbedit
+
+cp -rw-r--r--   1 bterry  staff   84500 Oct 27 14:38 22plus122.fa
+from /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML153
+
+## cat to get the 156 seqs
+
+cat 22plus122plus9.fa 135xtra3.fa > 22plus122plus9plus3.fa
+bbedit 22plus122plus9plus3.fa
+
+## finally, remove the 3 outlier seqs seen in figtree display of the 153 seqs
+-rw-r--r--@  1 bterry  staff  8244 Oct 29 21:02 22plus122plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML153/22plus122plus9_fa_aln_hmmaln_phy_phyml/22plus122plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+
+## They are:
+TraesCS1D01G199600.1   ## length > 600
+TraesCS1B01G210800.1  ## length > 600
+TraesCS1A01G196200.1  ## length > 600 aa's
+
+## so, 
+cp 22plus122plus9plus3.fa > 156_3.fa
+## use bbedit to delete these 3
+## confirmed new length = 153
+
+## ref: 10/26/17 (line 2981)
+
+## need new dir on crane to do next three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML156_3
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj
+mkdir refinPprots156_3
+cd refinPprots156_3
+## scp PPRhmmsearchsubset_P_prots820.fa to crane, dir = refinPprots156_3
+logout
+## now for slurm_muscle_wheatproj_refin153.sh
+## edit, then scp
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML156_3
+scp 156_3.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots156_3
+## cp slurm_muscle_wheatproj_refin153.sh to slurm_muscle_wheatproj_refin156_3.sh, edit
+
+scp slurm_muscle_wheatproj_refin156_3.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if present slurm_muscle_wheatproj_refin820.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_refin156_3.sh 10467000  7:51pm => ??:??am, 
+squeue -u pterry  ## a R
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+ls -lh
+
+less job.10467000.err
+## many invalid '*' lines.
+sacct -j  10467000 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2017-11-06T19:51:38 2017-11-06T19:52:11 
+2017-11-06T19:51:38 2017-11-06T19:52:11 
+19:52:11 - 19:51:38 = 33 sec
+
+less 156_3.fa.aln  ## looks to be *in* MSA fasta format.
+head -n 50 156_3.fa.aln
+# head -n 60 PPRhmmsearchsubset_P_prots820.fa.aln | tail -n 7
+
+## next, fasta2stockholm.pl conversion (line 3826)
+
+11/07/17:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots820
+ls -lh
+cd ..
+cd refinPprots156_3
+cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+-rwxr-xr-x 1 pterry amundsen   1231 Oct 28 00:33 fasta2stockholm.pl
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+ls -lh
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl 156_3.fa.aln > 156_3.fa.aln.slx
+ls -al
+-rw-r--r-- 1 pterry amundsen 150001 Nov  7 08:05 156_3.fa.aln.slx
+
+## to check top stockholm file
+less 156_3.fa.aln.slx
+
+## now for *hmmbuild*
+## see 10/28/17 above.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+ls -lh
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+
+hmmbuild 156_3.fa.aln.hmm 156_3.fa.aln.slx
+# input alignment file:             156_3.fa.aln.slx
+# output HMM file:                  156_3.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     156_3.fa.aln           153   959   788     2.34  0.590 
+
+# CPU time: 2.52u 0.01s 00:00:02.52 Elapsed: 00:00:02.54
+exit
+less 156_3.fa.aln.hmm
+#head -n 17 156_3.fa.aln.hmm
+wc -l 156_3.fa.aln.hmm
+ 2386 156_3.fa.aln.hmm
+tail -n 3 156_3.fa.aln.hmm
+
+## realign using hmm model, hmmalign 
+
+## slurm file prepared
+
+scp slurm_hmmalign_wheatproj_refin156_3.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_refin156_3.sh
+ls -lh
+sbatch slurm_hmmalign_wheatproj_refin156_3.sh 10469154  8:44am => ??:??am, 
+squeue -u pterry  ## a ST
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+ls -lh
+
+-rw-r--r-- 1 pterry amundsen    0 Nov  7 08:44 job.10469154.err
+-rw-r--r-- 1 pterry amundsen    0 Nov  7 08:44 job.10469154.out
+-rw-r--r-- 1 pterry amundsen 299K Nov  7 08:44 156_3.fa.aln.hmmaln
+
+sacct -j  10469154 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2017-11-07T08:44:27 2017-11-07T08:44:42 
+2017-11-07T08:44:27 2017-11-07T08:44:42 
+08:44:42 - 08:44:27 = 15 sec
+
+less 156_3.fa.aln.hmmaln
+#head -n 3 22plus122plus9.fa.aln.hmmaln
+tail -n 3 156_3.fa.aln.hmmaln
+#grep -c "Trae" PPRhmmsearchsubset_P_prots820.fa.aln.hmmaln  ## 26240, so not telling anything ????????????????
+wc -l 156_3.fa.aln.hmmaln
+1547 156_3.fa.aln.hmmaln  ## same as 153
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots820
+ls -al
+
+cd ..
+cd refinPprots156_3
+cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+-rwxr-xr-x 1 pterry amundsen   1398 Oct 28 16:22 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g 156_3.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > 156_3.fa.aln.hmmaln.fa
+
+ls -al
+less 156_3.fa.aln.hmmaln.fa
+
+grep -c ">Traes" 156_3.fa.aln.hmmaln.fa  ## 144 as expect, as rice9 not counted
+exit
+logout
+
+## now fas to phy
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/refinPprots820
+ls -al
+cd ..
+cp refinPprots820/align_convert_fas_to_phy.pl refinPprots156_3
+cd refinPprots156_3
+ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/refinPprots156_3
+module load bioperl
+
+./align_convert_fas_to_phy.pl 156_3.fa.aln.hmmaln.fa
+ls -al
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 184070 Nov  7 10:00 156_3.fa.aln.hmmaln.phy
+exit
+
+STOPPED
+
+## scp back to macbook, 
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML156_3
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots156_3/156_3.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  184070 Nov  7 10:03 156_3.fa.aln.hmmaln.phy
+
+less 156_3.fa.aln.hmmaln.phy
+head -n 4 156_3.fa.aln.hmmaln.phy
+
+ 153 788
+'TraesCS1D01G057800.1'  --STSTPTLR PSRSWSPHAA FAAATERVRA GTLSPEDAHH LFDELLRQAT PVPSRSLDGF 
+
+## so phy header 153, 788, expect the 153
+
+STOPPED
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML156_3
+/156_3.fa.aln.hmmaln.phy
+
+Data type: aa's
+
+Submitted 10:14am, name: 156_3
+
+The alignment file "156_3.fa.aln.hmmaln.phy" was uploaded, it contains 153 taxons of 788 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20171107-171418_Md38/cmd.txt
+
+github saved
 
 
 
