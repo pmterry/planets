@@ -4760,18 +4760,175 @@ STOPPED
 ## [:-2], what would this do ????????????????
 ***********************End aside*****************************
  
+# slip a save to ***github*** in here
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/shared/terry
+mkdir rmd_wkflowdoc
+cd /work/baenziger/shared/terry/rmd_wkflowdoc
+ls -al
+logout
+cd /Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflowdoc
+ls -al *_ppo*.Rmd
+scp *_ppo*.Rmd pterry@crane.unl.edu:/work/baenziger/shared/terry/rmd_wkflowdoc
+ls -al *.png
+scp *.png pterry@crane.unl.edu:/work/baenziger/shared/terry/rmd_wkflowdoc
+## then log on, see if worked, yes 11 files transferred.
+
+12/04/17:
+Talked to vikas
+1) 131 gff3 file => s/w to provide the picture of domains, patterns, (for example, see if lot of introns, did I do this before ????) try find ref from prev vikas email from 09/05/17, 'gsds' online site, is this s/w meant? Line 2306 above, from 09/08/17.
+2) 131 hmmaln output, '.fa' file, weblogo online pgm, see what looks like
+orthoMCL131.fa.aln.hmmaln.fa (line 4353)
+
+## So (1), submit .../wheatgff3/131_sort.gff3 to http://gsds.cbi.pku.edu.cn, request png output
+## see line 4143, 11/20/17
+## line 4165, 
+## LOOKS LIKE THE 131_sort.gff3 FILE HAS THE **SAME** ORDER OF ROWS AS THE iwgsc_refseqv1.0_HighConf_2017Mar13.gff3 FILE FOR THE SUBSET 131 ROWS FROM THE orthoMCL OUTPUT MAPPING TO **691** ROWS IN 131_sort.gff3.
+## requested '.png', get browser display of output, can one save to file ??????????
+Q: selection of other online page options. Vikas saved using right-click, '.png' provided.
+
+Q: re-submitted .../wheatgff3/131_sort.gff3 to GSDS having selected 'SVG' option. After display appeared, option to save either as svg, png or pdf presented, selected 'svg', then got page http://gsds.cbi.pku.edu.cn/task/ARV2HU/ARV2HU.svg, saved to .../wheatgff3/gsds131.svg. BUT THEN FOR EXAMPLE, COULD NOT OPEN IN 'PREVIEW' ??????????????????????????????
+
+12/05/17:
+## (2) 
+Q: vikas, get orthoMCL131.fa.aln.hmmaln.fa from crane .../refinPprots131norice9 dir, submit to weblogo, accepts defaults.
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/
+mkdir pyMLorthoMCL131norice9  ## note, this dir previously mistakenly deleted.
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa.aln.hmmaln.fa .
+ls -al *.fa
+## submit to weblogo
+## Q: output file, fileVdk3vK.png, x-axis TOO MANY compared to weblogo ???????????????
+## perhaps somehow need get the ~35 aa domains of these RF-like seqs to run on weblogo.
+
+12/06/17:
+talked to vikas
+1) reran .../phyml/pyMLorthoMCL131norice9
+/orthoMCL131.fa.aln.hmmaln.fa on weblogo, but 'checked 'multiline logo, kept default of 32 symbols/line. Saved file as .../phyml/pyMLorthoMCL131norice9/131hmmaln.fa.weblogo.pdf
+## note: vikas clicked the firefox weblogo to increase size of the display ?????????
+## NOTE: basically, at many positions, 1 or few aa's listed, indicating the seqs in the input fasta file seqs similar in aa at many positions.
+## Q: could one go in following one of the ref papers, 'mark' the domains by repetition of seq patterns by setting setting multiline logo to appropriate value ????????????????????????????????????
+2) MEME ver 4.12.0 (to do)
+http://meme-suite.org/tools/meme
+fasta format, limit 60,000 char. My file, orthoMCL131.fa.aln.hmmaln.fa has 108,072
+## so perhaps split into 132 & 130 size files, run each thru MEME ??????
+## Q: says, 'select number motif sites' ????? Q: not knowing what number to give, perhaps run multiple times with say 1, 2, 3 for 1st 3 runs ?????????????????????????????
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9
+head -n 132 orthoMCL131.fa.aln.hmmaln.fa > orthoMCL131.fa.aln.hmmaln_1st132lines.fa
+wc orthoMCL131.fa.aln.hmmaln_1st132lines.fa
+     132     132   54450 orthoMCL131.fa.aln.hmmaln_1st132lines.fa
+tail -n 130 orthoMCL131.fa.aln.hmmaln.fa > orthoMCL131.fa.aln.hmmaln_last130lines.fa
+wc orthoMCL131.fa.aln.hmmaln_last130lines.fa
+     130     130   53622 orthoMCL131.fa.aln.hmmaln_last130lines.fa
+>>> 54450 + 53622
+108072
+## 'any number of repetitions'
+## number motifs = 1  ???????????????
+Sequence contains bad characters
+
+    Total of 18928 bad characters in 66 sequences
+    Found 18928 characters (including '-') not in the alphabet on lines 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, ...
+## Q: what to do ?????????
+## Q: perhaps run perl substitution command, substitute '-' by nothing ???????????
+## Q: see line 207 above, looks like perl substitution does not work if the '-' are not in a pattern  ??????????????
+
+12/07/17:
+## Q: kochan & wood, p-82, couple approaches, Q: how specify output file ??????
+tr -d '-' < orthoMCL131.fa.aln.hmmaln.fa > test_tr
+## working ok, but still file > 60,000
+-rw-r--r--   1 bterry  staff   72478 Dec  7 08:52 test_tr
+## so do 'tr' as follows
+tr -d '-' < orthoMCL131.fa.aln.hmmaln_1st66seqs.fa > orthoMCL131.fa.aln.hmmaln_1st66seqs_dash.fa
+-rw-r--r--   1 bterry  staff   35522 Dec  7 09:04 orthoMCL131.fa.aln.hmmaln_1st66seqs_dash.fa
+## so < 60,000
+tr -d '-' < orthoMCL131.fa.aln.hmmaln_last65seqs.fa > orthoMCL131.fa.aln.hmmaln_1ast65seqs_dash.fa
+-rw-r--r--   1 bterry  staff   36956 Dec  7 09:12 orthoMCL131.fa.aln.hmmaln_1ast65seqs_dash.fa
+## so < 60,000
+## now ready submit non dash < 60,000 char to MEME
+
+upload orthoMCL131.fa.aln.hmmaln_1st66seqs_dash.fa
+## 'any number of repetitions'
+## number motifs = 1  ???????????????
+## Advanced options => should any of these be used ???????
+## submitted 9:50am => 
+## NOTE: REMOVING DASHES WITHIN SEQ OF AA seq, MEME only works on ungapped seqs, so removal all dashes apparently would not hurt MEME ???????
+## NOTE: orthoMCL131.fa.aln.hmmaln_1st66seqs_dash.fa has seq length **variance** 179 to 800 ??????????????????
+
+## output, Q: MAST, diff. from MAST ???????
+## Q: What to think of this 'logo' ????????????????????????
+
+12/08/17:
+## try 2nd run meme, description: orthoMCL131.fa.aln.hmmaln_1st66seqs_dash.fa_2motif
+## submit, 10:09am, 
+An error occurred running your MEME job. Further details may be available below
+http://meme-suite.org/info/status?service=MEME&id=appMEME_4.12.01512749382745409351221
+## don't see any error notes ????????????????????????????
+
+## perhaps submit with 3 motifs
+http://meme-suite.org/tools/meme
+## try 2rd run meme, description: orthoMCL131.fa.aln.hmmaln_1st66seqs_dash.fa_3motif
+12/8/2017, 11:30:02 AM
+An error occurred running your MEME job. Further details may be available below.
+http://meme-suite.org/info/status?service=MEME&id=appMEME_4.12.01512754202263189880938
+## don't see any error notes ????????????????????????????
+
+## TALKED TO VIKAS
+**PROBLEM:** FOR MEME, WANT ORIGINAL '.fa' FILE PUT THRU 'NOTES' STEPS, NOT THE 'TRIMMED' OUTPUT FROM HMMALIGN !!!!!!!!!!!!!!!!!!??????????????????????????
+## line 4199, today, can't find orthoMCL131.fa in /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9  ???????????????????????????????????????????????????/
+## so, 
+scp it back from pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa .
+ls -al
+## Now, submit this file to MEME
+## Q: Will MEME have problem with '*' characters ????????????????????? Answer, YES
+## so try remove with 'tr'
+wc orthoMCL131.fa
+    1398    1398   76214 orthoMCL131.fa
+## so will need divide file, say in half to be < 60,000
+
+#head -n 701 orthoMCL131.fa.aln.hmmaln.fa > orthoMCL131.fa.aln.hmmaln_1st132lines.fa
+head -n 701 orthoMCL131.fa > orthoMCL131_top701.fa
+tail -n 697 orthoMCL131.fa > orthoMCL131_last697.fa
+## two output files look ok.
+## try again submit to MEME
+orthoMCL131_top701.fa_1motif
+## ran, logo: YNTLIHGYFKVGKMDKACKJFHEMTSQGVEPBVVTYSSVIDALCKNGRMD
+Each of the following 63 sequences has an E-value less than 10.
+The motif matches shown have a position p-value less than 0.0001
+
+## try again for 2 motifs
+orthoMCL131_top701.fa_2motif
+Your job ID is: appMEME_4.12.01512792223286-1920140562
+running, 10:05pm
+## result: motif locations, seeing **different** pattern of the two motifs in the various input sequences.
+## perhaps **to try** run wi 3 motifs, then start analyzing 
+
+## github save again.
+
+## get rid '*'s
+## tr -d '-' < orthoMCL131.fa.aln.hmmaln.fa > test_tr
+## Note: need check size file also.
+
+
+
+
+STOPPED
 
 
 
 
 
+3) redo phenogram, this time for 131 seqs
 
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa.aln.hmmaln .
+less orthoMCL131.fa.aln.hmmaln
+## so stockholm MSA form does not give info on 'trim' size of the stockholm format ????????????????
 
-
-
-
-
- 
 
 
 
