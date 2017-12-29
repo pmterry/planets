@@ -4466,7 +4466,9 @@ http://bioinfogp.cnb.csic.es/tools/venny/index.html
 
 ## vikas suggestion, cat blue22, red122, do venny with just **2** input files.
 cat red122_nodotnum.txt blue22_nodotnum.txt > red122andblue22.txt  ## 144 rows
-venny output: .../r_stuff/135andonefileredandblue.png
+venny output: .../r_stuff/venny2inp_orthoMCL135andphylogeny.png
+## redone, 12/26/17, to change names above circles to orthoMCL & Phylogeny. 
+## Q: why not calc % in new venn diagram ????????????????????????
 
 ## note: another web site, https://www.stefanjol.nl/venny, say can do **proportional** circles ??????????????????
 ## tried, all overlaps not correct ??????????????
@@ -4906,24 +4908,207 @@ orthoMCL131_top701.fa_2motif
 Your job ID is: appMEME_4.12.01512792223286-1920140562
 running, 10:05pm
 ## result: motif locations, seeing **different** pattern of the two motifs in the various input sequences.
-## perhaps **to try** run wi 3 motifs, then start analyzing 
 
 ## github save again.
 
-## get rid '*'s
-## tr -d '-' < orthoMCL131.fa.aln.hmmaln.fa > test_tr
-## Note: need check size file also.
+## perhaps **to try** run wi 3 motifs, then start analyzing 
 
+
+## get rid '*'s
+## apparently not a problem.
+## Note: need check size file also. Both small enough.
+
+12/10/17:
+vikas
+MEME
+jhu article (crispr)
+
+12/17/17:
+# redo MEME for 131 for 1, 2, & 3 motifs
+orthoMCL131_top701.fa
+orthoMCL131_top701redo2.fa_1motif
+http://meme-suite.org/tools/meme
+'any number repetitions'
+no. of motifs =1
+start: 12:53pm
+
+orthoMCL131_top701.fa
+orthoMCL131_top701redo2.fa_2motif
+http://meme-suite.org/tools/meme
+'any number repetitions'
+no. of motifs =2
+start: 1:01pm
+
+orthoMCL131_top701.fa
+orthoMCL131_top701.fa_3motif
+http://meme-suite.org/tools/meme
+'any number repetitions'
+no. of motifs =3
+start: 1:05pm
+
+## Q: pattern of the 3 motifs ***varies*** for location in each sequence ??????????????
+## Q: can meme3motif.txt be displayed outside of meme browser result page ????????
+
+## For further information on how to interpret these results, go to http://meme-suite.org
+, motif compari
+# Q: Tomtom, motif comparison tool ?????????????????????
+# I note pattern of 1motif run similar to 1st pattern for 3 motif run.
+
+12/18/17:
+talked to vikas
+1) get images, etc. in .Rmd file ready for pub
+2) vikas available later in day, thurs, fri to work with this info.
+
+3) redo vikas phenogram (/Users/bterry/macbook2017/vikas17/vikas_phenograms
+), this time for the 131 seqs rather than 144
+## also, try option to display expanded single chrom, fig 8 of phenogram paper.
+
+12/20/17:
+## try prepare file for the 131 like gff3_cols13_144nochr_ForPhenoGram.txt of vikas.
+## need file wi chr & position for the 131 seqs. Try look at input/output for orthoMCL ???????
+gff3_cols13_144nochr.txt, perhaps could go to gff3, select the 131 seqs, similar to prepn of gff3_cols13_144nochr.txt ?????????????????
+
+12/21/17:
+## proceeding, 1st get the 131 seq names from /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9/orthoMCL131.fa
+grep "^>" orthoMCL131.fa > orthoMCL131names.txt  ## 131 rows as expect, appears sorted, last 3 are chromosome 'U'. Presume need to remove before phenoraph ??????????????
+# next, remove '>' left hand side of each line
+## cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 147 > sort147_nodotnum.txt
+cat orthoMCL131names.txt|perl -pe 's/>(Tr.+)$/\1/' | head -n 131 > orthoMCL131names2.txt
+# next, remove '.digit'
+## cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 147 > sort147_nodotnum.txt
+cat orthoMCL131names2.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 131 > orthoMCL131namesnodotnum.txt
+# now need subset .../wheatgff3/gff3_1345_9names.txt
+# 1st copy to /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9
+# see p-2325
+# sort/uniq check of orthoMCL131namesnodotnum.txt
+#sort oGroups135plus12blue_norice9.txt |uniq > testsort147.txt
+sort orthoMCL131namesnodotnum.txt |uniq > testsortuniq131.txt
+## seq of rows seems same
+## now, ready for bash subsetting script.
+## cp bash Philip_5colmgff3.sh to .../phyml/pyMLorthoMCL131norice9
+##bash Philip_5colmgff3.sh sort147_nodotnum.txt > gff3_1345_9names_147.txt  ## ok
+bash Philip_5colmgff3.sh orthoMCL131namesnodotnum.txt > gff3_1345_9names_131.txt  ## ok
+
+## now cut colms 1,3  ## Q: will seq names in new colm 3 be a problem ???????????
+cut -f 1,3 gff3_1345_9names_131.txt > gff3_cols13_131.txt
+
+## finally, remove 1st 3 char (chr) (each row in gff3_cols13_131.txt with 
+cat gff3_cols13_131.txt|perl -pe 's/chr(.+)/\1/' | head -n 131 > gff3_cols13_131nochr.txt
+
+## talked to vikas
+1) put 'tree' filenames in file .../rmd_wkflowdoc/listofimages.tst for each of the images. 8 tree files copied to .../wheatproj/rmd_wkflowdoc
+2) changes to venny image (orthoMCL & Phylogeny labels). They compare orthoMCL (135 seqs & the phylogeny, blue=22+red=44=144 after 820 blue & red 'p' + rice9 image above. I note, now missing % display ??????????????
+3) Q: The Goal of this research? heterosis, in research scale, 'chemical hybridizing agent' to stop polination some plants in field (like detassaling). But not for production scale. Q: vikas comment: active RF proteins only work with subset of sterile cytoplasm (Me: NEED CLARIFY HOW RF-proteins fcn ???????????!!!!!!!!!!!!************)
+4) vikas interest to redo rice9, get more rice RF proteins, run say orthoMCL these + the 820 'p' proteins, see if add'l orthogroups contain some of these known active RF proteins, +ve controls ?????
+5) vikas new task: snp locations, find location overlaps (also 1000 bases before & after) with RF genes (Me: need add'l explanation of task, data set ?????????????? I note, bioconductor may be able to do ???? Check bioconductor help site. Also, v buffalo, chpt 9, See p-263-4 and following for starters.
+6) get the image for the introns in the RF protein seqs, gsds (done, in Rmd file)
+7) phenogram with annotation, see what vikas thinks of the single chrom. plots with input files containing seq. names ??????
+8) Q: comment on MEME, what to think about varying pattern of motifs between putative RF seqs ?????????????????????????????
+9) weblogo ???????????????????
+
+12/22/17:
+## read into R, create 3 colm headers, add a vector, 'RF-like_seq'
+## need be in dir .../phyml/pyMLorthoMCL131norice9
+setwd("/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9")
+colm3 <- rep('RF-like_seq', 131)
+class(colm3)
+length(colm3)
+nchar(colm3)
+colm1and2 <- read.delim("gff3_cols13_131nochr.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("chr", "pos"))
+phen_input <- data.frame(chr = colm1and2$chr, pos = colm1and2$pos, phenotype = colm3)
+dim(phen_input)
+head(phen_input, n = 3)
+write.table(phen_input, file="phen_input131.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+## remove 3 'U' rows => phen_input128.txt
+## ready for phenogram plots
+## pheno_gram.33904.png, all chromosomes
+## pheno_gram.1A.10to60.png, chrom. 1A, 10,000,000 to 60,000,000 part of ~ 594 million length chrom. 1A 
+## 
+## Q: could I annotate the seqs on this segment of 1A ?????????????
+## tried, failed, perhaps email, contact wi Question ???????????????/
+
+12/26/17:
+## **also try** like **3rd example** at phenoGram site, put seq names in 'phenotype' colm, select chrom 1A (only 21 seqs for chrom 1A betw. 10 & 60 million), see if annotate by color and display seq names below the ideogram ????????
+
+## now cut colms 1,3,5
+cut -f 1,3,5 gff3_1345_9names_131.txt > gff3_cols135_131.txt
+
+## finally, remove 1st 3 char (chr) (each row in gff3_cols135_131.txt with 
+cat gff3_cols135_131.txt|perl -pe 's/chr(.+)/\1/' | head -n 131 > gff3_cols135_131nochr.txt
+## ck in bbedit, if all tab separations ????
+## need colm headers, try add with R
+
+## read into R, create 3 colm headers, add a vector, 'RF-like_seq'
+## need be in dir .../phyml/pyMLorthoMCL131norice9
+setwd("/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9")
+getwd()
+colms123 <- read.delim("gff3_cols135_131nochr.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("chr", "pos", "phenotype"))
+dim(colms123)
+head(colms123, n=3)
+phen_input <- data.frame(chr = colms123$chr, pos = colms123$pos, phenotype = colms123$phenotype)
+dim(phen_input)
+head(phen_input, n = 3)
+write.table(phen_input, file="phen_input131protnames.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+## remove 3 'U' rows => phen_input128.txt
+
+## ready for phenogram plots
+## ***error***, lost dir.../phyml/pyMLorthoMCL131norice9 by keyboard sensitivity problem ????? Try find the files with 'find' command ??????
+## finding the files previously in /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9 in /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pheno_gram.30959 dir.
+## but pheno_gram.30959 dir **not** showing up in finder window ????
+
+## ***what to do*** Perhaps mv pheno_gram.30959 to pyMLorthoMCL131norice9
+## from 
+mv pheno_gram.30959 pyMLorthoMCL131norice9
+## check if can see in finder window, looks ok now.
+
+## result: pheno_gram.1A.10.60protnames128.png => gave the 21 seq names, but some colors ***similar*** enough that betw. perhaps 3 or 4, can't identify colored circle matching seq. name ????????? ***But*** seq names in phen_input128protnames.txt **same** as order along chrom. So, **can** see which seqs are ***'grouped'*** on chrom.
+
+
+## To do, now copy pheno_gram.1A.10.60protnames128.png from Downloads to .../phyml/pyMLorthoMCL131norice9 dir. (done)
+
+## updated venny in 'Rmd' file (Q: why no % calc this time) ????????
+
+12/27/17: 
+## To do, put two .png images into rmd_wkflowdoc dir from .../phyml/pyMLorthoMCL131norice9 dir so can invoke in wheatflowdocnotestoc4_from_ppointtmp.Rmd file.
+i) pheno_gram.33904.png
+ii) pheno_gram.1A.10.60protnames128.png
+
+## now, update, then knit wheatflowdocnotestoc4_from_ppointtmp.Rmd file (done)
+
+12/28/17:
+## copy tree files to .../wheatproj/rmd_wkflowdoc (see listoftreefiles.txt)
+1) not in pub ???
+2) pro, .../100817/PPRhmmsearchsubset_plus9_clustaltree_coloredPandrice9
+
+3) pro, .../vikas17frompro/pyML829/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.txt
+
+4).../pyML153/22plus122plus9_fa_aln_hmmaln_phy_phyml/22plus122plus9_fa_aln_hmmaln_phy_phyml_tree.txt
+5) .../phyml/pyML156_3/156_3_fa_aln_hmmaln_phy_phyml
+/156_3_fa_aln_hmmaln_phy_phyml_tree.txt
+6) .../phyml/pyMLorthoMCL135price9/rice9orthomcl135_fa_aln_hmmaln_phy_phyml
+/rice9orthomcl135_fa_aln_hmmaln_phy_phyml_tree.txt
+7) .../phyml/pyMLorthoMCL131price9/rice9orthomcl131_fa_aln_hmmaln_phy_phyml
+/rice9orthomcl131_fa_aln_hmmaln_phy_phyml_tree.txt
+8) pro, .../macbookpro2017/pyMLorthoMCL131norice9/orthomcl131_fa_aln_hmmaln_phy_phyml_tree.txt
+9) .../phyml/pyMLorthomcl131vikas6/orthomcl131vikas6_fa_aln_hmmaln_phy_phyml
+/orthomcl131vikas6_fa_aln_hmmaln_phy_phyml_tree.txt
+
+## left to do, 3 pro files above (done, copied to .../wheatproj/rmd_wkflowdoc on mbook)
+
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 08/31/17 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
 
 
 
 STOPPED
 
 
-
-
-
-3) redo phenogram, this time for 131 seqs
 
 scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa.aln.hmmaln .
 less orthoMCL131.fa.aln.hmmaln
