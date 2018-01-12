@@ -5104,9 +5104,234 @@ git status
 git push origin master
 # git remote -v
 
+12/29/17:
 
+*****************************Start,chpt9,vbuffalo***********************************
+p-270
+have R 3.4.1, so upgrade to 3.4.2 (3.4.3 avail also), choose 3.4.2 since bioconductor using. (tho reading further, 3.4.3 perhaps better choice.
+Now install bioconductor 3.6
+Start R, then
+source("https://bioconductor.org/biocLite.R")
+biocLite()
+3.5, not 3.6 ????????????????????????????
+source("https://bioconductor.org/biocLite.R")
+         biocLite("BiocUpgrade")
+## still 3.5, not 3.6 ????????????????????
+## but then says:
+Upgrade all packages to Bioconductor version 3.6? [y/n]: y
+p-270
+biocLite("GenomicRanges")
+## several **utility** bioconductor packages mentioned.
+p-271, new R session
+library(BiocInstaller)
+biocLite("GenomicRanges")
+library(IRanges)
+rng <- IRanges(start=4, end=13)  ## how specify sequence ???
+rng
+IRanges(start=4, width=3)
+p-272
+p-278
+## to run this page, try fig out fig 9.8  ????????????????????
+set.seed(0)
+alns <- IRanges(start=sample(seq_len(50), 20), width=5)
+alns
+reduce(alns)
+## ok, see how works
+
+12/30/17:
+
+12/31/17:
+
+p-290
+## to try code this page, fig 9-16, not needed, can see what happening without coding
+p-294
+## to try code this page, 'coverage(), 
+set.seed(0) 
+rngs <- IRanges(start=sample(seq_len(60), 10), width=7)
+rngs
+names(rngs)[9] <- "A"  # label one range for examples later
+rngs_cov <- coverage(rngs)
+rngs_cov
+
+01/01/18:
+p-299
+GenomicRanges
+p-306
+## perhaps run code, see if 4 chr3 seqs ???????????????????????????
+p-307
+## perhaps run code, try figure out what happening for (1), see if my interpretation ok for (2), (3), ??????????????????????????
+p-308
+top of page code output ??????????????????
+p-309
+## to check bit.ly/anno-data url, => available annotation packages ???????????
+
+
+p-312
+## looks like will need to create a transscriptDb object for data/organism will want to work with ?????????????????????
+## Q: will this be a problem ????????????????
+
+p-313
+## import.gff() ?????????????????????????
+p-314-315
+## to run this code ??????????????
+
+p-316
+## two ways to grab promoter nucleotide seqs ???????????????????????
+
+01/02/18:
+p-317
+## Biostrings ????
+## large scale alignment/mapping ?????????????????????
+## bottom page code ??????????????????????
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx start vikas Q'sxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+## talked to vikas
+1) for rice, is there a list of RF-like genes, Os.... one can access ?????
+2) start 131, follow vikas 'Notes', create hmm (think previously did ??), then hmmsearch vs all the wheat .fa seqs, => , initially see what get (note: with PRR.hmm, prevly got 1545).
+3) venny, check if different web sites, may differ by the '%' representation ??????
+4) cp rmd_wkflow_doc to crane
+5) get the ios app for pag2018 going (apparently only for ios, not for osx ???) (done)
+6) snp input data format
+
+SNP id  | chr  | position
+snp1    | 2    | 5 Mb
+...
+        | 1    |
+...
+
+## working with gff3 file, looks like 3 colms from gff3 file, add 2 add'l colms
+
+Traes  | start  | end | start - 1kb | start+1kb
+
+To do: subset snp's within/around RF-like genes. Suggest check google for method to accomplish. Also chpt 9 of v buffalo.
+## google finding qqch on ncbi, but searching a seq **prevly** has snps located ?????
+
+7) Evid. RF-like proteins may have variation: Melonek abstr: this implies PPR gene inactivation and loss during polyploidization, for which we found evidence in the form of truncated or frame-shifted gene fragments. Pattern MEME motifs vary between 61 putative RF-like seqs. tested. Are MEME motifs perhaps **more sensitive** way to discriminate betw. putative RF-like seqs. ????????? Perhaps use to subset putative RF-like seqs, look for seqs with similar motif patterns ???????????
+
+8) ask vikas try install figtree on his new mac pro ?????
+xxxxxxxxxxxxxxxxxxxxxxxxxx end vikas Qs xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+p-324
+finding, working with overlapping ranges **[LOOKS LIKE TASK WANT TO ACCOMPLISH]**
+## could one build/structure files as prevly described, then employ IRanges package (TO CHECK)
+p-326
+findOverlaps()  ???????????
+
+01/03/18:
+p-328 Lander-Waterman
+## Q: looks like some typos in here ??????????????
+p-329
+BEDTools
+p-330
+Q: BED files, GTF, GFF, how compare ????????????????
+## note: format vikas suggested & '.bed' files examples bit different, how to proceed ????????
+
+01/04/18:
+p-331
+annotation/track formats ?????????????????
+BAM files ??????????
+p-333
+## dealing with strand ???????????????????????
+## Q: 'echo' line ???????????????????????
+p-334
+## check chr names compatible ????????
+p-335
+## Q: strand, stumbling block ?????????????????
+
+## so at the end of chpt9, next to try, p-330 (overlaps) & p-333-35 (slop, flank)
+## at same time, check out vikas rec., plink
+
+## 1st, map out what input files will be, steps to get the input files ready.
+
+01/05-06/18:
+## after looking at the plink 'Extract a subset of SNPs: file-list options' section, have number of questions for vikas. Some are:
+1) looks like 'snp' file will need 2 colms, chr & position (I assume need chr colm as position number not unique in genome, only within a chrom.)  ???????????????????????????????????
+2) myrange.txt, would have 4 colms.
+For example,
+
+     2 30000000 35000000  R1
+## if build from gff3 file, could cut last 3 of these fields directly from gff3 file, for chr field, perhaps extract chr from 'LABEL' field (perhaps what C. Brown presented using R, also in v buffalo for this task).
+3) SET file, what is it, perhaps prevly doc'd snps in genes ??????????
+4) +- 1bk ranges upstream/downstream of gene (is gene = 5'utr, coding region, 3'utr). Would/can plink do this with its algorithm, or would one need to prepare these ranges oneself  ??????????????????????????
+5) are we only doing the 128 genes ?????????????????????????
+6) perhaps do for *all* chromosomes ?????????????????
+ 
+## so for (2), prepare myrange.txt file
+## 1st, find what did prevly processing wheat ggf3 file for the 128 RF-like gnes/proteins. Check 131 also (perhaps also 135), since only difference is subtracted last 3 lines.
+##
+ ok, line 5034, looks like can start with file .../phyml/pyMLorthoMCL131norice9
+/gff3_1345_9names_131.txt
+chr1A	gene	49346779	49349220	TraesCS1A01G067600
+chr1A	gene	49355113	49356126	TraesCS1A01G067700
+## so in new myrange.txt file, colm 1 will remove chr from chr1A
+## new colm 2 will be colm 3 from gff3_1345_9names_131.txt
+## new colm 3 will be colm 4 from gff3_1345_9names_131.txt
+## new colm 4 will be colm 5 from gff3_1345_9names_131.txt
 
 STOPPED
+
+## to do: implement preceding steps.
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9
+cut -f 1,3,4,5 gff3_1345_9names_131.txt > gff3_cols1345_131.txt
+cat gff3_cols1345_131.txt|perl -pe 's/chr(.+)/\1/' | head -n 131 > gff3_cols1345_131nochr.txt
+## the last file the 'myrange.txt' file in plink section '
+Extract a subset of SNPs: file-list options' at url: http://zzz.bwh.harvard.edu/plink/dataman.shtml
+
+## email vikas:
+--get 'snp' file
+--check if correct in num. colms think need for this file to use in plink  ????????????
+--work on pag18 talks to see
+check academic courses for 18, stat, agron, the biology (BIOS ???)
+
+## **stopped** plink effort for moment
+
+STOPPED
+
+
+
+****************************End,chpt9,vbuffalo**************************************
+
+
+01/10/18:
+from 01/02/18 above, line 5188, 
+## 2) start 131 .fa prot. seqs, follow vikas 'Notes' (1st 3 steps only), create hmm (think previously did ??), then hmmsearch vs all the wheat .fa seqs, => , initially see what get (note: with PRR.hmm, prevly got 1545).
+## ref. HMMER userguide.pdf, p-20-22
+
+## needed steps to get new hmmsearch output for new hmm based on the 131
+## do 1st 3 steps in file: /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/Notes_Alignment_UsingHMMs.txt
+## on mbook, work in dir .../vikas2018/131RFlike
+mkdir ../macbook2018/vikas18/131RFlike
+## i. muscle on .fa for the 131 putative RF-like seqs
+## 131 .fa file ???, looks like can use /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9/orthoMCL131.fa
+## cp to ../macbook2018/vikas18/131RFlike dir
+## refer line 719, 739
+## ../FRprotseqs/slurm_muscle_wheatproj_refin820.sh
+
+cp, rename ../FRprotseqs/slurm_muscle_wheatproj_refin820.sh to ../macbook2018/vikas18/131RFlike/slurm_muscle_wheatproj_131RFlike.sh, & edit.
+
+STOPPED
+  
+github
+
+update crane wi rmd_wkflow_doc
+
+## to prepare crane for this slurm run
+
+
+
+
+## ii. ../hmmpipeline/FRprotseqs/fasta2stockholm.pl
+## iii. ## hmmbuild seq.fa.aln.hmm seq.fa.aln.slx
+## then, 
+## hmmsearch PPR.hmm iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa > PPR.out
+## analyze output of hmmsearch, ... get output like PPRsec2_1562_Seqscolm.txt
+
+
+
+
+
+
+
 
 
 
