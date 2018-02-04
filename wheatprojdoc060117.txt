@@ -5308,29 +5308,329 @@ mkdir ../macbook2018/vikas18/131RFlike
 ## ../FRprotseqs/slurm_muscle_wheatproj_refin820.sh
 
 cp, rename ../FRprotseqs/slurm_muscle_wheatproj_refin820.sh to ../macbook2018/vikas18/131RFlike/slurm_muscle_wheatproj_131RFlike.sh, & edit.
-
-STOPPED
   
-github
+## github update (done)
 
-update crane wi rmd_wkflow_doc
+## update crane wi rmd_wkflow_doc
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/shared/terry/rmd_wkflowdoc
+ls -al |wc -l ## 15, 14 .png, 1 .Rmd
+rm *.png
+rm *.Rmd
+ls -lh ## dir empty
+logout
+cd /Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflowdoc
+ls -al *_ppo*.Rmd
+scp *_ppo*.Rmd pterry@crane.unl.edu:/work/baenziger/shared/terry/rmd_wkflowdoc
+ls -al *.png | wc -l  16
+scp *.png pterry@crane.unl.edu:/work/baenziger/shared/terry/rmd_wkflowdoc
+## then log on, see if worked, lists 20 files.
+ls -lh *.Rmd  # 1
+ls -lh *.png  # 16
+[pterry@login.crane rmd_wkflowdoc]$ ls -lh |wc -l
+18
+## later, check what other 1 extra file is ?????????????
+
+01/22/18:
 
 ## to prepare crane for this slurm run
 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/
+ls -lh
+## if no dir 131RFlike, create one
+mkdir 131RFlike
+ls -lh
+## /work/baenziger/pterry/wheatproj/131RFlike
+logout
+## probably need scp orthoMCL131.fa over to crane into .../131RFlike dir.
+cd /Users/bterry/macbook2018/vikas18/131RFlike
+scp orthoMCL131.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/131RFlike
 
+scp slurm_muscle_wheatproj_131RFlike.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/131RFlike
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
 
-## ii. ../hmmpipeline/FRprotseqs/fasta2stockholm.pl
-## iii. ## hmmbuild seq.fa.aln.hmm seq.fa.aln.slx
+## ck if present slurm_muscle_wheatproj_refin820.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_131RFlike.sh 11302281  12:17pm => ??:??am, 
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          11302281     batch TJob_mus   pterry PD       0:00      1 (Resources)
+## later, 3:36pm,
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/131RFlike
+ls -lh
+
+-rw-r--r-- 1 pterry amundsen  69K Jan 22 12:25 job.11302281.err
+-rw-r--r-- 1 pterry amundsen    0 Jan 22 12:24 job.11302281.out
+-rw-r--r-- 1 pterry amundsen  75K Jan 22 11:21 orthoMCL131.fa
+-rw-r--r-- 1 pterry amundsen 126K Jan 22 12:25 orthoMCL131.fa.aln
+
+less job.11302281.err
+
+sacct -j  11302281 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-01-22T12:24:41 2018-01-22T12:25:08 
+2018-01-22T12:24:41 2018-01-22T12:25:08 
+12:25:08 - 12:24:41 = 27 sec
+
+less orthoMCL131.fa.aln  ## looks to be *in* MSA fasta format.
+ 
+## next, fasta2stockholm.pl conversion (line 4248)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/131RFlike
+ls -lh
+cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl orthoMCL131.fa.aln > orthoMCL131.fa.aln.slx
+ls -al
+-rw-r--r--  1 pterry amundsen 126693 Jan 22 16:17 orthoMCL131.fa.aln.slx
+
+## to check top stockholm file
+less orthoMCL131.fa.aln.slx
+
+## now for *hmmbuild*
+
+## see 11/30/17 above (line 4595)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/131RFlike
+ls -lh
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/131RFlike
+
+hmmbuild orthoMCL131.fa.aln.hmm orthoMCL131.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             orthoMCL131.fa.aln.slx
+# output HMM file:                  orthoMCL131.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     orthoMCL131.fa.aln     131   945   802     1.56  0.590 
+
+# CPU time: 2.57u 0.01s 00:00:02.57 Elapsed: 00:00:02.62
+exit
+less orthoMCL131.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  orthoMCL131.fa.aln
+LENG  802
+ALPH  amino
+RF    no
+MM    no
+CONS  yes
+CS    no
+MAP   yes
+DATE  Mon Jan 22 16:43:25 2018
+NSEQ  131
+EFFN  1.555145
+CKSUM 2958776102
+STATS LOCAL MSV      -12.8115  0.69619
+STATS LOCAL VITERBI  -13.7209  0.69619
+STATS LOCAL FORWARD   -6.7808  0.69619
+
+## preparing for hmmsearch using orthoMCL131.fa.aln.hmm vs iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+
+## log back in, check /work/baenziger/shared/terry/hmm dir.
+## has zip file for iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/shared/terry/hmm
+ls -al  ## sizes are same.
+
+iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+/work/baenziger/pterry/wheatproj
+## perhaps iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa deleted from crane ??????????????
+## not finding iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip in shared dir on crane.
+## try from /Users/bterry/macbook2017/vikas17/wheatproj dir the following
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+find . -name 'iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa' -print
+./iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+## so scp iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa to /work/baenziger/pterry/wheatproj/131RFlike
+
+-rw-r--r--  1 bterry  staff  48634703 Jun 14  2017 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+
+scp iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/131RFlike
+
+## then check file same size on crane
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj/131RFlike
+ls -al
+-rw-r--r--  1 pterry amundsen 48634703 Jan 22 19:20 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+## matches
+
 ## then, 
 ## hmmsearch PPR.hmm iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa > PPR.out
 ## analyze output of hmmsearch, ... get output like PPRsec2_1562_Seqscolm.txt
 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj/131RFlike
+ls -al
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+# hmmsearch NB-ARC.hmm Trinity.fasta.transdecoder.pep > hmmsrchshortpep.out
+cd /work/baenziger/pterry/wheatproj/131RFlike
+hmmsearch orthoMCL131.fa.aln.hmm iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa > orthoMCL131hmmsearch.out
+## 7:43pm, ran < 1min.
+ls -lh
+-rw-r--r-- 1 pterry amundsen 5.2M Jan 22 19:43 orthoMCL131hmmsearch.out
+
+less orthoMCL131hmmsearch.out
+
+# hmmsearch :: search profile(s) against a sequence database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query HMM file:                  orthoMCL131.fa.aln.hmm
+# target sequence database:        iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       orthoMCL131.fa.aln  [M=802]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence             Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------             -----------
+          0 1527.6   2.1          0 1527.4   2.1    1.0  1  TraesCS1D01G056200.1  
+          0 1513.4   3.1          0 1513.1   3.1    1.0  1  TraesCS1A01G054700.2  
+          0 1513.2   0.3          0 1513.0   0.3    1.0  1  TraesCS1D01G068400.1  
+          0 1512.9   8.4          0 1512.7   8.4    1.0  1  TraesCS1B01G072900.2  
+          0 1510.9   0.6          0 1510.7   0.6    1.0  1  TraesCS1A01G067400.1  
+          0 1509.9   0.4          0 1509.7   0.4    1.0  1  TraesCS1B01G085900.1  
+          0 1501.2   0.0          0 1500.9   0.0    1.0  1  TraesCS1A01G067600.1  
+          0 1497.3   0.3          0 1497.1   0.3    1.0  1  TraesCS1D01G068900.1  
+          0 1495.6   1.0          0 1495.3   1.0    1.0  1  TraesCS1D01G068500.1  
+
+wc -l orthoMCL131hmmsearch.out
+67619 orthoMCL131hmmsearch.out
+
+## compare PPR.out for size, e-values
+wc PPR.out
+ 118172  689922 6704453 PPR.out
+
+## so only approx half many lines as PPR.out
+
+## to check: how determied how many wheat proteins to call hits with orthoMCL131.fa.aln.hmm vs iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+
+## 1st, scp 
+
+## ref, 06/12/17 (line 137)
+## Note: p-544, cheng ref., 0.1 for *full*, 100 for *domain* ??????
+## Q: few comments:
+## PPR.out, line 1540, 'inclusion threshold'
+## p-9, sci. reports, RFL genes  >= 10 p-class ppr motifs, (note: sec 2, PPR.out, line 542, # domains < 10) So, should num. domains affect cutoff for hmmsearch hits ?????????????????
+## p-533, cheng ref., PPR proteins, 2 to 30 tandem repeats ??????????????
+## p-533, cheng ref., PPR.out, line 1562, criteria cutoff, 
+(-E 0.1),
+(-E 100)
+## compare, hmmer doc, p-23, cutoff E-value <= 10.0, catches *all* 1595 lines sec 2, PPR.out 
+## hmmer doc, p-24, sec 3, ...
+
+## talked to Vikas, would like to take hits in PPR.out file using cheng, p-544 criterion of 'full' E-value <= 0.1. This line 1562 and above in sec 2.
+
+## 1st, scp orthoMCL131hmmsearch.out back to macbook
+cd /Users/bterry/macbook2018/vikas18/131RFlike
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/131RFlike/orthoMCL131hmmsearch.out .
+
+philip-terry-2:131RFlike bterry$ ls -al
+-rw-r--r--   1 bterry  staff  5350084 Jan 22 21:16 orthoMCL131hmmsearch.out
+
+## note: all but last row of seqs for LHS E-value < .1
 
 
+STOPPED
+
+## comments:
+i. meme, p-77, 'sparkle', domain viewer (5:40pm tuesday), perhaps could split 'P' from 'PLS', RF-like eqs ??????????
+ii. so 1553 - 14 = 1539 rows of seqs < 0.1 LHS E-value
+iii. could run thru phyml, see what looks like, including rice9 ???????????
+iv. perhaps check couple other hmmsearch criteria for output file ????????
+v. Read over melonek material, understand all of it, may help with ideas ??????
+vi. ... ????
+
+01/23/18:
+## for now, stop with 06/13/17 section steps for hmmsearch output file, /work/baenziger/pterry/wheatproj/131RFlike/orthoMCL131hmmsearch.out file.
+
+## talked to vikas today.
+i. given the 1539 seqs < Evalue = 0.1 in orthoMCL131hmmsearch.out, not helping to identify RF-like genes.
+ii. to check: compare 1545 from PPR.hmm with 1539 from orthoMCL131.fa.aln.hmm (sort, unique, diff ???). If basically the same set, then
+iii. get a list of rice RF-like proteins (see melonek 2016 paper on rice).
+iv. unclear vikas here? Considering orthoMCL & ML phylogeny methods. 
+--run orthoMCL on expanded rice RF-like list + wheat P proteins selected by another ML phylogeny run (?) (or using all 1539 from orthoMCL131.fa.aln.hmm) output???
+-- ???? compare with phylogeny for wheat 'p' proteins rice RF-like seqs with ?? wheat P proteins
+v. read over melonek 2016 rice paper (think place where got rice seq from Ensembl) ??? Q: gene/protein names in table S1, fig 3 ???????????????????
+vi. understand melonek wheat talk & sorghum poster
+vii. barkan & small review, fig 2, could I try differentiate RF-like from 'P' proteins using for example webLogo ????????????????????????????????
+viii. autogamous, wheat, apparently ????????
+
+01/28/18:
+## talked to vikas, 01/26/18
+i. having trouble getting protein seqs from melonek paper, table S5, check out ref. Fuji there for the 'red' seqs, from bradi??? 
+ii. Fujii, 2011, *not* 2016
+
+01/29/18:
+iii. Sykes paper
+Q: is new wheat genome seq 'high quality' ??????????????
+# Q: how distinguish RF or PPR-RF from RFL ????? Is idea here, these two co-locate ???? Functional markers for actual RF genes yet to be identified ?????
 
 
+01/30/18:
+## talked to vikas yesterday.
+i. from Fujii, 2011 paper, table S1, set up runs of
+--orthoMCL & 
+--ML phyml 
+with following seqs
+## 820 'P' proteins prevly used
+## table S1 arabidopsis (dicot), brachypodium (monocot as is wheat), & soybean (dicot) RFL seqs. Try dnload these seqs from ensembl in *'bulk'* if can figure how to do?
+ii. check sykes paper for additional RFL seqs to use here
+iii. run orthoMCL & phyML each twice, once for 3 + wheat, once for brachy + wheat.
 
+01/31/18:
+## From ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/brachypodium_distachyon/pep/ got Brachypodium_distachyon.v1.0.pep.all.fa (31029 '>' lines. 
+# Q: to try, from table S1 of Fujii (2011 paper), subset the 9 brachy seqs from the '.fa' file ???????
+# finding 1st two of 9 brachy protein seqs from S1 table in the brachy '.fa' file. 
+# did vikas have a script, if provide names, will get that subset protein seqs from the .fa file ???????????????
+
+## looks like ./getseq.awk
+## example of use:
+philip-terry-2:wheatproj bterry$ pwd
+/Users/bterry/macbook2017/vikas17/wheatproj
+philip-terry-2:wheatproj bterry$ find . -name 'PPRsec2_1562_Seqscolm.txt' -print
+./PPRsec2_1562_Seqscolm.txt
+## to do just put 9 brachy names in a file, run as following *example* vs :
+## ./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa PPRsec2_1562_Seqscolm.txt > PPRhmmsearchsubset.fa
+
+02/03/18:
+## update github
+
+STOPPED
+
+./getseq.awk Brachypodium_distachyon.v1.0.pep.all.fa bracky9seqnamesfile.txt > bracky9.fa
 
 
 
