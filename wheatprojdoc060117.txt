@@ -1992,7 +1992,7 @@ Number of orthogroups	0
 ## NO genes in orthogroups
 ## So, have not proven that that using only **1** input .fa (rice9wheat820P.fa) file caused the failure to find any proteins in Orthogroups.csv output file. 
 
-## for now, move on to try the **one** file (rice9wheat820P.fa) with orthoMCL online run. Tho I don't see a ratioale to do this, but if orthomcl only allows 1 file? Perhaps run a 2nd with ric9.fa & wheat820P.fa ???????
+## for now, move on to try the **one** file (rice9wheat820P.fa) with orthoMCL online run. Tho I don't see a ratioale to do this, but if orthomcl only allows 1 file? Perhaps run a 2nd with rice9.fa & wheat820P.fa ???????
 ## dir is:
 /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp
 ## orthomcl: http://orthomcl.org/orthomcl/proteomeUpload.do
@@ -5608,10 +5608,10 @@ with following seqs
 ## 820 'P' proteins prevly used
 ## table S1 arabidopsis (dicot), brachypodium (monocot as is wheat), & soybean (dicot) RFL seqs. Try dnload these seqs from ensembl in *'bulk'* if can figure how to do?
 ii. check sykes paper for additional RFL seqs to use here
-iii. run orthoMCL & phyML each twice, once for 3 + wheat, once for brachy + wheat.
+iii. run orthoMCL & phyML each twice, once for 3 + wheat (820 P), once for brachy + wheat (820 P).
 
 01/31/18:
-## From ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/brachypodium_distachyon/pep/ got Brachypodium_distachyon.v1.0.pep.all.fa (31029 '>' lines. 
+## From ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/brachypodium_distachyon/pep/ got Brachypodium_distachyon.v1.0.pep.all.fa (31029 '>' lines). 
 # Q: to try, from table S1 of Fujii (2011 paper), subset the 9 brachy seqs from the '.fa' file ???????
 # finding 1st two of 9 brachy protein seqs from S1 table in the brachy '.fa' file. 
 # did vikas have a script, if provide names, will get that subset protein seqs from the .fa file ???????????????
@@ -5626,11 +5626,354 @@ philip-terry-2:wheatproj bterry$ find . -name 'PPRsec2_1562_Seqscolm.txt' -print
 ## ./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa PPRsec2_1562_Seqscolm.txt > PPRhmmsearchsubset.fa
 
 02/03/18:
-## update github
+
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 02/03/18 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
 
 STOPPED
 
-./getseq.awk Brachypodium_distachyon.v1.0.pep.all.fa bracky9seqnamesfile.txt > bracky9.fa
+02/04/18:
+## finish reading Sykes paper, checking if additional RFL's can include in (see 0/30/18 above)
+## Comments:
+i) would any of this Sykes pipeline be helpful for us at this point?
+ii) perhaps check fujii, 2011 list, table S1, with sykes sup. table 1, see how compares, if any proteins want to use from Sykes?  
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike
+#cat bracky9_3colms.txt|perl -pe 's/.+(Br.+).1/\1/' | head -n 9 > bracky9names.txt
+cat bracky9_3colms.txt|perl -pe 's/.+(Br.+)/\1/' | head -n 9 > bracky9names.txt
+tr '[a-z]' '[A-Z]' < bracky9names.txt > bracky9namesCAPS.txt
+
+./getseq.awk Brachypodium_distachyon.v1.0.pep.all.fa bracky9namesCAPS.txt > bracky9names.fa
+ 
+02/06/18:
+Dnloaded Glycine_max.Glycine_max_v2.0.pep.all.fa.gz from ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/glycine_max/pep/
+## expanded yielded
+-rw-rw-rw-@ 1 bterry  staff    54M Feb  5 10:09 Glycine_max.Glycine_max_v2.0.pep.all.fa
+## gene names closest to Fujii (2011) table S1 soybean names. For example, 
+
+>KRH43692 pep chromosome:Glycine_max_v2.0:8:12977614:12982018:-1 gene:GLYMA_08G164800 transcript:KRH43692 gene_biotype:protein_coding transcript_biotype:protein_coding description:hypothetical protein
+
+## so, appears an *extra* '_' in the gene names compared to Fujii, 2011,table S1.
+$## tried 5 names, only 1 of 5 found in soybean .fa file ???????????? Had to make all caps, & put in '_' 1st.
+# Q: note place to 'update your ensembl IDs. Fujii paper from 2011, 6-7 years ago ???? Phytozome v4.0 source for G. max ?????????
+
+Try dnload arabidopsis.t
+-rw-rw-rw-@ 1 bterry  staff    32M Feb  5 11:45 Arabidopsis_thaliana.TAIR10.pep.all.fa
+-rw-rw-rw-@ 1 bterry  staff   9.3M Feb  5 11:44 Arabidopsis_thaliana.TAIR10.pep.all.fa.gz
+
+48322 '>' in .fa file
+
+Differences betw format of name betw Fujii 2011 table S1 & arabidopsis .fa file. BUT, note, .fa file lists for ex., at least *3* tx's for gene name AtPPR_1g06580 (tab S1), AT1G06580 in .fa file.
+
+02/06/18:
+## talked to vikas
+i. resume search for soybean seqs as follows:
+https://soybase.org/dlpages/, try submit list of 41 soybean genes from Fujii, 2011,table S1.
+I note, could fail for reasons like the case of the letters in the names, etc. The genome soybean genome I dnloaded above from ensembl had such issues.
+
+cat bracky9_3colms.txt|perl -pe 's/.+(Br.+)/\1/' | head -n 9 > bracky9names.txt
+tr '[a-z]' '[A-Z]' < bracky9names.txt > bracky9namesCAPS.txt
+
+cat soybean41Fujii2011.txt|perl -pe 's/.+(Gly.+)\t.+/\1/' | head -n 41 > soybean41Fujii2011names.txt
+## At https://soybase.org/dlpages/#genecallcorrespondence site, 1st did 
+## Gene Model Correspondence Lookup
+## result, 38 of 41 found a name for Wm82.a2.v1 version. Note several names found more than 1 name for this version ?????????
+## anyway, **PERHAPS** take these 38 names (instead of submitted ones), submit these names to 'Download longest transcript or predicted protein sequence for gene calls' section of soybean site.
+## 1st, need isolate the 4th column from soybase.org_correspondence_methods.csv. Deleted 3 rows wi 'no correspondence'. Tabbed where apparent 'tab' missing ???????? Deleted 1st 3 rows. New name: Glyma4vernames.txt
+Now, use perl -pe script
+cat Glyma4vernames.txt|perl -pe 's/.+(Glyma\..+)/\1/' | head -n 38 | perl -pe 's/(.+),/\1/' | head -n 38 > Glyma_ver2.0names38.txt
+
+cat Glyma4vernames.txt|perl -pe 's/.+(Glyma\..+,)/\1/' | head -n 38 | perl -pe 's/(.+),/\1/' | head -n 38 > Glyma_ver2.0names38.txt
+
+## unclear what to do, absence '.' several version 2 names, perl -pe can't work ok ???
+## need clarify what **want** to do ???????????????????
+
+'s/.+\,.+\,\t(Gly.+)\,.+/\1/'
+'s/.+,.+,.+(Gly.+),.+/\1/'
+'s/.+(Glyma\..+)/\1/'
+'s/(.+),/\1/'
+
+02/07/18:
+https://soybase.org/dlpages/#dnarna
+## https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/Proteins
+## tair, not used.
+## test downloaded 1st soybean v.2 name, appears to have provided two transcripts for that gene
+
+## continue with arabidopsis
+## from 02/06/18 above have 
+-rw-rw-rw-@ 1 bterry  staff    32M Feb  5 11:45 Arabidopsis_thaliana.TAIR10.pep.all.fa
+## from Fujii, 2011, have arab26fujii2011.txt.
+## isolate colm 3, 'ID in gene models' (perl -pe)
+cat arab26fujii2011.txt|perl -pe 's/.+(AtPPR.+)/\1/' | head -n 3 | perl -pe 's/(.+)\t.d/\1/' | head -n 3
+  > Glyma_ver2.0names38.txt
+ ## preceding failed ???????????????? 
+
+bbedit: .+(At)PPR_(.+)\t\d to arab26fujii2011.txt
+replace was \1\2.1
+## new file name: arab26fujii2011names.txt
+## check no repeats
+sort arab26fujii2011names.txt |uniq  ## 26, originally not sorted, leave that way ????
+
+## left, make names all CAPS
+tr '[a-z]' '[A-Z]' < arab26fujii2011names.txt > arab26fujii2011namesCAPS.txt
+## now ready for getseq.awk
+
+cp two files to .../arabidopsistuff dir.
+Arabidopsis_thaliana.TAIR10.pep.all.fa, Arabidopsis_thaliana.TAIR10.pep.all.fa.gz, & getseq.awk
+cd /Users/bterry/macbook2018/vikas18/131RFlike/arabidopsistuff
+
+./getseq.awk Arabidopsis_thaliana.TAIR10.pep.all.fa arab26fujii2011namesCAPS.txt > arab26fujii2011names.fa
+## all but >AT1G62915.1 (167 aa's) have lengh ~ 490 range or more
+
+02/08/18:
+
+## back to soybean
+## file used to manually select RFlike names originally from Fujii, 2011, table S1, Glyma_Correspondence_Report_20180207232909.csv. Need display in excel due to fact only these, can easily see which names in v2 column. **But wait**, the internet site does this **better** than excel, https://www.soybase.org/correspondence/index.php
+## Puts multiple ver2 hits in same colm, **easier** to see.
+
+## so new file with manually selected ver2 name for Fujii, 2011 soybean names will be soybean41to_ver2names38.txt.
+
+02/09/18:
+
+## now, submit this file to https://soybase.org/dlpages/#dnarna, 'Download longest transcript or predicted protein sequence for gene calls' section using soybean41to_ver2names38.txt file.
+
+## resulting soybean41to_ver2names38.txt.prot.fa file has 54 '>' lines (apparently getting muliple isoforms ??????????
+## to do, try bbedit reg expn, on soybean41to_ver2names38.txt, add '.1.p' at end to input file. then run this with getseq.awk on soybean41to_ver2names38.txt.prot.fa to get new '.fa' file with just '.1.p' isoform (hopefully dowm from 54 '>' lines to '38 lines ?????
+
+soybean41to_ver2names38.txt => soybean41to_ver2names38dot1dotp.txt (done)
+
+./getseq.awk soybean41to_ver2names38.txt.prot.fa soybean41to_ver2names38dot1dotp.txt > soybean41to_ver2names38dot1dotp.fa
+
+## Finally ready for orthoMCL runs, tho 1st shorten .fa file '>' names, then for 1st orthoMCL run, 
+http://orthomcl.org/orthomcl/proteomeUpload.do
+
+## talked to vikas, comments
+i. would like copy of Fujii, 2011 names submitted to Glyma 1.1 to Glyma2.0 Correspondence Lookup at https://soybase.org/dlpages
+ii. would like both orthoMCL * ML phylogeny on each of the combinations
+--820 + bracky9 + rice9
+--820 + bracky9 + rice9 + arabidopsis26 + soybean38
+
+iii. ML phylogeny
+--820 + bracky9 + rice9
+--820 + bracky9 + rice9 + arabidopsis?? + soybean38
+
+## so next, get the .fa files **together**, check for need shorten '>' names
+/Users/bterry/macbook2018/vikas18/131RFlike/orthomcl
+
+arab26fujii2011names.fa
+bracky9names.fa
+soybean41to_ver2names38dot1dotp.fa
+
+## ref line 674
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqsPPRhmmsearchsubset_P_prots820.fa
+## names *short* enough, just the wheat names
+
+## rice9 ????
+## From /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyML829
+## copy FRknownseqs_shtname_9.fa file. Has short names *already*.
+## ref., 'cat', line 1352
+
+02/10/18:
+
+## still need shorten '>'names in .fa files for arabidopsis26, bracky9 & soybean38 ?????
+## ref. p-28, haddock, example: (>\w+).+\[(\w+).+
+
+arab26fujii2011names.fa =bbedit=> arab26fujii2011namesshort.fa
+(>\w+\.\d).+
+\1\r
+grep -c "^>" arab26fujii2011namesshort.fa   # 26 as expect
+sort arab26fujii2011namesCAPS.txt |uniq | wc -l  ## 26
+
+bracky9names.fa  =bbedit=> bracky9namesshort.fa
+(>\w+\.\d).+
+\1\r
+grep -c "^>" bracky9namesshort.fa   # 9 as expect
+sort bracky9namesCAPS.txt |uniq | wc -l  ## 9 
+
+## last, 
+soybean41to_ver2names38dot1dotp.fa =bbedit=> soybean41to_ver2names38dot1dotpshort.fa
+(>\w+\.\w+\.\d).+
+\1\r
+grep -c "^>" soybean41to_ver2names38dot1dotpshort.fa   # 38 as expect
+sort soybean41to_ver2names38dot1dotp.txt |uniq | wc -l  ## 38
+
+## yet to *cat* input files for orthoMCL ????? see line 1995 for orthomcl ????
+--820P + bracky + rice
+--820P + bracky + rice + soy + arab
+
+cat PPRhmmsearchsubset_P_prots820.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa > p820br9rice9.fa
+grep -c "^>" p820br9rice9.fa  ## 820+9+9=838 as expect
+
+## finally, ready run orthoMCL online (ref. line 1995)
+submitted: 02/10/18, 7:36pm.
+Job name: p820br9rice9_021018
+Sequence file uploaded: p820br9rice9.fa
+Email: pterry@huskers.unl.edu
+
+/Users/bterry/macbook2018/vikas18/131RFlike/orthomcl/orthomclResult-4HHT9B3DDQF7/orthologGroups
+## Q:s
+i. what can say about orthoMCL group wi +ve controls in it ????????
+ii. 'osat' or 'rcom' ??????
+iii. seq ID of best hit (do these hits relate to specific protein ???????)
+iv. difference, %ID & %match ????????????????????
+v. for orthomcl_group OG5_131220, containing the bracky9 & rice9 'controls', total 153 occurrences. Subtract 153 - 18 = 135 wheat seqs (matching the 135 from last summer).
+vi. p-6.12.3, ***where*** access OrthoMCL-DB Web site to learn about 'orthomcl_groups' of interest ???
+vii. should one rerun with 1545 seqs following PPR.hmm or even the 110,000 before PPR.hmm ???
+
+cat PPRhmmsearchsubset_P_prots820.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > p820br9rice9soy38arab26.fa
+grep -c "^>" p820br9rice9soy38arab26.fa  ## 820+9+9+38+26=902 as expect
+
+## finally, ready run orthoMCL online (ref. line 1995)
+submitted: 02/10/18, 10:29pm
+Job name: p820br9rice9soy38arab26_021018
+Sequence file uploaded: p820br9rice9soy38arab26.fa
+Email: pterry@huskers.unl.edu
+
+02/11/18:
+/Users/bterry/macbook2018/vikas18/131RFlike/orthomcl/orthomclResult-2PSJAXREJR6L/orthologGroups
+## Q:s
+i. several of the +ve controls are in orthogroup **different** from OG5_131220 ??????
+ii. tried google search for NP_001052533, but no hits.
+iii. google OG5_131220, hitting PPR proteins.
+iii. 210 OG5_131220 rows in orthoGroups output file for p820br9rice9soy38arab26.fa input file. Could check how many are wheat proteins. Estimate ~ 130 without actually counting.
+iv. tried google another of the soybean orthogroups, OG5_170290, hitting a 'pentatricopeptide (PPR)' protein.
+
+## NOTE: ORTHOMCL only compares input protein seqs to PRE-BUILT orthogroups. Melonek, sci reports paper, p-9, OrthoMCL-DB web site, (www.orthomcl.org/orthomcl/). Q: what all can do there ??? If use ML phylogeny, ALL input seqs processed compared to orthomcl. WHAT does CD-Hit do ?????????
+
+TO TRY: orthomcl run with 1545 wheat seqs ?????
+find . -name 'PPRhmmsearchsubset.fa' -print
+## copied PPRhmmsearchsubset.fa to /Users/bterry/macbook2018/vikas18/131RFlike/orthomcl
+
+grep -c "^>Tr" PPRhmmsearchsubset.fa  ## 1545
+
+02/12/18:
+
+## to create the two .fa (cat) file with 2 & 4 +ve ctl species for orthomcl & the 1545 .fa file ??
+cat PPRhmmsearchsubset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa > p1545br9rice9.fa
+grep -c "^>" p1545br9rice9.fa  ## 1545+9+9=1563 as expect
+
+## finally, ready run orthoMCL online (ref. line 1995)
+submitted: 02/12/18, 10:24pm.
+Job name: p1545br9rice9_021218
+Sequence file uploaded: p1545br9rice9.fa
+Email: pterry@huskers.unl.edu
+
+02/13/18:
+/Users/bterry/macbook2018/vikas18/131RFlike/orthomcl/orthomclResult-UUSGQP3LHON2/orthologGroups
+# in bbedit,
+##  Tr.+\.[2-9].+
+## 86 'Tr' rows != '.1', total 'Tr' rows = 1545
+## Tr.+\.[^1].+  ## not working ??????????
+## so, in OG5_131220 orthogroup are 
+154 - 18 (ctl's) = 136 'Tr' rows in orthogroup OG5_131220, so similar number to all the prev. orthomcl runs.
+
+## vikas Q: on isoforms:
+## 86 in [2-9] for 'Tr...\.d', only ~ 2 in OG5_131220 orthogroup, so, if this orthogroup the identifier for RF-like seqs, & '.1' refers to 1st isoform, then ~ only 2 of these higher than '.1' isoforms are RF-like seqs. 1459 ('.1') + 86 (!='.1') = 1545. So accounts for all the seqs input to orthomcl.
+
+## check actual 86, if in OG5_131220
+## rename orthologGroups file to orthologGroups86.txt
+## (Tr.+\.[2-9]).+  ## finds '86'
+## replace: \1
+## message says replaced, but 'where are new 86' ???????????
+## (Tr\w+\.[2-9]\t\w+).+
+## \1
+## did replacement, but left all rest in place ????????????
+
+grep -c "Tr\w+\.[2-9]\t\w+.+" orthologGroups86.txt  ## , so *fails*  ????????????
+grep -c '\.[2-9]' orthologGroups86.txt  ## 86, ok.
+grep '\.[2-9]' orthologGroups86.txt > test86.txt
+## bbedit test86.txt for OG5_131220 orthogroup returns only 3 rows
+## so, looking like 86 .[2-9] rows except for 3 not RF-like seqs.
+## finally, note, *all* 18 +ve ctl's in orthologGroups86.txt associated with orthogroup OG5_131220, the one assoc'd with the +ve ctl's in the previous orthMCL runs.
+
+## still create, submit to orthomcl p1545br9rice9soy38arab26.fa
+cd /Users/bterry/macbook2018/vikas18/131RFlike/orthomcl
+
+cat PPRhmmsearchsubset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > p1545br9rice9soy38arab26.fa
+grep -c "^>" p1545br9rice9soy38arab26.fa  ## 1545+9+9+38+26=1627 as expect
+
+## finally, ready run orthoMCL online (ref. line 1995)
+submitted: 02/13/18, 7:54pm
+Job name: p1545br9rice9soy38arab26_021318
+Sequence file uploaded: p1545br9rice9soy38arab26.fa
+
+## Note: only 3 '.2' seqs in **orthoMCL131.fa**, rest are '.1' tx.
+
+02/14/18:
+
+/Users/bterry/macbook2018/vikas18/131RFlike/orthomcl/orthomclResult-X5O8LRIX5OBA/orthologGroups
+## number rows = 1627 as expect
+## total 211 OG5_131220 orthogroup rows in file from p1545br9rice9soy38arab26.fa. With 82 'ctl' rows, 211 - 82 = 129 *max* possible rows with OG5_131220 & wheat sequence.
+
+## check 'ctrl' rows for orthogroup: I note a few not with OG5_131220. So, try grep them out for closer look.
+grep -v 'Tr' orthologGroups1545_4crtl.txt > test4ctrl82.txt
+## 6 of 82 not OG5_131220. 3 in soy, 3 in arab. The 6 are all *different*.
+
+## check wheat rows for not '.1'.
+grep -c '\.[2-9]' orthologGroups1545_4ctrl.txt  ## 86, ok.
+grep '\.[2-9]' orthologGroups1545_4ctrl.txt > test1545_4ctrl86.txt
+## only **3** of the 86 **non** '.1' wheat seqs are in orthogroup OG5_131220 ?????????
+
+## conclude, even starting with 1545 wheat seqs for orthoMCL, only get ~ 129 RF-like seqs, similar to the result starting with 820 'P' proteins.
+## Q: diff from melonek 207 number. So far, don't have an explanation. 
+## unless a bunch of the non OG5_131220 orthogroups associated with the ~ 75 non '.1' wheat seqs, upon checking, would turn out to be RF-like seqs. A visual check looks like **don't** have many if any in common ??????
+## BUT THE 75, ***APPROX*** the DIFFerence betw. 130 & 207 OF MELONEK ?????????????
+
+TO DO: THIS CHECK FOR THE 820P RUNS ????
+
+TO DO: PERHAPS CHECK SOME OF THESE ORTHOGROUPS ARE RF-LIKE REFERENCES ????
+
+## CHECK IF EACH OF THESE [2-9] SEQS SHARE A NAME WITH A WHEAT '.1' SEQ ??????
+
+## talked to vikas
+i. check 7 orthogroups found mapping to at least one ctrl (arab or soy), to see if map to any wheat sequence ???????
+cd /Users/bterry/macbook2018/vikas18/131RFlike/orthomcl/orthomclResult-X5O8LRIX5OBA
+
+## for orthologGroups1545_4ctrl.txt file, 6 of 7 hit no wheat proteins, one hit 3 (OG5_170290). They are all on chromosome one:
+
+TraesCS1A01G060500.1	OG5_170290	osat|NP_001047166	0	-181	48	100
+TraesCS1B01G078800.1	OG5_170290	osat|NP_001047166	0	-181	48	100
+TraesCS1D01G061400.1	OG5_170290	osat|NP_001047166	0	-181	48	100
+
+
+02/15/18:
+## to check for 820+4ctrl species ????
+cd /Users/bterry/macbook2018/vikas18/131RFlike/orthomcl/orthomclResult-2PSJAXREJR6L
+
+grep -v 'Tr' orthologGroups820_4ctl.txt > test820_4ctrl82.txt
+for orthologGroups820_4ctl.txt file, 6 of 7 hit no wheat proteins, one hit 3 (OG5_170290).
+
+## Q: do google search for this orthogroup name. MpPPR_24 	'Pentatricopeptide repeat' proteins. In PFAM, hits PF01535 (and 2 others, all PPR repeat). PF01535 same pfam hit by OG5_131220. So these additional 3 wheat seqs in previous 820 'P's & 1545 group, listed above, all on chromosome one. 
+## SO, PRESUME **INCLUDE** IN TENTATIVE RF-like seqs (that is, add to the 131) since tyey map to RF-like control seqs. BUT, HITTING STUFF NOT LABELED RF-like. Perhaps include, later may remove, I note they located on chr 1,
+
+02/16/18:
+
+STOPPED
+
+## TO DO, send email to vikas with this result. (done)
+
+ii. do ML phylogeny (follow steps in vikas 'Notes ...' file for 820P & 1545 with 2 & 4 ctrl species above. See if can isolate additional wheat seqs as RF-like?
+
+## reference (11/30/17)
+##  line 4512, now, for (ii), 'Notes' for 131, **plus** vikas6, 
+
+
+
+
+
+
+iii. subset ~ 110,000 wheat .fa protein seq file using wheat protein names from 131 previously identified RF-like seqs. Check how many isoforms find (.1, .2, etc.) for 131 protein seq names.
+
+
+## Note: only 3 '.2' seqs in orthoMCL131.fa, rest are '.1' tx.
+
+
 
 
 
@@ -5638,7 +5981,6 @@ STOPPED
 scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa.aln.hmmaln .
 less orthoMCL131.fa.aln.hmmaln
 ## so stockholm MSA form does not give info on 'trim' size of the stockholm format ????????????????
-
 
 
 
