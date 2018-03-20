@@ -6669,10 +6669,612 @@ sort iwsgc131_CDS_evdot01_col2.blastn |uniq | wc -l  ## 148
 
 ## so, **apparently** none of the additional 173 rows are unique compared to the 148 uniq found when using evalue 1e-20. Looking at a family of proteins, increasing the evalue to 0.01 just allows more hits from the 131 to be detected against the 148. So, the subsets thinking to identify may have additional hits, members? What to think? Anyway, the 17 non131 hits may be all the existing CDS's of this sequenced genome outside the 131?
 
-# update github
+03/05/18:
+# updated github
+
+## talked to vikas
+i) subset rows from iwsgc131_CDS_evdot01.blastn using the 17 new hits (seventeen_newhits.txt). cut rows 2-12 from iwsgc131_CDS_evdot01.blastn, then run Philip... to do the subsetting on the 'hits' colm of iwsgc131_CDS_evdot01.blastn
+ii) for the 17, locate them in iwsgc annotation file, see if names are PPR proteins?
+iii) 1602, 1545, try setdiff these two, identify the 62 seqs by which they differ ??
+iv) respond to vikas 'unl box' invitation
+
+## ok, for the subset of iwsgc131_CDS_evdot01.blastn which have one of the 17 in colm 2:
+## 1st cut colms 2-12 from iwsgc131_CDS_evdot01.blastn.
+cut -f2,3,4,5,6,7,8,9,10,11,12 iwsgc131_CDS_evdot01.blastn > iwsgc131_CDS_evdot01_11colms.blastn
+
+## now set up Philip_iwsgc131_CDScolm2_17subset.sh
+## put iwsgc131_CDS_evdot01_11colms.blastn 'inside'.
+
+bash Philip_iwsgc131_CDScolm2_17subset.sh seventeen_newhits.txt > iwsgc131_CDS_evdot01_11colms_17subset.blastn
+wc -l iwsgc131_CDS_evdot01_11colms_17subset.blastn
+     248 iwsgc131_CDS_evdot01_11colms_17subset.blastn
+
+## could cut colm 11, eyeball for range of evalues
+cut -f10 iwsgc131_CDS_evdot01_11colms_17subset.blastn > ev_of17.txt
+## smallest see 1e-11 (rest 25 to 30 & smaller). How effectively display the distribution ?? histogram ?? Or, grep lines for each of 17 in turn, see if each has a tight distn, thus conclude variation betw the 17 wi regard to evalue ?????
+## or, can one relate queries hitting each of the 17, see some patterns there ????
+## perhaps, *next* go to annotation file, see name of each of the 17
+
+# line 2151, annotation file in wheatgff3 dir, iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+03/06/18:
+## copy seventeen_newhits.txt to seventeen_newhits_annotatn.txt. Note: all 17 from chr 1. For the non-PPR, sev'l have **similar** annotation. All non-PPR very close/adjacent to PPR genes. 
+
+## Perhaps see if *relationship* betw. size of evalue & if annotation hit is PPR ??????
+## subset each of 17 vs iwsgc131_CDS_evdot01_11colms.blastn, then take mean of evalue colm ??????????
+## or, for 1 at time, just try grep ????????
+grep "TraesCS1D01G076400" iwsgc131_CDS_evdot01_11colms.blastn  > TraesCS1D01G076400rows.txt
+
+## doc what hit for nonPPR ??  To check: are all these 'response reg' diff. genes ?????
+
+#Subset each of 17 in turn in with Philip_iwsgc131_CDScolm2_17subset.sh in file iwsgc131_CDS_evdot01.blastn. Try correlate query with fcn found in 'annotation' file for 'nonPPR' of the 17?
+## now set up Philip_iwsgc131_CDS12colm_17subset.sh
+## put iwsgc131_CDS_evdot01.blastn 'inside'.
+
+bash Philip_iwsgc131_CDS12colm_17subset.sh seventeen_newhits.txt > iwsgc131_CDS_evdot01_12colms_17subset.blastn
+wc -l iwsgc131_CDS_evdot01_12colms_17subset.blastn
+     248 iwsgc131_CDS_evdot01_12colms_17subset.blastn
+
+## now for the 11 of 17 **nonPPR** hits in seventeen_newhits_annotatn.txt in iwsgc131_CDS_evdot01_12colms_17subset.blastn, test what queries hitting them.
+--TraesCS1A01G054600, 11 diff. queries hit this, so were the queries PPR seqs, note 'hits' appear to be in cluster of PPR?
+--TraesCS1A01G055700, 11 diff. queries hit this, not the same 11 as for TraesCS1A01G054600 above.
+--TraesCS1A01G057500, 19 diff. queries hit this
+--TraesCS1A01G067100, 8 *diff.* queries hit this
+## Next three have same queries in their '23' (Q: but the 'hit' seqs have diff. gene names ??) To check just these in annotation file [**TO DO**]
+--TraesCS1B01G074800, 23 *diff* queries hit this
+--TraesCS1B01G074900, 23 *diff* queries hit this
+--TraesCS1B01G075100, 23 *diff* queries hit this
+## Q: if compared genes within the subsets, would there be similar subsets ????? At least the immediate 3 above are the same.
+--TraesCS1B01G075400, 6 *diff* queries hit this
+
+--TraesCS1D01G055400, 2 *diff* queries hit this
+--TraesCS1D01G056300, 12 *diff* queries hit this
+--TraesCS1D01G069200, 20 *diff* queries hit this
+
+## Summary of seventeen_newhits_annotatn.txt: 11 of 17 'nearPPR's'. 8 of these 'response reg' annotation. Similar 'Response reg' distribution thru chroms A, B, D.
+
+03/07/18:
+## vikas email response, several misunderstandings need clarification ?????
+i) evalues match well, ok
+ii) query coverage not checked for the 17 (or subset)?
+iii) vicinity, the 11 physically close to annotated PPR genes, but have not checked if close to RF-like genes ?
+iv) the 11 have nonPPR annotation ?
+v) see seventeen_newhits_annotatn.txt to get overview
+vi) show few of the annotation file for the 8 of 11, note, more duplication chrom B, the group of queries hitting 3 are identical!
+vi) next ... following preceding 5 parts
+
+## to proceed, 
+a) phylogram, with 131 + 6 or more (of 17) + 3 (orthoMCL, 2nd orthogroup). If include (some or all of actually 11 with different annotation) ?????
+b) phenogram (whole genome or by chromosome, perhaps both ???)
+
+
+03/08/18:
+## talked to vikas
+i) Do check on 0.01 blastn run with 'coverage' calcn, incorporate custom outfmt line from Jean-Jack.
+ii) next, run phylogram 131+3+16(?) depending result of (i) ??????
+iii) (me), bunch phenograms of various sets of PPRs/RF-like prot. seqs
+
+03/12/18:
+
+## *next*, rerun blastn with 'evalue 0.01', followed by sort|uniq, count rows. This time, change outfmt to '-outfmt "7 qseqid sseqid stitle evalue pident length qlen slen mismatch gapopen qstart qend sstart send bitscore"'.
+
+
+## slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt7.sh
+## scp to crane
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt7.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## run script
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blast131vsiwgscCDS
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt7.sh
+ls -lh
+sbatch slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt7.sh 12208753  11:32am => ??:??am, 
+squeue -u pterry  ## 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          12208753     batch TJob_bla   pterry PD       0:00      1 (Priority)
+
+
+sacct -j  12208753 -o start,end
+2018-03-12T12:05:33 2018-03-12T12:05:39 
+2018-03-12T12:05:33 2018-03-12T12:05:39 
+12:05:39 - 12:05:33 = 6 sec
+
+cd /work/baenziger/pterry/wheatproj/blast131vsiwgscCDS
+ls -al
+-rw-r--r--  1 pterry amundsen    731966 Mar 12 12:05 iwsgc131_CDS_evdot01_outfmt7.blastn
+
+wc -l iwsgc131_CDS_evdot01_outfmt7.blastn
+5555 iwsgc131_CDS_evdot01_outfmt7.blastn  ## ???????????????
+#4899 iwsgc131_CDS_evdot01.blastn ## with outfmt6 ????????
+
+less iwsgc131_CDS_evdot01_outfmt7.blastn
+## To do, scp this file back, examine.
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+scp  pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blast131vsiwgscCDS/iwsgc131_CDS_evdot01_outfmt7.blastn .
+
+wc -l iwsgc131_CDS_evdot01_outfmt7.blastn
+    5555 iwsgc131_CDS_evdot01_outfmt7.blastn
+******************************************************************************
+## WOULD PREFER TABULAR outfmt 6 FORMAT, SO TO RERUN WITH 8 CUSTOM FIELDS FOR outfmt 6
+
+## *next*, rerun blastn with 'evalue 0.01', followed by sort|uniq, count rows. This time, change outfmt to '-outfmt "6 qseqid sseqid evalue pident length qlen slen bitscore"'.
+
+
+## slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh
+## scp to crane
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## run script
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blast131vsiwgscCDS
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh
+ls -lh
+sbatch slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh 12209624  12:48pm => ??:??am, 
+squeue -u pterry  ## 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+sacct -j  12209624 -o start,end
+2018-03-12T12:48:32 2018-03-12T12:48:36 
+2018-03-12T12:48:32 2018-03-12T12:48:36 
+12:48:36 - 12:48:32 = 4 sec
+
+cd /work/baenziger/pterry/wheatproj/blast131vsiwgscCDS
+ls -al
+-rw-r--r--  1 pterry amundsen    360860 Mar 12 12:48 iwsgc131_CDS_evdot01_outfmt6cust.blastn
+
+wc -l iwsgc131_CDS_evdot01_outfmt6cust.blastn
+4899 iwsgc131_CDS_evdot01_outfmt6cust.blastn
+
+less iwsgc131_CDS_evdot01_outfmt6cust.blastn
+## To do, scp this file back, examine.
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+scp  pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blast131vsiwgscCDS/iwsgc131_CDS_evdot01_outfmt6cust.blastn .
+
+###############################dplyr###########################
+## R session
+## set dir
+setwd("~/macbook2018/vikas18/131RFlike/iwgsc.2to9")
+getwd()
+## read in iwsgc131_CDS_evdot01_outfmt6cust.blastn
+library("dplyr")
+blastn01cust6df <- read.delim("iwsgc131_CDS_evdot01_outfmt6cust.blastn", header=FALSE, stringsAsFactors=FALSE, col.names=c("qseqid", "sseqid", "evalue", "pident", "length", "qlen", "slen", "bitscore"))
+
+dim(blastn01cust6df)
+View(blastn01cust6df)
+head(blastn01cust6df, n=2)
+
+## R code to calc 'fracqryaligned=length/qlen'
+frac_qry_targ <- blastn01cust6df %>% select(qseqid,sseqid,evalue,length,qlen,slen) %>% 
+  mutate(qryfrac=length/qlen, tarfrac=length/slen) 
+
+dim(frac_qry_targ)
+head(frac_qry_targ, n=3)
+
+## write.table frac_qry_targ to file
+write.table(frac_qry_targ, file="frac_qry_targ.blastn", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+## perhaps subset rows with qry_frac < 0.50
+#filter(starwars, mass > 1000)
+
+frac_qry.50 <- frac_qry_targ %>% filter(qryfrac < 0.50)
+dim(frac_qry.50)  ## [1] 2072    8
+
+frac_targ.50 <- frac_qry_targ %>% filter(tarfrac < 0.50)
+dim(frac_targ.50)  ## [1] 1887    8
+
+## perhaps check the '16' on these parameters ?????????
+
+## Q: how best to do ??????
+## since only 16, perhaps manually in bbedit ????????????
+
+## Q: do I want to look at the data for the hits on the 131 for qryfrac & tarfrac, since many < 0.05  ?????????????????????????
+
+03/15/18:
+## talked to vikas yesterday
+i) check % coverage for the '17' (over the 131 hits) on blastn with evalue of 0.01, outfmt 6, custom output.
+## possible approaches:
+a. grep -f seventeen_newhits.txt frac_qry_targ.blastn > targ_17_blastn_hits_248rows.txt
+b. 'cat' the 16 files prevly created, they constitute 16 of the 17 rows of 131 qry blastn hits.
+c. use like bash script file to subset the 17 new hits from the 3899 frac_qry_targ.blastn file. seventeen_newhits.txt file contains the 'query' file for the task.
+
+03/16/18:
+
+grep -f seventeen_newhits.txt frac_qry_targ.blastn | wc -l  ## 248, same number as Philip_iwsgc131_CDS12colm_17subset.sh when run above.
+
+grep -f seventeen_newhits.txt frac_qry_targ.blastn > targ_17_blastn_hits_248rows.txt
+
+## To do, look at evalue colm, roughly what looks like. Evalues from 09 to 0, only 3 rows at 09. 
+Then for the 17 (248 hits), check fraction querys, targets for which length aligned is < 50%? Use dplyr, R.
+
+###############################dplyr###########################
+## R session
+rm(list=ls())
+#
+# set dir
+setwd("~/macbook2018/vikas18/131RFlike/iwgsc.2to9")
+getwd()
+## read in targ_17_blastn_hits_248rows.txt
+library("dplyr")
+blastn01cust6_17_248df <- read.delim("targ_17_blastn_hits_248rows.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("qseqid", "sseqid", "evalue", "length", "qlen", "slen", "qryfrac", "tarfrac"))
+
+dim(blastn01cust6_17_248df)
+View(blastn01cust6_17_248df)
+head(blastn01cust6_17_248df, n=2)
+
+## perhaps subset rows with qry_frac < 0.50
+#filter(starwars, mass > 1000)
+
+frac_qry.50_the17 <- blastn01cust6_17_248df %>% filter(qryfrac < 0.50)
+dim(frac_qry.50_the17)  ## [1] 241   8
+View(frac_qry.50_the17)
+summary(frac_qry.50_the17$qryfrac)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 0.02899 0.09053 0.15715 0.17108 0.22591 0.48817 
+frac_targ.50_the17 <- blastn01cust6_17_248df %>% filter(tarfrac < 0.50)
+dim(frac_targ.50_the17)  ## [1] 55  8
+View(frac_targ.50_the17)
+summary(frac_targ.50_the17$tarfrac)
+Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.1149  0.3354  0.3868  0.3818  0.4648  0.4985 
+
+## so, see, 'summary for qryfrac & for tarfrac, for the 241, & 55 rows with coverage fractions < 50%, mean/medians ~ 16%, 38%. 241 of 248 query fractions < 50%.
+## WHAT TO THINK ?????????????
+
+ii) initialize box vikas sent(**TO DO**)
+
+iii) send vikas gene names for 131 + 3 + 17 = 151
+## prepare a file with these 151 names
+## for the 131, could use iwsgc131_CDSnames_minus1stchar.txt for the 131
+## for the 3, 
+##ref 02/16/18 email to vikas or 02/14/18 above.
+To finish analyzing the two orthomcl runs with 4 ctl species, 4 rows of soybean & 3 rows of arabidopsis mapped to orthogroups other than OG5_131220. 6 of these did not also map to a wheat sequence. One, OG5_170290, mapped to three.
+
+TraesCS1A01G060500.1	OG5_170290	osat|NP_001047166	0	-181	48	100
+TraesCS1B01G078800.1	OG5_170290	osat|NP_001047166	0	-181	48	100
+TraesCS1D01G061400.1	OG5_170290	osat|NP_001047166	0	-181	48	100
+A google search of OG5_170290 produces 'Pentatricopeptide repeat'. In PFAM, it hits PF01535 (and 2 others, all say 'PPR repeat'). PF01535 is same pfam hit by OG5_131220.
+
+Note: these additional 3 wheat seqs are in both the 820 'P's & 1545 group, listed above.
+ 
+## finally, the 17. Try get from precursor to seventeen_newhits.txt (want recover '.d' part of each name).
+
+## To try:
+cut -f2 targ_17_blastn_hits_248rows.txt > targ_17_blastn_hits_248rows_col2.txt
+sort targ_17_blastn_hits_248rows_col2.txt |uniq | wc -l  ## 17
+sort targ_17_blastn_hits_248rows_col2.txt |uniq > seventeen_newhits_with.d.txt
+
+## now cat two files, then manually add the three rows (names) above
+#cat PPRhmmsearchsubset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > p1545br9rice9soy38arab26.fa
+cat iwsgc131_CDSnames_minus1stchar.txt seventeen_newhits_with.d.txt > iwsgc_131_17_3_151names.d.txt
+
+## vikas email (done)
+a. iwsgc_131_17_3_151names.d.txt file (.d form)
+b. results for 50% fraction for the 17, for qry, targ vs length
+
+03/17/18:
+
+iv) TO DO: ML phylogram for these 151 prot. seqs following vikas 'notes' file. See 02/16/18 above. Copy 'notes' in .../FRprotseqs/notes_...
+
+
+1st, need input for muscle MSA, a prot. fasta file.
+
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_17_3_151names.d.txt > iwsgc151_REPR_PROT_seqs.fa
+
+## 1506 lines, several **very** short proteins ???????????????????????????
+
+## Now run Notes steps ... 
+
+## need new dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj
+mkdir wheat151
+cd wheat151
+## scp iwsgc151_REPR_PROT_seqs.fa to crane, dir = wheat151
+logout
+## now for slurm_muscle_wheatproj_wheat151.sh
+## cp slurm_muscle_wheatproj_refin131vikas6.sh to slurm_muscle_wheatproj_wheat151.sh
+## edit, then scp (done)
+
+cd 
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp iwsgc151_REPR_PROT_seqs.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/wheat151
+
+scp slurm_muscle_wheatproj_wheat151.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 5991)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if present slurm_muscle_wheatproj_wheat151.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_wheat151.sh 12281619 7:07pm => 8:53am, finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          12281619     batch TJob_mus   pterry PD       0:00      1 (Priority)
+
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -lh
+
+less job.12281619.err
+sacct -j  12281619 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-03-18T00:30:07 2018-03-18T00:30:41 
+2018-03-18T00:30:07 2018-03-18T00:30:41 
+00:30:41 - 00:30:07 = 34 sec
+
+less iwsgc151_REPR_PROT_seqs.fa.aln  ## looks to be *in* MSA fasta format.
+
+## next, fasta2stockholm.pl conversion (line 4567)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -lh
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl iwsgc151_REPR_PROT_seqs.fa.aln > iwsgc151_REPR_PROT_seqs.fa.aln.slx
+ls -al
+-rw-r--r--  1 pterry amundsen 143768 Mar 18 09:18 iwsgc151_REPR_PROT_seqs.fa.aln.slx
+#-rw-r--r--  1 pterry amundsen 3400034 Feb 16 19:28 p820br9rice9soy38arab26.fa.aln.slx
+
+## to check top of stockholm file
+less iwsgc151_REPR_PROT_seqs.fa.aln.slx
+
+## now for *hmmbuild*
+
+## see 02/16/18 above (line 6041)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -lh
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/wheat151
+
+hmmbuild iwsgc151_REPR_PROT_seqs.fa.aln.hmm iwsgc151_REPR_PROT_seqs.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             iwsgc151_REPR_PROT_seqs.fa.aln.slx
+# output HMM file:                  iwsgc151_REPR_PROT_seqs.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     iwsgc151_REPR_PROT_seqs.fa.aln   151   930   794     2.39  0.590 
+
+# CPU time: 2.99u 0.00s 00:00:02.99 Elapsed: 00:00:03.03
+
+exit
+less iwsgc151_REPR_PROT_seqs.fa.aln.hmm
+
+#head -n 17 iwsgc151_REPR_PROT_seqs.fa.aln.hmm
+
+STOPPED
+
+## realign using hmm model, hmmalign  (refer 02/16/18, line 6076)
+mv slurm_hmmalign_wheatproj_refinorthoMCL131vikas6.sh slurm_hmmalign_wheatproj_wheat151.sh
+# see, from dir .../phyml/pyMLorthoMCL131vikas6
+
+## slurm file prepared
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp slurm_hmmalign_wheatproj_wheat151.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_wheat151.sh
+ls -lh
+sbatch slurm_hmmalign_wheatproj_wheat151.sh 12287821  10:26am => ??:??am, 
+squeue -u pterry  ## a ST
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -lh
+-rw-r--r-- 1 pterry amundsen 296K Mar 18 10:26 iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln
+#-rw-r--r-- 1 pterry amundsen 7.8M Feb 16 22:22 p820br9rice9soy38arab26.fa.aln.hmmaln
+
+sacct -j  12287821 -o start,end
+2018-03-18T10:26:07 2018-03-18T10:26:19 
+2018-03-18T10:26:07 2018-03-18T10:26:19 
+10:26:19 - 10:26:07 = 12 sec
+
+less iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln  ## # STOCKHOLM 1.0 format MSA
+
+## next, stockholm2fasta.pl conversion (line 4653)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -al
+
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/wheat151
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.fa
+
+ls -al
+less iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.fa
+
+grep -c ">Traes" iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.fa  ## 151 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+## now fas to phy (line 6141)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/wheat151
+ls -al
+cd ..
+cp refinPprots820/align_convert_fas_to_phy.pl wheat151
+cd wheat151
+ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/wheat151
+module load bioperl
+
+./align_convert_fas_to_phy.pl iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.fa
+ls -al
+## Q: will it create file & name for output, yes.
+-rw-r--r--  1 pterry amundsen 182730 Mar 18 13:12 iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+exit
+less iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy
+ 151 794
+'TraesCS1A01G054800.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+logout
+
+## scp back to macbook, (line 6169)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/wheat151/iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  182730 Mar 18 14:01 iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+less iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+head -n 4 iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy
+ 151 794
+'TraesCS1A01G054800.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+## so phy header   151 794, expect the 151
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT
+
+Name: iwsgc151_REPR_PROT_seqs
+
+The alignment file "iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln.phy" was uploaded, it contains 151 taxons of 794 characters.
+
+Your job was submitted. (2:12pm, sun, 03/18/18)
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20180318-201232_Wu36/cmd.txt
+
+Execution time: 1 hour(s), 9 minute(s)
+
+## Dnloaded from: http://www.atgc-montpellier.fr/phyml/results.php?path=20180318-201232_Wu36/sms.csv
+
+## new location:
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml.zip
+
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt
+
+STOPPED
+
+## to transfer tree file to 'pro'
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+## Q: should I have inluded any of the other species controls ????????????????
+
+## initial comments of figtree display of file: /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml
+/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt
+
+## couple comments for vikas email
+a. 15 to 20 very short proteins in the fasta file of the 151 proteins (approximately 60 to 200 aa's)
+b. have the phylogram for the 151 proteins in figtree. Looks similar to previous trees with possible RF-like input sequences. Chromosomes 1, 2, 6 clearly subset in the display. A minority of sequences on long branch lengths.
+
+03/19/18:
+## script to separate name, seq lines in a fasta file?
+## like do 'summary' for the lengths of sequences in 151 protein fasta file?
+## checking lengths of the proteins of the 17 in file iwsgc151_REPR_PROT_seqs.fa
+## 10 of 17 not annotated as PPR = 64 aa's
+## 1 of 17 not annotated as PPR =264
+## 5 of 17 annotated as PPR = 263, 392, 303, 342, 363. So borderline or below criterion of 10x35 = 350 aa's.
+## 1 not annotated in annotation file = 266
+## uploaded iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt to vikas 'Box'
+## see https://unl.app.box.com/folder/0
+## vikas can't access, I note a 'share' button, for moment won't push ??????????????
+
+## to do, upload to github again.
+
+
+## relationship protein lengths and ML phylogram ???
+
+
+BR = red, Gly = pink, rice(AB) = green arab(AT) = yellow, these +ve ctls group to the left of circular phylogram. Red & pink sort og group together, yellow near pink. but note, some dispersal of a few mostly yellow & green ?????????????????????
+## now highlighting chr 1, 2, 6 in turn
+## they pretty much **spread around** the circular phylogram  ???????????????????
+## PERHAPS SHOULD NOT HAVE USED **ALL** SEQS IN p820br9rice9soy38arab26.fa FOR hmmbuild ?????????????
+## working with p820br9rice9soy38arab26_fa_aln_hmmaln_phy_phyml_tree.txt file, red [=] TraesCS1, chr 1. green [=] TraesCS2, chr 2, purple [=] TraesCS6, chr 6.
+
+
+
+
+
+
+STOPPED
+
+
+
+## a note: vikas metric of aligned length/query seq length  ???????
+
+## Perhaps, **map** the locations of the 1545, 1602 PPR's, and setDiff to list 62 which differ ??? See if in clusters? Look back on phenogram, see if can do ???????????
+
 
 STOPPED 
-
+ 
 
 ## in 131, are all hits within *same* chrom. of query seq. ?????
 
