@@ -6221,7 +6221,7 @@ Initially asked select a name for node values, gave aLRT
 tree/midpoint
 'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
 ## on taxa 
-BR = red, Gly = pink, rice(AB) = green arab(AT) = yellow, these +ve ctls group to the left of circular phylogram. Red & pink sort og group together, yellow near pink. but note, some dispersal of a few mostly yellow & green ?????????????????????
+BR = red, Gly = pink, rice(AB) = green arab(AT) = yellow, these +ve ctls group to the left of circular phylogram. Red & pink sort of group together, yellow near pink. but note, some dispersal of a few mostly yellow & green ?????????????????????
 ## now highlighting chr 1, 2, 6 in turn
 ## they pretty much **spread around** the circular phylogram  ???????????????????
 ## PERHAPS SHOULD NOT HAVE USED **ALL** SEQS IN p820br9rice9soy38arab26.fa FOR hmmbuild ?????????????
@@ -6231,7 +6231,7 @@ BR = red, Gly = pink, rice(AB) = green arab(AT) = yellow, these +ve ctls group t
 i. mentioned wheat seqs in p820br9rice9soy38arab26 phylogram **spread around** the circular phylogram. He suggested could be wheat seqs more closely related to selves than the other species ???????????
 
 02/20/18:
-ii. blast 131+3 'genes' of the RF-like genes vs 110,000 genes. Not protein-protein. Det. which blast need. Try see if can identify any more RF-like seqs.
+ii. blast 131+3 'genes' of the RF-like genes vs 110,000 genes. Not protein-protein. Det. which blast need. See if can identify any more RF-like seqs. Note: **only** did 131 HERE
 
 ## which blast: ??????????
 
@@ -6959,7 +6959,6 @@ sort targ_17_blastn_hits_248rows_col2.txt |uniq | wc -l  ## 17
 sort targ_17_blastn_hits_248rows_col2.txt |uniq > seventeen_newhits_with.d.txt
 
 ## now cat two files, then manually add the three rows (names) above
-#cat PPRhmmsearchsubset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > p1545br9rice9soy38arab26.fa
 cat iwsgc131_CDSnames_minus1stchar.txt seventeen_newhits_with.d.txt > iwsgc_131_17_3_151names.d.txt
 
 ## vikas email (done)
@@ -7042,7 +7041,7 @@ srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
 module load perl/5.22
 perl fasta2stockholm.pl iwsgc151_REPR_PROT_seqs.fa.aln > iwsgc151_REPR_PROT_seqs.fa.aln.slx
 ls -al
--rw-r--r--  1 pterry amundsen 143768 Mar 18 09:18 iwsgc151_REPR_PROT_seqs.fa.aln.slx
+#-rw-r--r--  1 pterry amundsen 143768 Mar 18 09:18 iwsgc151_REPR_PROT_seqs.fa.aln.slx
 #-rw-r--r--  1 pterry amundsen 3400034 Feb 16 19:28 p820br9rice9soy38arab26.fa.aln.slx
 
 ## to check top of stockholm file
@@ -7216,8 +7215,6 @@ Execution time: 1 hour(s), 9 minute(s)
 
 /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt
 
-STOPPED
-
 ## to transfer tree file to 'pro'
 
 in figtree
@@ -7247,7 +7244,505 @@ b. have the phylogram for the 151 proteins in figtree. Looks similar to previous
 ## see https://unl.app.box.com/folder/0
 ## vikas can't access, I note a 'share' button, for moment won't push ??????????????
 
-## to do, upload to github again.
+## to do, upload to github again. Done.
+
+03/25/18:
+
+1st, today, recreate iwsgc_131_17_3_151names.d.txt (made a modifn by mistake)
+
+## now cat two files, then manually add the three rows (names) above
+cat iwsgc131_CDSnames_minus1stchar.txt seventeen_newhits_with.d.txt > iwsgc_131_17_3_151names.d.txt
+
+## 3 rows added manually => 151 rows again.
+## now create five_17minus12_with.d.txt
+cp seventeen_newhits_with.d.txt five_17minus12_with.d.txt
+## manually delete 12 rows from five_17minus12_with.d.txt previously agreed, leaving 5 of original 17. (done)
+## now, cat 131 + 5
+cat iwsgc131_CDSnames_minus1stchar.txt five_17minus12_with.d.txt > iwsgc_131_5_3_139names.d.txt
+
+## then manually add the 3 = 139 (done)
+
+## TO DO: ML phylogram for these potential 139 RF-like prot. seqs following vikas 'notes' file. See 03/17/18 above. Copy 'notes' in .../FRprotseqs/notes_...  (line 6970)
+
+1st, need input for muscle MSA, a prot. fasta file.
+
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names.d.txt > iwsgc139_REPR_PROT_seqs.fa
+
+## 1467 lines, shortest are 3.
+>TraesCS1A01G055500.1 217 aa's
+>TraesCS1A01G066500.1 190 aa's
+>TraesCS1A01G067500.1 188 aa's
+
+## Now run Notes steps ... 
+
+## need new dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+03/26/18:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj
+mkdir RF139
+cd RF139
+## scp iwsgc139_REPR_PROT_seqs.fa to crane, dir = RF139
+logout
+## now for slurm_muscle_wheatproj_RF139.sh
+## cp slurm_muscle_wheatproj_wheat151.sh to slurm_muscle_wheatproj_RF139.sh
+
+## edit (done), then scp
+
+cd 
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp iwsgc139_REPR_PROT_seqs.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/RF139
+
+scp slurm_muscle_wheatproj_RF139.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 7001)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if present slurm_muscle_wheatproj_RF139.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_RF139.sh 12398498 9:58am => , finally done.
+
+squeue -u pterry  ## a PD
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          12398498     batch TJob_mus   pterry PD       0:00      1 (Priority)
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+## To see, **diff.** way review run time, etc. from QIIME2 workshop ??????
+
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh
+
+less job.12398498.err
+sacct -j  12398498 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-03-26T09:59:33 2018-03-26T10:00:03 
+2018-03-26T09:59:33 2018-03-26T10:00:03 
+
+
+less iwsgc139_REPR_PROT_seqs.fa.aln  ## looks to be *in* MSA fasta format.
+
+## next, fasta2stockholm.pl conversion (line 7029)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl iwsgc139_REPR_PROT_seqs.fa.aln > iwsgc139_REPR_PROT_seqs.fa.aln.slx
+ls -al
+
+ls -al
+-rw-r--r--  1 pterry amundsen 135124 Mar 26 11:19 iwsgc139_REPR_PROT_seqs.fa.aln.slx
+#-rw-r--r--  1 pterry amundsen 143768 Mar 18 09:18 iwsgc151_REPR_PROT_seqs.fa.aln.slx
+
+## to check top of stockholm file
+less iwsgc139_REPR_PROT_seqs.fa.aln.slx
+
+## now for *hmmbuild*
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/RF139
+
+hmmbuild iwsgc139_REPR_PROT_seqs.fa.aln.hmm iwsgc139_REPR_PROT_seqs.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             iwsgc139_REPR_PROT_seqs.fa.aln.slx
+# output HMM file:                  iwsgc139_REPR_PROT_seqs.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     iwsgc139_REPR_PROT_seqs.fa.aln   139   950   802     1.81  0.591 
+
+# CPU time: 2.56u 0.02s 00:00:02.58 Elapsed: 00:00:02.63
+exit
+ls -lh
+-rw-r--r-- 1 pterry amundsen 366K Mar 26 13:15 iwsgc139_REPR_PROT_seqs.fa.aln.hmm
+
+less iwsgc139_REPR_PROT_seqs.fa.aln.hmm
+
+#head -n 17 iwsgc139_REPR_PROT_seqs.fa.aln.hmm
+
+## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
+## copy slurm_hmmalign_wheatproj_wheat151.sh to slurm_hmmalign_wheatproj_RF139.sh
+
+## slurm file prepared
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp slurm_hmmalign_wheatproj_RF139.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_RF139.sh
+ls -lh
+sbatch slurm_hmmalign_wheatproj_RF139.sh 12401484  1:58pm => ??:??am, 
+squeue -u pterry  ## a ST
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh
+-rw-r--r-- 1 pterry amundsen 273K Mar 26 13:58 iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln
+##-rw-r--r-- 1 pterry amundsen 296K Mar 18 10:26 iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln
+
+sacct -j  12401484 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-03-26T13:58:20 2018-03-26T13:58:30 
+2018-03-26T13:58:20 2018-03-26T13:58:30 
+
+less iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln  ## # STOCKHOLM 1.0 format MSA
+
+## next, stockholm2fasta.pl conversion (line 7117)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/RF139
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.fa
+
+ls -al
+less iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.fa
+
+grep -c ">Traes" iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.fa  ## 139 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+## now fas to phy (line 7146)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+cd ..
+cp refinPprots820/align_convert_fas_to_phy.pl RF139
+cd RF139
+ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/RF139
+module load bioperl
+
+./align_convert_fas_to_phy.pl iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.fa
+ls -al
+## Q: will it create file & name for output, yes.
+
+-rw-r--r--  1 pterry amundsen 169461 Mar 26 19:18 iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+exit
+less iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy
+ 139 802
+'TraesCS1A01G073700.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+logout
+
+## scp back to macbook, (line 7173)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/RF139/iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  169461 Mar 26 19:26 iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+less iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+head -n 4 iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy
+ 139 802
+'TraesCS1A01G073700.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+## so phy header    139 802, expect the 139
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT
+
+Name: iwsgc139_REPR_PROT_seqs
+
+The alignment file "iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.phy" was uploaded, it contains 139 taxons of 802 characters.
+
+Your job was submitted. (Mon, 03/26/18, 7:34pm)
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20180327-023402_Ws89/cmd.txt
+
+Execution time: 1 hour(s), 8 minute(s)
+
+## Dnloaded from: 
+http://www.atgc-montpellier.fr/phyml/results.php?path=20180327-023402_Ws89/sms.csv
+
+## location of 139 tree file:
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc139_repr_prot_seqs_fa_aln_hmmaln_phy_phyml/iwsgc139_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt
+
+
+STOPPED
+03/27/18:
+## to do: transfer to 'pro'. Instead, rather just dnload it from phyml to 'pro' laptop.
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+ tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+
+## initial comments of figtree display of file: 
+chroms 1, 2, 6 'mostly' group. Longest branch is a group of 3, on CS1, A, B, & D.
+
+To do, email 'modified tree file, & 'png' file so don't have to take 'pro' to UNL.
+
+## TO DO: the awk pgm to **find** seq lengths of fasta file ?????
+## TO DO: **FIX** FOLLOWING PATHs fot the record
+
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml
+/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt
+
+## 
+
+
+
+## talked to vikas
+1. by Wed, need rmd_wkflow_doc up to date
+2. will prepare cartoon overview from
+3. intron-exon plot for the 139 (subset gff3)
+4. me, awk of fasta lengths for 139 .fa file, 'summary' in R
+5. www.wheat-expression.com, browser
+
+## working on wheatflowdocnotestoc4_from_ppointtmp.Rmd
+grep -c "!" wheatflowdocnotestoc4_from_ppointtmp.Rmd  ## not working ??????
+grep -c "\.png" wheatflowdocnotestoc4_from_ppointtmp.Rmd  ## 26
+
+
+
+## update Rmd file, outlining this file. STOPPED (line 7535)
+## note, when render, the 'html' file displayed 'IN RSTUDIO' ***has*** captions for images ????  AND, NOW THIS NEW html displayed in firefox now **HAS**
+ the captions ?????????????????????????????????
+
+## ok, 
+16 images in wheatflowdocnotestoc4_from_ppointtmp.Rmd
+19 png in dir .../wheatproj/rmd_wkflowdoc
+29 'png' found in wheatflowdocnotestoc4_from_ppointtmp.Rmd
+16 '!\[" found by bbedit in wheatflowdocnotestoc4_from_ppointtmp.Rmd
+
+## perhaps, just identify the 'png' for the 16 images, keep only these in dir .../wheatproj/rmd_wkflowdoc ?????????
+## then get 'tree' files modified from figtree for these 16 images ???????
+
+## line 2302, 
+# bash Philip_realgff3.sh sort147_nodotnum.txt > realbashtofile.gff3
+## ran in less than 20 min, 789 rows, Q: should I delete last 3 pattern outputs since no chromosome specified before pass to GSDS display  (or IGV) ?????
+## TO prepare for GSDS as this example 
+
+03/28/18:
+## talked to vikas
+1. run intron discovery on the 139 prot. seqs in 
+
+## to remove '\.\d' from iwsgc_131_5_3_139names.d.txt (139 rows)
+
+## 131 +5 +3 (sorted except last 5+3, so leave like that)
+wc -l iwsgc_131_5_3_139names.d.txt  ## 139, **BUT** needed last return after line 139
+cat iwsgc_131_5_3_139names.d.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | wc -l  ## 139
+
+cat iwsgc_131_5_3_139names.d.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 139 > iwsgc_131_5_3_139names_minus_dotd.txt
+## copy Philip_realgff3.sh from .../wheatgff3 dir to /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9 dir
+## check for iwgsc_refseqv1.0_HighConf_2017Mar13.gff3 in .../131RFlike/iwgsc.2to9 dir
+## not there, so copy from .../wheatgff3 dir.
+
+03/29/18:
+bash Philip_realgff3.sh iwsgc_131_5_3_139names_minus_dotd.txt > 139_131sorted.gff3
+## 727 lines, 139 with 'gene'
+
+grep -c "gene" 139_131sorted.gff3  ## 139
+
+grep "gene" 139_131sorted.gff3 > 139_131sorted_gene.gff3
+
+## So (1), submit .../iwgsc.2to9/139_131sorted.gff3 to http://gsds.cbi.pku.edu.cn, request png output (ref line 4788)
+
+## previous file gsds131.png, how got from gsds site ????????????????????????/
+## W8BXL5.png
+## rename it to gsds139.png
+mv W8BXL5.png gsds139.png
+## Note: the 4 'indents' are duplicate gene names with '.2' extensions ?????????????
+## perhaps they are in the gff3 file, perhaps in one of the 727 lines in 139_131sorted.gff3 file ??????????????????????
+
+
+## Result: The three long branch seqs in 139 phylogram file are: 
+TraesCS1A01G060500
+TraesCS1B01G078800
+TraesCS1D01G061400
+## In gsds139.png, they have **no** introns.
+
+**************************************************************
+## ok, trying to get rmd_wkflow_doc dir up to date,
+1st, get the 8 'tree' file into the dir with the path to dir. containing the tree file modified by figtree.
+## They were:
+
+sec 2.2  2nd => tree file to box, *done*
+![Rice9 with 1545 proteins, possible 'P' prots in red](PPRhmmsearchsubset_plus9_clustaltree_coloredPandrice9.png)
+
+sec 2.3.9 3rd => tree file to box, *done*
+![829 red and blue](pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors_scrnshot.png)
+
+
+sec 2.7.9  5th, ONLY ON PRO, SO **NEED** COPY TREE FILE OVER TO mbook rmd_wkflow_doc, before to 'box'
+![156_3 seqs](156_3_fa_aln_hmmaln_phy_phyml_tree_copy_bluecolored.png)
+
+
+
+sec 2.8.7  6th, APPARENTLY, ONLY ON PRO, SO **NEED** COPY TREE FILE OVER TO mbook rmd_wkflow_doc, before to 'box'
+![rice9orthomcl135](rice9orthomcl135_fa_aln_hmmaln_phy_phyml_tree.png)
+
+
+03/31/18:
+sec 2.9.8  7th, APPARENTLY, FIGTREE MODIFIED TREE FILE ONLY ON PRO, SO **NEED** COPY TREE FILE OVER TO mbook rmd_wkflow_doc, before to 'box'
+![rice9orthomcl131](rice9orthomcl131_fa_aln_hmmaln_phy_phyml_tree.png)
+
+
+sec 2.10.7  8th, figtree modified, tree file to box, *done*
+
+![orthomcl131](orthomcl131_fa_aln_hmmaln_phy_phyml_tree.png)
+
+
+sec 2.12.5  10th, APPARENTLY, FIGTREE MODIFIED TREE FILE ONLY ON PRO, SO **NEED** COPY TREE FILE OVER TO mbook rmd_wkflow_doc, before to 'box'
+![131plusvikas6](orthomcl131vikas6_fa_aln_hmmaln_phy_phyml_tree.png)
+
+
+sec 2.29  16th, figtree modified, tree file to box, *done* ![iwsgc139_repr_prot](iwsgc139_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.png)
+
+
+## **now, go** in figtree_out_treefiles.txt file, find tree files for these 8 including path to post figtree version. 
+
+## now, go to /Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflowdoc dir, rename the 4 'original' tree files for which plan bring figtree modified tree files over from 'pro' laptop.
+mv 156_3_fa_aln_hmmaln_phy_phyml_tree.txt 156_3_fa_aln_hmmaln_phy_phyml_tree.txt.orig
+mv rice9orthomcl135_fa_aln_hmmaln_phy_phyml_tree.txt rice9orthomcl135_fa_aln_hmmaln_phy_phyml_tree.txt.orig
+
+mv rice9orthomcl131_fa_aln_hmmaln_phy_phyml_tree.txt rice9orthomcl131_fa_aln_hmmaln_phy_phyml_tree.txt.orig
+ 
+mv orthomcl131vikas6_fa_aln_hmmaln_phy_phyml_tree.txt orthomcl131vikas6_fa_aln_hmmaln_phy_phyml_tree.txt.orig
+ 
+ls -al *.orig  ## check if worked (ok, 4 files listed)
+
+04/01/18:
+## Then, copy (email) these 4 tree files over from 'pro' to dir rmd_wkflow_doc. (done)
+
+## **yet** also copy (email) over figtree_out_treefiles.txt into rmd_wkflow_doc dir.
+
+## finally, copy these 4 figtree modified tree files up to the 'box'. (done)
+
+## email vikas with 'key', & Q: when, where phenomics symposium ???????
+
+04/03/18:
+talked to vikas
+1. prepare sample gsds intron display with 35 input rows. To test if gene names are large enough? Example, try 186 of 727 input lines to GSDS (need split so don't split rows of a gene name across subset files, note that a '.2' gene name occurs along wi its '.1' just at row 186)
+
+04/04/18:
+head -n 186 139_131sorted.gff3 > 139_131sorted_sub1st186.gff3
+## 139_131sorted.gff3 (727 lines). so want subset 1st 186 lines, submit to gsds.
+
+## So (1), submit .../iwgsc.2to9/139_131sorted_sub1st186.gff3 to http://gsds.cbi.pku.edu.cn, request png output (ref line 7603)
+
+## previous file gsds131.png, how got from gsds site ????????????????????????/
+## E6Z54L.png
+## rename it to gsds139sub1st186.png
+mv E6Z54L.png gsds139sub1st186.png
+## Note: the 2 'indents' are duplicate gene names with '.2' extensions ?????????????
+
+04/05/18:
+## need check '131' for '.d', is '.2' contained ????
+## probably redo GDGS, this time with '.1' rather than just gene name (need be clear on what '.d' am using !!!!!!!!!!!! ????????????/
+
+04/06/18:
+## talked to vikas
+--proceed wih gsds as did for 1st 186 lines, make 4 images total. For now, just take what got in 139_131sorted_sub1st186.gff3 for 1st image.
+
+139_131sorted.gff3, 2nd image
+head -n 364 139_131sorted.gff3 | tail -n 178 > 139_131sorted_sub2nd178.gff3
+# check in bbedit that correct rows selected for 2nd image, ok
+# 73000 -> 68900
+## So (1), submit .../iwgsc.2to9/139_131sorted_sub2nd178.gff3 to http://gsds.cbi.pku.edu.cn, request png output (ref line 7603)
+# ## rename it to gsds139sub2nd178.png
+**************************************************************
+## NOTE: iwgsc_refseqv1.0_HighConf_2017Mar13.gff3 may not be 'REPR' type file, i.e., may list more than one transcript per gene ?????????????
+
+139_131sorted.gff3, 3rd image
+head -n 544 139_131sorted.gff3 | tail -n 180 > 139_131sorted_sub3rd180.gff3
+# check in bbedit that correct rows (180) selected for 3rd image, ok
+# 69100 -> 311600
+## So (1), submit .../iwgsc.2to9/139_131sorted_sub3rd180.gff3 to http://gsds.cbi.pku.edu.cn, request png output (ref line 7603)
+# ## rename it to gsds139sub3rd180.png
+
+04/07/18:
+139_131sorted.gff3, 4th image
+tail -n 183 139_131sorted.gff3 > 139_131sorted_sub4th183.gff3
+# check in bbedit that correct rows (183) selected for 4th image, ok
+# 21200 -> 61400
+## So (1), submit .../iwgsc.2to9/139_131sorted_sub4th183.gff3 to http://gsds.cbi.pku.edu.cn, request png output (ref line 7603)
+# ## rename it to gsds139sub4th183.png
+mv FW5KCI.png gsds139sub4th183.png
+
+## To Do: upload 2nd, 3rd, 4th to the 'box'. Done.
+## Note: following file used to subset the '139' genes. Looks like *not* the 'REPR' type file if one exists for '.gff3' this wheat genome.
+-rw-r--r--  1 bterry  staff  149076203 Mar  9  2017 iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+
+STOPPED
+
+04/08/18:
+# slip a save to ***github*** in here
+
+
+
+ 2. phenograms (note: omit names *not* mapped to a chromosome)
+--all chromosomes
+--chr 1
+--chr 1, concentrated location for RF-like genes
+
+# ref line 5030, .../phyml/FRprotseqs/
+
+
 
 
 ## relationship protein lengths and ML phylogram ???
