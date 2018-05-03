@@ -5054,7 +5054,8 @@ write.table(phen_input, file="phen_input131protnames.txt", quote=FALSE, sep="\t"
 ## ready for phenogram plots
 ## ***error***, lost dir.../phyml/pyMLorthoMCL131norice9 by keyboard sensitivity problem ????? Try find the files with 'find' command ??????
 ## finding the files previously in /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9 in /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pheno_gram.30959 dir.
-## but pheno_gram.30959 dir **not** showing up in finder window ????
+## but pheno_gram.30959 dir **not** showing up in finder window ???c
+?
 
 ## ***what to do*** Perhaps mv pheno_gram.30959 to pyMLorthoMCL131norice9
 ## from 
@@ -7727,13 +7728,9 @@ mv FW5KCI.png gsds139sub4th183.png
 ## To Do: upload 2nd, 3rd, 4th to the 'box'. Done.
 ## Note: following file used to subset the '139' genes. Looks like *not* the 'REPR' type file if one exists for '.gff3' this wheat genome.
 -rw-r--r--  1 bterry  staff  149076203 Mar  9  2017 iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
-
-STOPPED
-
+ 
 04/08/18:
 # slip a save to ***github*** in here
-
-
 
  2. phenograms (note: omit names *not* mapped to a chromosome)
 --all chromosomes
@@ -7741,8 +7738,61 @@ STOPPED
 --chr 1, concentrated location for RF-like genes
 
 # ref line 5030, .../phyml/FRprotseqs/
+1st task, subset gff3 wheat genome file with these, compare with 727 rows got above.  
+##See 03/29/18 above.
+-rw-r--r--@ 1 bterry  staff  2916 Mar 28 23:08 iwsgc_131_5_3_139names.d.txt
+-rw-r--r--  1 bterry  staff  2638 Mar 28 23:11 iwsgc_131_5_3_139names_minus_dotd.txt
+#bash Philip_realgff3.sh iwsgc_131_5_3_139names_minus_dotd.txt > 139_131sorted.gff3
+## 727 lines, 139 with 'gene'
+## or Philip_5colmgff3.sh
+bash Philip_realgff3.sh iwsgc_131_5_3_139names.d.txt > 139_131sorted_dotd_vsfullgff3.gff3
+## no **gene** rows
+bash Philip_realgff3.sh iwsgc_131_5_3_139names_minus_dotd.txt > 139_131sorted_minusdotd_vsfullgff3.gff3
+## 727 rows as above.
+
+bash Philip_5colmgff3.sh iwsgc_131_5_3_139names_minus_dotd.txt > gff3_1345_9names_139.txt
+## 139 rows as expect.
+## next, how get 'phen_input128.txt' (phen_input131.txt)format?
+
+## now cut colms 1,3  ## Q: will seq names in new colm 3 be a problem ???????????
+cut -f 1,3 gff3_1345_9names_139.txt > gff3_cols13_139.txt
+
+## finally, remove 1st 3 char (chr) (each row in gff3_cols13_139.txt with 
+cat gff3_cols13_139.txt|perl -pe 's/chr(.+)/\1/' | head -n 139 > gff3_cols13_139nochr.txt
 
 
+## (from 12/22/17)
+## read into R, create 3 colm headers, add a vector, 'RF-like_seq'
+## need be in dir /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+setwd("/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9")
+colm3 <- rep('RF-like_seq', 139)
+class(colm3)
+length(colm3)
+nchar(colm3)
+colm1and2 <- read.delim("gff3_cols13_139nochr.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("chr", "pos"))
+phen_input <- data.frame(chr = colm1and2$chr, pos = colm1and2$pos, phenotype = colm3)
+dim(phen_input)
+head(phen_input, n = 3)
+write.table(phen_input, file="phen_input139.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+## remove 3 'U' rows => phen_input136.txt
+## Q: do I need to sort phen_input136.txt, the last 8 rows = 5 + 3 rows not sorted ??????
+## test sort phen_input136.txt
+
+sort phen_input136.txt |uniq | wc -l  ##     137  as expected if each record in unique. Moved header back to top.
+sort phen_input136.txt |uniq > phen_input136sorted.txt
+## sorting **not** needed for phenogram pgm
+
+## ready for phenogram plots
+## plot all 136, all chromosomes, pheno_gram136.png (input from phen_input136.txt)
+
+## plot chr 1A, 24 genes, from phen_input136.txt -> pheno_gram136_chr1A10to60no_anno.png
+## Note: does not give names of genes, did not have names in 3rd colm of phen_input136.txt
+
+STOPPED
+
+05/02/18:
+# save github
 
 
 ## relationship protein lengths and ML phylogram ???
