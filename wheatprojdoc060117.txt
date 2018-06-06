@@ -7543,8 +7543,7 @@ To do, email 'modified tree file, & 'png' file so don't have to take 'pro' to UN
 /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml
 /iwsgc151_repr_prot_seqs_fa_aln_hmmaln_phy_phyml_tree.txt
 
-## 
-
+ 
 
 
 ## talked to vikas
@@ -7789,10 +7788,105 @@ sort phen_input136.txt |uniq > phen_input136sorted.txt
 ## plot chr 1A, 24 genes, from phen_input136.txt -> pheno_gram136_chr1A10to60no_anno.png
 ## Note: does not give names of genes, did not have names in 3rd colm of phen_input136.txt
 
-STOPPED
-
 05/02/18:
 # save github
+
+05/25/18:
+
+# working on updating '.Rmd' file
+# lines 7609 to 7725, incorporating 5 gsds139 files
+# see /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9 dir
+-rw-rw-rw-@ 1 bterry  staff  268185 Mar 29 11:54 gsds139.png
+-rw-rw-rw-@ 1 bterry  staff   72930 Apr  4 22:21 gsds139sub1st186.png
+-rw-rw-rw-@ 1 bterry  staff   67801 Apr  6 21:31 gsds139sub2nd178.png
+-rw-rw-rw-@ 1 bterry  staff   70918 Apr  6 23:49 gsds139sub3rd180.png
+-rw-rw-rw-@ 1 bterry  staff   70391 Apr  7 09:17 gsds139sub4th183.png
+# none of these 5 are in rmd_wkflow_doc, so copy them over (done)
+ 
+# now for two phenograms (line 7786 & 7788), from dir Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+# plot all 136 (139 minus 3 seqs with no designated chromosome), all chromosomes, pheno_gram136.png (input from phen_input136.txt)
+# plot chr 1A, 24 genes, from phen_input136.txt -> pheno_gram136_chr1A10to60no_anno.png
+# note: prevly, did single chrom example with all the seq **names**, see 12/26/17.
+
+# working on updating '.Rmd' file
+# lines 7786, 7788, incorporating 2 phen136 files in '.Rmd' file. 
+# see /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9 dir
+-rw-rw-rw-@ 1 bterry  staff   418K Apr  8 22:08 pheno_gram136.png
+-rw-rw-rw-@ 1 bterry  staff   220K Apr  8 22:32 pheno_gram136_chr1A10to60no_anno.png
+
+Neither are in rmd_wkflow_doc dir, so copy them there. (done)
+
+
+05/26/18:
+
+# To get the 11 figtree-modified tree files to treefiles subdir, match figtree_out_treefiles.txt doc with 'box' doc. Add 3 from pro, get these tree files into treefiles dir.
+
+# see figtree_out_treefiles.txt for paths of these files
+# fig 1, probably won't use
+# fig 2, 1545+9, apparently *not* phyml ????????
+# fig 3, 820+9, 
+# fig 4, 22plus122plus9, to get from 'pro'  ????????????????
+# fig 5, 156_3,
+# fig 6, rice9orthomcl135
+# fig 7, rice9orthomcl131
+# fig 8, orthomcl131
+# fig 10, orthomcl131vikas6
+# fig 14, p820br9, to get from 'pro'  ????????????????
+# fig 15, iwsgc151, to get from 'pro'  ????????????????
+# fig 16, iwsgc139,
+
+05/27/18:
+
+# Now, upload the 8 tree files in /Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflow_doc/treefiles (done)
+# Then, upload the 3 tree files still on 'pro' to treefiles folder on 'box' giving a total of 11 files. (done)
+# Dnload these 3 files to treefiles dir on mbook (/Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflow_doc/treefiles) (done)
+
+05/29/18:
+
+# make dupl of rmd_wkflow_doc dir,
+# /Users/bterry/macbook2017/rmd_wkflow_doc_052818backup
+
+# remove any tree files from /Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflow_doc (removed 7, one ended in '.orig')
+# deleted listimages.txt
+# for now, retain listoftreefiles.txt, JUST NOT USING RIGHT NOW.
+# for now, retain oGroups144col1_to_135_nodotnum.txt, JUST NOT USING RIGHT NOW.
+# for now, retain ppointtmp.txt, JUST NOT USING RIGHT NOW.
+# Note: lot extra files in /Users/bterry/macbook2017/vikas17/wheatproj/rmd_wkflow_doc, FOR NOW, JUST LEAVE, *DON'T* COPY TO 'box' rmd_wkflow_doc folder.
+
+# now, remove any tree files from rmd_wkflow_doc folder in 'box' if any. (removed 8 tree files)
+
+# find 23 image files called in wheatflowdocnotestoc4_from_ppointtmp.Rmd. Copy to 'box' rmd_wkflow_doc folder. (16 left to copy)
+
+# copy .Rmd, .html files to 'box' (https://unl.app.box.com/folder/48208911836)
+# wheatflowdocnotestoc4_from_ppointtmp.Rmd
+# wheatflowdocnotestoc4_from_ppointtmp.html
+ 
+# *for moment*, retain other extra files from this dir.
+
+# finish figtree_out_treefiles.txt
+# copied 3 paths & sizes from ~/macbookpro2018/treefiles_4_10_11.txt file
+
+05/30/18:
+
+# left, *compare* the sizes in the paths with the sizes in the treefiles dir. (done, all match)
+
+# then leave copy figtree_out_treefiles.txt in 'treefiles' dir, both on mbook & box (done)
+
+# perhaps rerun knit for .Rmd file, check html file, make sure all 23 images are present (done, ok)
+
+05/31/18:
+
+06/06/18:
+save to github
+
+
+STOPPED
+
+# is that all, perhaps cartoon of 'story' in html file
+# then on to MEME
+# gwas for RF proteins ??
+
 
 
 ## relationship protein lengths and ML phylogram ???
