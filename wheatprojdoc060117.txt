@@ -7878,13 +7878,296 @@ Neither are in rmd_wkflow_doc dir, so copy them there. (done)
 05/31/18:
 
 06/06/18:
-save to github
+saved to github
 
 
 STOPPED
 
 # is that all, perhaps cartoon of 'story' in html file
-# then on to MEME
+
+06/16/18:
+# working on /.../rmd_wkflow_doc/cartoon_outline_RF_res.pptx
+
+06/18/18:
+# wondering why keep the 3 seqs on long phylogram branch in [iwsgc139_repr_prot] (12th tree) in rmd file?
+
+06/28/18:
+Trying to learn MEME by studying Yue et al, in Genes 2018 9, 70. Problem: the supplementary file is a '.rar' file.
+
+# from internet:
+Mac users should be able to download and use Keka, The Unarchiver, or RAR Extractor Free to unload RAR files.
+
+Another method is to use Unzip-Online, which lets you open RAR files without having any software installed, thanks to the fact that it works through your web browser.
+
+More download links to free RAR extractors can be found in this list of free file extractor programs.
+
+# check HCC, for advice  on opening 'rar' file ??????????????
+
+06/29/18:
+# after check adam at hcc, downloaded/installed 'unrar free' from apple app store. Then tried to run with 
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/unrarfree/genes-09-00070-s001.rar. Behaves as if opening '.rar' file, but then where is the output ?????????????
+
+06/30/18:
+# tried the following online tool, appears to also failed ??????????
+https://unzip-online.com/en/Zip
+
+# found refs top my Rmd/html file
+# to look for MEME expts there ????????
+
+# Sykes, 2016, p-353, MEME, but don't see any details on its use ?????
+# could I use maskfeat to mask out PPR domains, then align & cluster (??) to identify any regions outside PPR domains ????????????????
+
+# barkin & small, ... => lot already known about PPr's
+
+07/02/18:
+# email for Kelley: (**done** this date)
+--when pub date for wheat genome assembly?
+--if delay, would there be a release of annotation version 2 before this pub date ??????
+
+# talked to vikas,
+# to try locate RF loci which associated with R (restoration) 
+--snp calls, are available
+--need groups of lines, R & nonR to compare
+
+07/08/18:
+Looking for domains or motifs in a PF-like seq. Following Cheng paper (see reference, top of Rmd file for summarizing data this lab log file), perhaps can use 'P' seq, 1st seq fig 4, p-538 (, do blastp vs one of my RF-like seqs, will it find all the 'P' motifs there ????????
+Perhaps, the 'Align two or more sequences' choice can align one query vs one subject ???
+find . -name 'Cheng*' -print  ## ./vikas17/wheatproj/Cheng_et_al-2016-The_Plant_Journal.pdf
+# fig 4, PPR-P repeat (1st row). Q: what is the '.' ?? Looks like filling **gap** because of other rows in the figure. So just remove the '.' before a blastp search.
+
+v v T Y N t L I N g y c K s G K I E E A m e L f e E M k e k . G I k P D
+# to check, case of 'subject' seq, convert this preceding line to that a candidate 'subject' seq., look in fasta file: 
+# so, 
+VVTYNTLINGYCKSGKIEEAMELFEEMKEKGIKPD
+
+
+07/09/18:
+# to fine the fasta file, ./vikas18/131RFlike/iwgsc.2to9/iwsgc139_REPR_PROT_seqs.fa
+
+# pick 1st seq, 662/35 = 18.9
+
+>TraesCS1A01G031600.1
+MDCCCRACRTDLALAFFGRLLRTGLQAGQVVFNTLLKGLCHTKRADEALDVLLHRMPELG
+CTPDVVAYNTVIHGFFREGQVGKACDMFHGMAQKGVMPNVVTYNSVIDGLCKARAMDKAE
+TVLSQMVNDGVRPDNVTYNSLIHGYSSLGNWKEAVRVFKEMSRRFTPDVITCTSLMAFLC
+KNGKSKEAAEIFDSMAMKGLKRDTVSYAILLHGYATEGCLVDMINLFNSMATDCILPNCH
+IFNILINAYAKSGMMGEAMLIFKKMHEQGVSPDVVTYSTVIHAFCKMGSLDIAMDKFNQM
+VDMGVRPNAIVYHSLIQGFCTHGDLVKAKELVTEMRNKAMRPPDIKIFHSIMKNLCTEGR
+VIEARDILDLMVHIGMRPDVPIFNLLIGGYCLVHKMEDATKMFDDMVSYGLEPCNSTYGI
+LINGYCKNGRIDDGLNLFKEMLRKGLKPTTFNYNVILDGLFLAGRTVAAKEKFDEMVESG
+VSVCIDTYSIVLGGLCRNNCTGEAITLSKKLSTMNVKFNIAIVNILIGAFFRVRRNQEAK
+DLFAAIPANGLVANVVTYSMMMINLIKEGSLEEADDLFLSMEKSGCTADSCMLNHIIRRL
+LERGEIVKAGNYMSKVDAKSYSLEAKTVSLLISLFLGKGRYREHMKLLPMKYQFLEEAAT
+VE*
+
+# dnloaded file blastp_listbyevalue070918.txt. Note: can display on web in order location on subject, but don't know how dnload in that format ?????
+
+# anyway, following is list locations of hits on subject file:
+
+Range 1: 30 to 64
+Range 2: 65 to 99
+Range 3: 100 to 134
+Range 4: 136 to 168
+Range 5: 169 to 203
+Range 6: 205 to 238
+Range 7: 242 to 273
+Range 8: 274 to 308
+Range 9: 310 to 342
+Range 10: 348 to 379
+Range 11: 380 to 413
+Range 12: 417 to 448
+Range 13: 487 to 517
+Range 14: 520 to 551
+Range 15: 555 to 589
+
+Range 1: 30 to 64   = 35
+Range 2: 65 to 99   = 35
+Range 3: 100 to 134   = 35
+Range 4: 136 to 168   = 33
+Range 5: 169 to 203   = 35
+Range 6: 205 to 238   = 34
+Range 7: 242 to 273   = 32
+Range 8: 274 to 308   = 35
+Range 9: 310 to 342   = 33
+Range 10: 348 to 379
+Range 11: 380 to 413
+Range 12: 417 to 448
+Range 13: 487 to 517
+Range 14: 520 to 551
+Range 15: 555 to 589
+
+
+
+# so, perhaps seq to locate mitochondrion precedes position 30, the 29 residues preceding ??????????????????????????????????
+MDCCCRACRTDLALAFFGRLLRTGLQAGQ
+# perhaps blastp this vs the 139 seqs in fasta file, see if hits start of each RF-like seq of the 139 seqs ???????????????????????????????????????
+
+# Q: might smartblast help ???????????????????????
+# Q: can I group the RF-like seqs by chr 1, 2, 6 as phylogram does ???????
+
+# save to github
+
+
+# then on to MEME (Try new ver **5.0**, rather than 4.12.0 prevly used)
+philip-terry-2:iwgsc.2to9 bterry$ ls -al iwsgc139*.fa
+-rw-r--r--  1 bterry  staff  79868 Mar 25 20:52 iwsgc139_REPR_PROT_seqs.fa
+philip-terry-2:iwgsc.2to9 bterry$ pwd
+/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+# MEME has 80Mb limit, so will have to break input .fa file into two parts
+# consider use iwsgc139_REPR_PROT_seqs.fa or iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.fa for input to MEME? Guessing iwsgc139_REPR_PROT_seqs.fa should be fine ????????????
+# 139 '>' lines in fasta. iwsgc139ma	cd _REPR_PROT_seqs.fa has 80 kB,
+-rw-r--r--  1 pterry amundsen  79868 Mar 26 09:49 iwsgc139_REPR_PROT_seqs.fa
+# so, can submit all at one time.
+
+06/19/18:
+# 1st try: Your job ID is: appMEME_5.0.01529385634457456677846
+Submitted	6/19/2018, 12:20:34 AM
+Expires	6/23/2018, 12:20:34 AM
+Description	**139_1motif_061918**
+(Primary) Sequences	A set of 139 Protein sequences, between 189 and 874 in length (average length 543.1), from the file ***/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+/iwsgc139_REPR_PROT_seqs.fa***.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	Zero or one occurrence (of a contributing motif site) per sequence.
+Motif Count	Searching for one motif.
+Motif Width	Between 6 wide and 50 wide (inclusive).
+
+# MEME result for MEME description: 139_1motif_061918
+# see file in dir /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/
+-rw-r--r--@ 1 bterry  staff  81513 Jun 19 11:39 meme_139_1motif_061918.txt
+
+
+# are p-values how evaluate how valid the motif is ??????????
+# relate which motifs, which seqs?
+# motif location?
+# fcn of motifs?
+
+# Try MAST
+
+Submitted	6/19/2018, 10:02:31 PM
+Expires	6/23/2018, 10:02:31 PM
+Description	**mast_139_1motif_061918**
+Motifs	One protein motif, with a width of 41, from the file meme_139_1motif_061918.txt.
+Sequences	A set of 154140 protein sequences, between 23 and 4844 in length (average length 454.3), from the database Triticum aestivum.
+Sequence Threshold	Report sequences with E-value ≤ 10.
+Remove Redundant Motifs	Redundant motifs will be removed from your query by MAST.
+
+# To try: MEME with 1 motifs, 'anyreps'
+Submitted	6/19/2018, 10:48:37 PM
+Expires	6/23/2018, 10:48:37 PM
+Description	**meme139_anyreps_1motif_061918**
+(Primary) Sequences	A set of 139 Protein sequences, between 189 and 874 in length (average length 543.1), from the file iwsgc139_REPR_PROT_seqs.fa.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
+Motif Count	Searching for one motif.
+Motif Width	Between 6 wide and 50 wide (inclusive).
+
+06/20/18:
+# **meme139_anyreps_1motif_061918** run has different length motif than **139_1motif_061918** run.
+# Q: how to deal/use MEME results ????????????????????????
+
+to try run **meme139_anyreps_2motif_061918**
+
+Submitted	6/20/2018, 10:57:11 AM
+Expires	6/24/2018, 10:57:11 AM
+Description	**meme139_anyreps_2motif_062018**
+(Primary) Sequences	A set of 139 Protein sequences, between 189 and 874 in length (average length 543.1), from the file iwsgc139_REPR_PROT_seqs.fa.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
+Motif Count	Searching for 2 motifs.
+Motif Width	Between 6 wide and 50 wide (inclusive).
+
+# viewing meme.html (meme139_anyreps_2motif_062018.txt, txt version), just lot of motifs on each seq., what to think ????????????????
+
+
+# talked ***JJ*** about how to try use MEME. Suggests strategy to find motifs in groups of related seqs (for example, promoter seqs in his case). If I try for all 139 seqs, since differences for example, betw. chrom 1, 2, 6 in ML phylogram, appears the MEME alg. reflecting the task it is given (for example, for the 139, for 1motif, it finds diff. motif depending if freq of 0 or 1, vs 'any number of reps'). So perhaps try MEME on chrom 1, 2, 6 separately. Since ML phylogram can group RF-like prots by chrom., perhaps MEME can do also, and would learn motifs unique to the diff. chrom. groups.
+
+# aside for from JJ, **'fasta_toolkits'** (crane for say find length each seq of '.fa' file. **'ea_utils'** for fastq file info.
+
+
+# so, subset iwsgc139_REPR_PROT_seqs.fa by chrom 1, 2, 6. Then try MEME on each. Q: How best to do? Perhaps find file may have used to create this '.fa' file. Subset it, then make new '.fa' files with using Vikas 'getseq.awk' file ???????????????
+
+# line 7270 above
+#./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names.d.txt > iwsgc139_REPR_PROT_seqs.fa
+
+# iwsgc_131_5_3_139names.d.txt already sorted by chrom except last 8 which all chrom1. Wait, there is one '5', three '7's, & three without a chrom specification.
+
+STOPPED
+
+06/21/18:
+
+# so, just separate by chrom 1, 2, 6. Omit the '5', '7's, & those without chrom specification.  Run each separately wi getseq.awk. Then submit to MEME, any number reps, initially for 1 motif. Perhaps, since last 8 rows (chrom 1's not picked up by orthomcl, omit them also. So, use 1st 125 rows, omitting chrom 5, row 94. So, 74 '1's, 19 '2's, & 
+31 '6's, total 124 rows.
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+cat iwsgc_131_5_3_139names.d.txt | head -n 74 > iwsgc_131_5_3_139names_chr1_74.d.txt
+cat iwsgc_131_5_3_139names.d.txt | head -n 93 | tail -n 19 > iwsgc_131_5_3_139names_chr2_19.d.txt
+cat iwsgc_131_5_3_139names.d.txt | head -n 125 | tail -n 31 > iwsgc_131_5_3_139names_chr6_31.d.txt
+
+# next getseq.awk to produce '.fa' file for these 3 files
+
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names_chr1_74.d.txt > iwsgc139_REPR_PROT_seqs_chr1_74.fa
+
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names_chr2_19.d.txt > iwsgc139_REPR_PROT_seqs_chr2_19.fa
+
+./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names_chr6_31.d.txt > iwsgc139_REPR_PROT_seqs_chr6_31.fa
+
+# now submit to MEME
+# **meme139_anyreps_1motif_chr1_74_062118**
+
+Submitted	6/21/2018, 12:50:55 PM
+Expires	6/25/2018, 12:50:55 PM
+Description	**meme139_anyreps_1motif_chr1_74_062118**
+(Primary) Sequences	A set of 74 Protein sequences, between 189 and 874 in length (average length 577.2), from the file iwsgc139_REPR_PROT_seqs_chr1_74.fa.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
+Motif Count	Searching for one motif.
+Motif Width	Between 6 wide and 50 wide (inclusive).
+
+# result: 29 aa motif, many per seq.
+
+# **meme139_anyreps_1motif_chr2_19_062118**
+
+Submitted	6/21/2018, 12:53:46 PM
+Expires	6/25/2018, 12:53:46 PM
+Description	**meme139_anyreps_1motif_chr2_19_062118**
+(Primary) Sequences	A set of 19 Protein sequences, between 228 and 779 in length (average length 574.5), from the file iwsgc139_REPR_PROT_seqs_chr2_19.fa.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
+Motif Count	Searching for one motif.
+Motif Width	Between 6 wide and 50 wide (inclusive).
+
+# result: 50 aa motif, many per seq.
+
+# **meme139_anyreps_1motif_chr6_31_062118**
+
+Submitted	6/21/2018, 12:56:27 PM
+Expires	6/25/2018, 12:56:27 PM
+Description	**meme139_anyreps_1motif_chr6_31_062118**
+(Primary) Sequences	A set of 31 Protein sequences, between 215 and 837 in length (average length 476.2), from the file iwsgc139_REPR_PROT_seqs_chr6_31.fa.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
+Motif Count	Searching for one motif.
+Motif Width	Between 6 wide and 50 wide (inclusive).
+
+# result: another 29 aa motif, many per seq.
+# Q: is it the same seq?
+# for meme139_anyreps_1motif_chr6_31_062118
+# MOTIF DEAMDLFDEMVQQGVKPBVVTYNSLIDGY MEME-1	width =  29  sites = 155  llr = 6331  E-value = 7.4e-1815
+# for meme139_anyreps_1motif_chr1_74_062118
+MOTIF VTYNTLIDGYCKEGRLDEAMKLFREMTSK MEME-1	width =  29  sites = 370  llr = 15249  E-value = 6.8e-4492
+# so for chrom 1 & 6, same length of motif, but **different** seq of aa's.
+# So, Q: can I benefit from MEME for this RF-like protein project ?????????????
+
+
+
 # gwas for RF proteins ??
 
 
