@@ -7980,32 +7980,181 @@ Range 13: 487 to 517
 Range 14: 520 to 551
 Range 15: 555 to 589
 
+                            Additional residues  
+                              1:29
 Range 1: 30 to 64   = 35
 Range 2: 65 to 99   = 35
-Range 3: 100 to 134   = 35
+Range 3: 100 to 134   = 35    135 
 Range 4: 136 to 168   = 33
-Range 5: 169 to 203   = 35
-Range 6: 205 to 238   = 34
+Range 5: 169 to 203   = 35     204
+Range 6: 205 to 238   = 34    239:241
 Range 7: 242 to 273   = 32
-Range 8: 274 to 308   = 35
-Range 9: 310 to 342   = 33
-Range 10: 348 to 379
-Range 11: 380 to 413
-Range 12: 417 to 448
-Range 13: 487 to 517
-Range 14: 520 to 551
-Range 15: 555 to 589
+Range 8: 274 to 308   = 35    309
+Range 9: 310 to 342   = 33    343:347
+Range 10: 348 to 379   = 32
+Range 11: 380 to 413   = 34   414:416
+Range 12: 417 to 448   = 32   449:486 (blast missing 38 residues)
+Range 13: 487 to 517   = 31   518:519
+Range 14: 520 to 551   = 32   512:514
+Range 15: 555 to 589   = 35
 
+# **could** go thru, doc. if considering 'additional residues', can construct 35 aa seqs thru whole seq, TraesCS1A01G031600.1
+# result: 3 residues in excess, blast misses 3 motifs ???????
 
+STOPPED
+
+# perhaps accuracy of blastp slightly off. Could **'look'** at places where not seeing '35' lengths & 'additional residues, see if can puzzle out why not seeing all motifs = 35 ?????
+
+#*********************************************************************
+look, range 1, note changes in subject from query. So upshot, perhaps best can do is check that 'subject' motifs 'reasonable' compared to query. That is, mutations make alignments in e^-13 to 0.002 for 15 ranges, 38 residues after range 12, and 72 after range 15 not in hit list, but suggest 3 more PPR motifs may be there, total 18 motifs, equal the 18 projected from 662 residue seq with 35 residue motifs plus the 29 residue initial sequence (supposedly mitochondrion finding seq) 
+#*************************************************************************
 
 # so, perhaps seq to locate mitochondrion precedes position 30, the 29 residues preceding ??????????????????????????????????
 MDCCCRACRTDLALAFFGRLLRTGLQAGQ
 # perhaps blastp this vs the 139 seqs in fasta file, see if hits start of each RF-like seq of the 139 seqs ???????????????????????????????????????
 
 # Q: might smartblast help ???????????????????????
-# Q: can I group the RF-like seqs by chr 1, 2, 6 as phylogram does ???????
+# Q: can I group the RF-like seqs by chr 1, 2, 6 as phylogram does using this blastp info  ???????
 
-# save to github
+# saved to github
+
+07/16/18:
+# looking into IWGSC RefSeq Annotations (https://wheat-urgi.versailles.inra.fr/Seq-Repository/Annotations), 
+# IWGSC RefSeq v1.1 annotation
+
+# Q: https://urgi.versailles.inra.fr/WheatMine/begin.do, what is 'InterMine' ????????
+# JBrowse, https://urgi.versailles.inra.fr/jbrowseiwgsc/gmod_jbrowse/?data=myData%2FIWGSC_RefSeq_v1.0&loc=chr1A%3A237605936..356426347&tracks=DNA%2CHighConfidenceGenesv1.1%2CrepeatRegion%2CrepeatMasker%2ClncRNA%2CmiRNA&highlight=
+
+# Q: https://urgi.versailles.inra.fr/download/iwgsc/IWGSC_RefSeq_Annotations/v1.1/ ('genes', 'rnaseq', exacty how use 'rnaseq' file ??????????????????/
+ 
+Dnload: 777ca9dcc04c12e5c92f464321617670	iwgsc_refseqv1.1_genes_2017July06.zip
+# currently in Downloads dir.  Put in appropriate dir (/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1)
+
+* to open*, ck md5, they search if still 1602 PPR genes annotated.
+# refer line *2395* ??????
+
+.../wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3/iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+#head -n 6 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB > test6.txt
+
+wc -l allcolm5_annotation.txt
+  107503 allcolm5_annotation.txt
+grep -c "Pentatricopeptide" allcolm5_annotation.txt  ## 1602
+
+07/17/18:
+
+# now try this in iwgsc_refseqv1.1_genes_2017July06.zip
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+md5 iwgsc_refseqv1.1_genes_2017July06.zip 777ca9dcc04c12e5c92f464321617670
+# *matches* number above
+# unzip, a directory, with 14 files ????????????????
+
+head -n 4 IWGSC_v1.1_HC_20170706_cds.fasta
+head -n 4 IWGSC_v1.1_HC_20170706_pep.fasta
+
+# but need a file with the annotation, which ??????
+
+-rwxr-xr-x@  1 bterry  staff  231237082 Jul  6  2017 IWGSC_v1.1_HC_20170706.gff3
+-rwxr-xr-x@  1 bterry  staff  225259668 Jul  6  2017 IWGSC_v1.1_HC_20170706.gtf
+-rwxr-xr-x@  1 bterry  staff    5539140 May 17  2017 IWGSC_v1.1_HC_20170706.idmapping.csv
+-rwxr-xr-x@  1 bterry  staff  197845128 Jul  6  2017 IWGSC_v1.1_HC_20170706_cds.fasta
+-rwxr-xr-x@  1 bterry  staff   66503362 Jul  6  2017 IWGSC_v1.1_HC_20170706_pep.fasta
+-rwxr-xr-x@  1 bterry  staff  275711825 Jul  6  2017 IWGSC_v1.1_HC_20170706_transcripts.fasta
+-rwxr-xr-x@  1 bterry  staff     132338 Jul  6  2017 IWGSC_v1.1_LC.correspondanceTEHC.txt
+-rwxr-xr-x@  1 bterry  staff  127144897 Jul  6  2017 IWGSC_v1.1_LC_20170706.gff3
+-rwxr-xr-x@  1 bterry  staff   99828748 Jul  6  2017 IWGSC_v1.1_LC_20170706.gtf
+-rwxr-xr-x@  1 bterry  staff  118813190 Jul  6  2017 IWGSC_v1.1_LC_20170706_cds.fasta
+-rwxr-xr-x@  1 bterry  staff   42417306 Jul  6  2017 IWGSC_v1.1_LC_20170706_pep.fasta
+-rwxr-xr-x@  1 bterry  staff  146044299 Jul  6  2017 IWGSC_v1.1_LC_20170706_transcripts.fasta
+
+# Q: diff 'HC' & 'LC' ???????????????????????
+
+# prevly looked in (line 2395) iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+# has an 'HC', so try that.
+head -n 4 IWGSC_v1.1_HC_20170706.gff3
+# does not have annotation names ????????
+head -n 4 IWGSC_v1.1_HC_20170706.gtf
+# does not have annotation names ????????
+# try
+head -n 4 IWGSC_v1.1_LC_20170706.gtf
+# does not have annotation names ????????
+
+# Q: perhaps this iwgsc_refseqv1.1_genes_2017July06.zip does not contain annotation in iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB used prevly ???????????????????????????
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3
+head -n 4 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+# has annotation in 5th colm.
+wc -l iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+  107502 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+
+
+# talked to vikas, notes:
+# 1) check/compare 1.0 gene annotation...zip, 12/06/17 with prev annotation file, number PPR rows
+# 2) get rnaseq files
+
+07/18/18:
+# 1) The Dec 2017 version for file. Want to check how 1602 Pentatricopeptide rows previously found compares with this apparently newer file.
+https://urgi.versailles.inra.fr/download/iwgsc/IWGSC_RefSeq_Annotations/v1.0/ for file iwgsc_refseqv1.0_FunctionalAnnotation_v1.zip
+# Expanded file name is:
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/annotation1.0/iwgsc_refseqv1.0_FunctionalAnnotation_v1
+ 
+-rwxr-xr-x@ 1 bterry  staff    117307 Dec  6  2017 README.pdf
+-rwxr-xr-x@ 1 bterry  staff  35935545 Apr 21  2017 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+-rwxr-xr-x@ 1 bterry  staff  46988327 Apr 21  2017 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0.TAB
+-rwxr-xr-x@ 1 bterry  staff  28684770 Apr 21  2017 iwgsc_refseqv1.0_FunctionalAnnotation_v1__LCgenes_v1.0.TAB
+
+# Looks like the ...TEcleaned.TAB file name matches the previous annotation which found 1602 Pentatricopeptide rows.
+# from line 2395
+cut -f 5 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB > allcolm5_annotation.txt
+## can see much annotation, not PPR
+## perhaps search on colm 5 for 'Pentatricopeptide', get a sense if many more than 147 in allcolm5_annotation.txt ??????
+wc -l allcolm5_annotation.txt
+  107503 allcolm5_annotation.txt
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/annotation1.0/iwgsc_refseqv1.0_FunctionalAnnotation_v1
+wc -l iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+#   107502 iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0-repr.TEcleaned.TAB
+# **same** as 1602 PPR annotation file working with previously.
+  
+
+grep -c "Pentatricopeptide" allcolm5_annotation.txt  ## 1602
+# so this new file has **same** number rows with "Pentatricopeptide" as found with previous file.
+
+# Q: but what about the file: iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0.TAB ??????????????????
+
+# 2) get rnaseq files
+# think at https://urgi.versailles.inra.fr/download/iwgsc/IWGSC_RefSeq_Annotations/v1.1/
+
+47b34ab1d829297c3ac1cc90f9eb27f9	iwgsc_refseqv1.1_rnaseq_mapping_2017July20.zip
+
+philip-terry-2:refseq1.1 bterry$ md5 iwgsc_refseqv1.1_rnaseq_mapping_2017July20.zip
+
+MD5 (iwgsc_refseqv1.1_rnaseq_mapping_2017July20.zip) = 47b34ab1d829297c3ac1cc90f9eb27f9
+# so md5 matches.
+
+# investigate what got in the 1.6 Gb ??????????????
+ 
+# talked to vikas:
+--forgot to mention paper with PPR motif, that I blastped vs the 1st PR-like seq ??????
+
+--kellye, email, check if annotation file update v1.0 to v1.1 ?????????????
+
+--run original hmmsearch vs new peptide file, 
+-rwxr-xr-x@  1 bterry  staff   66503362 Jul  6  2017 IWGSC_v1.1_HC_20170706_pep.fasta
+see if still get 1545 hits as did for ver 1.0 (to check for name of that file ??????, (see line 99 above)
+
+--examine new rnaseq directories (gene, transcript)
+
+--check metadata file (for what ?????????)
+
+--note: check plink, subsetting snps within genes ?????????????????
+
+   
+07/19/18:
+github bkup update
+
+
+STOPPED
+
+
 
 
 # then on to MEME (Try new ver **5.0**, rather than 4.12.0 prevly used)
