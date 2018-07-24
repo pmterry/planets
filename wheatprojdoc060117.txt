@@ -8151,8 +8151,184 @@ see if still get 1545 hits as did for ver 1.0 (to check for name of that file ??
 07/19/18:
 github bkup update
 
+# compare. wc -l
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+-rwxr-xr-x@  1 bterry  staff   66503362 Jul  6  2017 IWGSC_v1.1_HC_20170706_pep.fasta
+# with previous hmmsearch which yielded 1545 PPR proteins 
+
+
+# following, from line 20, above
+Sykes, et al., see discussion, p-356, 
+## step 1: PPR.hmm on 
+iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+-----------------------------------------------
+Contains the protein sequence of all high-confidence (HC) gene models that have been positioned on the IWGSC sequence assembly, without splice variants. Only the representative gene model per locus is given.
+#from line 63
+unzip iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa.zip
+ls -lh
+less iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+cd macbook2017/vikas17
+find . -name 'iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa' -print
+./wheatproj/iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+cd wheatproj/
+cd wheatproj/
+pwd ## /Users/bterry/macbook2017/vikas17/wheatproj
+
+ls -al iw*03.fa
+-rw-r--r--  1 bterry  staff  48634703 Jun 14  2017 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+wc -l iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+  921676 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+grep -c ">Traes" iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+110790
+grep -c ">" iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+110790
+
+Now, do for 
+-rwxr-xr-x@  1 bterry  staff   66503362 Jul  6  2017 IWGSC_v1.1_HC_20170706_pep.fasta
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/iwgsc_refseqv1.1_genes_2017July06
+
+wc -l IWGSC_v1.1_HC_20170706_pep.fasta
+ 1049413 IWGSC_v1.1_HC_20170706_pep.fasta
+
+grep -c ">" IWGSC_v1.1_HC_20170706_pep.fasta
+133744
+grep -c ">Traes" IWGSC_v1.1_HC_20170706_pep.fasta
+133744
+## so looks like **20,000** more seqs in ver 1.1
+head -n 4 IWGSC_v1.1_HC_20170706_pep.fasta
+## so looks like **need** do hmmsearch on new prot seqs file ?????????????
+
+# talked to vikas
+# prioritize:
+--hmmsearch on new 133744 seq wheat prot. seqs, **compare** with prev finding of 1545 ppr seqs.
+--to do: weblogo for the 135 after MSA. Then expect 35x?? logos along say 662 aa's of seq.
+(weblogo.berkley.edu)
+ 
+STOPPED
+07/21/18:
+line 107 above
+#scp PPR.hmm pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+-rw-r--r--@ 1 bterry  staff  15607 Jun  2  2017 PPR.hmm
+# so, check if this file on crane at that location ???
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -lh
+# looks like **no** files here, just directories
+
+07/22/18:
+# to proceed, refer to line 105 above
+# looks like thing to do create new dir, populate it appropriately to conduct this new hmmsearch.
+
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+## need scp PPR.hmm to crane
+cd /work/baenziger/pterry/wheatproj
+# create new dir on crane, 
+mkdir hmmsrch_protv1.1
+logout
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+scp PPR.hmm pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1
+
+
+scp IWGSC_v1.1_HC_20170706_pep.fasta pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1
+
+# ref line 109
+ssh -Y pterry@crane.unl.edu 
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1
+ls -lh
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+# hmmsearch NB-ARC.hmm Trinity.fasta.transdecoder.pep > hmmsrchshortpep.out
+# hmmsearch PPR.hmm iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa > PPR.out
+hmmsearch PPR.hmm IWGSC_v1.1_HC_20170706_pep.fasta > PPRv1.1.out
+## ran almost *instantly*
+
+ls -lh
+#-rw-r--r-- 1 pterry amundsen   6704453 Jun  6 17:14 PPR.out
+-rw-r--r-- 1 pterry amundsen 7.8M Jul 22 12:48 PPRv1.1.out
+
+less PPRv1.1.out
+wc PPRv1.1.out
+ 141895  832897 8145244 PPRv1.1.out
+
+# 118172  689922 6704453 PPR.out
+exit
+# ref line 120
+## now what to do with this output ????????
+
+#cd /Users/bterry/macbook2017/vikas17/wheatproj
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/PPRv1.1.out .
+#scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/PPR.out .
+
+ls -al
+-rw-r--r--   1 bterry  staff    8145244 Jul 22 13:52 PPRv1.1.out
+
+## Hmmer User's Guide, p-21-27, discussing 'hmmsearch' output
+## line 8203 (Bdac...)
+## note: PPR.out has *no* 'description' colm entries, hmmsrchshortpep.out *does* ????????
+## line 8208, ## 3rd colm, 'bias' ...
+## line 8210, The next three colms are again an E-value, score, and bias, but only for the **single** best-scoring domain in the sequence, rather than the sum of all its identified domains.
+## line 8213, ## So ***operationally***,
+if both E-values are significant (<< 1), the sequence is likely to be homologous to your query.
+
+# From 06/12/17:
+## Note: p-544, cheng ref., 0.1 for *full*, 100 for *domain* ??????
+## Q: few comments:
+## PPR.out, line 1540, 'inclusion threshold'
+## p-9, sci. reports, RFL genes  >= 10 p-class ppr motifs, (note: sec 2, PPR.out, line 542, # domains < 10) So, should num. domains affect cutoff for hmmsearch hits ?????????????????
+## p-533, cheng ref., PPR proteins, 2 to 30 tandem repeats ??????????????
+## p-533, cheng ref., PPR.out, line 1562, criteria cutoff, 
+(-E 0.1),
+(-E 100)
+
+## compare, hmmer doc, p-23, cutoff E-value <= 10.0, catches *all* 1595 lines sec 2, PPR.out 
+## hmmer doc, p-24, sec 3, ...
+
+## talked to Vikas, would like to take hits in PPR.out file using cheng, p-544 criterion of 'full' E-value <= 0.1. This line 1562 and above in sec 2.
+
+# For PPRv1.1.out, using this cheng criterion of 'full' E-value <= 0.1, the 1562 last line in PPR.outis 1930 in PPRv1.1.out. So 1930 - 1562 = 368 additional lines (368/1545=23.8%). Q: how many more p-proteins (compared to 820 from PPR.out ??????????????)
+# **project** (820/1545 = x/1913, x = 1015, i.e., 195 more than 820.
+
+## So, to do, start  wi PPRv1.1.out file
+i) remove sec 1 above sec 2
+## cd /Users/bterry/macbook2017/vikas17/wheatproj
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+head -n 1930 PPRv1.1.out | tail -n 1
+
+ii) get sec 2 rows of PPRv1.1.out, lines 1930 & above
+head -n 1930 PPRv1.1.out | tail -n 1914 | head -n 1
+head -n 1930 PPRv1.1.out | tail -n 1914 > PPRv1.1sec2_1930.txt
+
+## Left, remove line 1885, 'inclusion threshold' in new file
+## try unix commands before doing wi BBedit, remaining, 1913 lines.
+head -n 1884 PPRv1.1sec2_1930.txt > top.txt
+tail -n 29 PPRv1.1sec2_1930.txt > bottom.txt
+
+cat top.txt bottom.txt > tmp.txt
+wc -l tmp.txt  ## expect 1913
+    1913 tmp.txt
+
+## examine tmp.txt in BBedit, if line above, below 'inclusion threshold' line ok, (looks good) then
+mv tmp.txt PPRv1.1sec2_1930.txt  ## done, now 1913 in length
+wc -l PPRv1.1sec2_1930.txt
+    1913 PPRv1.1sec2_1930.txt  ## ok, have 10 colms, think will use colm 9, prot names ??
+
+
+save to github
 
 STOPPED
+
+# from line 174 
+(probably get p subset next, similar to 820 for 1545)
+
 
 
 
