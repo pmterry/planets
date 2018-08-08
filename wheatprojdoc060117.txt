@@ -8294,8 +8294,8 @@ if both E-values are significant (<< 1), the sequence is likely to be homologous
 
 ## talked to Vikas, would like to take hits in PPR.out file using cheng, p-544 criterion of 'full' E-value <= 0.1. This line 1562 and above in sec 2.
 
-# For PPRv1.1.out, using this cheng criterion of 'full' E-value <= 0.1, the 1562 last line in PPR.outis 1930 in PPRv1.1.out. So 1930 - 1562 = 368 additional lines (368/1545=23.8%). Q: how many more p-proteins (compared to 820 from PPR.out ??????????????)
-# **project** (820/1545 = x/1913, x = 1015, i.e., 195 more than 820.
+# For PPRv1.1.out, using this cheng criterion of 'full' E-value <= 0.1, the 1562 last line in PPR.out is 1930 in PPRv1.1.out. So 1930 - 1562 = 368 additional lines (368/1545=23.8%). Q: how many more p-proteins (compared to 820 from PPR.out ??????????????)
+# **project** (820/1545 = x/1913, x = 1015, i.e., project 195 more than 820.
 
 ## So, to do, start  wi PPRv1.1.out file
 i) remove sec 1 above sec 2
@@ -8321,13 +8321,554 @@ mv tmp.txt PPRv1.1sec2_1930.txt  ## done, now 1913 in length
 wc -l PPRv1.1sec2_1930.txt
     1913 PPRv1.1sec2_1930.txt  ## ok, have 10 colms, think will use colm 9, prot names ??
 
-
 save to github
+
+# next, get 'P' subset of the 1913 from hmmsearch with PPR.hmm
+
+07/24/18:
+
+# from line 174 still going at line 414 (42 RF's, other species ?) line 538, '11', (line 601, 'the 9'), ... to line 675, now have '820' 'P' prot seqs, line 702 (run 'Notes' steps ????
+(probably get p subset next, similar to subset of 820 for 1545)
+
+07/29/18:
+# ref line 174
+
+## so, try read into **R**, get 'sequence' colm (9) that way ?????????
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+## inside rStudio & R
+setwd("/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1")
+# line 188
+PPRsec2_1930 <- read.delim("PPRv1.1sec2_1930.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(PPRsec2_1930)  ## [1] 1545    1   ???????????????????????????????
+head(PPRsec2_1930, n=3)
+write.table(PPRsec2_1930, file="Testwrite.txt", quote=FALSE, sep="\t", row.names=FALSE) 
+# Q: looks like just **skipped** use of R to get tabs as colm separators ????????
+
+
+#********************************************************************
+
+07/30/18:
+# digression: talked to vikas
+1) 'Notes' steps on 1913 seqs, no controls
+2) 'Notes' steps on 1913 seqs, include 9 rice & 6 vikas control RF-like seqs
+3) vikas to email ref for a paper to read.
+
+cat PPRv1.1sec2_1930.txt|perl -pe 's/.+(Traes.+)/\1/'| head -n 3
+
+
+cat PPRv1.1sec2_1930.txt|perl -pe 's/.+(Traes.+)/\1/'| head -n 1930 > PPRv1.1sec2_1930_Seqscolm.txt
+## 1st & last rows look ok.
+# Q: ***removed*** the '.d' from each name ??????????????????
+
+sort | uniq | length, see if still have same number as in PPRv1.1sec2_1930.txt (i.e., are there any duplicates)? Name this file PPRv1.1seqnames.txt 
+
+# note, line 1205 is
+TraesCS5D02G259395.1  gene=PPRfinder_140
+
+
+sort PPRv1.1sec2_1930_Seqscolm.txt |uniq | wc -l  ##     ***1746***  ***not*** as expected if each record in unique. Q: might it be that if '.d' extension not removed, that sort/unique would give 1913 ??????????????????
+To check ?????????????????????
+# To test, take IWGSC_v1.1_HC_20170706_pep.fasta, the input to PPR.hmm, 
+head -n 3 IWGSC_v1.1_HC_20170706_pep.fasta
+>TraesCS1A02G000100.1 gene=TraesCS1A02G000100
+MRVIALSAGVTPSLRIGLPMCKCRSHGTFLLFGLQSSHLNICYYHQDLPRRPLCPGSRPGFCSGRRALLL
+IGAWRSSRWPGVGRAL.
+# so, each faste seq apparently has both prot name & gene name ???????????
+# so try grab colm 9 from PPRv1.1sec2_1930.txt using R (or get the perl -pe to accomplish it)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+## inside rStudio & R
+setwd("/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1")
+# line 188
+PPRv1.1sec2_1930 <- read.delim("PPRv1.1sec2_1930.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(PPRv1.1sec2_1930)  ## [1] 1545    1   ???????????????????????????????
+head(PPRv1.1sec2_1930, n=3)
+# note, bbedit, looks like space character(s) betw colms ????????????????????????????????
+
+write.table(PPRv1.1sec2_1930, file="Testwrite.txt", quote=FALSE, sep="\t", row.names=FALSE)
+# Failed ?????????????/
+
+cat PPRv1.1sec2_1930.txt|perl -pe 's/.+(Traes.+\.[0-9]).+/\1/'| head -n 3
+TraesCSU02G134400.1
+TraesCS6B02G108900.1
+TraesCS6A02G081600.4
+
+# got the '.d' colm,  ??????????
+# to do, get the whole 1930, colm 9, then check sort|uniq, now see of get 1913 ?????
+
+cat PPRv1.1sec2_1930.txt|perl -pe 's/.+(Traes.+\.[0-9]).+/\1/'| wc -l  ## 1913 as expect
+cat PPRv1.1sec2_1930.txt|perl -pe 's/.+(Traes.+\.[0-9]).+/\1/' > PPRv1.1sec2_1930_colm9.txt
+wc -l PPRv1.1sec2_1930_colm9.txt
+    1913 PPRv1.1sec2_1930_colm9.txt
+sort PPRv1.1sec2_1930_colm9.txt |uniq | wc -l  ##     1913
+# So, **apparently** 1913 proteins, 1746 genes in PPRv1.1sec2_1930.txt
+
+ 
+## next use Vikas getsubsetfatofa.awk (getseq.awk) pgm to subset the records selected by 
+# hmmsearch PPR.hmm IWGSC_v1.1_HC_20170706_pep.fasta > PPRv1.1.out
+
+
+1st need copy IWGSC_v1.1_HC_20170706_pep.fasta from dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/iwgsc_refseqv1.1_genes_2017July06
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+
+# line 236, now need getseq.awk
+
+07/31/18:
+
+# might **1st** **check** if ver1.0 protein fasta file had both prot **&** gene names ?????????
+cd /Users/bterry/macbook2017/vikas17/wheatproj
+head -n 3 iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa
+>TraesCS1A01G000100.1
+MRVIALSAGVTPSLRIGLPMCKCRSHGTFLLFGLQSSHLNICYYHQDLPRRPLCPGSRPG
+FCSGRRALLLIGAWRSSRWPGVGRAL*
+# so, ver 1.0 ***only*** lists protein name
+# ver 1.1 of IWGSC_v1.1_HC_20170706_pep.fasta lists prot name ***&*** gene name.
+
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta PPRv1.1sec2_1930_colm9.txt | head -n 3
+>TraesCS1A02G023205.1 gene=TraesCS1A02G023205
+PVTSASPAPAADDLHAFLRRGLRSRGAVLRAHAFLLRRGLLLGHPVPSGLLLSAAAASXXXXXXXXXXXX
+XXLPPPLPLFSLSAALRAVAPRVPFSALLSLFAHLLRAHAPSGFPDAFAFPPLLSAAASARSPRSHLPAA
+
+# Note all the 'X's' ??????????????????????????????????
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta PPRv1.1sec2_1930_colm9.txt > PPRv1.1hmmsearchsubset.fa
+
+wc -l PPRv1.1hmmsearchsubset.fa
+   19334 PPRv1.1hmmsearchsubset.fa
+#   18284 PPRhmmsearchsubset.fa
+#grep -c "^>Tr" PPRhmmsearchsubset.fa   # 1913 as expect
+
+# compared to 1545 as expect for ver 1.0
+
+
+# line 631, stopped looking thru to 'Notes', want try muscle **rather** than clustal ?????????
+# line 640, 660, figtree colored rows, getseq, 674, 689, muscle
+# had to be a MSA above, probably clustal, so, TO DO, substitute with muscle
+
+# talked to vikas, would *like* a protein fasta file in v1.1 with REPR, that is, *not* multiple isoforms for a gene.  Not seeing one from /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/iwgsc_refseqv1.1_genes_2017July06 dir.
+
+So, perhaps subset 1st colm of IWGSC_v1.1_HC_20170706_pep.fasta including the '.d' extension (done, PPRv1.1sec2_1930_colm9.txt)
+
+Sort. Try sort | uniq just to see what happens (above, got 1913 rows)
+
+# now, try sort
+
+sort PPRv1.1sec2_1930_colm9.txt > PPRv1.1sec2_1930_colm9sorted.txt
+wc -l PPRv1.1sec2_1930_colm9sorted.txt
+    1913 PPRv1.1sec2_1930_colm9sorted.txt
+
+Manually go down thru, see multiply isoforms adjacent. For each set of isoforms, go check 
+IWGSC_v1.1_HC_20170706_pep.fasta, determine which longest, delete rest from the colm1 list. 
+Note, checked 1st two sets of dupl. gene names in sorted list, '.1' not necessary longest in each set. 1st two sets, **similarity** in lengths within each set. I note some of the seqs are **quite** short.
+# So, how to proceed? Given this situation, if would like to take longest in each set, looks like would need examine **each** set. Q: is there way to say graphically examine the sets, to pick longest? Perhaps, check how many sets? If reasonable number, perhaps pick longest manually? Perhaps grep all the prot names in PPRv1.1sec2_1930_colm9sorted.txt wi extension [2-9]?
+
+08/01/18:
+
+grep -c "\.[2-9]" PPRv1.1sec2_1930_colm9sorted.txt  ## 172
+
+# talked to vikas
+# suggests go ahead with 'Notes' steps with all 1913 ver1.1 seqs (1913 by self, then 1913 plus 9 (rice) + 6 (vikas6) controls. 
+# vikas emailed seqlen.awk script to report length of seqs in fasta file. Could use to report seq length for isoforms in /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/...
+
+08/03/18:
+
+# so lets try it
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+chmod 755 seqlen.awk
+
+# 1st getseq.awk with sorted 1913 prot names
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta PPRv1.1sec2_1930_colm9sorted.txt > PPRv1.1hmmsearchsubset_sorted.fa
+
+wc -l PPRv1.1hmmsearchsubset_sorted.fa
+   19334 PPRv1.1hmmsearchsubset_socrted.fa
+
+grep -c "^>Tr" PPRv1.1hmmsearchsubset_sorted.fa   # 1913 as expect
+
+# Now, seqlen.awk 
+head -n 22 PPRv1.1hmmsearchsubset_sorted.fa > test_seqlen.fa
+./seqlen.awk test_seqlen.fa
+TraesCS1A02G023205.1 549
+TraesCS1A02G031600.1 784
+# to check if these lengths are correct ????????????????????
+# they are, Q: the '.' at end of TraesCS1A02G023205.1 ??????????????????
+
+./seqlen.awk PPRv1.1hmmsearchsubset_sorted.fa > PPRv1.1fastaseqlengths.txt
+# worked, Q: could subset for longest seq each gene, or subset for some cutoff of sequence length before starting 'Notes steps to produce phylogram of 1913 ????????????????
+
+08/04/18:
+# perhaps, cutoff of 29 (leader) + 10*35 = 379  ??????????
+# population[order(population$age),]
+
+
+# start rstudio
+
+#PPRv1.1fastaseqlengths <- read.delim("PPRv1.1fastaseqlengths.txt", header=FALSE, seq="",  stringsAsFactors=FALSE)
+Error in read.table(file = file, header = header, sep = sep, quote = quote,  : 
+  unused argument (seq = "")
+
+# so try cut, get separate colms of PPRv1.1fastaseqlengths.txt, then read them in individually into R
+
+#cut -d ' ' -f 2 srep35152-s1_tableS1_copy.txt | head -n 42 > NCBIrefcolm.txt
+cut -d ' ' -f 1 PPRv1.1fastaseqlengths.txt | wc -l
+cut -d ' ' -f 1 PPRv1.1fastaseqlengths.txt > colm1.txt
+cut -d ' ' -f 2 PPRv1.1fastaseqlengths.txt > colm2.txt
+paste colm1.txt colm2.txt > colms1_2.txt
+
+PPRv1.1fastaseqlengths <- read.delim("colms1_2.txt", header=FALSE,  stringsAsFactors=FALSE)
+dim(PPRv1.1fastaseqlengths)
+head(PPRv1.1fastaseqlengths, n=3)
+PPRv1.1fastaseqlengthssorted <- PPRv1.1fastaseqlengths[order(PPRv1.1fastaseqlengths$V2),]
+
+write.table(PPRv1.1fastaseqlengthssorted, file="PPRv1.1fastaseqlengths_sorted.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+# So, 1st **233** seqs <= 379 aa's long. Q: should these be excluded from 'Notes steps ??????????
+# To start with, apparently not  ????????????????????????????????
+# do seq length for '135' RF-like proteins, after 1st 'Notes' steps, do for supposed 'P', 'PLS' subsets of PPR proteins (vs new v1.1 prot fasta file
+# so the file with ~135 prot names is iwsgc_131_5_3_139names.d.txt (but check .pptx or html to make sure this producing 12th tree, sec 2.29
+
+# line 7308, check inside file slurm_muscle_wheatproj_RF139.sh, see if input file want to check for length seqs is listed ??????????????????????/
+
+08/05/18:
+cd macbook2018/vikas18
+find . -name 'slurm_muscle_wheatproj_RF139.sh' -print
+./131RFlike/iwgsc.2to9/slurm_muscle_wheatproj_RF139.sh
+
+iwsgc139_REPR_PROT_seqs.fa, file want do seqlen.awk on
+copy to /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+
+./seqlen.awk iwsgc139_REPR_PROT_seqs.fa > iwsgc139_REPR_PROT_seqs_lengths.txt
+# now, sort on 2nd colm
+
+cut -d ' ' -f 1 iwsgc139_REPR_PROT_seqs_lengths.txt | wc -l  ## 139
+cut -d ' ' -f 1 iwsgc139_REPR_PROT_seqs_lengths.txt > colm1_139.txt
+cut -d ' ' -f 2 iwsgc139_REPR_PROT_seqs_lengths.txt > colm2_139.txt
+paste colm1_139.txt colm2_139.txt > colms1_2_139.txt
+
+iwsgc139fastaseqlengths <- read.delim("colms1_2_139.txt", header=FALSE,  stringsAsFactors=FALSE)
+dim(iwsgc139fastaseqlengths)
+head(iwsgc139fastaseqlengths, n=3)
+iwsgc139fastaseqlengthssorted <- iwsgc139fastaseqlengths[order(iwsgc139fastaseqlengths$V2),]
+
+write.table(iwsgc139fastaseqlengthssorted, file="iwsgc139fastaseqlengths_sorted.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+# lengths of seqs in iwsgc139fastaseqlengths_sorted.txt range from 189 to 874.
+# if were to assign 29 + 350 = 379 as to short to use, 1st 34 woud be eliminated.
+
+# ready go ahead with 'Notes' steps with all 1913 ver1.1 seqs (1913 by self, then 1913 plus 9 (rice) + 6 (vikas6) controls.
+
+# Notes_Alignment_UsingHMMs.txt
+cd macbook2017/vikas17
+find . -name 'Notes_Alignment_UsingHMMs.txt' -print
+./wheatproj/hmmpipeline/FRprotseqs/Notes_Alignment_UsingHMMs.txt
+
+# ref: line 2981, 7277
+
+08/06/18:
+
+## Now run Notes steps ... 
+
+## need new dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+# from 03/26/18:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1
+mkdir Notessteps
+cd Notessteps
+logout
+
+## scp PPRv1.1hmmsearchsubset.fa to crane, dir = /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+
+## now for slurm_muscle_wheatproj_PPRv1.1.sh
+## cp slurm_muscle_wheatproj_RF139.sh to slurm_muscle_wheatproj_PPRv1.1.sh
+
+## edit (done), then scp
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+
+scp PPRv1.1hmmsearchsubset.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+
+scp slurm_muscle_wheatproj_PPRv1.1.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 7001)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if present slurm_muscle_wheatproj_PPRv1.1.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_PPRv1.1.sh 15503129 2:27pm => , finally done.
+logout
+
+squeue -u pterry  ## a PD
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          15503129     batch TJob_mus   pterry PD       0:00      1 (Priority)
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          15503129     batch TJob_mus   pterry  R    6:52:28      1 c1014
+
+# check slurm file, PPRv1.1hmmsearchsubset.fa has 1913 seqs. Looks like may need to rerun with more time requested ???????????????????????????????????
+          
+cd /Users/bterry/macbook2017/vikas17
+find . -name 'slurm_muscle_wheatproj_refin820.sh' -print
+./wheatproj/hmmpipeline/FRprotseqs/slurm_muscle_wheatproj_refin820.sh
+# ran 1 hr 44 min, line 789
+
+## To see, **diff.** way review run time, etc. from QIIME2 workshop ??????
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+ls -lh
+
+less job.15503129.err  ## Q: lot of '^M' characters ??????????????????/
+sacct -j  15503129 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-08-06T15:18:41 2018-08-07T02:53:32 
+2018-08-06T15:18:41 2018-08-07T02:53:32 
+24:00:00 - 15:18:41 = 8hr 42min + 02:53:32 - 0:0:0 = 2hr 52min
+# total = 11hr 34min
+
+# Q: how do I know for sure this job finished ?????????????????????
+
+-rw-r--r-- 1 pterry amundsen 9092425 Aug  7 02:53 PPRv1.1hmmsearchsubset.fa.aln
+less PPRv1.1hmmsearchsubset.fa.aln  ## looks to be *in* MSA fasta format.
+wc -l PPRv1.1hmmsearchsubset.fa.aln
+151127 PPRv1.1hmmsearchsubset.fa.aln  
+
+grep -c "^>Tr" PPRv1.1hmmsearchsubset.fa.aln  ## 1913 as expect
+
+# line 7334, next (2nd) step, fasta2stockholm.pl conversion (line 7029)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/RF139
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+ls -lh
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl PPRv1.1hmmsearchsubset.fa.aln > PPRv1.1hmmsearchsubset.fa.aln.slx
+ls -al
+
+-rw-r--r-- 1 pterry amundsen 8897342 Aug  7 12:30 PPRv1.1hmmsearchsubset.fa.aln.slx
+
+## to check top of stockholm file
+less PPRv1.1hmmsearchsubset.fa.aln.slx 
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 7357)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+
+hmmbuild PPRv1.1hmmsearchsubset.fa.aln.hmm PPRv1.1hmmsearchsubset.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             PPRv1.1hmmsearchsubset.fa.aln.slx
+# output HMM file:                  PPRv1.1hmmsearchsubset.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     PPRv1.1hmmsearchsubset.fa.aln  1913  4629   594    18.20  0.590 
+
+# CPU time: 3.82u 0.05s 00:00:03.86 Elapsed: 00:00:03.91
+exit
+ls -lh
+-rw-r--r-- 1 pterry amundsen 271K Aug  7 12:48 PPRv1.1hmmsearchsubset.fa.aln.hmm
+#-rw-r--r-- 1 pterry amundsen 366K Mar 26 13:15 iwsgc139_REPR_PROT_seqs.fa.aln.hmm
+
+less PPRv1.1hmmsearchsubset.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  PPRv1.1hmmsearchsubset.fa.aln
+LENG  594
+ALPH  amino
+
+#head -n 17 PPRv1.1hmmsearchsubset.fa.aln.hmm
+
+# ref: line 7391
+## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
+
+cd macbook2018/vikas18
+find . -name 'slurm_hmmalign_wheatproj_RF139.sh' -print
+./131RFlike/iwgsc.2to9/slurm_hmmalign_wheatproj_RF139.sh
+
+## copy slurm_hmmalign_wheatproj_wheat151.sh to slurm_hmmalign_wheatproj_RF139.sh
+## copy slurm_hmmalign_wheatproj_RF139.sh to slurm_hmmalign_wheatproj_PPRv1.1.sh
+
+## slurm file prepared
+#cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+
+scp slurm_hmmalign_wheatproj_PPRv1.1.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+#cd /work/baenziger/pterry/wheatproj/RF139
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1.sh
+ls -lh
+sbatch slurm_hmmalign_wheatproj_PPRv1.1.sh 15514302  2:05pm => ??:??am, 
+
+squeue -u pterry  ## a ST
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          15514302     batch TJob_hmm   pterry PD       0:00      1 (Priority)
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+ls -lh
+-rw-r--r-- 1 pterry amundsen 273K Mar 26 13:58 iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln
+##-rw-r--r-- 1 pterry amundsen 296K Mar 18 10:26 iwsgc151_REPR_PROT_seqs.fa.aln.hmmaln
+
+sacct -j  15514302 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-08-07T14:34:25 2018-08-07T14:36:09 
+2018-08-07T14:34:25 2018-08-07T14:36:09 
+36:09 - 35:25 = 1min 44sec
+
+less PPRv1.1hmmsearchsubset.fa.aln.hmmaln  ## # STOCKHOLM 1.0 format MSA
+
+## ref line 7423, next step, stockholm2fasta.pl conversion (line 7117)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+ls -al
+
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g PPRv1.1hmmsearchsubset.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > PPRv1.1hmmsearchsubset.fa.aln.hmmaln.fa
+
+ls -al
+less PPRv1.1hmmsearchsubset.fa.aln.hmmaln.fa
+
+grep -c ">Traes" PPRv1.1hmmsearchsubset.fa.aln.hmmaln.fa  ## 1913 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+## ref., line 7452, now fas to phy (line 7146)
+
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+ls -al
+cd ..
+cd ..
+cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/Notessteps
+
+
+cd hmmsrch_protv1.1/Notessteps
+ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps
+module load bioperl
+
+./align_convert_fas_to_phy.pl PPRv1.1hmmsearchsubset.fa.aln.hmmaln.fa
+ls -al
+## Q: will it create file & name for output, yes.
+
+-rw-r--r-- 1 pterry amundsen  1714028 Aug  7 23:40 PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy
+exit
+less PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy
+
+  1913 596
+'TraesCS7B02G163000.1'  ---------- ---------- ---------- ---------- --SRLAHRHL PLLLSYATVS
+ logout
+
+# ref: line 7480
+## scp back to macbook, (line 7173)
+
+#cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/Notessteps/PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  1714028 Aug  7 23:58 PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy
+
+less PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy
+
+head -n 4 PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy
+ 1913 596
+'TraesCS7B02G163000.1'  ---------- ---------- ---------- ---------- --SRLAHRHL PLLLSYATVS 
+
+## so phy header     1913 596, expect the 1913
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: PPRv1.1hmmsearchsubset_seqs
+
+The alignment file "PPRv1.1hmmsearchsubset.fa.aln.hmmaln.phy" was uploaded, it contains 1913 taxons of 596 characters.
+
+Your You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20180808-071148_Em07/cmd.txt
+
+job was submitted. (Wed, 08/08/18, 12:12am)
+
+#note example, line 6213, a job 1day, 3hrs
+
+08/08/18:
+# save to github
+
+#ref: resume line 7510 for post montpellier analysis
+
+
 
 STOPPED
 
-# from line 174 
-(probably get p subset next, similar to 820 for 1545)
+# probably could transfer to an output file, doc lengths of fasta seq in IWGSC_v1.1_HC_20170706_pep.fasta
+# then with largest length for each prot group, compare wi length of '.1' seq for each group, finally retain seq & name for longest seq for each group ????????
+
+
+#****************************************************************
 
 
 
