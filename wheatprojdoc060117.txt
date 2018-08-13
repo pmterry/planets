@@ -8524,6 +8524,10 @@ PPRv1.1fastaseqlengthssorted <- PPRv1.1fastaseqlengths[order(PPRv1.1fastaseqleng
 
 write.table(PPRv1.1fastaseqlengthssorted, file="PPRv1.1fastaseqlengths_sorted.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
 
+summary(PPRv1.1fastaseqlengths$V2)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   99.0   488.0   599.0   603.2   721.0  1562.0 
+
 # So, 1st **233** seqs <= 379 aa's long. Q: should these be excluded from 'Notes steps ??????????
 # To start with, apparently not  ????????????????????????????????
 # do seq length for '135' RF-like proteins, after 1st 'Notes' steps, do for supposed 'P', 'PLS' subsets of PPR proteins (vs new v1.1 prot fasta file
@@ -8555,6 +8559,10 @@ head(iwsgc139fastaseqlengths, n=3)
 iwsgc139fastaseqlengthssorted <- iwsgc139fastaseqlengths[order(iwsgc139fastaseqlengths$V2),]
 
 write.table(iwsgc139fastaseqlengthssorted, file="iwsgc139fastaseqlengths_sorted.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+summary(iwsgc139fastaseqlengths$V2)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  189.0   381.5   547.0   543.1   715.5   874.0 
 
 # lengths of seqs in iwsgc139fastaseqlengths_sorted.txt range from 189 to 874.
 # if were to assign 29 + 350 = 379 as to short to use, 1st 34 woud be eliminated.
@@ -8856,13 +8864,212 @@ job was submitted. (Wed, 08/08/18, 12:12am)
 #note example, line 6213, a job 1day, 3hrs
 
 08/08/18:
-# save to github
+# saved to github
 
 #ref: resume line 7510 for post montpellier analysis
 
+08/09/18:
 
+# done by 11am  (~ 35 hrs)
+ Analysis name : pprv1_1hmmsearchsubset_seqs
+PhyML results :
+
+    Download (zip format)
+    Tree Visualisation
+
+***Unexpected error***
+# ??????????????????????????????????????????????????????????????????/
+# phyml zip output file **only** has about 10 lines
+
+# from line 613, ran PPRhmmsearchsubset_plus9.fa on clustal omega
+# so perhaps try run on https://www.ebi.ac.uk/Tools/msa/clustalo/
+the fasta file PPRv1.1hmmsearchsubset.fa 
+# I note there limits of 4000 seqs & 4 Mb (I have 1.2 Mb).
+# Q: format of file output from phyml (france) ?????????????
+
+# job submitted to https://www.ebi.ac.uk/Tools/msa/clustalo/ 12:40pm.
+# Q: when done, is there a way have clustal create phylogram ?????
+# Q: file format to use in figtree, prevly did ?????????????????????
+# Q: line 629 mentions figtree, so format compatible ????????
+
+# The clustal Omega alignment also has a phylogenetic tree. Try dnload this file on 'pro' laptop, so can display with figtree.
+# name PPRv1.1.1913.txt on macbook as /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1.1913.txt
+# and on 'pro' as ~/macbookpro2018/PPRv1.1.1913.txt
+
+# displaying in figtree on 'pro', can't tell how to separate phylogram into 'P' & 'PLS' seqs. So, prepare PPRv1.1.1913_plusrice9.fa. Then, run clustal omega, see if these ctl's can indicate which part of phylogram are the 'P' seqs.
+
+# from line 611
+# cat PPRhmmsearchsubset.fa FRknownseqs_shtname_9.fa > PPRhmmsearchsubset_plus9.fa
+# so, locate FRknownseqs_shtname_9.fa so can cat to PPRv1.1.1913.txt, before next submit to clustal omega MSA & phylogram
+# cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+# copied FRknownseqs_shtname_9.fa to /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+# next do the cat
+cat PPRv1.1hmmsearchsubset.fa FRknownseqs_shtname_9.fa > PPRv1.1.1913_plusrice9.fa
+grep -c ">" PPRv1.1.1913_plusrice9.fa  ## 1922 as expect
+
+# now submit to clustal omega (done 12:44am, 08/10/18)
+
+08/10/18:
+# next clustal omega run, "PPRv1.1.1913_plusrice9.fa for 1922 seqs", will 1st dnload to 'pro' for display in figtree.
+# Q: what to think of these 'job details' ????????
+
+Job Details
+===========
+
+program: clustalo
+version: 1.2.4
+guidetreeout: false
+dismatout: false
+dealign: false
+mbed: true
+mbediteration: true
+iterations: 0
+gtiterations: -1
+hmmiterations: -1
+outfmt: clustal_num
+order: aligned
+stype: protein
+
+grep ">" FRknownseqs_shtname_9.fa  ## to use in figtree
+
+# located at least 6 of 7 'AB' rice ctl's on figtree for PPRv1.1.1913plusrice9.txt 'nexus' (?) file, all 'close' together.
+# check for 1st seq, >TraesCS1A01G031600.1, in file iwsgc139_REPR_PROT_seqs.fa. Can't find this single seq, if in phylogram?
+
+# talked to vikas
+# when trying to highlight color for figtree phylogram, select 'taxa', not clade.
+# for colors, use 3rd on list, from color pallet. 1913 seqs in PPRv1.1hmmsearchsubset.fa, plus seqs 
+# if problem coloring 'P' seqs on this phylogram, check wi vikas. **Once** color, can do **checks** on resulting/underlying file to verify what seqs in each section of phylogram. Like check for the 'ctl's, the 139 wheat RF-like seqs, etc.
+# to check prev figtree file selected color for, since what doing today not 'marking' seqs like previously ?????????????????????????????????????
+#
+
+# next clustal omega, include in fasta file, 1913 seqs in PPRv1.1hmmsearchsubset.fa, plus seqs seqs in p820br9rice9soy38arab26.fa
+# so total 1913 + 9 + 9 + 38 + 26 = 1995
+
+# To prepare this fasta file, call it PPRv1.1.1913_br9rice9soy38arab26.fa
+need
+PPRv1.1hmmsearchsubset.fa
+bracky9namesshort.fa
+FRknownseqs_shtname_9.fa
+soybean41to_ver2names38dot1dotpshort.fa
+arab26fujii2011namesshort.fa
+
+08/11/18:
+
+# to access them, place them in a new subdir of /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1
+# call it PPRv1.1plus_82ctls (done)
+# copy the 4 from /Users/bterry/macbook2018/vikas18/131RFlike/orthomcl
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_82ctls
+
+cat PPRv1.1hmmsearchsubset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > PPRv1.1.1913_br9rice9soy38arab26.fa
+# 1995 lines
+
+# ref: line 5830
+# cat PPRhmmsearchsubset_P_prots820.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > p820br9rice9soy38arab26.fa
+
+# now ready submit to clustal omega, https://www.ebi.ac.uk/Tools/msa/clustalo
+# started, 1:34pm
+# dnload result to a file named PPRv1.1.1913plus82ctls.txt (5980 lines) on 'pro' (/Users/bterry/macbookpro2018/PPRv1.1plus_82ctls), also on macbook, at /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_82ctls
+# in bbedit, 1913 'Traes' rows, 7 'AB' rows as expect
+
+# THINK FORGOT THE VIKAS6, see line 4514 ??????????????????????????????????????
+
+# displaying on 'pro' figtree, try refer to my prev coloring of figtree phylogram to subset underlying nexus concerning how to accomplish ???????????
+
+# Looking like the 4 sets of controls are in the hypothetical 'P' part of the phylogram, tho may be some of Glyma in 'PLS' part, but just guessing now. So, need 'color' 'P' portion, cause labeling of underlying 'nexus' file like did for 1545 for ver 1.o proteins (see previous logfile steps, as currenty failing to successfully 'mark' 'colored' seqs in figtree ?????????????
+
+# looks like I successfully marked a subset (but not all 'P' ???) of putative 'P' in PPRv1.1.1913plus82ctls.txt file.
+
+# THINK FORGOT THE VIKAS6, see line 4514 ??????????????????????????????????????
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131vikas6
+
+# So get this file (FunctionallyCharacterizedRfs_fasta.txt), (cat to PPRv1.1.1913_br9rice9soy38arab26.fa) in dir 
+# so in dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+cat PPRv1.1.1913_br9rice9soy38arab26.fa FunctionallyCharacterizedRfs_fasta.txt > PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa 
+# (so total 88 ctl seqs), 2001 seqs total.
+
+# now ready submit to clustal omega, https://www.ebi.ac.uk/Tools/msa/clustalo PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa in dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+08/12/18:
+
+# 12:51am, job submitted
+# job name: PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa_88ctls
+# nexus file name: PPRv1.1.1913plus88ctls.txt
+# dnload also to pro (/Users/bterry/macbookpro2018/PPRv1.1plus_88ctls)
+# got figtree to highlight ***mostly*** apparently 'P' seqs while trying to highlight the non-P seqs. ????????????????????????????????????????????
+# next try subset the underlying 'nexux' file, check where the 88 ctls are located in attempt to separate the 'P' & 'PLS' seqs ????????????????????????
+# 1st 2005 rows in PPRv1.1.1913plus88ctls.txt minus 1st 4 rows are seq names with label for color or not. Should be able to work with this. 
+
+# To do, see my prev work when separating 'P' seqs for ver 1.0 protein seqs ??????
+# refer line 640
+ 
+# refer line 640
+
+# Perhaps transfer PPRv1.1.1913plus88ctls1stcolor.txt to box, then to macbook laptop ????? Box is ***'down'*** ?????????????????????
+# so used thumbdrive.
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+# taxlabels, lines 5 thru 2005 in PPRv1.1.1913plus88ctls1stcolor.txt
+
+#cat PPRhmmsearchsubset_plus9_clustaltree_colored_copy | head -n 1560 > PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560
+## check number 'Treas' rows, in, '1560' (1545 as expected) in bbedit. Matches number in PPRhmmsearchsubset.fa.
+
+cat PPRv1.1.1913plus88ctls1stcolor.txt | head -n 2005 | tail -n 2001 >  PPRv1.1.1913plus88ctls1stcolor_2001.txt
+
+## check number 'Treas' rows, in, '2001' (1913 as expected) in bbedit. Matches number in PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa.
+
+# Q: rows in 
+-rw-r--r--   1 bterry  staff    68789 Aug 12 14:28 PPRv1.1.1913plus88ctls1stcolor_2001.txt
+# ***sorted*** alphabetically by name ????????????????????
+
+# Just looking at since sorted, can see PPRv1.1.1913plus88ctls1stcolor_2001.txt has all 88 ctl seqs as colored, thus ***all*** in putative 'P' seqs.
+# Still ***don't*** know if have included some 'PLS' seqs in the red colored seqs ??????????
+
+# now ref, line 648
+
+cat PPRv1.1.1913plus88ctls1stcolor_2001.txt|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 90 | tail -n 10
+
+# now ref, line 652
+# cat PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 1560 > PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560_aftperl
+## check number of 'Traes' in bbedit, 1545 as expect.
+
+cat PPRv1.1.1913plus88ctls1stcolor_2001.txt|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 2001 > PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt
+
+## check number of 'Traes' in bbedit, 1913 as expect.
+
+# line 655, ## next,
+grep "^Traes" PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt |  head -n 30
+
+## looks like working, so 
+
+# ref: line 660
+#grep "^Traes" PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560_aftperl > PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560_aftperl_listfile
+## 820 rows, matching what expect from number of 'color' rows in PPRhmmsearchsubset_plus9_clustaltree_colored_copy_1560
+
+grep "^Traes" PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt > PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt
+## 1161 rows, matching what expect from number of 'color' rows in PPRv1.1.1913plus88ctls1stcolor_2001.txt (1249 - 88)
+
+# So, may have 'P' subset (1161) of 1913, or may have ***some*** 'PLS' included ???????
+# But, ***all*** 88 ctls in PPRv1.1.1913plus88ctls1stcolor_2001.txt putative 'P' subset.
+
+08/13/18:
+# slip a save to ***github*** in here
 
 STOPPED
+
+# ref, line 663
+
+
+
+
+p820br9rice9soy38arab26.fa => phylogram for hmmbuild for this fasta file produced phylogram where wheat chromosomes unable to co-locate on resulting phylogram, perhaps
+if the 820 not included, wheat chroms 1, 2, 6 could have co-located ???????
+# for purpose here to separate P & PLS seqs, presumably may help ?????????
+
+
+
+
+
 
 # probably could transfer to an output file, doc lengths of fasta seq in IWGSC_v1.1_HC_20170706_pep.fasta
 # then with largest length for each prot group, compare wi length of '.1' seq for each group, finally retain seq & name for longest seq for each group ????????
