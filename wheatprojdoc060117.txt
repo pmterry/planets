@@ -8439,6 +8439,8 @@ wc -l PPRv1.1hmmsearchsubset.fa
    19334 PPRv1.1hmmsearchsubset.fa
 #   18284 PPRhmmsearchsubset.fa
 #grep -c "^>Tr" PPRhmmsearchsubset.fa   # 1913 as expect
+grep -c "^>Tr" PPRv1.1hmmsearchsubset.fa   # 1913 as expect
+
 
 # compared to 1545 as expect for ver 1.0
 
@@ -9052,10 +9054,323 @@ grep "^Traes" PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt > PPRv1.1.1913plus
 # So, may have 'P' subset (1161) of 1913, or may have ***some*** 'PLS' included ???????
 # But, ***all*** 88 ctls in PPRv1.1.1913plus88ctls1stcolor_2001.txt putative 'P' subset.
 
+## check for duplicates (line 663 above)
+sort PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt |uniq | wc -l  
+##          1161  as expected if each record in unique.
+
 08/13/18:
 # slip a save to ***github*** in here
 
+# talked to vikas
+# 1) do clustal omega tree with ***just*** the 1913 '>Traes' seqs in PPRv1.1hmmsearchsubset.fa, no ctls. Apparently want to compare phylogram with the preceding ones which each have ctls added.
+# 2) take 'P' subset from PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt, presumably just the 1161 'P' seqs from the 1913 in original ver1.1 PPR.hmm output.
+# so need to subset original .fa ver1.1 file PPR.hmm output to get .fa file for these 1161.
+# then add the 88 ctl seqs, run on clustal, perhaps also phyml, see if all ctls can be viewed in phylogram (if phylogram now simple enough for this purpose ????????)
+# get idea if all areas of 'P' seqs 'covered' by ctls ??????????????
+# make judgment on how many of the 1161 want to keep as apparent 'P' seqs ?????????
+
+# 3) perhaps try also with apparent 'PLS' seqs. See if added ctls to 'PLS" seqs in clustal phylogram, will they all not map inside 'PLS' group ?????????????????
+
+# ***Figures***: Put two dirs in box today, unl.app.box.com, 'manuscript' & inside, 'figures'
+# concerning figures, from figtree, save as pdf. Then, from preview, 'file/export', format 'tiff', comp = LZW, resol = 300. But need to clarify as not working ok when vikas demonstrating ???????????????????????????????
+
+
+08/14/18:
+# so 1) above,
+# /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1hmmsearchsubset.fa, has the 1913 PPR.hmm output  seqs from ver 1.1, IWGSC_v1.1_HC_20170706_pep.fasta (see line 8409)
+# submit this file, **no** ctls to clustal omega, https://www.ebi.ac.uk/Tools/msa/clustalo
+# subitted, 11:19pm
+
+# job name: PPRv1.1hmmsearchsubset.fa_1913wheat seqs_no_ctls
+# to do, dnload to 'pro', name the file: .../PPRv1.1_1913_no_ctls/PPRv1.1.1913_no_ctls.txt
+# bbedit shows 1913 rows 'Tr' at start of line.
+# now, make a copy, then load this file into figtree,
+# Would seem lot **similarity** to previous PPRv1.1.1913pus88ctls.txt in figtree, on 'pro'. For moment, **no** attempt to color any seqs in figtree.
+ 
+# so 2) above, create appropriate fasta file for the 1161 putative 'P' seqs, 
+# names of the 1161, get fasta, then add 88 ctls, 
+# so file with the 1161 names, PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt
+# use getseq.awk 
+# see line 8436
+# copy IWGSC_v1.1_HC_20170706_pep.fasta from .../annotation1.1 dir.
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt > PPRv1.1_1161_P_seqs_subset.fa
+# PPRv1.1_1161_P_seqs_subset.fa has 1161 '>' ('P') seqs as expect
+
+08/15/18:
+
+# next, need append the fasta file for the 88 ctls to PPRv1.1_1161_P_seqs_subset.fa to give 1249 seqs.
+
+copy to .../PPRv1.1plus_88ctls 4 ctl .fa files from .../PPRv1.1plus_82ctls
+
+-rw-r--r--@  1 bterry  staff     6604 Jul  2  2017 FRknownseqs_shtname_9.fa
+-rw-r--r--@  1 bterry  staff    14550 Feb 10  2018 arab26fujii2011namesshort.fa
+-rw-r--r--@  1 bterry  staff     7305 Feb 10  2018 bracky9namesshort.fa
+-rw-r--r--@  1 bterry  staff    21001 Feb 10  2018 soybean41to_ver2names38dot1dotpshort.fa
+
+# 5th ctl file to append is 
+FunctionallyCharacterizedRfs_fasta.fa
+
+# ref line 8966
+# cat PPRv1.1hmmsearchsubset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa > PPRv1.1.1913_br9rice9soy38arab26.fa
+# 1995 lines
+
+cat PPRv1.1_1161_P_seqs_subset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > PPRv1.1_1161_P_seqs_plus_88ctls.fa
+
+# 1249 rows as expected.
+
+# submit this file, PPRv1.1_1161_P_seqs_plus_88ctls.fa, 1249 seqs to clustal omega, https://www.ebi.ac.uk/Tools/msa/clustalo
+# title: PPRv1.1_1161_P_seqs_plus_88ctls.fa_ total_1249seqs
+# subitted, 11:20am
+
+# job name: PPRv1.1_1161_P_seqs_plus_88ctls.fa_ total_1249seqs
+# to do, dnload to 'pro', name the file: .../PPRv1.1_1161_88ctls/PPRv1.1.1161_88ctls.txt
+# bbedit shows 1161 rows 'Tr' at start of line.
+# now, make a copy, then load this file into figtree,
+# looks like, finding ctls in figtree phylogram, perhaps covering approx. 1/4 of phylogram. Tried find one Traes... seq, cursory look not locating ?????????
+
+
+# Now, try (3) above, perhaps try also with apparent 'PLS' seqs. See if added ctls to 'PLS" seqs in clustal phylogram, will they all not(?)  map inside 'PLS' group ????????????
+
+# to accomplish, need get the non 'P' seqs from the 1913. Perhaps, the query to grab the 1161 'P' seqs from the 1913 can be 'reversed', try 'grep -v'
+
+# ref line 9051
+# grep "^Traes" PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt > PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt
+## 1161 rows, matching what expect from number of 'color' rows in PPRv1.1.1913plus88ctls1stcolor_2001.txt (1249 - 88)
+
+grep -v "^Traes" PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt > PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile_PLS.txt
+
+## 840 rows, matching what expect from number of 'color' rows in PPRv1.1.1913plus88ctls1stcolor_2001.txt (1913 - 1161 = 752+88=840)
+
+PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile_PLS.txt
+# next remove 88 ctl rows in this file, new name
+PPRv1.1.1913_ls1stcolor_aftperl_listfile_PLS_752.txt
+
+# next perl -pe to remove quotes
+cat PPRv1.1.1913_1stcolor_aftperl_listfile_PLS_752.txt|perl -pe 's/.+(Traes.+\d).+/\1/' | head -n 3  ## ok
+
+cat PPRv1.1.1913_1stcolor_aftperl_listfile_PLS_752.txt|perl -pe 's/.+(Traes.+\d).+/\1/' > PPRv1.1_1stcolor_aftperl_752_PLS_seqs.txt
+# has 752 as expect
+
+# think getseq.awk vs 1913.fa or orig PPR.hmm output to give .fa of the 752 'PLS' seqs
+
+# ./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt > PPRv1.1_1161_P_seqs_subset.fa
+# PPRv1.1_1161_P_seqs_subset.fa has 1161 '>' ('P') seqs as expect
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta PPRv1.1_1stcolor_aftperl_752_PLS_seqs.txt > PPRv1.1_752_PLS_seqs.fa
+# PPRv1.1_752_PLS_seqs.fa has 752 '>' ('PLS') seqs as expect
+
+
+# then append 88 ctls .fa files, give 840 seqs to submit to clustal.
+
+cat PPRv1.1_752_PLS_seqs.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa
+
+# 840 rows as expected.
+
+# submit this file, PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa, 840 seqs to clustal omega, https://www.ebi.ac.uk/Tools/msa/clustalo
+# title: PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa_total_840_seqs
+# submitted, 3:14pm
+
+08/16/18:
+
+# job name: PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa_total_840_seqs
+# to do, dnload to 'pro', name the file: .../PPRv1.1_752_88ctls/PPRv1.1.752_PLS_88ctls.txt
+# bbedit shows 752 rows 'Tr' at start of line.
+# now, make a copy, then load this file into figtree,
+# looks like, finding ctls in figtree phylogram, perhaps covering approx. 1/5 of phylogram.  The ctls on one branch **together**. Tried find one Traes... seq (TreasCS1A02G060500). Note: there are some 'Traes' seqs on branch **with** ctls, for example this one.
+# **Comments** from this 752PLS_88ctls phylogram, ctls only in one section, but some 'PLS' (?) in this section also.
+
+08/17/18:
+# talked to vikas
+1) read wheat genome paper, RF proteins may be described within?
+#************************
+# v1.1 annotation, how get ?????????????
+#******************************	
+2) for clustal phylograms prepared, further handling
+i) spot check the 'U' in 1913, no ctls, see if in 'red' or 'black' in 1913plus88ctls
+3) 'final' phylogram, 1913, no ctls, & 1913plus88ctls
+4) 'Traes' in PLSplus88ctls, 'mixed' section, check location on 1913, no ctls
+5) in 'figtreetemp' dir on 'box', place 5 clustal phylogram files, & list of ctl names
+6) 'labeling', 1913, no ctls phylogram (Q: how to do ??????????????)
+7) make phyml phylograms, inputs with fewer seqs ???????
+
+
+08/19/18:
+# eaar7191.full.pdf, science 361 eaar7191 (2018)
+# see p-9, 3rd colm, top, RFL = 207, BUT, **no** listing of them?
+# distal R1, R3 regions?
+# p-9, fig 4C, fig S54, ref 44, 45 (prev new), 165 - 168 (cant't find 166 (?)
+# Q: annotation v1.1 mentioned (to list ref where found ??????). Q: how access ??????????
+# supplemental, fig S54, Rf1, Rf3, etc., can I get a 'wheat' name for these genes ?????
+
+# summary page, DNA marker platform ???????????????
+# now, 'limits' article'
+# p-1 
+# haploid genome, 1C = ???????//
+# 85% repetitive ?????
+# coexpression networks
+# 14.5 Gb,
+# rice, arabidopsis genomes much smaller ????
+# transposable elements, families ???????
+# p-3 
+# 5 million yrs ago
+# microRNAs, tRNAs
+# 11,000 nuclear inserted mitochondrial DNA segments  ??
+# centromeres
+# 3rd colm, RefSeq Annotation ***v1.1***
+# chr zones R1, R2a, C, R2b, R3 ?????????????????????
+# Q: cM/Mb ????????????????
+# fig2, ***v1.1***
+# fig2a, pseudogenes, large number ???????????????
+# chi sq test ????????????
+# fig 2b, BUSCO v3, ???????????????????????
+# phylogenomic approach, **EXACTLY HOW DONE** ????????????????
+# p-4
+# triad
+# synteny
+# p-5
+# Atlas of transcription, 
+# PCA, 
+# distal regions, R1, R3 ?????????????????? (ref to centromere ????????
+# global patterns, network, WGCNA ??????, chi sq, 
+# p-8
+# fig 3g, to look at figtree ***not*** in circular format
+# p-9
+# gene families, expansion, defn ??????????????????
+# PPR, 207, Q: where a ***list*** ????????????????????????
+# fertility restoration QTLs in wheat ???????
+# ref 44, sykes, ryegrass
+# ref 45, melonek, rice
+# chr 1, 2, 6, 'fertility-restoration QTLs in wheat, Q: ref paper ????????
+# fig S54, 
+# ref 131
+# ref 164
+# ref 165, may be one prevly seen papers ????????
+# Rf1, Rf3 restorer genes, map to chr 1,  ???????????????????
+# ref 166, CAN'T FIND, ???????????????????, 
+# ref 167, Rf4, chr 6
+# ref 168, Rf8, 2013 paper, ??????????
+# black asterisk, Rf genes (Q: where list of these ????????????????)
+
+
+
+
+
+08/20/18:
+# looking thru ref 167 (2018). p-459, 'penetrance' ???? oligo- ??????
+# Q: how useful this approach? Would we do anything like this?
+ # looked thru Science 361, eaar6089 (2018), The transcriptional landscape
+of polyploid wheat
+# looks like **lot interaction** between homoeologs on A, B & D genomes for each of chromosomes 1 thru 7.
+ 
+08/22/18:
+# to do, summarize what know of the 207 PPR seqs from Science papers?
+# put stuff on 'box'
+
+08/24/18:
+# talked to vikas
+# compose email to kellye asking about list of 207 RFL genes (p-9, 'limits' paper.
+# upload 5 figtree phylogram files to 'box', see 08/17/18 above after do tasks listed there.
+
+08/25/18:
+# so in figtree, tried to highlight the 'U' group near putative PLS group in file 1913no ctls, compare/see what group they in in 1913+88ctls, where 'red' colored seqs putative 'P' proteins. Trouble coloring all these green, got lot of them, BUT also a few in putative PLS GROUP, need check back, remove ones not in 'U'.note: looks like could come back for 2nd try, get next group to left, check where they are in 1913+88ctls. Finally, not for sure that all captured by green in RHS two branches in 'U' ???????
+  
+08/26/18:
+# perhaps try whatever prevly did to compare the geen colored seqs for  .../PPRv1.1_1913_no_ctls/1913noctlsgreen.txt on 'pro' with the seqs in 'P' or 'PLS' section derived from of .../PPRv1.1plus_88ctls/PPRv1.1_1913plus88ctls1stcolor.txt.
+# possible options:
+1) bash Philip_iwsgc131_CDScolm2_17subset.sh (see line 6689)
+2) %in%
+3) setdiff (ref., for example, line 6604)
+# *steps* needed before one of these:
+# head, tail, grep green seqs from 1913noctlsgreen.txt
+# have seqs for 'PLS' & 'P' seqs in files ...
+# see PPRv1.1.1161_88ctls, how get these seq nqmes ?????? (possibly input name to clustal ????)
+# see PPRv1.1.752_PLS_88ctls, how get these seq nqmes ?????? (see line 9170, PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa) Perhaps grep ">Traes" to get 752 'PLS' names ???
+
+# created 'figtreetmp' dir on box at https://unl.app.box.com/folder/52855291477
+# think try setup to use %in% to compare 'green' seqs in 1913noctlsgreen.txt with 'P', & 'PLS' seqs in PPRv1.1_1stcolor_aftperl_752_PLS_seqs.txt, line 9160.
+# 
+# 
+.../annotation1.1/PPRv1.1plus_88ctls/PPRv1.1_1stcolor_aftperl_752_PLS_seqs.txt
+# has 752 'Tr' seqs, prot. names wi .\d at end.
+# need bring over thru box from pro (.../PPRv1.1_1913_no_ctls/1913noctlsgreen.txt) to 
+macbook, dir. (.../annotation1.1/PPRv1.1plus_88ctls)
+# ok, now, 
+
+08/27/18:
+# 49 of 1913noctlsgreen.txt are green color seqs (bbedit)
+head -n 1917 1913noctlsgreen.txt | tail -n 1913 > 1913noctlsgreen1917.txt
+# ok, 1913 in output file
+
+# ref line 9038
+cat 1913noctlsgreen1917.txt|perl -pe 's/.+(Traes.+\d).+color.+/\1/' | head -n 1913 > 1913noctlsgreen_aftperl.txt
+
+grep "^Traes" 1913noctlsgreen_aftperl.txt > 1913noctlsgreen_aftperl_49.txt
+# now, just 49 prot names
+
+# ready use with %in% operator
+# 1st, with 752 PLS file
+# .../annotation1.1/PPRv1.1plus_88ctls/PPRv1.1_1stcolor_aftperl_752_PLS_seqs.txt
+# has quote marks, need remove
+cat PPRv1.1_1stcolor_aftperl_752_PLS_seqs.txt|perl -pe 's/.+(Traes.+\d).+/\1/' | head -n 752 > PPRv1.1_1stcolor_aftperl_752_PLS_seqs_minusquotes.txt
+# got 752 minus quotes
+# now for %in%
+# start R
+rm(list=ls())
+
+PLS752 <- read.delim("PPRv1.1_1stcolor_aftperl_752_PLS_seqs_minusquotes.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("thepls752"))
+class(PLS752)
+PLS752[1:3,]
+
+gr49 <- read.delim("1913noctlsgreen_aftperl_49.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("green49"))
+class(gr49)
+#gr49 %in% PLS752
+str(gr49)
+gr49$green49 %in% PLS752$thepls752
+ [1] FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE
+[18]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE
+[35] FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+
+# 18 of 49 from 1913noctlsgreen_aftperl_49.txt are in PPRv1.1_1stcolor_aftperl_752_PLS_seqs_minusquotes.txt
+# expected some, BUT this many.
+# in figtree, go light up a few of the 49, see where they light up in 1913noctlsgreen.txt
+# in 752, but TraesCS3A02G097906.1 in 'green P region'. NOTE: in PPRv1.11913plus88ctls.txt, more branches in 'U' section than in PPRv1.1.1913_no_ctls.txt.
+# so, seeing a seq in 'green P section **not** an indicator of if 'P' or 'PLS'.
+# perhaps, if 'break' highlighting color **not** using borderline seqs, could use figtree to distinguish P, PLS ????
+# yet to test, perhaps do some checking in PPRv1.1.752_PLS_88ctls.txt, mixed section, if Traes seqs in mixed section are in what section in PPRv1.1.1913_no_ctls.txt ?????
+
+# conclusion: phylogram not definitive in cataloging all 'P', 'PLS' seqs, so run following orthoMCL (blast based ??) for 
+# 1913+88ctls
+# 1913noctls
+# compare orthogroup(s) with ctl seqs, the Treas seqs in this orthogroup with seqs from clustal phylogram 'P' seqs.
+
+08/28/18:
+# may start wi Rmd html file for where in log file to start to run orthoMCL.
+
+http://orthomcl.org/orthomcl/proteomeUpload.do
+# looks like currently, online orthomcl ***not*** available ????????????
+
+08/29/18:
+# do a github save
+
+# to do, start rmd file for v1.1 research.
+
+
 STOPPED
+
+# talked to vikas
+# two figtree files to box manuscript dir.
+# do orthomcl for all red + 88 ctls (figtree file, 1161 + 88 ctls)
+# 207 email (done)
+# ctl section of 752 & 88 ctls, the mixed section, color, subset these, get the Treas seq names, see where they locate in 1913+88ctls ??????
+
+
+
+
+
+# to do, retrieve 752 PLS + 88 ctls, see if overlap on phylogram
+
+
 
 # ref, line 663
 
