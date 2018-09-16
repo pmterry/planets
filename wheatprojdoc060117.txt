@@ -7931,7 +7931,9 @@ https://unzip-online.com/en/Zip
 
 07/08/18:
 Looking for domains or motifs in a PF-like seq. Following Cheng paper (see reference, top of Rmd file for summarizing data this lab log file), perhaps can use 'P' seq, 1st seq fig 4, p-538 (, do blastp vs one of my RF-like seqs, will it find all the 'P' motifs there ????????
+#**********************************************************
 Perhaps, the 'Align two or more sequences' choice can align one query vs one subject ???
+#***********************************************************
 find . -name 'Cheng*' -print  ## ./vikas17/wheatproj/Cheng_et_al-2016-The_Plant_Journal.pdf
 # fig 4, PPR-P repeat (1st row). Q: what is the '.' ?? Looks like filling **gap** because of other rows in the figure. So just remove the '.' before a blastp search.
 
@@ -7942,7 +7944,7 @@ VVTYNTLINGYCKSGKIEEAMELFEEMKEKGIKPD
 
 
 07/09/18:
-# to fine the fasta file, ./vikas18/131RFlike/iwgsc.2to9/iwsgc139_REPR_PROT_seqs.fa
+# to fine the fasta file, .../vikas18/131RFlike/iwgsc.2to9/iwsgc139_REPR_PROT_seqs.fa
 
 # pick 1st seq, 662/35 = 18.9
 
@@ -9353,6 +9355,7 @@ http://orthomcl.org/orthomcl/proteomeUpload.do
 08/29/18:
 # do a github save
 
+
 # to do, start rmd file for v1.1 research.
 
 
@@ -9365,10 +9368,456 @@ STOPPED
 # ctl section of 752 & 88 ctls, the mixed section, color, subset these, get the Treas seq names, see where they locate in 1913+88ctls ??????
 
 
+08/30/18:
+# talked to vikas,
+# ***suggested*** to try RF-like seqs on phylogram by looking at non-circular format, look for Treas... seqs close to ctl branches, try build list of relationships of Treas. seqs with these ctl seqs.
+
+09/01/18:
+# *to do*, retrieve 752 PLS + 88 ctls .fa file, see what happens when blast wi query pentricopeptide repeat motif present in P-class proteins vs a PLS seq (Cheng, fig 4) near 662 residues in length.
+
+# Query: VVTYNTLINGYCKSGKIEEAMELFEEMKEKGIKPD
 
 
+09/03/18:
+# find 35 aa PPR motif ?????
+# line 7943, looks like may have just manually entered this 35 aa PPR motif seq in online blasp manually.
 
-# to do, retrieve 752 PLS + 88 ctls, see if overlap on phylogram
+# similar to line 7968, get a PLS seq from 752+88ctls fasta file. The file (see line 9159).
+
+.../PPRv1.1plus_88ctls/PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa
+
+#py pgm (fastaseqlen.py), get lengths of fasta seqs in this .fa file. Note: currently need hard code output file (done)
+
+# from dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+#**********************************************************
+# Q: note a '.' at end of each sequence ?????????????????
+#**********************************************************
+
+# python3 fastaseqlen.py PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa
+# output file: fastaSeqLen752PLSplus88ctls.txt
+
+sort --key=2,2r --key=2n fastaSeqLengths.txt  ## worked
+sort --key=2,2 --key=2n fastaSeqLen752PLSplus88ctls.txt  > fastaSeqLen752PLSplus88ctls_sorted.txt
+
+# Not sorting properly ?????????????????????????
+# sorting by each digit rather than whole number ?????????????
+# perhaps return, sort in R ????????????????
+# anyway, about 7 seqs are 662 aa's long. Perhaps pick from one of them for test blastp ???????
+
+TraesCS1D02G234800.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'top' border wi 'P' ?????
+TraesCS1D02G379400.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'lower' border wi 'P' ?????
+TraesCS3B02G123400.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'top' border wi 'P', farther from 'P' border than 1 of 7 ?????
+TraesCS3B02G327900.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'lower' border wi 'P', to right of 'gap' ?????
+TraesCS3D02G292900.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'lower' border wi 'P', to right of 'gap', near  4 of 7?????
+TraesCS6A02G085900.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'lower' border wi 'P', to right of 'gap', near  5 of 7, but 'higher ?????
+TraesCSU02G078000.1	662  ## PPRv1.1.1913_no_ctls.txt => in 'PLS' grp, near 'lower' border wi 'P', to right of 'gap', near  6 of 7, but 'higher ?????
+
+# so check in figtree for one well into middle of putative PLS seqs. 
+# pick say 6 or 7 of 7 to blastp, as they are closer to center of 'PLS' section than 1 thru 5 seqs.
+
+Try 1st, 6 of 7, as subject seq 
+TraesCS6A02G085900.1
+>TraesCS6A02G085900.1 gene=TraesCS6A02G085900
+MIRTFQKLLQPTRGPHWASTPLRRFCGRAPAPPAPAGGDIFQWNSAITSHLRGGRVAAARRLFDEMPERN
+VFTWNCMISGFVQNRMLADARRAFDAMPARNSVSWAALLTGYARSGRVVEARELFDRMPDRNVVSWNAMM
+SGYMRNGMVEQARELFDAMPSRNDVSWLTMISGYIRRRCVHEARELFDRAPSPSTSVCNALLSGYVALGC
+LKDAEELFVRMQRRNPVSWNVMITGYARAGRMQVAQSLFDEMPQKDTISRTAIMRGYLQNGDVDASWKVF
+EEMPDRDAIAWNTMIGGFVQSERVDDALRLFAEMPNRDLVSWNTILQGYVQQGDMASANTWFRRMPEKDE
+TSWNTLISGYKDEGALALLSEMTRGGLRPNQATLSVVISICASLVALGCGKMVHLCAVKTGFERDALVMS
+SLISMYSKCGLIAEASQVFELMLQRDTVTWNAMIATYAYHGMAAEALKLFHKMTEDGFRPDHATFLSVLS
+SCAHKGYLYEGCRYFRSMQEDWNLIPRSDHYSCMVDLLGRSGFVHQAYAFTRKIPSDLQVNAWETLFSAC
+NAHGDVQLGEVIAKNVLQAQPSDGGMYTLLANLYAAKEMWSSAANVRGFMKEQGLKKETGCSWVELKGEV
+VSFSSNDNTHPLIDQICQEVDNLSVMIEGAM.
+
+# now, ready for blastp
+ 
+# getting e-09 to 0.016, 13 hits/ranges. Prevly with a RF-like 'subject, got 0.002 to e-23.
+#***************************************************
+# Q: could one subset 'P', 'PLS' by difference in blastp e-values ??????? That is, sep 'P' from 'PLS' but perhaps can't sep 'P' from RF-like ??????????
+# perhaps, test few RF-like, & more of the 7 above for PLS group. See if can distinguish 'P', 'PLS' by blastp e-values.
+
+# Follow Vikas suggestion document phylogram tree branches near the 88 RF-like ctls in figtree for file .../PPRv1.1plus_88ctls/PPRv1.1.1913pluss88ctls1stcolor.txt to try identify RF-like values in the 1913 seqs.
+# Q: or perhaps use 'orig' file if any problem with this colored one ???????
+#************************************************************
+
+09/04/18:
+# line 7947, from .../vikas18/131RFlike/iwgsc.2to9/iwsgc139_REPR_PROT_seqs.fa, pick say 3 more seqs in addition to the 1st seq (refer line 7951). Q: should I try select for length also? Perhaps don't worry as long as reasonably sized?
+# so', say 50th seq
+>TraesCS1B01G092500.1
+MARLCFTTPMPHLRRRYSSFTSPPSRRWDPRPAFAAATERVRAGTLSPEDAHHLFDELLL
+QANPVPERSLNGFLAALARAPSSATLRDGPSLALALFNRVCREEAGPPVAPPTVRTYNIL
+MDSCCRARRPDLGLAFFGRFLRAGLKVNLIVASTLLKCLCHARRTDEAVNMLLHRMSEFG
+CVPDAISYSIVLKGLCDNSRSQQALDLLQMVRKGGACSLSVVAYSIIIHGFFKEGEVSKA
+CNLFHEMMQQGVVPDVVTYSSIIDALCKVRAMDKAKLVLQQMVNNGVRPNMYTWNSFMYS
+LCKHGRSKEAAEFFNSMTAKGLKPDIVAYSTLLHGYATEGCLTDMINFFNSMERNGIVAN
+CKVFTILIDGYAKCGMTDEAMLIFTKMQEQGVSPNVFTYAIVTAALCRMGRLSDAMEKLN
+EMIAMGLQPNKVVYHSLIQVFCTHGDLVKAKALVSEMMNKGIPRPNIVFFNSVINSLCKE
+GRVTDAHDIFDLAINIGERPDVITFNSLIDGYCLAGKMDKAFGVLDAMVSSGIEPNVVTY
+NTLVGGYSRNGRIDDGLTLFREMMHIKIKPTTATYGAILHGLFRAGRTFSAKKMFNEMIE
+SGTTVNISIYAIILGGLCRNNCVDEAIVLFEKLGAMNVKLDVGIFNTMINAMYAVKGREE
+AEDLFAAISANGLVPNASSYGVMITNLLREGLVEEADNMFSSMDKSGCAPSSRLLNNIIR
+MLLEKGEISKAGNYMSKVDGKNISLEASTTSLLLSLFSREGKYREQIKLLPAKYQFFDGS
+SHS*
+# 17 hits, e-12 to 0.13
+
+# and 100th seq
+>TraesCS2D01G532600.1
+MPTGRLSSIFTSNATSSFRAPSPQPRAPLAALAAATERVRAGTLSRQDAHHLFDELLSQA
+ATVPVRTLNNFLAALARAPPSAACGDGPALAIALFNRMSQGAGARVVSPTLCTYSILMDC
+CCRAGRPDLVVAFFGRLIRLGLRLNVIPFNNLLKGLCKAKRSNEALDLLLHRMPELDCAP
+DVFSYSIVINGCFKEGEVDKACNLFHGMIQLGVQPNVVIYTSIIDALSKCGAMDKAEVVF
+RQMVDKGIGPDVMTCTSLIHGYSISGRWKAAVRVFKEMISLGVVPDTVMWNSFVDSLCKH
+RRTKEARVIFDSMAAKGQKPDTVSYSIMLNGYVKEGCFDDMTGLFNSMLQNGVVPNHHIF
+NILINAYAKRGLMDEAMHMFEVMRQQGVNPDVVDYLVVMDSLCKMGRMDAALDKFNQMVN
+QGVSPNKAVYQCLVLGFCSHGDFVKAKELISETINRGLCSNNVFFYPVINDLCKEGKVKE
+AQDMFDFIVGIGQRPDVIMYNSLMDGYCLVGKVEEALRVLDAMKSAGLQPDAITYAILLN
+GYCKIGRIADGLSLFREMSLSGVKPTTIMYSIILDGLFRSGRTVSAKEKFNTMVESGLPV
+DVRTYNIVLHGLCRNNCTGEAIELFKKLCATNVKINVITFNTMISAMFKTRRIGEAKDLF
+ATISAIGLVPSVVTYSVMTTNFIKEGLLAEADDMFLAMEKAGCAPNSRLLNHVVRVLLEN
+GAVVKAATYLAKLDAKQLSLEASTVSLIVSLFSRKGKLREHVKLLPVKYQPPEMLD*
+# 15 hits, e-13 to 0.003
+
+# and 139th
+>TraesCSU01G090200.1
+MSGHFVPVDRRILEQNIKARYHAGDIGTEDALHLFDELLQCAGSSSIRAINYLVTTVGRD
+SPALGVSLFNRVASANVAPNSMTYTILVDCCCRAGRLDLGFAAMGHIIKMGFAADAIVTF
+SHLLKAICAEKKTSYAMDIVLRIMPMFNCVPDNFSYNILFKGLCNERRSQEALELIHMMV
+QHGGSCQPNVVSYNTVVDGLLKEGEVGKAYTLFSEMLRQGISPDVVTCTSIISGMCKVHA
+MDKAEEVLQQMLDRRILPDAATYNCLIHGYYLLGQCEEVDRIFKEMSRNGVQPNIVTYNI
+QMDYLCKSGRCAEARKIFDSMIGLGQKPVVTTYSILLHGYAMEKSFHDMHCLIDLMVENG
+IAPNHPVYNILISACAQEEMVSEVMHIFTKMRQQGLNPNVANYGVVVNLLSRIGRMDDAM
+SLFNQMITEGLAPDIIVFTPPY*
+# 10 hits, e-11 to 0.022
+
+# So looks like seq blasp'd previously had smallest e-value. The latter 3 today not significantly different from the one 'PLS' (?) seq prevly blastp'd ????
+
+# Can try blastp couple more of the putative 'PLS' seqs, just to see what get ????
+# 7 of 7
+
+>TraesCSU02G078000.1 gene=TraesCSU02G078000
+MIRTFQKLLQPTHGPHRASAPLRRFCRRAPAPPSPAGGDIFQWNSAITAHLRAGRVAAARQLFDEMPERN
+VFTWNCMISGFVQNRMLADARRAFDAMPGRNSVSWAALLTGYARSGRVAEARELFDRMPDRNMVSWNAMM
+SGYTRNGMAEQARELFDAMPARNDVSWLTMISGYIRRRRVREARELFDRAPSPSTSVCNALLSGYIALGC
+LKDAEELFGRMQRRNPVSWNVMITGYARAGRMQVAQSLFDEMPQKDTISRTAIMRGYLQNGDVDASWKVF
+QEMPDRDAVAWNTMIGGFVQSERVDDALRLFAEMPNRDLVSWNTILQGYVQQGDMASANTWFRRMPEKDE
+TSWNTLISGYKDEGALALLSEMTRGGLRPNQATLSVVISICASLVALGCGKMVHLCAVKTGFERDALVMS
+SLISMYSKCGLISEASQVFELMLQRDTVTWNAMIATYAYHGMAAEALKLFDKMTEDGFRPDHATFLSVLS
+SCAHKGYLYEGCRYFRSMQEDWNLIPRSDHYSCMVDLLGRSGFVHQAYAFTRKIPSDLQVNAWETLFSAC
+NAHGDVQLGEVIAKNVLQAQPPDGGMYTLLANLYAAKEMWSSAANVRGFMKEQGLKKETGCSWVELKGEV
+VSFSSNDNTHPLIDQICQEVDNLSVMIEGAT
+# 13 hits, e-09 to 0.049
+
+#**************************************************************
+# So conclusion, can't use blastp e-values to distinguish 'P' from 'PLS' seqs ???????
+#****************************************************************
+ 
+# so on 'pro', on to trying to identify RF-like seqs, 1st, color rice ctls in .../PPRv1.1plus_88ctls/PPRv1.1.1913pluss88ctls_color_riceRF.txt by their relation to ctls in figtree. Use non-circular display for this purpose.
+
+# so working on 'pro' with figtree, 
+
+09/05/18:
+# result: 12 of the 16 are in the .fa file. RECHECKED SINCE NEED CONVERT BETW '01G' & '02G' 1st. 
+
+# next, check for AT (arabidopsis ctls)
+# so on 'pro', on to trying to identify RF-like seqs, 1st, color rice ctls in .../PPRv1.1plus_88ctls/PPRv1.1.1913pluss88ctls_color_Arab.txt by their relation to ctls in figtree.
+# looks like perhaps 3 locations in figtree, all in putative 'P' section of phylogram. 
+# Q: why 'Q76...' lighting up (its in the rice branch) with 'AT'  ?????????????????????
+# so Arab 'AT' ctls *not* all grouped as were rice ctls.
+# **to check**	 closest Treas seqs 
+
+# looks like 23 arab, glyma ctls on same branch
+
+09/06/18:
+
+# next, check for BRAD (?? ctls)
+# so on 'pro', on to trying to identify RF-like seqs, 1st, color BRAD ctls in .../PPRv1.1plus_88ctls/PPRv1.1.1913pluss88ctls_color_BRAD.txt by their relation to ctls in figtree.
+
+# looks like 3 locations for the 9 BRAD seqs in phylogram
+# a singleton, a 6-mer, & a 2-mer, total = 9
+
+# next, check for Glyma, soybean ctls
+# so on 'pro', on to trying to identify RF-like seqs, 1st, color Glyma ctls in .../PPRv1.1plus_88ctls/PPRv1.1.1913pluss88ctls_color_Glyma.txt by their relation to ctls in figtree.
+# total 38 seqs
+# a 2-mer, a 1-mer, a 1-mer, 33-mer (near rice 9), 1-mer, 
+
+# Q: relationship of main 4 species to wheat ??? Any correlation betw this and relative phylogram locations ??????
+
+
+09/07/18:
+
+# Q: perhaps in figtree, ***highlight*** few (perhaps every 10th one) of the putative '139' (most from orthoMCL) RF-like Treas names from file ?????, see if they 'group' on phylogram ?????????????????????
+# Q: is naming scheme same betw v1.0, v1.1 ?????????????????????
+# Note: '01G' in 139, '02G' in v1.1 differ. Perhaps take all 139, change '1' digit to '2' ?????????
+# '31600', near (above on 'line' graph), but not near BRAD 2-mer
+# '57300', near (above on 'line' graph), but not near BRAD 2-mer
+
+09/10/18:
+
+# Q: can I color more than one seq at a time (diff colors) ?????????? in trying to see how the random 15 of the 139 are located on PPRv1.1.1913plus88ctls_color139testing.txt
+#***************************************************************
+# Q: if can even use phylogram to select RF-like seqs ??????????
+#*****************************************************************
+
+# rand15of139.txt
+# to do, sort, then doc bit about relative location of the 15 on phylogram
+# see line 9399
+# sort as position of the 15 on PPRv1.1.1913plus88ctls_color139testing.txt in figtree on 'pro'.
+From dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+sort --key=2,2 --key=2n rand15of139.txt  ## will work for my task
+
+STOPPED
+
+sort --key=2,2 --key=2n rand15of139.txt > rand15of139_sorted.txt
+# then manually moved 10 thru 15 to bottom of file.
+
+# then locate these 15 on PPRv1.1.1913plus88ctls_composite.txt
+# comments: 13 of 15 relatively close to rice & BRAD ctls. Not close to Glyma or Arab. All except possible #1 in putative 'P' region.
+# Q: for purpose of identifying RF-like seqs, 
+--note phylogram can 'mostly' (but not all) group ctl seqs.
+--Except for the 12 0f 16 seqs near rice which also in 139 file, can something be made of the random 15's locations to identify RF-like seqs. That is, the random 15 not grouping as well as ctls in general ?????????
+-- evolutionarywise are rice & BARD closer to wheat than soybean & arabidopsis ?????
+
+09/12/18:
+# talked to vikas yesterday. 
+# **to do**, match my 'P' (RF-like) seqs with science genome seq paper, some wheat RF seqs discussed there
+# try use blastp queries with 88 ctls applied to 1161 targets/'P's' previously prepared from v1.1 seqs. Filter by i) eval < e-05, & ii) % idenity > 30%.
+# subsequently may apply the tool to display introns (probably would have to go back, get gene seqs for the protein seqs want to check for introns ???????) Think prevly used blastn.
+# ref line 6846, custom blast output ????? Q: was this for genes, & will it work for proteins ????????
+
+# also, ref line 6814
+#cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+
+#slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh
+# can this work for blastp (ck JJ)
+
+# could also **try** online blastp.
+
+# 1st to do, get a file for the 88 ctls (protein fasta)
+# ref, line 9120
+# dir: /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+cat PPRv1.1_1161_P_seqs_subset.fa bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > PPRv1.1_1161_P_seqs_plus_88ctls.fa
+# to do, cat the 5 files wi the 88 ctls to obtain a fasta file wi just the 88 ctls.
+
+# ref, line 9120
+# get a file for protein fasta for 1161 putative 'P' proteins. Q: if got a file with both 1161 & ctl seqs, could compare strength of hits ???????????????
+#-rw-r--r--  1 bterry  staff  798011 Aug 15 11:13 PPRv1.1_1161_P_seqs_plus_88ctls.fa
+#-rw-r--r--  1 bterry  staff  744413 Aug 15 00:35 PPRv1.1_1161_P_seqs_subset.fa
+
+09/13/18:
+cat bracky9namesshort.fa FRknownseqs_shtname_9.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > 88ctls.fa
+
+# Initially, online, try query 1 rice seq (AB110443), & the 1249 seqs in PPRv1.1_1161_P_seqs_plus_88ctls.fa just to see what happens.
+# adjust max target seqs under algorithm parameters, try from default of 100 to 250
+# output (additional) rows in dnloaded file, than on online display, like online display only shows row with highest % identity for particular hit ????????????????????
+# what to do with this output ?????
+# If use dnloaded output, perhaps could do uniq (??) on 'subject acc.ver' and % identity to get uniq rows with say % identity > 30% (in R or linux prompt ?????????)
+
+# then, have a set of uniq hit rows, repeat for just 1161 row target file, and for each ctl as query (or initially, just one seq from 'group' in phylogram for each ctl species ???). Then %in% (or a 'union operation) to get hits common (found) to all the ctl searches ?????
+# What if basically all of the 1161 are selected by this approach ??????????//
+
+# try rice seq (AB110443) vs target, select PPRv1.1_1161_P_seqs_subset.fa (1161 seqs), max target seqs = 250
+# NOTE: % identities significantly lower (1161 wheat seqs) than when ctl seqs (1161+88=1249) in the target file.
+# TPF..., 1250 rows ?????????? 
+# rice query, rice & BRAD ctls at top hits list, Glyma, arabidopsis not near top of hit list.
+
+09/14/18:
+# so, comments after two test blastp online runs
+--rice ctl query hits other ctls than BRAD well down list for target list PPRv1.1_1161_P_seqs_plus_88ctls.fa 
+--wheat hits & non-rice ctls have significanly lower % identities with rice query AB110443 and PPRv1.1_1161_P_seqs_plus_88ctls.fa target file.
+# perhaps run one query from 'group' for each ctl species, take union of the hits above 30% Identity from each? Perhaps roughly as effective as all 88 ctls as queries, easier to run online.
+# checking into do blastp runs on crane?
+
+# talked to vikas:
+# would like two searches initially:
+# files in /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+# online blastp: query: 88ctls.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-06 (blastp help says this common setting at ncbi)
+# run started: 3:25pm
+# Job Title: BRADI1G14190.1 (867 letters)
+# RID-TS6A74YU11N
+
+STOPPED
+
+# at 3:32pm, **job aborted**, message to contact helpdesk. **(TO DO)**
+# think problem wi 88ctls.fa
+# so, make new 'query' file, new ctl seq at beginning, check in bbedit for anything may be wrong, then try another online blastp run
+
+cat FRknownseqs_shtname_9.fa bracky9namesshort.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > rice1st_88ctls.fa
+# Q: Glyma seqs spread across page ?????????????
+# In bbedit, apply 'view'. Glyma now wrapped, but now has multiple '...' line extensions ???? None of the non-Glyma seqs have this wrap ???????????????????
+# Thinking have not fixed the .fa file ??????????????
+# When I run a BLAST search, why do I get a “Process terminated by SIGXCPU” error? BLAST searches online are limited to the total amount of CPU time per individual search. ...
+# so, assume my error due to to large a submitted job.
+# perhaps try split run wi 88 ctls into 5 runs, one for each of the 5 ctl files constituting the 88 ctls
+
+# online blastp: query: FRknownseqs_shtname_9.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-06 (blastp help says this common setting at ncbi)
+# run started: 11:28pm
+# Job Title: AB110443 (791 letters)
+# RID-TT2JW17N11N
+# by 11:31pm, online page stopped refreshing periodically ????????????????????
+
+# perhaps start another run (rice9)
+# online blastp: query: FRknownseqs_shtname_9.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-06 (blastp help says this common setting at ncbi)
+# run started: 11:40pm
+# Job Title: rice9query
+# RID-TT39P5HS114
+
+# perhaps, would take this dnloaded descriptions table, process it 1st, for % identity > 30, then perhaps cut out colm 2, run sort|uniq, have hit list for rice9query.
+# repeat for other ctl files. Will then be harvesting results from 5 output files. Perhaps cat the 5 output files, do sort|uniq giving Treas hits.
+
+09/15/18:
+# perhaps start another run (Glyma)
+# online blastp: query: soybean41to_ver2names38dot1dotpshort.fa (the file without line endings in the seqs ???????????????????
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-06 (blastp help says this common setting at ncbi)
+# run started: 9:40am
+# Job Title: soy38
+# RID-TU6G348R114
+# Q: by 9:48am, online blastp no longer 'updating' its page, and ***no*** results displayed, just white field on screen ???????????????????????????????????????//
+
+# perhaps start another run (bracky)
+# online blastp: query: bracky9namesshort.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-06 (blastp help says this common setting at ncbi)
+# run started: 10:15am
+# Job Title: bracky9query
+# RID-TU8H10JW114
+
+# perhaps start another run (arab)
+# online blastp: query: arab26fujii2011namesshort.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-06 (blastp help says this common setting at ncbi)
+# run started: 1:01pm
+# Job Title: arab26query
+# RID-??????
+# reverts to input page after only few seconds of run ?????????????????????
+# so **no** results
+#**************************************************
+# So, only got rice9 & bracky9 to run online
+# one problem is soy38 fasta file, problem length lines in seqs ????????????
+#***************************************************
+
+
+# and submit the same query & subject to crane thru slurm file. Assume need new crane dir.
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj
+ls -al
+mkdir blastpctls88vs_prots1161
+cd blastpctls88vs_prots1161
+# /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ 
+# ref line 6816
+#scp slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+
+# ref: line 6816
+#slurm_blastn131_iwgscCDS_defnohits_evdot01_outfmt6cust.sh
+# can this work for blastp (ck JJ), says yes.
+
+# prep slurm file (done)
+slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+ 
+scp slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+# get two files to dir. /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+# from dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+# FRknownseqs_shtname_9.fa
+# PPRv1.1_1161_P_seqs_subset.fa
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+scp FRknownseqs_shtname_9.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+
+scp PPRv1.1_1161_P_seqs_subset.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+
+## run script
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+ls -lh
+sbatch slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh 15990927  11:45pm => ??:??am, 
+squeue -u pterry  ## 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -lh  ## ck dir contents?
+less job.15990927.err
+USAGE
+  blastp [-h] [-help] [-import_search_strategy filename]
+    [-export_search_strategy filename] [-task task_name] [-db database_name]
+    [-dbsize num_letters] [-gilist filename] [-seqidlist filename]
+    [-negative_gilist filename] [-entrez_query entrez_query]
+    [-db_soft_mask filtering_algorithm] [-db_hard_mask filtering_algorithm]
+    [-subject subject_input_file] [-subject_loc range] [-query input_file]
+    [-out output_file] [-evalue evalue] [-word_size int_value]
+    [-gapopen open_penalty] [-gapextend extend_penalty]
+    [-qcov_hsp_perc float_value] [-max_hsps int_value]
+    [-xdrop_ungap float_value] [-xdrop_gap float_value]
+    [-xdrop_gap_final float_value] [-searchsp int_value]
+    [-sum_stats bool_value] [-seg SEG_options] [-soft_masking soft_masking]
+    [-matrix matrix_name] [-threshold float_value] [-culling_limit int_value]
+    [-best_hit_overhang float_value] [-best_hit_score_edge float_value]
+    [-window_size int_value] [-lcase_masking] [-query_loc range]
+    [-parse_deflines] [-outfmt format] [-show_gis]
+    [-num_descriptions int_value] [-num_alignments int_value]
+    [-line_length line_length] [-html] [-max_target_seqs num_sequences]
+    [-num_threads int_value] [-ungapped] [-remote] [-comp_based_stats compo]
+    [-use_sw_tback] [-version]
+
+DESCRIPTION
+   Protein-Protein BLAST 2.4.0+
+
+Use '-help' to print detailed descriptions of command line arguments
+========================================================================
+
+Error: Unknown argument: "dust"
+Error:  (CArgException::eInvalidArg) Unknown argument: "dust"
+
+# so, dust apparently not an argument for blastp ???????????????? Tho, '-task' is.
+# perhaps change slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh by ***removing*** '-dust no' parameter from blastp command ?????????????
+
+# retry run slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh again.
+sbatch slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh 15991043  12:15pm (09/16/18) => ??:??am, 
+squeue -u pterry  ## 
+less job.15991043.err
+
+DESCRIPTION
+   Protein-Protein BLAST 2.4.0+
+
+Use '-help' to print detailed descriptions of command line arguments
+========================================================================
+
+Error: Argument "task". Illegal value, expected Permissible values: 'blastp' 'blastp-fast' 'blastp-short' :  `megablast'
+Error:  (CArgException::eConstraint) Argument "task". Illegal value, expected Permissible values: 'blastp' 'blastp-fast' 'blastp-short' :  `megablast'
+
+# Q: but
+ I used "-task megablast", but flagging as error ?????????????????
+ 
+STOPPED
+09/16/18:
+save to github
+ 
+ 
+ 
+sacct -j  12209624 -o start,end
 
 
 
