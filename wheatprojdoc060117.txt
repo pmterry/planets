@@ -8708,7 +8708,7 @@ hmmbuild PPRv1.1hmmsearchsubset.fa.aln.hmm PPRv1.1hmmsearchsubset.fa.aln.slx
 
 # CPU time: 3.82u 0.05s 00:00:03.86 Elapsed: 00:00:03.91
 exit
-ls -lh
+ls -al
 -rw-r--r-- 1 pterry amundsen 271K Aug  7 12:48 PPRv1.1hmmsearchsubset.fa.aln.hmm
 #-rw-r--r-- 1 pterry amundsen 366K Mar 26 13:15 iwsgc139_REPR_PROT_seqs.fa.aln.hmm
 
@@ -9813,15 +9813,1137 @@ Error:  (CArgException::eConstraint) Argument "task". Illegal value, expected Pe
  
 STOPPED
 09/16/18:
-save to github
+# saved this log file to github
+
+# copy soybean41to_ver2names38dot1dotpshort.fa to soy38fixedseqs60perline.fa. In latter, fixed absence of return characters to 60 char/line.
+# perhaps start another run (Glyma)
+# online blastp: query: soy38fixedseqs60perline.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-6 (blastp help says this common setting at ncbi)
+
+# run started: 1:50pm
+# Job Title: soy38fixedseqs60perline
+# RID-TU6G348R114
+# Q: by 1:52pm, 
+# after say < 1 min, online blastp no longer 'updating' its page, and ***no*** results displayed, just white field on screen ???????????????????????????????????????
  
+09/17/18:
+Test: if can run preceding soy38 file search from 'pro' laptop. To do, thru box, copy 
+--PPRv1.1_1161_P_seqs_subset.fa
+--soy38fixedseqs60perline.fa
+# to dir PPRv1.1_1161_88ctls/blastptest
+# try run online blastp with settings, 5000 & 1e-6.
+# run started: 9:36am
+# Job Title: forget give job title, so will be name 1st seq in query
+# RID-TZEZJCJ911N
+# By 5 min, online blastp no longer 'updating' its page, and ***no*** results displayed, just white field on screen ???????????????????????????????????????
+
+# to send email to JJ, when he would be available for blastp questions
+jeanjack@unl.edu
  
+09/18/18:
+# to try FunctionallyCharacterizedRfs_fasta.fa online
+# perhaps start another run (vikas6)
+# online blastp: query: FunctionallyCharacterizedRfs_fasta.fa
+# subject seqs: PPRv1.1_1161_P_seqs_subset.fa
+# max subject seqs: 5000
+# expect threshold: 1e-6 (blastp help says this common setting at ncbi)
+
+# run started: 2:14pm
+# Job Title: vikas6
+# RID-U2KMR2SD113, dnloaded
+# so, online, 3 queries ran (9, 9, 6 seqs in query), soy (38 seqs) did not?
+
+# perhaps retry slurm blastp with '-task blastp' in place of '-task megablast' ????
+# ref, line 9732
+# prep slurm file, here  '-task blastp' (done)
+slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
  
-sacct -j  12209624 -o start,end
+scp slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+ls -lh
+sbatch slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh 16005496 2:44pm => ??:??am, 
+squeue -u pterry  ## 
+less job.16005496.err
+
+BLAST Database error: No alias or index file found for protein database [PPRv1.1_1161_P_seqs_subset.fa] in search path [/lustre/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161::]
+job.16005496.err (END) 
+
+# looks like need prepare index file 1st ????????
+# looks like can use slurm_makeblastdb_iwgscCDS.sh from dir: /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+# as template. Q: 'dbtype nucl' will need to be modified ??????????? Internet example has 'dbtype prot'.
+# rename to slurm_makeblastdb_protv1.1_1161.sh, of course in dir: /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+scp slurm_makeblastdb_protv1.1_1161.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_makeblastdb_protv1.1_1161.sh
+ls -lh
+sbatch slurm_makeblastdb_protv1.1_1161.sh 16008211 11:33pm => ??:??am, 
+squeue -u pterry  ## 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16008211     batch TJob_mak   pterry  R       0:50      1 c3617
+
+09/19/18:
+# crane down, can't check status of job # 16008211 now. I note crane down before I started job last night, it seemed to be taking long time, perhaps related ?????????
+
+less job.16008211.err
+slurmstepd: error: *** JOB 16008211 ON c3617 CANCELLED AT 2018-09-19T05:33:24 DUE TO TIME LIMIT ***
+job.16008211.err (END) 
+
+less job.16008211.out
+Building a new DB, current time: 09/19/2018 00:03:07
+New DB name:   /lustre/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161/PPRv1.1_1161_P_seqs_subset.fa
+New DB title:  PPRv1.1_1161_P_seqs_subset.fa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+job.16008211.out (END) 
+# Q: what to think of this max file size ????????????
+
+# try again, perhaps up request to 8 hr, set number nodes to 1
+
+scp slurm_makeblastdb_protv1.1_1161.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_makeblastdb_protv1.1_1161.sh
+ls -lh
+sbatch slurm_makeblastdb_protv1.1_1161.sh 16012779 1:31pm => ??:??am, 
+squeue -u pterry  ## 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -al
+less job.16012779.err
+FASTA-Reader: Ignoring invalid residues at position(s): On line 9: 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 34: 42
+FASTA-Reader: Ignoring invalid residues at position(s): On line 39: 60
+# not liking '.' at end many lines ???????????????????????????????????????????
+
+less job.16012779.out
+Building a new DB, current time: 09/19/2018 13:30:42
+New DB name:   /lustre/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161/PPRv1.1_1161_P_seqs_subset.fa
+New DB title:  PPRv1.1_1161_P_seqs_subset.fa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 1161 sequences in 0.293911 seconds.
+job.16012779.out (END) 
+# looks like crerated these 4 files
+-rw-r--r--  1 pterry amundsen 744413 Sep 15 22:54 PPRv1.1_1161_P_seqs_subset.fa
+-rw-r--r--  1 pterry amundsen 125239 Sep 19 13:30 PPRv1.1_1161_P_seqs_subset.fa.phr
+-rw-r--r--  1 pterry amundsen   9384 Sep 19 13:30 PPRv1.1_1161_P_seqs_subset.fa.pin
+-rw-r--r--  1 pterry amundsen 680849 Sep 19 13:30 PPRv1.1_1161_P_seqs_subset.fa.psq
+# for moment, pretend this successful run of makeblastdb ??????????????
+
+# with 4 files created from makeblastdb run, try again run slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh again
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+ls -lh
+sbatch slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh 16013863 2:22pm => ??:??am, 
+squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16013863     batch TJob_bla   pterry PD       0:00      1 (Priority)
+
+sacct -j  16013863 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-09-19T14:33:41 2018-09-19T14:33:53 
+2018-09-19T14:33:41 2018-09-19T14:33:53 
+33:53 - 33:41 = 12 sec
+-rw-r--r-- 1 pterry amundsen 1.6M Sep 19 14:33 rice9_prot1161_ev06_outfmt6cust.blastp
+wc -l rice9_prot1161_ev06_outfmt6cust.blastp
+26193 rice9_prot1161_ev06_outfmt6cust.blastp
+
+less rice9_prot1161_ev06_outfmt6cust.blastp
+AB110443        TraesCS7D02G487500.1    0.0     51.373  765     791     715     763
+AB110443        TraesCS1D02G068800.1    0.0     48.516  775     791     816     748
+# Q: is the 5th field, the 'length' field, the 'alignment length' of the online blastp report ??????????????????????????????
+
+# Perhaps compare this output with the online output for query is the rice9 ctls ??????
+# 1st few rows matching well (for 1st duplicate hits, such as row 8 & 9, 
+AB110443        TraesCS6D02G047700.1    0.0     52.149  698     791     691     729
+AB110443        TraesCS6D02G047700.1    1.68e-80   28.205  585     791     691     268
+
+# for duplicate subject hits, signif diff for evalue, %ID, length
+ 
+# talked to JJ
+# **strategy** to analyze output of blastp
+1) select an evalue target
+2) since expect several hits per subject protein, bracket hits to select as per example, if set cutoff at e-200, then, perhaps bracket acceptable values e-200 to e-190 or 180.
+3) make sure sufficient portion of subject is aligned when trying to subset multiple hits same subject. Could just compare this field for this purpose ??????
+4) Then % identity. Think he indicated 30% is quite low ????????????????????
+
+09/20/18:
+# talked to vikas
+# next on crane try run all 88 ctls in query in one run.
+# 1st have to remake the 88 .fa query file, to incorporate soy seqs, this time, row length 60, by manually asdding 'carriage returns'.
+
+#cat FRknownseqs_shtname_9.fa bracky9namesshort.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > rice1st_88ctls.fa
+
+cat FRknownseqs_shtname_9.fa bracky9namesshort.fa soy38fixedseqs60perline.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > rice1st_88ctls_soyfixed.fa
+
+# this new cat uses soy38fixedseqs60perline.fa
+
+# now, try crane blastp, with 88 ctls query vs 1161 'P' (?) seqs.
+
+# prep slurm file, here  '-task blastp' (done)
+slurm_blastp_88ctls_vs_prot1161_ev06_outfmt6cust.sh
+
+
+scp slurm_blastp_88ctls_vs_prot1161_ev06_outfmt6cust.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+ 
+scp rice1st_88ctls_soyfixed.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+
+# finally run blastp 88 query vs 1161 subject
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_blastp_88ctls_vs_prot1161_ev06_outfmt6cust.sh
+ls -lh
+sbatch slurm_blastp_88ctls_vs_prot1161_ev06_outfmt6cust.sh 16027252  10:47pm => ??:??am, 
+squeue -u pterry  ## 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16027252     batch TJob_bla   pterry  R       0:38      1 c0409
+
+cd /work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161
+-rw-r--r--  1 pterry amundsen 16533587 Sep 20 22:48 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+less rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+wc -l rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+237410 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+# 237410/102168 = 2.32 hits per query seq.
+head 
+
+09/21/18:
+sacct -j  16027252 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-09-20T22:46:47 2018-09-20T22:48:19 
+2018-09-20T22:46:47 2018-09-20T22:48:19 
+48:19 - 46:47 = 1 min 32 sec
+
+head -n 5 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161/rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp .
+grep -c "^AB" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 19967
+grep -c "^KJ" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 6226
+grep -c -v "^AB" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 217443
+grep -c "^AT" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 66841
+grep -c "^BR" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 23589
+grep -c "^Gl" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 103829
+# leaves 16958 for vikas6
+
+grep "^AB" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > rice7_AB_ctls_prot1161hits.blastp
+wc -l rice7_AB_ctls_prot1161hits.blastp  ##    19967 rice7_AB_ctls_prot1161hits.blastp
+grep "^KJ" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > rice2_KJ_ctls_prot1161hits.blastp
+wc -l rice2_KJ_ctls_prot1161hits.blastp  ##     6226 rice2_KJ_ctls_prot1161hits.blastp
+cat rice7_AB_ctls_prot1161hits.blastp rice2_KJ_ctls_prot1161hits.blastp > rice9_ctls_prot1161hits.blastp
+wc -l rice9_ctls_prot1161hits.blastp  ##    26193 rice9_ctls_prot1161hits.blastp
+
+# Analysis:
+1) subsetting of wheat hits by ctl species (tho may have to use evalue in addition to what follows ???)
+--grep rows by query species as filter
+--perhaps in R, subset rows by 'length/slen'
+--cut wheat hit colm
+--sort|uniq
+
+# Q: what was the range in seq length for subject 1161 putative 'P' seqs ??????
+# may affect analysis, looks like would need use "length/slen' if trying to filter the hit list since range seq lengths may be large ????? Is this an R task ???????
+
+# for the rice9, 
+
+cut -f 2  rice9_ctls_prot1161hits.blastp | wc -l  ##    26193
+cut -f 2  rice9_ctls_prot1161hits.blastp > rice9_colm2_hits.txt  
+wc -l rice9_colm2_hits.txt  ##    26193 rice9_colm2_hits.txt
+
+sort rice9_colm2_hits.txt |uniq | wc -l  ##  562 (evalue cutoff was 1e-6
+# so less than half of the 1161 subject seqs in the preceding blastp run.
+# perhaps filter by 'length/slen' perhaps >= 0.50 ????????
+
+STOPPED
+
+09/22/18:
+# so set up R session to accomplish, add calcn as colm 9.
+
+# start R (ref line 9323)
+
+rm(list=ls())
+setwd("~/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls")
+getwd()
+#PLS752 <- read.delim("PPRv1.1_1stcolor_aftperl_752_PLS_seqs_minusquotes.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("thepls752"))
+
+rice9hits <- read.delim("rice9_ctls_prot1161hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qnam", "snam", "eval", "pid", "len", "qlen", "slen", "bscor"))
+class(rice9hits)
+dim(rice9hits)  ## [1] 26193     8
+
+rice9hits[1:3,]
+rice9hits$frac_align <- rice9hits$len/rice9hits$slen
+rice9hits[1:3,]
+summary(rice9hits$frac_align)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#0.0852  0.5391  0.6928  0.6810  0.8304  1.2656 
+# Q: how have value over 1.0 ?????????????????????????
+summary(rice9hits$eval)
+#Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#0.000e+00 0.000e+00 0.000e+00 3.203e-09 0.000e+00 9.420e-07 
+summary(rice9hits$pid)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#16.98   24.79   26.59   27.74   28.57   61.22 
+summary(rice9hits$len)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#52     286     384     391     482     883 
+summary(rice9hits$slen)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#106.0   482.0   609.0   609.6   746.0  1561.0 
+
+# Q: can I filter these seqs further? 1e-6 cutoff has reduced 1161 putative 'P' seqs to 562.
+# perhaps, set cutoffs for len/slen, and/or %identity. But then what to set it at?
+ 
+# Would it help to repeat preceding for other ctl species? Perhaps try for soy or arab (different from rice & bracky). See if diff in summary stats for one of them?
+
+# vikas, would like copy of rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp in .../RF_GeneFamily/figtreetmp directory on box. (sent)
+
+# prepare 'summary' results as above for say 'soy38 (Glyma)
+# ref: line 10057
+grep "^Glyma" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > soy38_ctls_prot1161hits.blastp
+wc -l soy38_ctls_prot1161hits.blastp  ## 103829 soy38_ctls_prot1161hits.blastp
+
+09/23/18:
+
+# ref line 10074
+cut -f 2  soy38_ctls_prot1161hits.blastp | wc -l  ##      103829
+cut -f 2  soy38_ctls_prot1161hits.blastp > soy38_colm2_hits.txt  
+wc -l soy38_colm2_hits.txt  ##      103829 soy38_colm2_hits.txt
+
+sort soy38_colm2_hits.txt |uniq | wc -l  ##    619 (evalue cutoff was 1e-6
+# so little over half of the 1161 subject seqs in the preceding blastp run.
+
+# start R (ref line 10089)
+
+rm(list=ls())
+setwd("~/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls")
+getwd()
+
+soy38hits <- read.delim("soy38_ctls_prot1161hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qnam", "snam", "eval", "pid", "len", "qlen", "slen", "bscor"))
+class(soy38hits)
+dim(soy38hits)  ## [1] 26193     8
+soy38hits[1:3,]
+soy38hits$frac_align <- soy38hits$len/soy38hits$slen
+soy38hits[1:3,]
+
+summary(soy38hits$frac_align)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#0.05606 0.44864 0.58824 0.57995 0.70511 1.17162 
+summary(soy38hits$eval)
+#Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#0.000e+00 0.000e+00 0.000e+00 3.517e-09 0.000e+00 9.990e-07 
+summary(soy38hits$pid)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#16.09   24.93   26.89   26.90   28.86   43.94 
+summary(soy38hits$len)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#55.0   276.0   361.0   360.7   453.0   746.0 
+summary(soy38hits$slen)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#158.0   537.0   657.0   660.4   791.0  1561.0 
+
+09/24/18:
+# note ave fraction aligning with soy38 queries approxly 10% less than rice9. Would this obsn be of any value ????????? Perhaps run bracky9, arab26 analysis, see if get comparable results?
+
+# 1st try bracky9
+# ref line 10134
+# prepare 'summary' results as above for Bracky9, 'BRAD'.
+
+grep "^BRAD" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > bracky9_ctls_prot1161hits.blastp
+wc -l bracky9_ctls_prot1161hits.blastp
+##    23589 bracky9_ctls_prot1161hits.blastp
+
+# ref line 10134
+cut -f 2  bracky9_ctls_prot1161hits.blastp | wc -l  ##     23589
+cut -f 2  bracky9_ctls_prot1161hits.blastp > bracky9_colm2_hits.txt  
+wc -l bracky9_colm2_hits.txt  ##         23589 bracky9_colm2_hits.txt
+
+sort bracky9_colm2_hits.txt |uniq | wc -l  ##         564 (evalue cutoff was 1e-6
+# so little over half of the 1161 subject seqs in the preceding blastp run.
+
+# start R (ref line 10142)
+
+rm(list=ls())
+setwd("~/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls")
+getwd()
+
+bracky9hits <- read.delim("bracky9_ctls_prot1161hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qnam", "snam", "eval", "pid", "len", "qlen", "slen", "bscor"))
+class(bracky9hits)
+dim(bracky9hits)  ## [1] 26193     8
+bracky9hits[1:3,]
+bracky9hits$frac_align <- bracky9hits$len/bracky9hits$slen
+bracky9hits[1:3,]
+
+summary(bracky9hits$frac_align)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#0.08624 0.53612 0.67598 0.67226 0.81538 1.37209 
+summary(bracky9hits$eval)
+#Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#0.000e+00 0.000e+00 0.000e+00 4.618e-09 0.000e+00 9.940e-07 
+summary(bracky9hits$pid)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#17.36   24.34   26.06   28.25   28.05   79.31 
+summary(bracky9hits$len)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#49.0   272.0   386.0   383.5   480.0   943.0 
+summary(bracky9hits$slen)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#120.0   477.0   620.0   607.8   752.0  1561.0
+
+# similar to rice9 in 'frac_align' for mean, median
+
+# now to test arab26
+
+# Now try bracky9
+# ref line 10174
+# prepare 'summary' results as above for Bracky9, 'BRAD'.
+
+grep "^AT" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > arab26_ctls_prot1161hits.blastp
+wc -l arab26_ctls_prot1161hits.blastp
+##    66841 arab26_ctls_prot1161hits.blastp
+
+STOPPED
+
+# ref line 10182
+cut -f 2  arab26_ctls_prot1161hits.blastp | wc -l  ##     66841
+cut -f 2  arab26_ctls_prot1161hits.blastp > arab26_colm2_hits.txt  
+wc -l arab26_colm2_hits.txt  ##       66841 arab26_colm2_hits.txt
+
+sort arab26_colm2_hits.txt |uniq | wc -l  ##    595 (evalue cutoff was 1e-6
+# so little over half of the 1161 subject seqs in the preceding blastp run.
+
+# start R (ref line 10190)
+
+rm(list=ls())
+setwd("~/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls")
+getwd()
+
+arab26hits <- read.delim("arab26_ctls_prot1161hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qnam", "snam", "eval", "pid", "len", "qlen", "slen", "bscor"))
+class(arab26hits)
+dim(arab26hits)  ## [1] 66841     8
+arab26hits[1:3,]
+arab26hits$frac_align <- arab26hits$len/arab26hits$slen
+arab26hits[1:3,]
+
+summary(arab26hits$frac_align)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#0.0788  0.4741  0.6066  0.6024  0.7282  1.1509
+summary(arab26hits$eval)
+#Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#0.000e+00 0.000e+00 0.000e+00 2.571e-09 0.000e+00 9.980e-07 
+summary(arab26hits$pid)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#16.93   24.90   26.82   26.79   28.74   41.96 
+summary(arab26hits$len)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#64.0   294.0   377.0   375.7   457.0   710.0 
+summary(arab26hits$slen)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#191.0   534.0   649.0   659.8   790.0  1561.0 
+
+#*****************************************************************
+# so looks like hypothesis that frac_align parameter close betw. rice9 & bracky9 and close betw. soy38 & arab26 but different betw. the two pairs groups holding. So, the more closely related ctls have roughly .68 for len/slen, while more distantly related ctls have roughly .594 for len/slen. Translates to about 50 aa residues difference.
+I note, mean or median for %ID similar for both groups of ctls, but max for more closely related ctls larger than less closely related ctls.
+I note, mean & medium slen for rice9 & bracky9 smaller than for soy38 & arab26.
+Perhaps, can compare s.start, s.end betw. these ctl groups, see if a part of the subject seqs which aligning for more closely relaed ctl species, but not for more distantly related ctl species. But need rerun crane blastp with these two colms. Q: need name of these two colms (sstart, send) so can include in custom output slurm file ???????????????? The online version includes them.
+Q: but would this advance goal of identifying RF-seqs ????????????????
+#********************************************************************
+
+09/25/18:
+# talked to vikas
+# plan:
+# run phyml phylogram by 'Notes ...' steps for 4 .fa files, 35, 40, 45 & 50% ID. Verify I get same set of wheat seqs for these criteria. Looks like 35, 40 & 45 will be run without 88 ctls. For 50%, run *1st*, do *both* wi & without 88 ctls.
+
+cd vikas_filter
+# /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+head -n 3 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+wc -l rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  
+  237410 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+ cut -f2 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > col2.txt
+wc -l col2.txt  ##   237410 col2.txt
+sort col2.txt|uniq > col2_uniq.txt
+wc -l col2_uniq.txt  ##      706 col2_uniq.txt
+# check if any have 'd' > 1
+# yes, several
+
+# checking this code:
+#Unique loci (excluding the splice variants)
+cut -f2 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp_WithHeader.txt|tail -n+2|sort|uniq|perl -pe 's/(Traes.+)\.\d/\1/'|sort|uniq|wc -l
+
+perl -pe 's/(Traes.+)\.\d/\1/'
+col2_uniq.txt 
+
+cat col2_uniq.txt|perl -pe 's/(Traes.+)\.\d/\1/'|wc -l
+cat col2_uniq.txt|perl -pe 's/(Traes.+)\.\d/\1/'|sort|uniq|wc -l  ## 630
+
+# get 50% ID
+# Q: I would like do this wi R or python ????????????????????
+#***********************************
+# Q: vikas has 206, all hits (including 'd' > 1) ?????????????????????????????/
+#**************************************
+
+09/26/18:
+# to replicate with R
+
+rm(list=ls())
+setwd("~/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+getwd()
+pid50_88ctlshits <- read.delim("rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qnam", "snam", "eval", "pid", "len", "qlen", "slen", "bscor"))
+class(pid50_88ctlshits)
+dim(pid50_88ctlshits)  ## [1] 237410      8
+pid50_88ctlshits[1:3,]
+pid50_88ctlshits_gtr50pid <- pid50_88ctlshits[pid50_88ctlshits$pid > 50,]
+dim(pid50_88ctlshits_gtr50pid)  ## [1] 1668    8
+write.table(pid50_88ctlshits_gtr50pid, file="pid50_88ctlshits_gtr50pid.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+cut -f2 pid50_88ctlshits_gtr50pid.txt | wc -l  ##     1668
+cut -f2 pid50_88ctlshits_gtr50pid.txt |sort|uniq| wc -l  ##  206, matches vikas
+cut -f2 pid50_88ctlshits_gtr50pid.txt |sort|uniq > pid50_88ctlshits_gtr50pid_srtuniq.txt
+# vikas file, mine same names top, bottom of colm, so **assume** the same.
+# mine (pid50_88ctlshits_gtr50pid_srtuniq.txt), & vikas (list_WheatIDs_pid50.txt)
+
+# ready to prepare .fa file from vikas list (list_WheatIDs_pid50.txt), then 'Notes ...' steps
+# from dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta list_WheatIDs_pid50.txt > list_WheatIDs_pid50.fa
+# check have 206 '>' in bbedit, yes.
+
+# ready for steps of 'Notes ...' protocol
+# ref: line 8585
+
+## Now run Notes steps ... 
+
+## need new dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+# from 08/05/18:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1
+mkdir blastp
+cd blastp
+pwd ## /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+logout
+
+cd /Users/bterry/macbook2018/vikas18
+find . -name 'slurm_muscle_wheatproj_PPRv1.1.sh' -print
+./131RFlike/annotation1.1/slurm_muscle_wheatproj_PPRv1.1.sh
+# copy to /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# rename to slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh
+# modify as needed (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp list_WheatIDs_pid50.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 8610)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh  16097148 9:19pm => , finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16097148     batch TJob_mus   pterry  R       0:48      1 c3721
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+
+less job.16097148.err
+
+MUSCLE v3.8.425 by Robert C. Edgar
+
+http://www.drive5.com/muscle
+This software is donated to the public domain.
+Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
+
+list_WheatIDs_pid50 206 seqs, lengths min 106, max 987, avg 483
+# followed by lot of '^M' characters ??????????????????/
+
+
+sacct -j  16097148 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-09-26T21:19:27 2018-09-26T21:20:30 
+2018-09-26T21:19:27 2018-09-26T21:20:30 
+1 min 3 sec         
+# output file:
+-rw-r--r-- 1 pterry amundsen 247K Sep 26 21:20 list_WheatIDs_pid50.fa.aln
+less list_WheatIDs_pid50.fa.aln
+# top of file looks ok.
+
+wc -l list_WheatIDs_pid50.fa.aln
+4326 list_WheatIDs_pid50.fa.aln
+
+grep -c "^>Tr" list_WheatIDs_pid50.fa.aln  ## 206 as expect
+
+#ref line 8660, next (2nd) step, fasta2stockholm.pl conversion
+logout
+
+09/27/18:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/RF139
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl list_WheatIDs_pid50.fa.aln > list_WheatIDs_pid50.fa.aln.slx
+ls -al
+-rw-r--r-- 1 pterry amundsen 242889 Sep 27 15:00 list_WheatIDs_pid50.fa.aln.slx
+
+## to check top of stockholm file
+less list_WheatIDs_pid50.fa.aln.slx 
+# STOCKHOLM 1.0
+TraesCS7A02G407400.1 ---------------------------------------------------------------------
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 8683)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild list_WheatIDs_pid50.fa.aln.hmm list_WheatIDs_pid50.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             list_WheatIDs_pid50.fa.aln.slx
+# output HMM file:                  list_WheatIDs_pid50.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     list_WheatIDs_pid50.fa.aln   206  1157   813     2.73  0.590 
+
+# CPU time: 3.22u 0.01s 00:00:03.23 Elapsed: 00:00:03.28
+exit
+ls -al
+-rw-r--r-- 1 pterry amundsen 379083 Sep 27 15:12 list_WheatIDs_pid50.fa.aln.hmm
+less list_WheatIDs_pid50.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  list_WheatIDs_pid50.fa.aln
+LENG  813
+ALPH  amino
+
+# ref: line 8749
+## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
+
+## copy from /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/slurm_hmmalign_wheatproj_PPRv1.1.sh to slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh in dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh
+ls -al
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh 16113542  11:22pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16113542     batch TJob_hmm   pterry PD       0:00      1 (Priority)
+# bit later
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+-rw-r--r-- 1 pterry amundsen 462613 Sep 27 23:22 list_WheatIDs_pid50.fa.aln.hmmaln
+
+sacct -j  16113542 -o start,end
+              Start                 End 
+-------------------------------------- 
+2018-09-27T23:22:40 2018-09-27T23:22:54 
+2018-09-27T23:22:40 2018-09-27T23:22:54 
+22:54 - 22:40 = 14 sec
+
+less list_WheatIDs_pid50.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 8767, next step, stockholm2fasta.pl conversion
+
+09/28/18:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+
+cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid50.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid50.fa.aln.hmmaln.fa
+
+ls -al
+less list_WheatIDs_pid50.fa.aln.hmmaln.fa
+
+grep -c ">Traes" list_WheatIDs_pid50.fa.aln.hmmaln.fa  ## 206 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+## ref., line 8796, now fas to phy (line 8796)
+ 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl -rw-r--r-- 1 pterry amundsen 206862 Sep 30 00:36 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa
+
+ls -al
+## Q: will it create file & name for output, yes.
+
+-rw-r--r-- 1 pterry amundsen 254017 Sep 28 10:12 list_WheatIDs_pid50.fa.aln.hmmaln.phy
+exit
+less list_WheatIDs_pid50.fa.aln.hmmaln.phy
+ 206 815
+'TraesCS5B02G250800.1'  ---------- ---------- ---------- ---NIKDRYH AGCIGTEDAL HLFDELLQVA 
+logout
+
+## scp back to macbook, (line 8829)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid50.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  254017 Sep 28 10:35 list_WheatIDs_pid50.fa.aln.hmmaln.phy
+
+less list_WheatIDs_pid50.fa.aln.hmmaln.phy
+ 206 815
+'TraesCS5B02G250800.1'  ---------- ---------- ---------- ---NIKDRYH AGCIGTEDAL HLFDELLQVA 
+
+
+head -n 4 list_WheatIDs_pid50.fa.aln.hmmaln.phy
+ 206 815
+'TraesCS5B02G250800.1'  ---------- ---------- ---------- ---NIKDRYH AGCIGTEDAL HLFDELLQVA 
+'TraesCS6B02G114300.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+'TraesCS1B02G072900.2'  --LIPRLRLL RRCSTSTSTS SPSRSWSPRD AFAAATERVR AGTLSLEDAH KLFDELLGQA
+
+## so phy header      206 815, expect the 206
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid50.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid50.fa.aln.hmmaln.phy
+
+The alignment file "list_WheatIDs_pid50.fa.aln.hmmaln.phy" was uploaded, it contains 206 taxons of 815 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20180928-174956_Sc83/cmd.txt
+
+job was submitted. (Fri, 09/28/18, 10:50am)
+#*******************************************************************
+
+#was finished by < 6 hrs later
+# output file, list_wheatids_pid50_fa_aln_hmmaln_phy_phyml_tree.txt renamed  list_wheatids_pid50_phyml_tree.txt
+#  next take it to unl.box.com, then to 'pro' laptop.
+# from (on pmtmbook15) /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50_fa_aln_hmmaln_phy_phyml
+# to on 'pro', dir .../macbookpro2018/PPRv1.1_1161_88ctls
+# create new dir on pro, .../PPRv1.1_1161_88ctls/vikas_filter
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+
+# Note: *overview* of phylogram, similar look to several from v1.0 of approx 135 wheat seqs, that is,*5* significant size groups similar, geometry. 
+# uploaded to unl.box.com, list_wheatids_pid50_phyml_tree.pdf file.
+# to do: send vikas note name, location on box.
+
+
+09/29/18:
+#talked to vikas yesterday
+# interest in GSDS for 35pid (306 seqs), 50pid seqs (206 seqs). ME: add in 88 ctls, see if they low on 'introns' ??????????????????????????
+# apparently Venny quick way subset seqs, perhaps can do for 35pid, 50pid seqs. Venny will find 'overlap' then a button to print out list of seqs in common ???????????
+
+# next, prepare, submit 50pid_plus88ctls .fa file for processing thru 'Notes ...' steps.
+# 1st cat 88ctls onto the 206 wheat seqs '.fa' file
+
+# see line 10362
+list_WheatIDs_pid50.fa
+# cat preceding file to 88 ctl fasta seqs
+# see line 10003, 
+copy rice1st_88ctls_soyfixed.fa file to /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# from .../annotation1.1/PPRv1.1plus_88ctls dir.
+# now cat this file with list_WheatIDs_pid50.fa will give 206+88=294 seqs
+
+cat rice1st_88ctls_soyfixed.fa list_WheatIDs_pid50.fa > list_WheatIDs_pid50_plus88ctls.fa
+# bbedit shows 294 seqs.
+
+## Now run Notes steps ...  (ref line 10340)
+
+cp slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh
+# modify as needed (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp list_WheatIDs_pid50_plus88ctls.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 8610)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh  16128382 2:24pm => , finally done.
+# *messed* up, ran job twice
+
+squeue -u pterry  ## a PD
+[pterry@login.crane scripts]$ squeue -u pterry
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16128382     batch TJob_mus   pterry  R       1:13      1 c3709
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+less job.16128393.err
+list_WheatIDs_pid50_plus88ctls 294 seqs, lengths min 54, max 1045, avg 514
+# followed by lot of '^M' characters ??????????????????/
+
+sacct -j  16128393 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-09-29T14:27:01 2018-09-29T14:29:49 
+2018-09-29T14:27:01 2018-09-29T14:29:49 
+29:49 - 27:01 = 2 min 48 sec
+-rw-r--r-- 1 pterry amundsen 456K Sep 29 14:29 list_WheatIDs_pid50_plus88ctls.fa.aln
+
+less list_WheatIDs_pid50_plus88ctls.fa.aln
+# top of file looks ok.
+
+wc -l list_WheatIDs_pid50_plus88ctls.fa.aln
+7938 list_WheatIDs_pid50_plus88ctls.fa.aln
+
+grep -c "^>" list_WheatIDs_pid50_plus88ctls.fa.aln  ## 294 as expect
+logout
+
+#ref line 10413, next (2nd) step, fasta2stockholm.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+#ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl list_WheatIDs_pid50_plus88ctls.fa.aln > list_WheatIDs_pid50_plus88ctls.fa.aln.slx
+ls -al
+-rw-r--r-- 1 pterry amundsen 453541 Sep 29 23:29 list_WheatIDs_pid50_plus88ctls.fa.aln.slx
+
+## to check top of stockholm file
+less list_WheatIDs_pid50_plus88ctls.fa.aln.slx
+# STOCKHOLM 1.0
+AT1G12770.1 ------------------------------------------------------------------------------
+
+## now for *hmmbuild* (see line 10440)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild list_WheatIDs_pid50_plus88ctls.fa.aln.hmm list_WheatIDs_pid50_plus88ctls.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             list_WheatIDs_pid50_plus88ctls.fa.aln.slx
+# output HMM file:                  list_WheatIDs_pid50_plus88ctls.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     list_WheatIDs_pid50_plus88ctls.fa.aln   294  1522   682     5.10  0.590 
+
+# CPU time: 2.83u 0.00s 00:00:02.83 Elapsed: 00:00:02.89
+ls -al
+-rw-r--r-- 1 pterry amundsen 318179 Sep 29 23:36 list_WheatIDs_pid50_plus88ctls.fa.aln.hmm
+
+less list_WheatIDs_pid50_plus88ctls.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  list_WheatIDs_pid50_plus88ctls.fa.aln
+LENG  682
+ALPH  amino
+
+# ref: line 10476
+## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
+
+## copy from 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh to
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/slurm_hmmalign_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh
+
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh
+ls -al
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh 16130726  12:22am => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+-rw-r--r-- 1 pterry amundsen 861794 Sep 30 00:21 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln
+
+sacct -j  16130726 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-09-30T00:21:34 2018-09-30T00:21:50 
+2018-09-30T00:21:34 2018-09-30T00:21:50 
+21:50 - 21:34 = 1 sec
+
+less list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln
+# STOCKHOLM 1.0
+
+## ref line 10514, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+#ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa
+
+ls -al
+less list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa
+
+grep -c ">Traes" list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa  ## 206 as expect
+grep -c ">" list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa  ## 294 as expect
+
+exit
+#logout
+
+## ref., now fas to phy (line 10543)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa
+ls -al
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 306089 Sep 30 00:48 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+exit
+less list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+ 294 684
+'TraesCS7D02G487500.1'  ---------- -------VGR RILEQNIKAW YHAGDIGTKD ALHRFDELLQ DAGSSSIRAV 
+logout
+
+## scp back to macbook, (line 8829)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  254017 Sep 28 10:35 list_WheatIDs_pid50.fa.aln.hmmaln.phy
+
+less list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+  294 684
+
+head -n 3 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+ 294 684
+'TraesCS7D02G487500.1'  ---------- -------VGR RILEQNIKAW YHAGDIGTKD ALHRFDELLQ DAGSSSIRAV 
+'TraesCS1B02G315436.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+## so phy header        294 684, expect the 294
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections: (line 10597)
+
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+
+The alignment file "list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy" was uploaded, it contains 294 taxons of 684 characters.
+
+Your job was submitted. (1:03am, 09/30/18)
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20180930-080328_Bt70/cmd.txt
+
+09/30/18:
+#dnloaded from http://www.atgc-montpellier.fr/phyml/results.php?path=20180930-080328_Bt70/sms.csv
+-rw-r--r--@ 1 bterry  staff  8769 Sep 30 10:00 list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml.zip
+# the 294 seqs pid50 plus 88 ctls
+#was finished by < 4 hrs later
+# output tree file: /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml/list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+
+-rw-r--r--@  1 bterry  staff  15696 Sep 30  2018 list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+# copy, then rename it to:
+list_wheatids_pid50_plus88ctls_phyml_tree.txt
+-rw-r--r--@ 1 bterry  staff  15696 Sep 30  2018 list_wheatids_pid50_plus88ctls_phyml_tree.txt
+
+#  next take it to unl.box.com, then to 'pro' laptop.
+# from (on pmtmbook15) 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml/list_wheatids_pid50_plus88ctls_phyml_tree.txt
+
+# to on 'pro', dir .../macbookpro2018/PPRv1.1_1161_88ctls/vikas_filter
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+
+# some diffs in overview of this phylogram compared to 50pid_206 seqs. As *expect* since initial MSA has additional 88 seqs. Try *relate* using location of some of the 206 50pid seq names. Note: ctls sort of *spread* around the 50pid+88ctls phylogram. Might benefit by using hmm from just 50pid (MSA from just 50pid), then bring in 88 ctls for hmmsearch step ??????????????????? 
+
+# next, see if 50pid phylogram is grouping seqs for chr 1, 2, 6 ????????????????
+# result: they basically 'group', with a few stragglers spread outside each chr's group.
+ 
+# now check phylogram list_wheatids_pid50_plus88ctls_phyml_tree.txt file for groupings.
+# result: mostly the chr's form groups, but with some stragglers. The four species of ctls roughly cluster each by themselves, but with some stragglers. Rice & BRAD closest to wheat seqs, Arab & soy farther away, but few stragglers don't follow this pattern.
+# there are a few long branches.
+
+STOPPED
+
+# comments: Perhaps, run GSDS, looking for introns. Run two groups, 206 50pid seqs, and 88 ctls seqs separately.
 
 
 
-# ref, line 663
+
+
+
+
+
 
 
 
