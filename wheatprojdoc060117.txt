@@ -10390,8 +10390,9 @@ http://www.drive5.com/muscle
 This software is donated to the public domain.
 Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
 
-list_WheatIDs_pid50 206 seqs, lengths min 106, max 987, avg 483
 # followed by lot of '^M' characters ??????????????????/
+
+list_WheatIDs_pid50 206 seqs, lengths min 106, max 987, avg 483
 
 
 sacct -j  16097148 -o start,end
@@ -10449,7 +10450,7 @@ srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
 module load compiler/gcc/4.8 openmpi/1.8 hmmer
 cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
 
-hmmbuild list_WheatIDs_pid50.fa.aln.hmm list_WheatIDs_pid50.fa.aln.slx
+hmmbuild list_WheatIDs_pid35.fa.aln.hmm list_WheatIDs_pid35.fa.aln.slx
 # hmmbuild :: profile HMM construction from multiple sequence alignments
 # HMMER 3.1b2 (February 2015); http://hmmer.org/
 # Copyright (C) 2015 Howard Hughes Medical Institute.
@@ -10465,13 +10466,14 @@ hmmbuild list_WheatIDs_pid50.fa.aln.hmm list_WheatIDs_pid50.fa.aln.slx
 
 # CPU time: 3.22u 0.01s 00:00:03.23 Elapsed: 00:00:03.28
 exit
-ls -al
--rw-r--r-- 1 pterry amundsen 379083 Sep 27 15:12 list_WheatIDs_pid50.fa.aln.hmm
-less list_WheatIDs_pid50.fa.aln.hmm
+ls -al *.hmm
+-rw-r--r-- 1 pterry amundsen 370713 Oct  7 14:45 list_WheatIDs_pid35.fa.aln.hmm
+less list_WheatIDs_pid35.fa.aln.hmm
 HMMER3/f [3.1b2 | February 2015]
-NAME  list_WheatIDs_pid50.fa.aln
-LENG  813
+NAME  list_WheatIDs_pid35.fa.aln
+LENG  795
 ALPH  amino
+
 
 # ref: line 8749
 ## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
@@ -10500,6 +10502,7 @@ squeue -u pterry
           
 cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
 ls -al
+
 -rw-r--r-- 1 pterry amundsen 462613 Sep 27 23:22 list_WheatIDs_pid50.fa.aln.hmmaln
 
 sacct -j  16113542 -o start,end
@@ -10560,7 +10563,7 @@ module load bioperl
 
 ./align_convert_fas_to_phy.pl -rw-r--r-- 1 pterry amundsen 206862 Sep 30 00:36 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.fa
 
-ls -al
+ls -al *,phy
 ## Q: will it create file & name for output, yes.
 
 -rw-r--r-- 1 pterry amundsen 254017 Sep 28 10:12 list_WheatIDs_pid50.fa.aln.hmmaln.phy
@@ -10754,10 +10757,10 @@ hmmbuild list_WheatIDs_pid50_plus88ctls.fa.aln.hmm list_WheatIDs_pid50_plus88ctl
 1     list_WheatIDs_pid50_plus88ctls.fa.aln   294  1522   682     5.10  0.590 
 
 # CPU time: 2.83u 0.00s 00:00:02.83 Elapsed: 00:00:02.89
-ls -al
--rw-r--r-- 1 pterry amundsen 318179 Sep 29 23:36 list_WheatIDs_pid50_plus88ctls.fa.aln.hmm
+ls -al *.hmm
+-rw-r--r-- 1 pterry amundsen 346544 Oct  8 13:08 list_WheatIDs_pid35_plus88ctls.fa.aln.hmm
 
-less list_WheatIDs_pid50_plus88ctls.fa.aln.hmm
+less list_WheatIDs_pid35_plus88ctls.fa.aln.hmm
 HMMER3/f [3.1b2 | February 2015]
 NAME  list_WheatIDs_pid50_plus88ctls.fa.aln
 LENG  682
@@ -10789,7 +10792,7 @@ squeue -u pterry
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
 
 cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
-ls -al
+ls -al  *.hmmaln
 -rw-r--r-- 1 pterry amundsen 861794 Sep 30 00:21 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln
 
 sacct -j  16130726 -o start,end
@@ -10933,16 +10936,1373 @@ tree/root tree/midpoint
 # result: mostly the chr's form groups, but with some stragglers. The four species of ctls roughly cluster each by themselves, but with some stragglers. Rice & BRAD closest to wheat seqs, Arab & soy farther away, but few stragglers don't follow this pattern.
 # there are a few long branches.
 
+# comments: Perhaps, run GSDS, looking for introns. Run two groups, 206 50pid seqs, and 88 ctls seqs separately.
+#**********************
+# updated this log file to github
+#********************
+
+10/01/18:
+# Consider try do phyml phylogram with
+# i. 206 50pid seqs for MSA, hmmbuild hmm
+# ii. then for hmmsearch, let input file be 206 50pid seqs + 88 ctls seqs.
+# idea, the 206 50pid seqs will display as did for 50pid MSA, hmmbuild phylogram. Perhaps easier see relationship these seqs to 88 ctls. In 50pid+88ctls MSA, & hmmbuild, the MSA & hmmbuild are different than the 50pid MSA & hmmbuild. So in 50pid+88ctls MSA & hmmbuild, the geometry of the 50pid seqs in the phylogram will be different than when just in 50pid MSA, & hmmbuild.
+
+# so, start following preparation of 50pid MSA & hmmbuild above. That is, start with the hmmalign step, this time using 50pid+88ctls .fa input seq. See line 
+
+10/02/18:
+# so 1st need copy 
+## copy from /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/slurm_hmmalign_wheatproj_PPRv1.1.sh to slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh in dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# new name: slurm_hmmalign_wheatproj_PPRv1.1combo_blastp50pidplus88ctls.sh
+# make needed changes (done)
+
+# ref line 10482
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1combo_blastp50pidplus88ctls.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1combo_blastp50pidplus88ctls.sh
+ls -al
+sbatch slurm_hmmalign_wheatproj_PPRv1.1combo_blastp50pidplus88ctls.sh 16149483  9:58pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+-rw-r--r-- 1 pterry amundsen 824624 Oct  2 21:59 list_WheatIDs_pid50plus88combo.fa.aln.hmmaln
+
+sacct -j  16149483 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-02T21:59:05 2018-10-02T21:59:24 
+2018-10-02T21:59:05 2018-10-02T21:59:24 
+59:24 - 59:05 = 19 sec
+
+less list_WheatIDs_pid50plus88combo.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 10514, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid50plus88combo.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.fa
+
+ls -al
+less list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.fa
+
+grep -c ">Traes" list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.fa  ## 206 as expect
+grep -c ">" list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.fa  ## 294 as expect
+exit
+#logout
+
+## ref., line 10543, now fas to phy (line 10543)
+ 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.fa
+
+ls -al
+## Q: will it create file & name for output, yes.
+
+-rw-r--r-- 1 pterry amundsen 362539 Oct  2 23:25 list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy
+exit
+less list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy
+ 294 815
+'TraesCS1A02G067500.1'  ---------- ---------- ---------- ---------- ---------- ----------
+logout
+
+## scp back to macbook, (line 10573)
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  362539 Oct  2 23:32 list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy
+
+less list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy
+
+ 294 815
+'TraesCS5B02G250800.1'  ---------- ---------- ---------- ---NIKDRYH AGCIGTEDAL HLFDELLQVA 
+
+
+head -n 3 list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy
+ 294 815
+'TraesCS1A02G067500.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+'TraesCS6D02G089400.1'  ---------- -----RPGSS SSSVSSRADQ LLNKLKDHLG PRTLQPERAH QLFDKLLRQT 
+
+## so phy header      294 815, expect the 294
+
+# ref line 10594
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid50plus88combo
+
+The alignment file "list_WheatIDs_pid50plus88combo.fa.aln.hmmaln.phy" was uploaded, it contains 294 taxons of 815 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20181003-064144_Bg58/cmd.txt
+
+job was submitted. (Fri, 10/02/18, 11:42pm)
+#*******************************************************************
+# done within by 8 hrs
+
+10/03/18:
+# outputfile: -rw-r--r--@  1 bterry  staff  15696 Oct  3  2018 list_wheatids_pid50plus88combo_fa_aln_hmmaln_phy_phyml_tree.txt
+# location:
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50plus88combo_fa_aln_hmmaln_phy_phyml/list_wheatids_pid50plus88combo_fa_aln_hmmaln_phy_phyml_tree.txt
+
+#  next take it to unl.box.com (../BLASTP_Filtering dir.), then to 'pro' laptop from (on pmtmbook15) 
+# but 1st, make copy, shorten name to pid50plus88combo_phyml_tree.txt
+
+# dir on pro, .../figtreetmp/PPRv1.1_1161_88ctls/vikas_filter
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+#**********************
+# Q: many/all the leaves don't have the seq name ??????????????????
+# select tip labels/Names, *now* have names
+#***********************
+# **summary** comments for *combo*: soy, arab farther from 'Traes' seqs than BRAD & rice, but some 'mixing' in Traes groups. Mostly, no Treas out in 'ctrl' group.
+# Takehome: Probably these 206 of 1161 are PPR seqs. The extl ctls are mostly but not all distinguishable from 'Traes' seqs.  If were to add some of the putative 'PLS' seqs to this 1161, *probably* would distinguish ????????????????????
+# Looks like *combo* not helping ????????
+# Could map (phenogram ??) this (blastp) subset of of 1161, see if most as previously on chr 1, 2, 6.
+
+10/07/18:
+
+# next, do 35pid, phyml, phenogram, see if more from 306 - 206 group can filter/locate on phylogram with the 206.
+
+# line 10331, 
+# ready to prepare .fa file from vikas list (list_WheatIDs_pid35.txt), then 'Notes ...' steps
+
+# dnload list_WheatIDs_pid35.txt from box .../figtreetmp/BLASTP_Filtering dir. Copy to .../PPRv1.1plus_88ctls/vikas_filter dir. Has 305 seq names.
+
+# from dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta list_WheatIDs_pid35.txt > list_WheatIDs_pid35.fa
+# check have 305 '>' in bbedit, yes.
+
+# ready for steps of 'Notes ...' protocol
+# ref: line 10337
+
+## Now run Notes steps ... 
+
+## will work in dir /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+# in dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# copy slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh to slurm_muscle_wheatproj_PPRv1.1blastp35pid.sh
+# modify as needed (done)
+
+# refer line 10360
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp list_WheatIDs_pid35.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp35pid.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 10366)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp35pid.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp35pid.sh  16177288 11:59am => , finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16177288     batch TJob_mus   pterry PD       0:00      1 (Priority)
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+
+less job.16177288.err
+
+MUSCLE v3.8.425 by Robert C. Edgar
+
+# followed by lot of '^M' characters ??????????????????/
+sacct -j  16177288 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-07T12:05:05 2018-10-07T12:08:53 
+2018-10-07T12:05:05 2018-10-07T12:08:53 
+08:53 - 05:05 = 3 min 48 sec
+
+# output file:
+-rw-r--r-- 1 pterry amundsen 793619 Oct  7 12:08 list_WheatIDs_pid35.fa.aln
+
+less list_WheatIDs_pid35.fa.aln
+# top of file looks ok.
+
+wc -l list_WheatIDs_pid35.fa.aln
+13115 list_WheatIDs_pid35.fa.aln
+
+grep -c "^>Tr" list_WheatIDs_pid35.fa.aln  ## 305 as expect
+
+#ref line 10414, next (2nd) step, fasta2stockholm.pl conversion
+logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl list_WheatIDs_pid35.fa.aln > list_WheatIDs_pid35.fa.aln.slx
+ls -al *.slx
+-rw-r--r-- 1 pterry amundsen 773493 Oct  7 14:40 list_WheatIDs_pid35.fa.aln.slx
+
+## to check top of stockholm file
+less list_WheatIDs_pid35.fa.aln.slx 
+# STOCKHOLM 1.0
+TraesCS7A02G407400.1 ---------------------------------------------------------------------
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 10441)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild list_WheatIDs_pid35.fa.aln.hmm list_WheatIDs_pid35.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             list_WheatIDs_pid35.fa.aln.slx
+# output HMM file:                  list_WheatIDs_pid35.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     list_WheatIDs_pid35.fa.aln   305  2514   795     6.18  0.590 
+
+# CPU time: 6.57u 0.01s 00:00:06.58 Elapsed: 00:00:06.62
+
+# ref: line 10478
+## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
+
+## copy from slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh in dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/ to slurm_hmmalign_wheatproj_PPRv1.1blastp35pid.sh 
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp35pid.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmmaln ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp35pid.sh
+ls -al *35*
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp35pid.sh 16177579  3:06pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16177579     batch TJob_hmm   pterry PD       0:00      1 (Priority)
+
+-rw-r--r-- 1 pterry amundsen 1251837 Oct  7 15:37 list_WheatIDs_pid35.fa.aln.hmmaln
+sacct -j  16177579 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-07T15:37:05 2018-10-07T15:37:36 
+2018-10-07T15:37:05 2018-10-07T15:37:36 
+37:36 - 37:05 = 31 sec
+
+less list_WheatIDs_pid35.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 10517, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+#ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid35.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid35.fa.aln.hmmaln.fa
+
+ls -al *.fa
+less list_WheatIDs_pid35.fa.aln.hmmaln.fa
+# looks like .fa file
+
+grep -c ">Traes" list_WheatIDs_pid35.fa.aln.hmmaln.fa  ## 305 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl list_WheatIDs_pid40.fa.aln.hmmaln.fa
+
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 369982 Oct  7 21:46 list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
+exit
+less list_WheatIDs_pid40.fa.aln.hmmaln.phy
+ 305 797
+'TraesCS1B02G038400.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+logout
+
+## scp back to macbook, (line 10576)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid40.fa.aln.hmmaln.phy .
+
+Passcode or option (1-3): 1
+list_WheatIDs_pid35.fa.aln.hmmaln.phy                     0%    0     0.0KB/s - stalled -^CKilled by signal 2.
+philip-terry-2:vikas_filter bterry$ scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid35.fa.aln.hmmaln.phy .
+Password: 
+Duo two-factor login for pterry
+
+Enter a passcode or select one of the following options:
+
+ 1. Duo Push to XXX-XXX-1502
+ 2. Phone call to XXX-XXX-1502
+ 3. SMS passcodes to XXX-XXX-1502 (next code starts with: 2)
+
+Passcode or option (1-3): 1
+packet_write_wait: Connection to 129.93.227.113 port 22: Broken pipe
+
+#*****************************************
+# two scp attempts, both error message ??????????????????????????????????
+
+#Try another file, one that previously was scp'd, see if it will scp.
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/testscp.phy .
+# packet_write_wait: Connection to 129.93.227.113 port 22: Broken pipe
+# also fails ???????????????????????????????????????
+
+10/08/18:
+try again next morning, appears to work fine ???????
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid40.fa.aln.hmmaln.phy .
+
+#****************************************
+
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  369982 Oct  8 09:25 list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
 STOPPED
 
-# comments: Perhaps, run GSDS, looking for introns. Run two groups, 206 50pid seqs, and 88 ctls seqs separately.
+less list_WheatIDs_pid35.fa.aln.hmmaln.phy
+ 305 797
+'TraesCS1B02G038400.1'  ---------- ---------- ---------- ---------- ---------- ----------
+
+#head -n 4 list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
+## so phy header       305 797, expect the 305
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
+The alignment file "list_WheatIDs_pid35.fa.aln.hmmaln.phy" was uploaded, it contains 305 taxons of 797 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20181008-165423_Sc32/cmd.txt
+
+job was submitted. (Mon, 10/08/18, 9:54am)
+# file back from phyml in France:
+-rw-r--r--@ 1 bterry  staff  8656 Oct  8 17:10 list_wheatids_pid35_fa_aln_hmmaln_phy_phyml.zip
+
+# outputfile:
+-rw-r--r--@  1 bterry  staff  16709 Oct  8  2018 list_wheatids_pid35_fa_aln_hmmaln_phy_phyml_tree.txt
+
+# location:
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid35_fa_aln_hmmaln_phy_phyml/list_wheatids_pid35_fa_aln_hmmaln_phy_phyml_tree.txt
+
+#  next take it to unl.box.com (../BLASTP_Filtering dir.), then to 'pro' laptop from (on pmtmbook15) 
+# but 1st, make copy, shorten name to pid35_phyml_tree.txt
+
+# dir on pro, .../figtreetmp/PPRv1.1_1161_88ctls/vikas_filter
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+#**********************
+# Q: many/all the leaves don't have the seq name ??????????????????
+# select tip labels/Names, *now* have names
+#***********************
+# comments: phylogram looks like has 88 ctls, but writing in the 1st few letters of each of the 4 ctl species, nothing 'lights up'. So, apparently correct 305 '35pid' seqs are all have in this phylogram.
+
+# test chr's, see if they group. They do, with a few of each scattered in the 'spread' section not in pid50 phylogram. Geometry of pid50 & pid35 groups similar.
 
 
+#*******************************************************************
+
+# mean while, go on, start 'Notes steps for 35pidplus88ctls
+
+# ref 10646
+# next, prepare, submit 35pid_plus88ctls .fa file for processing thru 'Notes ...' steps.
+# 1st cat 88ctls onto the 305 wheat seqs '.fa' file
+
+# see line 10649
+list_WheatIDs_pid35.fa
+# cat preceding file to 88 ctl fasta seqs
+# see line 10003, 
+#copy rice1st_88ctls_soyfixed.fa file to /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# from .../annotation1.1/PPRv1.1plus_88ctls dir.
+# now cat this file with list_WheatIDs_pid50.fa will give 206+88=294 seqs
+
+cat rice1st_88ctls_soyfixed.fa list_WheatIDs_pid35.fa > list_WheatIDs_pid35_plus88ctls.fa
+# bbedit shows 393 seqs.
+
+## Now run Notes steps ...  (ref line 10660)
+
+cp slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh slurm_muscle_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh
+# modify as needed (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp list_WheatIDs_pid35_plus88ctls.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 10671)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh  16181083 10:16am => , finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16181083     batch TJob_mus   pterry  R       0:29      1 c3618
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+less job.16181083.err
+
+sacct -j  16181083 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-08T10:16:05 2018-10-08T10:23:35 
+2018-10-08T10:16:05 2018-10-08T10:23:35 
+23:35 - 16:05 = 7 min 30 sec
+
+-rw-r--r-- 1 pterry amundsen  937543 Oct  8 10:23 list_WheatIDs_pid35_plus88ctls.fa.aln
+
+less list_WheatIDs_pid35_plus88ctls.fa.aln
+# top of file looks ok.
+
+wc -l list_WheatIDs_pid35_plus88ctls.fa.aln
+15720 list_WheatIDs_pid35_plus88ctls.fa.aln
+
+grep -c "^>" list_WheatIDs_pid35_plus88ctls.fa.aln  ## 393 as expect
+logout
+
+#ref line 10711, next (2nd) step, fasta2stockholm.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+#ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl list_WheatIDs_pid35_plus88ctls.fa.aln > list_WheatIDs_pid35_plus88ctls.fa.aln.slx
+ls -al *.slx
+-rw-r--r-- 1 pterry amundsen 914900 Oct  8 11:33 list_WheatIDs_pid35_plus88ctls.fa.aln.slx
+
+## to check top of stockholm file
+less list_WheatIDs_pid35_plus88ctls.fa.aln.slx
+# STOCKHOLM 1.0
+AT1G12770.1 ------------------------------------------------------------------------------
+
+## now for *hmmbuild* (see line 10733)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+#**************************
+# srun: Job step creation temporarily disabled, retrying   ????????
+#****************************
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild list_WheatIDs_pid35_plus88ctls.fa.aln.hmm list_WheatIDs_pid35_plus88ctls.fa.aln.slx
+
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             list_WheatIDs_pid35_plus88ctls.fa.aln.slx
+# output HMM file:                  list_WheatIDs_pid35_plus88ctls.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     list_WheatIDs_pid35_plus88ctls.fa.aln   393  2307   743     8.12  0.590 
+
+# CPU time: 6.86u 0.01s 00:00:06.87 Elapsed: 00:00:06.90
+
+less list_WheatIDs_pid35_plus88ctls.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  list_WheatIDs_pid35_plus88ctls.fa.aln
+LENG  743
+ALPH  amino
+
+# ref: line 10769
+## realign using hmm model, hmmalign  (refer 03/26/18, line 7086)
+
+## copy from 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/slurm_hmmalign_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh
+ to
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/slurm_hmmalign_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmm ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh
+ls -al hmmalign*
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp35pid_plus88ctls.sh 16181573  1:33pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+# ref 10794
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmmaln
+-rw-r--r-- 1 pterry amundsen 2057307 Oct  8 13:34 list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln
+
+sacct -j  16181573 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-08T13:33:35 2018-10-08T13:34:02 
+2018-10-08T13:33:35 2018-10-08T13:34:02
+34:02 - 33:35 = 27 sec
+
+less list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln
+# STOCKHOLM 1.0
+
+## ref line 10808, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmmaln
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+#ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.fa
+
+ls -al *hmmaln.fa
+less list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.fa
+# looks like .fa file
+grep -c ">Traes" list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.fa  ## 305 as expect
+grep -c ">" list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.fa  ## 393 as expect
+
+exit
+#logout
+## ref., now fas to phy (line 10836)
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.fa
+ls -al  *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 445303 Oct  8 18:37 list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy
+
+exit
+less list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy
+ 393 746
+'TraesCS6D02G083300.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+logout
+
+## scp back to macbook, (line 10864)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  445303 Oct  8 19:00 list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy
+
+less list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy
+ 393 746
+
+#head -n 3 list_WheatIDs_pid50_plus88ctls.fa.aln.hmmaln.phy
+
+## so phy header         393 746, expect the 393
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections: (line 10885)
+
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid35_plus88ctls
+
+The alignment file "list_WheatIDs_pid35_plus88ctls.fa.aln.hmmaln.phy" was uploaded, it contains 393 taxons of 746 characters.
+
+Your job was submitted. (7:08pm, 10/08/18)
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20181009-020819_Og00/cmd.txt
+
+10/09/18:
+ref: line 11400
+# outputfile:
+-rw-r--r--@ 1 bterry  staff  10578 Oct  9 14:42 list_wheatids_pid35_plus88ctls_fa_aln_hmmaln_phy_phyml.zip
+
+# location:
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid35_plus88ctls_fa_aln_hmmaln_phy_phyml/list_wheatids_pid35_plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+
+#  next take it to unl.box.com (../BLASTP_Filtering dir.), then to 'pro' laptop from (on pmtmbook15) 
+# but 1st, make copy, shorten name to pid35_plus88ctls_phyml_tree.txt
+
+# dir on pro, .../macbookpro2018/PPRv1.1_1161_88ctls/vikas_filter
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+#**********************
+# Q: many/all the leaves don't have the seq name ??????????????????
+# select tip labels/Names, *now* have names
+#***********************
+# comments: phylogram looks like has 88 ctls, but writing in the 1st few letters of each of the 4 ctl species, nothing 'lights up'. So, apparently correct 305 '35pid' seqs are all have in this phylogram.
+
+# test chr's, see if they group. They do, with a few of each scattered in the 'spread' section not in pid50 phylogram. Geometry of pid50 & pid35 groups similar.
+
+# comments: for pid35_plus88ctls_phyml_tree.txt in figtree display.See 7 groups on phylogram. 5 similar to 50pid phylogram. A 6th similar to 'new' group on pid35 relative to pid50. Finally, a group with mostly (?) seqs from the 88 ctl seqs. To check, if bracky mostly there? Cretainly at least 1 bracky seq is in he chr1 group ??????
 
 
+# uploaded two pid35 tree files exposed to figtree from 'pro' to box (BLASTP_Filtering).
 
 
+# vikas, plan, make phylogram for 40pid. 
 
+10/10/18:
+# ref line 11117
+make phylogram for 
+-rw-r--r--@ 1 bterry  staff  4531 Oct  9 23:01 list_WheatIDs_pid40.txt
+# has 216 seqs. 
+# place in dir: /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+# compare to previous phylogram of list_WheatIDs_pid35.txt.
+
+# list_WheatIDs_pid40.txt dnloaded from box .../figtreetmp/BLASTP_Filtering dir.
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta list_WheatIDs_pid40.txt > list_WheatIDs_pid40.fa
+# check have 216 '>' in bbedit, yes.
+
+# ready for steps of 'Notes ...' protocol
+# ref: line 11130
+
+## Now run Notes steps ... 
+
+## will work in dir /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+# in dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# copy slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh to slurm_muscle_wheatproj_PPRv1.1blastp40pid.sh
+cp slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh slurm_muscle_wheatproj_PPRv1.1blastp40pid.sh
+# modify as needed (done)
+
+10/11/18:
+
+# refer line 11140
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp list_WheatIDs_pid40.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp40pid.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 11147)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp40pid.sh
+ls -lh *40pid*
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp40pid.sh  16204187 2:59pm => , finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16204187     batch TJob_mus   pterry  R       0:33      1 c3616
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al list*40*
+# output file:
+-rw-r--r-- 1 pterry amundsen 400259 Oct 11 15:00 list_WheatIDs_pid40.fa.aln
+ls -al *.err
+less job.16204187.err
+
+MUSCLE v3.8.425 by Robert C. Edgar
+
+# followed by lot of '^M' characters ??????????????????/
+
+sacct -j  16204187 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-11T14:59:06 2018-10-11T15:00:37 
+2018-10-11T14:59:06 2018-10-11T15:00:37
+00:37 - 59:06 = 1 min 31 sec
+
+less list_WheatIDs_pid40.fa.aln
+# top of file looks ok.
+
+wc -l list_WheatIDs_pid40.fa.aln
+6696 list_WheatIDs_pid40.fa.aln
+
+grep -c "^>Tr" list_WheatIDs_pid40.fa.aln  ## 216 as expect
+
+#ref line 11190, next (2nd) step, fasta2stockholm.pl conversion
+logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+#ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl list_WheatIDs_pid40.fa.aln > list_WheatIDs_pid40.fa.aln.slx
+ls -al *.slx
+-rw-r--r-- 1 pterry amundsen 388598 Oct 11 15:16 list_WheatIDs_pid40.fa.aln.slx
+
+## to check top of stockholm file
+less list_WheatIDs_pid40.fa.aln.slx 
+# STOCKHOLM 1.0
+TraesCS7A02G407400.1 ---------------------------------------------------------------------
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 11214)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+#ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild list_WheatIDs_pid40.fa.aln.hmm list_WheatIDs_pid40.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             list_WheatIDs_pid40.fa.aln.slx
+# output HMM file:                  list_WheatIDs_pid40.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     list_WheatIDs_pid40.fa.aln   216  1777   826     2.96  0.590 
+
+# CPU time: 4.86u 0.01s 00:00:04.87 Elapsed: 00:00:04.90
+
+# ref: line 11241
+## realign using hmm model, hmmalign  (refer 03/26/18, line 11241)
+
+## copy from slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh in dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/ to slurm_hmmalign_wheatproj_PPRv1.1blastp40pid.sh 
+cp slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh slurm_hmmalign_wheatproj_PPRv1.1blastp40pid.sh
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp40pid.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmm ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp40pid.sh
+ls -al *40*
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp40pid.sh 16204560  3:58pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+ls -al  *.hmmaln
+-rw-r--r-- 1 pterry amundsen  642093 Oct 11 15:58 list_WheatIDs_pid40.fa.aln.hmmaln
+
+sacct -j  16204560 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-11T15:58:27 2018-10-11T15:58:41 
+2018-10-11T15:58:27 2018-10-11T15:58:41 
+58:41 - 58:27 = 14 sec
+
+less list_WheatIDs_pid40.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 11274, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+#ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid40.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid40.fa.aln.hmmaln.fa
+
+ls -al *hmmaln.fa
+less list_WheatIDs_pid40.fa.aln.hmmaln.fa
+# looks like .fa file
+
+grep -c ">Traes" list_WheatIDs_pid40.fa.aln.hmmaln.fa  ## 216 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl list_WheatIDs_pid45.fa.aln.hmmaln.fa
+
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 269370 Oct 11 22:51 list_WheatIDs_pid40.fa.aln.hmmaln.phy
+
+exit
+less list_WheatIDs_pid40.fa.aln.hmmaln.phy
+ 216 828
+'TraesCS1B02G084563.1'  ---------- ---------- ---------- ---------- ---------- ----------
+logout
+
+## scp back to macbook, (line 11330)
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid40.fa.aln.hmmaln.phy .
+
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  269370 Oct 11 22:58 list_WheatIDs_pid40.fa.aln.hmmaln.phy
+
+less list_WheatIDs_pid40.fa.aln.hmmaln.phy
+ 216 828
+'TraesCS1B02G084563.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+#head -n 4 list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
+## so phy header       216 828, expect the 216
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid40.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid40
+
+The alignment file "list_WheatIDs_pid40.fa.aln.hmmaln.phy" was uploaded, it contains 216 taxons of 828 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20181012-060413_Fd59/cmd.txt
+
+job was submitted. (Mon, 10/11/18, 11:04pm)
+
+# ref line 11400
+# file back from phyml in France:
+-rw-r--r--@ 1 bterry  staff   7082 Oct 12 10:39 list_wheatids_pid40_fa_aln_hmmaln_phy_phyml.zip
+
+# outputfile:
+-rw-r--r--@  1 bterry  staff  11815 Oct 12 08:55 list_wheatids_pid40_fa_aln_hmmaln_phy_phyml_tree.txt
+
+# location:
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid40_fa_aln_hmmaln_phy_phyml/list_wheatids_pid40_fa_aln_hmmaln_phy_phyml_tree.txt
+
+#  next take it to unl.box.com (../BLASTP_Filtering dir.), then to 'pro' laptop from (on pmtmbook15) 
+# but 1st, make copy, shorten name to pid40_phyml_tree.txt
+cp list_wheatids_pid40_fa_aln_hmmaln_phy_phyml_tree.txt pid40_phyml_tree.txt
+
+# dir on pro, .../macbookpro2018/PPRv1.1_1161_88ctls/vikas_filter
+ 
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# Q: colour by: user selection currently, **what** about something other like aLRT ??????? 
+
+# Describe pid40 phylogram !!!!!!!!!!!!!!!
+# similar to pid 50 (216 compared to 20 6 seqs).
+#***********************************************************
+# ref line 11725
+# vikas, plan, make phylogram for 45pid. 
+
+# ref line 11728
+# list_WheatIDs_pid45.txt dnloaded from box .../figtreetmp/BLASTP_Filtering dir.
+
+make phylogram for 
+ls -al *45.txt
+-rw-r--r--@ 1 bterry  staff  4447 Oct 11 23:24 list_WheatIDs_pid45.txt
+# has 212 seqs. 
+# place in dir: /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+# to compare to previous phylogram of list_WheatIDs_pid35.txt.
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta list_WheatIDs_pid45.txt > list_WheatIDs_pid45.fa
+# check have 212 '>' in bbedit, yes.
+
+# ready for steps of 'Notes ...' protocol
+# ref: line 11742
+
+## Now run Notes steps ... 
+
+## will work in dir /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+
+# in dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# copy slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh to slurm_muscle_wheatproj_PPRv1.1blastp45pid.sh
+cp slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh slurm_muscle_wheatproj_PPRv1.1blastp45pid.sh
+# modify as needed (done)
+
+# refer line 11762
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp list_WheatIDs_pid45.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp45pid.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 11762)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp45pid.sh
+ls -lh *45pid*
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp45pid.sh  16206433 11:44pm => , finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16206433     batch TJob_mus   pterry  R       0:06      1 c1302
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al list*45*
+# output file:
+-rw-r--r-- 1 pterry amundsen 389667 Oct 11 23:46 list_WheatIDs_pid45.fa.aln
+
+
+ls -al *.err
+less job.16206433.err
+
+MUSCLE v3.8.425 by Robert C. Edgar
+
+# followed by lot of '^M' characters ??????????????????/
+
+sacct -j  16206433 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-11T23:44:37 2018-10-11T23:46:10 
+2018-10-11T23:44:37 2018-10-11T23:46:10 
+46:10 - 44:37 = 1 min 23 sec
+
+less list_WheatIDs_pid45.fa.aln
+# top of file looks ok.
+
+wc -l list_WheatIDs_pid45.fa.aln
+6572 list_WheatIDs_pid45.fa.aln
+
+grep -c "^>Tr" list_WheatIDs_pid45.fa.aln  ## 212 as expect
+
+#ref line 11803, next (2nd) step, fasta2stockholm.pl conversion
+logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+#ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl list_WheatIDs_pid45.fa.aln > list_WheatIDs_pid45.fa.aln.slx
+ls -al *.slx
+-rw-r--r-- 1 pterry amundsen 378222 Oct 12 22:45 list_WheatIDs_pid45.fa.aln.slx
+
+## to check top of stockholm file
+less list_WheatIDs_pid45.fa.aln.slx 
+# STOCKHOLM 1.0
+TraesCS7A02G407400.1 ---------------------------------------------------------------------
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 11214)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+#ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild list_WheatIDs_pid45.fa.aln.hmm list_WheatIDs_pid45.fa.aln.slx
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             list_WheatIDs_pid45.fa.aln.slx
+# output HMM file:                  list_WheatIDs_pid45.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     list_WheatIDs_pid45.fa.aln   212  1762   829     2.65  0.590 
+
+# CPU time: 7.13u 0.01s 00:00:07.14 Elapsed: 00:00:07.16
+
+# ref: line 11854
+## realign using hmm model, hmmalign
+
+## copy from slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh in dir. /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/ to slurm_hmmalign_wheatproj_PPRv1.1blastp45pid.sh 
+cp slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh slurm_hmmalign_wheatproj_PPRv1.1blastp45pid.sh
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp45pid.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmm ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp45pid.sh
+ls -al *45*
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp45pid.sh 16212957  11:05pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  *.hmmaln
+-rw-r--r-- 1 pterry amundsen  591490 Oct 12 23:05 list_WheatIDs_pid45.fa.aln.hmmaln
+
+sacct -j  16212957 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-12T23:05:41 2018-10-12T23:05:56 
+2018-10-12T23:05:41 2018-10-12T23:05:56 
+05:56 - 05:41 = 15 sec
+
+less list_WheatIDs_pid40.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 11890, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+#ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g list_WheatIDs_pid45.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > list_WheatIDs_pid45.fa.aln.hmmaln.fa
+
+ls -al *hmmaln.fa
+-rw-r--r-- 1 pterry amundsen 180625 Oct 12 23:14 list_WheatIDs_pid45.fa.aln.hmmaln.fa
+
+less list_WheatIDs_pid45.fa.aln.hmmaln.fa
+# looks like .fa file
+
+grep -c ">Traes" list_WheatIDs_pid45.fa.aln.hmmaln.fa  ## 212 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+#logout
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl list_WheatIDs_pid45.fa.aln.hmmaln.fa
+
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 265230 Oct 12 23:20 list_WheatIDs_pid45.fa.aln.hmmaln.phy
+exit
+less list_WheatIDs_pid45.fa.aln.hmmaln.phy
+ 212 831
+'TraesCS1D02G067703.1'  ---------- ---------- ---------- ---------- ---------- ----------
+
+logout
+
+## scp back to macbook, (line 11946)
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/list_WheatIDs_pid45.fa.aln.hmmaln.phy .
+
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  265230 Oct 12 23:24 list_WheatIDs_pid45.fa.aln.hmmaln.phy
+
+less list_WheatIDs_pid45.fa.aln.hmmaln.phy
+ 212 831
+'TraesCS1D02G067703.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+#head -n 4 list_WheatIDs_pid35.fa.aln.hmmaln.phy
+
+## so phy header        212 831216 828, expect the 212
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid45.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: list_WheatIDs_pid45
+
+The alignment file "list_WheatIDs_pid45.fa.aln.hmmaln.phy" was uploaded, it contains 212 taxons of 831 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20181013-063157_Pu85/cmd.txt
+
+job was submitted. (Mon, 10/12/18, 11:31pm)
+
+# ref line 11986
+# file back from phyml in France:
+-rw-r--r--@ 1 bterry  staff   6998 Oct 13 09:24 list_wheatids_pid45_fa_aln_hmmaln_phy_phyml.zip
+
+# outputfile:
+-rw-r--r--@ 1 bterry  staff  11595 Oct 13 09:04 list_wheatids_pid45_fa_aln_hmmaln_phy_phyml_tree.txt
+
+# location:
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid45_fa_aln_hmmaln_phy_phyml/list_wheatids_pid45_fa_aln_hmmaln_phy_phyml_tree.txt
+
+#  next take it to unl.box.com (../BLASTP_Filtering dir.), then to 'pro' laptop from (on pmtmbook15) 
+# but 1st, make copy, shorten name to pid45_phyml_tree.txt
+cp list_wheatids_pid45_fa_aln_hmmaln_phy_phyml_tree.txt pid45_phyml_tree.txt
+
+# dir on pro, .../macbookpro2018/PPRv1.1_1161_88ctls/vikas_filter
+ 
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# Q: colour by: user selection currently, **what** about something other like aLRT ??????? 
+
+# Describe pid45 phylogram !!!!!!!!!!!!!!!
+# similar to pid 40 (212 compared to 216 seqs).
+# quick look, *could* be the fewer 4 seqs could be all on long branches betw pid 40 & 45
+
+# slip a save to ***github*** in here
+
+STOPPED
 
 
 
