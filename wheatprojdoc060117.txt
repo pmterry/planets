@@ -9073,7 +9073,7 @@ sort PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt |uniq | wc -l
 
 # 3) perhaps try also with apparent 'PLS' seqs. See if added ctls to 'PLS" seqs in clustal phylogram, will they all not map inside 'PLS' group ?????????????????
 
-# ***Figures***: Put two dirs in box today, unl.app.box.com, 'manuscript' & inside, 'figures'
+# ***Figures***: Put two dirs in box today, unl.box.com, 'manuscript' & inside, 'figures'
 # concerning figures, from figtree, save as pdf. Then, from preview, 'file/export', format 'tiff', comp = LZW, resol = 300. But need to clarify as not working ok when vikas demonstrating ???????????????????????????????
 
 
@@ -9541,6 +9541,7 @@ VSFSSNDNTHPLIDQICQEVDNLSVMIEGAT
 # a 2-mer, a 1-mer, a 1-mer, 33-mer (near rice 9), 1-mer, 
 
 # Q: relationship of main 4 species to wheat ??? Any correlation betw this and relative phylogram locations ??????
+# looks like at least all 88 locate in 'P' area, not in 'PLS' area. On PPRv1.1.752_PLSW_88ctls.txt, all 88 'not' in 'PLS' ares.
 
 
 09/07/18:
@@ -9996,7 +9997,7 @@ AB110443        TraesCS6D02G047700.1    1.68e-80   28.205  585     791     691  
 09/20/18:
 # talked to vikas
 # next on crane try run all 88 ctls in query in one run.
-# 1st have to remake the 88 .fa query file, to incorporate soy seqs, this time, row length 60, by manually asdding 'carriage returns'.
+# 1st have to remake the 88 .fa query file, to incorporate soy seqs, this time, row length 60, by manually adding 'carriage returns'.
 
 #cat FRknownseqs_shtname_9.fa bracky9namesshort.fa soybean41to_ver2names38dot1dotpshort.fa arab26fujii2011namesshort.fa FunctionallyCharacterizedRfs_fasta.fa > rice1st_88ctls.fa
 
@@ -10602,7 +10603,7 @@ browse:
 /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid50.fa.aln.hmmaln.phy
 
 Data type: aa's
-Still, no bootdstrap, rather aLRT SH-like
+Still, no bootstrap, rather aLRT SH-like
 # Q: other choices  ????????????????????????????????????
 
 Perform bootstrap, no
@@ -10640,7 +10641,7 @@ tree/root tree/midpoint
 
 09/29/18:
 #talked to vikas yesterday
-# interest in GSDS for 35pid (306 seqs), 50pid seqs (206 seqs). ME: add in 88 ctls, see if they low on 'introns' ??????????????????????????
+# interest in GSDS for 35pid (306 seqs), 50pid seqs (206 seqs). ME: add in 88 ctls, see if they low on 'introns'. will need nucleotide seqs for, may only be avail. for wheat ?????
 # apparently Venny quick way subset seqs, perhaps can do for 35pid, 50pid seqs. Venny will find 'overlap' then a button to print out list of seqs in common ???????????
 
 # next, prepare, submit 50pid_plus88ctls .fa file for processing thru 'Notes ...' steps.
@@ -11114,7 +11115,7 @@ tree/root tree/midpoint
 
 10/07/18:
 
-# next, do 35pid, phyml, phenogram, see if more from 306 - 206 group can filter/locate on phylogram with the 206.
+# next, do 35pid, phyml, phenogram, see if more from 305 - 206 group can filter/locate on phylogram with the 206.
 
 # line 10331, 
 # ready to prepare .fa file from vikas list (list_WheatIDs_pid35.txt), then 'Notes ...' steps
@@ -11405,7 +11406,7 @@ job was submitted. (Mon, 10/08/18, 9:54am)
 -rw-r--r--@  1 bterry  staff  16709 Oct  8  2018 list_wheatids_pid35_fa_aln_hmmaln_phy_phyml_tree.txt
 
 # location:
-/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid35_fa_aln_hmmaln_phy_phyml/list_wheatids_pid35_fa_aln_hmmaln_phy_phyml_tree.txt
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid35_fa_aln_hmmaln_phy_phyml/`list_wheatids_pid35_fa_aln_hmmaln_phy_phyml_tree.txt
 
 #  next take it to unl.box.com (../BLASTP_Filtering dir.), then to 'pro' laptop from (on pmtmbook15) 
 # but 1st, make copy, shorten name to pid35_phyml_tree.txt
@@ -11716,7 +11717,7 @@ tree/root tree/midpoint
 
 # test chr's, see if they group. They do, with a few of each scattered in the 'spread' section not in pid50 phylogram. Geometry of pid50 & pid35 groups similar.
 
-# comments: for pid35_plus88ctls_phyml_tree.txt in figtree display.See 7 groups on phylogram. 5 similar to 50pid phylogram. A 6th similar to 'new' group on pid35 relative to pid50. Finally, a group with mostly (?) seqs from the 88 ctl seqs. To check, if bracky mostly there? Cretainly at least 1 bracky seq is in he chr1 group ??????
+# comments: for pid35_plus88ctls_phyml_tree.txt in figtree display.See 7 groups on phylogram. 5 similar to 50pid phylogram. A 6th similar to 'new' group on pid35 relative to pid50. Finally, a group with mostly (?) seqs from the 88 ctl seqs. To check, if bracky mostly there? Cretainly at least 1 bracky seq is in the chr1 group ??????
 
 
 # uploaded two pid35 tree files exposed to figtree from 'pro' to box (BLASTP_Filtering).
@@ -12008,7 +12009,7 @@ tree/root tree/midpoint
 # Q: colour by: user selection currently, **what** about something other like aLRT ??????? 
 
 # Describe pid40 phylogram !!!!!!!!!!!!!!!
-# similar to pid 50 (216 compared to 20 6 seqs).
+# similar to pid 50 (216 compared to 206 seqs).
 #***********************************************************
 # ref line 11725
 # vikas, plan, make phylogram for 45pid. 
@@ -12302,7 +12303,573 @@ tree/root tree/midpoint
 
 # slip a save to ***github*** in here
 
+# log file uploaded to figtreetmp
+
+10/21/18:
+# to do: want to identify RF-like subset of 1161 'P' proteins. Perhaps tentatively select the 206 form pid50 tree. Plan remove couple 'long branch' seqs. Compare with pid45 (212), pid40 (216), decide final set to keep.
+# Of interest, perhaps check if any of the 88 ctls in pid35 + 88ctls are in the Traes chr 1, 2, 6 groups ?????????????????????? Or, if any Traes are in the 88 ctls group ???????
+# pid35 has lot Traes outside chr 1, 2, 6 groups. What to think ????????
+
+# so 1st, get list of seq names (206) for pid50 phylogram. 
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+-rw-r--r--@ 1 bterry  staff  4322 Sep 25 22:06 list_WheatIDs_pid50.txt
+
+# now, need remove 'long branch' seqs, view list_WheatIDs_pid50_phyml_tree.txt in figtree to do.
+
+# two long branches coming betw & off of the two chr 6 groups
+# off one of group 6 are 4 seqs
+TraesCS1B02G084581.1
+# etc
+
+# 6 seqs on long branches *betw.* chr6 groups, all chr7.
+
+# 15 seqs are chr 7 or CSU seqs
+
+# so long branch seqs are 6 + 4 = 10. Removing leaves 206 - 10 = *196*.
+
+# to do, remove these 10 from this tree file, display, make sure now no more long branches.
+
+# list_WheatIDs_pid50.txt, prune 10 LBranch seqs giving file:
+list_WheatIDs_pid50LB10prunedto196.txt
+
+# next, compare to pid45, pid40. Document differences. Perhaps use my bash script ????
+# or setdiff examples from: https://stackoverflow.com/questions/1837968/how-to-tell-what-is-in-one-vector-and-not-another
+
+# compare to file, has 212 seqs
+-rw-r--r--@ 1 bterry  staff  4447 Oct 11 23:24 list_WheatIDs_pid45.txt
+
+#******************R code start**********************
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+getwd()
+pid50_196 <- read.delim("list_WheatIDs_pid50LB10prunedto196.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("pid50pruned"))
+dim(pid50_196)
+head(pid50_196)
+class(pid50_196)
+
+pid45_212 <- read.delim("list_WheatIDs_pid45.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("pid45"))
+dim(pid45_212)
+head(pid45_212)
+class(pid45_212)
+
+intersect196_212 <- intersect(pid50_196$pid50pruned, pid45_212$pid45)
+length(intersect196_212)
+class(intersect196_212)
+head(intersect196_212)
+
+zero <- setdiff(pid50_196$pid50pruned, pid45_212$pid45)
+length(zero)
+
+sixteen <- setdiff (pid45_212$pid45, pid50_196$pid50pruned)
+length(sixteen)
+
+head(sixteen)
+
+write.table(sixteen, file="sixteen_pid45_pid50.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+#*********************R code end********************************
+# ok, 10 of 16 are the 10 removed from pid50 as long branch seqs.
+# now go to figtree, locate the 6 which must be the 212 - 206 = 6 betw. pid50 & pid45.
+# result: 4 basically indistinguishable from '<50pid' seqs, 2 extending out a bit in phylogram.
+
+# next to do, compare pid50_196 (196) with pid40 (216), pid35 (305)
+ 
+10/22/18:
+# so need setdiff for list_WheatIDs_pid50LB10prunedto196.txt & 
+-rw-r--r--@ 1 bterry  staff  4531 Oct  9 23:01 list_WheatIDs_pid40.txt
+
+#******************R code start**********************
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+getwd()
+pid50_196 <- read.delim("list_WheatIDs_pid50LB10prunedto196.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("pid50pruned"))
+dim(pid50_196)
+head(pid50_196)
+class(pid50_196)
+
+pid40_216 <- read.delim("list_WheatIDs_pid40.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("pid40"))
+dim(pid40_216)
+head(pid40_216)
+class(pid40_216)
+
+intersect196_216 <- intersect(pid50_196$pid50pruned, pid40_216$pid40)
+length(intersect196_216)
+class(intersect196_216)
+head(intersect196_216)
+
+zero <- setdiff(pid50_196$pid50pruned, pid40_216$pid40)
+length(zero)
+
+twenty <- setdiff (pid40_216$pid40, pid50_196$pid50pruned)
+length(twenty)
+
+head(twenty)
+
+write.table(twenty, file="twenty_pid40_pid50.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+#*********************R code end********************************
+
+# ok, 10 of 16 are the 10 removed from pid50 as long branch seqs.
+# now go to figtree, locate the 10 which must be the 216 - 206 = 10 betw. pid50 & pid40.
+
+# <50 who are not LB's could be additional candidates ??????
+# result: 5 basically indistinguishable from '<50pid' 'basic' seqs, 2 extending out a bit in phylogram & 3 out on long branches. So 5 or 7 could be added to 196 as RF-like seqs ??????????????
+
+# next to do, compare pid50_196 (196) with pid35 (305). Just see what have beyond the 196?
+
+10/22/18:
+# talked to vikas
+# 1. new phylogram, from pid40 (216) list of seqs, subtr the ten which took pid50 from 206 to 196. Subtract the three seqs from pid40_phyml_tree.txt which are on a LB on phylogram yielding 203 seqs for new phylogram. Display colors for chr 1, 2, 6.
+# 2. GSDS for 
+# the 203 seqs on 203 phylogram
+# the 13 seqs removed from pid40 phylogram list (216 - 13 = 203)
+# 3. phenogram of the 203 seqs
+
+
+# to prepare for new 203 seqs phylogram, 1st identify the 3 LB seqs on pid40_phyml_tree,txt, using figtree.
+Identified in 
+-rw-r--r--  1 bterry  staff  419 Oct 22 09:40 twenty_pid40_pid50.txt
+# seqs 4th, 7th, 16th rows.
+# next, remove these three and the ten (refer: 206 (pid50) - 10 = 196 prevly removed from pid50 to obtain list_WheatIDs_pid50LB10prunedto196.txt.
+
+# so, take list_WheatIDs_pid40.txt, copy to pid40pruned13to203.txt
+cp list_WheatIDs_pid40.txt pid40_216pruned13to203.txt
+# manually deleted 10 (206 - 10 from pid50 giving 196) & 3 seqs on LB in pid40 resulting in 203 seqs in file.
+# to ck 216 vs 203 with setdiff
+list_WheatIDs_pid40.txt, pid40_216pruned13to203.txt
+#******************R code start**********************
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+getwd()
+pid40_216 <- read.delim("list_WheatIDs_pid40.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("pid40"))
+dim(pid40_216)
+head(pid40_216)
+class(pid40_216)
+
+pid40_203 <- read.delim("pid40_216pruned13to203.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("pid40pr"))
+dim(pid40_203)
+head(pid40_203)
+class(pid40_203)
+
+intersect203_216 <- intersect(pid40_216$pid40, pid40_203$pid40pr)
+length(intersect203_216)
+class(intersect203_216)
+head(intersect203_216)
+
+zero <- setdiff(pid40_203$pid40pr, pid40_216$pid40)
+length(zero)  ## 0
+
+thirteen <- setdiff (pid40_216$pid40, pid40_203$pid40pr)
+length(thirteen)  ## 13
+
+head(thirteen)
+
+# write.table(twenty, file="twenty_pid40_pid50.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+#*********************R code end********************************
+# so checks
+
+10/24/18:
+
+# to do, the 'Notes' steps thru to phyml phylogram.
+# ref line 10331
+# ready to prepare .fa file from vikas pruned pid40 list (pid40_216pruned13to203.txt), 
+
+./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta pid40_216pruned13to203.txt > pid40_216pruned13to203.fa
+# check have 203 '>' in bbedit, yes.
+
+then 'Notes ...' steps
+# from dir /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+## Now run Notes steps ... 
+
+## dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+pwd ## /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+# rename to slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh to slurm_muscle_wheatproj_PPRv1.1blastp40pid_203.sh
+cp slurm_muscle_wheatproj_PPRv1.1blastp50pid.sh slurm_muscle_wheatproj_PPRv1.1blastp40pid_203.sh
+# modify as needed (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pid40_216pruned13to203.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_PPRv1.1blastp40pid_203.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 10366)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_PPRv1.1blastp40pid_203.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_PPRv1.1blastp40pid_203.sh  16298730 11:10am => , finally done.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          16298730     batch TJob_mus   pterry  R       0:30      1 c3716
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+ls -al *16298730*
+less job.16298730.err
+MUSCLE v3.8.425 by Robert C. Edgar
+
+http://www.drive5.com/muscle
+This software is donated to the public domain.
+Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
+
+# followed by lot of '^M' characters ??????????????????/
+
+sacct -j  16298730 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-24T11:10:32 2018-10-24T11:11:57 
+2018-10-24T11:10:32 2018-10-24T11:11:57 
+11:11:57 - 11:10:32 = 1 min 25 sec
+
+# output file:
+-rw-r--r-- 1 pterry amundsen 369K Oct 24 11:11 pid40_216pruned13to203.fa.aln
+less pid40_216pruned13to203.fa.aln
+# top of file looks ok.
+
+wc -l pid40_216pruned13to203.fa.aln
+6293 pid40_216pruned13to203.fa.aln
+
+grep -c "^>Tr" pid40_216pruned13to203.fa.aln  ## 203 as expect
+
+#ref line 10414, next (2nd) step, fasta2stockholm.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/RF139
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al
+#cd ..
+#cd refinPprots131vikas6
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/fasta2stockholm.pl .
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl pid40_216pruned13to203.fa.aln > pid40_216pruned13to203.fa.aln.slx
+ls -al
+-rw-r--r-- 1 pterry amundsen  366023 Oct 24 12:08 pid40_216pruned13to203.fa.aln.slx
+
+## to check top of stockholm file
+less pid40_216pruned13to203.fa.aln.slx 
+# STOCKHOLM 1.0
+TraesCS7B02G372755.1 ---------------------------------------------------------------------
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 10441)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild pid40_216pruned13to203.fa.aln.hmm pid40_216pruned13to203.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             pid40_216pruned13to203.fa.aln.slx
+# output HMM file:                  pid40_216pruned13to203.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     pid40_216pruned13to203.fa.aln   203  1781   785     2.79  0.590 
+
+# CPU time: 3.13u 0.01s 00:00:03.13 Elapsed: 00:00:03.17
+exit
+ls -al *.hmm
+-rw-r--r-- 1 pterry amundsen 366066 Oct 24 12:14 pid40_216pruned13to203.fa.aln.hmm
+
+less pid40_216pruned13to203.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  pid40_216pruned13to203.fa.aln
+LENG  785
+ALPH  amino
+
+# ref: line 10478
+## realign using hmm model, hmmalign
+
+## copy from /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh
+# to slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh
+cp slurm_hmmalign_wheatproj_PPRv1.1blastp50pid.sh slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh
+# make needed changes (done)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh
+ls -al *_203.sh
+sbatch slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh ## 16299658  1:38pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al *hmmaln
+-rw-r--r-- 1 pterry amundsen  595058 Oct 24 13:38 pid40_216pruned13to203.fa.aln.hmmaln
+sacct -j  16299658 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2018-10-24T13:37:50 2018-10-24T13:38:07 
+2018-10-24T13:37:50 2018-10-24T13:38:07 
+13:38:07 - 13:37:50 = 17 sec
+
+less pid40_216pruned13to203.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 10517, next step, stockholm2fasta.pl conversion
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al *hmmaln
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g pid40_216pruned13to203.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > pid40_216pruned13to203.fa.aln.hmmaln.fa
+
+ls -al *hmmaln.fa
+less pid40_216pruned13to203.fa.aln.hmmaln.fa  ## looks ok
+
+grep -c ">Traes" pid40_216pruned13to203.fa.aln.hmmaln.fa  ## 203 as expect
+#grep -c ">" p820br9rice9soy38arab26.fa.aln.hmmaln.fa  ## 902 as expect
+exit
+
+## ref., line 10546, now fas to phy
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+#ls -al
+#cd ..
+#cd ..
+#cp refinPprots820/align_convert_fas_to_phy.pl hmmsrch_protv1.1/blastp
+
+#cd hmmsrch_protv1.1/blastp
+#ls -al  ## 755 after cp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl pid40_216pruned13to203.fa.aln.hmmaln.fa
+
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 243618 Oct 24 20:57 pid40_216pruned13to203.fa.aln.hmmaln.phy
+exit
+less pid40_216pruned13to203.fa.aln.hmmaln.phy
+ 203 785
+'TraesCS6B02G045200.1'  ---------- ---------- ---------- ---VPVGRRI LEQNIKARYH AGDIGTEDAL 
+
+logout
+
+## scp back to macbook, (line 10576)
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/pid40_216pruned13to203.fa.aln.hmmaln.phy .
+ls -al *.phy
+-rw-r--r--  1 bterry  staff  243618 Oct 24 21:02 pid40_216pruned13to203.fa.aln.hmmaln.phy
+
+less pid40_216pruned13to203.fa.aln.hmmaln.phy
+ 203 785
+'TraesCS6B02G045200.1'  ---------- ---------- ---------- ---VPVGRRI LEQNIKARYH AGDIGTEDAL
+
+head -n 4  pid40_216pruned13to203.fa.aln.hmmaln.phy
+ 203 785
+'TraesCS6B02G045200.1'  ---------- ---------- ---------- ---VPVGRRI LEQNIKARYH AGDIGTEDAL 
+'TraesCS1A02G057400.1'  -------TPI SRIRIRLRRS RLFSSSATTP PPARSWSPHT AFA------- ---------- 
+'TraesCS1B02G038400.1'  ---------- ---------- ---------- ---------- ---------- ----------
+
+## so phy header       203 785, expect the 203
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/pid40_216pruned13to203.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: pid40_216pruned13to203
+
+The alignment file "pid40_216pruned13to203.fa.aln.hmmaln.phy" was uploaded, it contains 203 taxons of 785 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20181025-044646_Zm85/cmd.txt
+
+job was submitted. (Wed, 10/24/18, 9:47pm)
+#*******************************************************************
+
+# line 10622, job finished by < 6 hrs later
+
+10/25/18:
+-rw-r--r--@ 1 bterry  staff   6904 Oct 25 14:31 pid40_216pruned13to203_fa_aln_hmmaln_phy_phyml.zip
+# dnloaded from phyml site
+
+# output file, in dir.:
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/pid40_216pruned13to203_fa_aln_hmmaln_phy_phyml
+-rw-r--r--@  1 bterry  staff  11100 Oct 25 07:02 pid40_216pruned13to203_fa_aln_hmmaln_phy_phyml_tree.txt
+# rename by coping to:
+pid40_216pruned13to203_phyml_tree.txt
+cp pid40_216pruned13to203_fa_aln_hmmaln_phy_phyml_tree.txt pid40_216pruned13to203_phyml_tree.txt
+
+#  next take it to unl.box.com, then to 'pro' laptop.
+# from (on pmtmbook15) 
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/pid40_216pruned13to203_fa_aln_hmmaln_phy_phyml
+
+# to on 'pro', dir .../macbookpro2018/PPRv1.1_1161_88ctls
+# create new dir on pro, .../PPRv1.1_1161_88ctls/vikas_filter
+
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# figtree pattern pretty much matches pid40_phyml_tree.txt tree.
+
+# talked to vikas
+# note, 1 chr5 (magenta), 5 chr7 (blue-green), 5 chrU (orange) in the 203 seqs. They are only co-located in groups chr2 & chr6. pid40_216pruned13to203_phyml_tree_other.txt
+
+# note: pid40_216pruned13to203_phyml_tree_color.txt has colored chr1 (red), chr2 (green), & chr6 (blue).
+
+# note: for chr 1, 2, 6, A, B, D figtree pattern *not* skewed.
+
+# tasks:
+# Rmd, (abstract)
+# GSDS (203, 13)
+# phenogram
+# codon usage
+
+# think 1st, Rmd starting v1.1 on log file. Put in abstr in here. Stopped v1.0 Rmd file at line 7788.
+
+10/30/18:
+# working on images for Rmd file. 
+
+# 1st, PPRv1.11913_no_ctls_forRmd.txt, no initial request for aLRT, then with node labels, not seeing aLRT, etc., ????????????? .png file looks fine in 'preview' ??????
+# Q: display node ages ?????????????????
+ 
+# 2nd, PPRv1.1.1913_plusrice9_forRmd.png
+# Q: same issues as #1 ????, .png file looks fine in 'preview' ??????
+
+# 3rd, PPRv1.1.1913_plus88ctlsplus88ctls_guess_P_PLS_forRmd.png
+
+# 4th, PPRv1.1.1913_plus88ctlsplus88ctls_4color_forRmd.png
+# note a yellow color near end of 'P' portion of 1913 ????????
+# AB = red, AT = green, BRAD = blue, Glyma = yellow
+
+
+10/31/18:
+# 5th, PPRv1.1.752_plus88ctlsplus88ctls_4color_forRmd.png
+# all colored ctls off by selves in a section, so perhaps rest seqs are 'PLS' ???
+# color key as 4th.
+
+# 6th, PPRv1.1.1161_plus88ctlsplus88ctls_4color_forRmd.png
+# color key as 4th.
+# here, colors mixed thru the 1161 seqs, perhaps arab & Glyma closer together, and rice & bracky sort of grouped. But some arab & Glyma seqs spread around.
+
+# Following blastp:
+
+# 7th, list_wheatids_pid50_phyml_tree_chrcolor_forRmd.png, 206 seqs
+# chr1=red, chr2=green, chr6=blue
+
+# 8th, list_wheatids_pid50_plus88_phyml_tree_chrcolor_forRmd.png, 206+88 seqs
+# key as 7th
+
+# 9th, list_wheatids_pid50_plus88_phyml_tree_4ctlscolor_forRmd.png, 206+88 seqs
+# key as 7th
+
+11/01/18:
+
+TO GO
+# 10th, pid35_phyml_tree_chrcolor_forRmd.png
+key as 7th
+
+# 11th, pid35_plus88ctls_phyml_tree_chrcolor_forRmd.png, 305+88 seqs
+key as 7th
+
+# 12th, pid35_plus88ctls_phyml_tree_4ctlscolor_forRmd.png, 305+88 seqs
+key as 4th
+
+11/02/18:
+
+# 13th & 14th, pid40_phyml_tree_chrcolor_forRmd.png
+But to capture 'up close' view in figtree,
+SShot2018-11-02pid40chrcolor_forRmd.png
+key as 7th
+
+# 15th & 16th, pid45_phyml_tree_chrcolor_forRmd.png
+But to capture 'up close' view in figtree,
+SShot2018-11-02pid45chrcolor_forRmd.png
+key as 7th
+
+# 17th & 18th & 19th & 20th, pid40216pfruned13to203chrcolor_forRmd.png
+Note: exported png more 'close up' due to absence of long branches.
+But to capture 'up close' view in figtree,
+SShot2018-11-02pid40_216pruned13to203chrcolor_forRmd.png
+key as 7th
+pid40216pfruned13to203_phyml_tree_otherchrcolor_forRmd.png
+chr5=magenta, chr7=cyan, chrU=orange
+preceding exported
+SShot2018-11-02pid40_216pruned13to203otherchrcolor_forRmd.png
+key as preceding file
+
+# Now, upload these 20 images to box (new dir, say v1.1Rmd_doc)
+
+11/03/18:
+# dnload to v1.1 Rmd dir, v1.1Rmd_doc
+
+11/04/18:
+# slip a save to ***github*** in here
+
 STOPPED
+
+# fix Rmd file -> html file
+
+
+
+
+
+
+
+
+
+
 
 
 
