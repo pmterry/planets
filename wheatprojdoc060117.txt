@@ -2299,7 +2299,6 @@ bash Philip_no_echo.sh sort147_nodotnum.txt
 bash Philip_no_echo.sh sort147_nodotnum.txt > testbashtofile.gff3
 ## looks like worked. Now try on actual gff3 file, iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
 ## Philip_realgff3.sh
-bash Philip_realgff3.sh sort147_nodotnum.txt > realbashtofile.gff3
 ## ran in less than 20 min, 789 rows, Q: should I delete last 3 pattern outputs since no chromosome specified before pass to GSDS display  (or IGV) ?????
 
 09/08/17:
@@ -12857,9 +12856,335 @@ key as preceding file
 11/04/18:
 # slip a save to ***github*** in here
 
+# fix Rmd file -> html file
+
+11/17/18:
+#talked to vikas on 11/12/18.
+--frac-align at some point, for seqs want to call RF-like ???
+--vikas table: see /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc/SShot2018-11-17vikas_table.png
+To put in v1.1_logfile_doc.Rmd, (done)
+
+--note: pid50+88, ??? **what** this ???????
+
+-- sequence lists
+
+# 206
+pid50 (206 rows): /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+/list_WheatIDs_pid50.txt
+
+# 196
+(pid50 minus 10 LB's, = 196 rows)
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+/list_WheatIDs_pid50LB10prunedto196.txt
+
+# 216
+pid40 (216 rows)
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+/list_WheatIDs_pid40.txt
+
+# 203
+203, (216(40pid) - 10(50pid LB's) - 3 addl LBs on 40pid) 
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+/pid40_216pruned13to203.txt
+
+# ten
+# pid50_the_10_LBs.txt
+comm -23 list_WheatIDs_pid50.txt list_WheatIDs_pid50LB10prunedto196.txt > pid50_the_10_LBs.txt  ## (subset, 4 from chr 1,2,6, 6 from chr 7, note: only 7 genes for the 10 seqs, isomorphs)
+
+# 'ten_addl'
+pid40_216minus_pid50_206_10seqs.txt (3 are LB's, thus excluded from 203 'final')
+comm -23 list_WheatIDs_pid40.txt list_WheatIDs_pid50.txt > pid40_216minus_pid50_206_10seqs.txt
+# **TO CHECK**: in figtree, pid40_phyml_tree.txt, confirm names of the 3 LB's of the 10. *Confirmed*, the 3 are all on same LB.
+
+# 7
+# 3 LB's excluded from 'ten_addl' yielding 7 added to the 196.
+cp pid40_216minus_pid50_206_10seqs.txt pid40_216minus10_7_SBs.txt
+# then manually remove the 3 LBs
+
+# **TO DO**: upload these 7 files up to 'box' (RF_GeneFamily/figtreetmp/BLASTP_Filtering/RFseqlists dir.)
+list_WheatIDs_pid50.txt
+list_WheatIDs_pid50LB10prunedto196.txt
+list_WheatIDs_pid40.txt
+pid40_216pruned13to203.txt
+pid50_the_10_LBs.txt
+pid40_216minus_pid50_206_10seqs.txt
+pid40_216minus10_7_SBs.txt
+# (done)
+
+# work on the ***'table'*** (like Zhang et al, 2018)
+# some Q's:
+# wheat v1.1, both gene name, prot. seq name indicates the chr name, so, perhaps skip chr. name colm ????????
+# location: can I get gff3 file for for v1.1 (note: v1.1 have difference in each name (v1.0 has '01G', v1.1 has '02G' as part on gene/protein name, ????????????)
+# 'domain number', ??????????????
+# sub. location (Q: is this needed ??????????)
+# Q: table in Rmd, 'kable', ??????????????????????? For **moment**, create dataframe for table, **see** how Rmd displays it, may be adequate for now ?????????????????
+
+# colm 1, 203 seqs, initially protein name ???, pid40_216pruned13to203.txt
+# order: (file is in order of chroms, then trailing numbers already)
+grep -c "TraesCS1A" pid40_216pruned13to203.txt  ## 31
+grep -c "TraesCS1B" pid40_216pruned13to203.txt  ## 43
+grep -c "TraesCS1D" pid40_216pruned13to203.txt  ## 38
+
+grep -c "TraesCS2A" pid40_216pruned13to203.txt  ## 10
+grep -c "TraesCS2B" pid40_216pruned13to203.txt  ## 8
+grep -c "TraesCS2D" pid40_216pruned13to203.txt  ## 10
+
+grep -c "TraesCS6A" pid40_216pruned13to203.txt  ## 19
+grep -c "TraesCS6B" pid40_216pruned13to203.txt  ## 19
+grep -c "TraesCS6D" pid40_216pruned13to203.txt  ## 14
+
+5B = 1, 7B = 2, 7D = 3, 'U' = 5
+
+Total = 203
+
+11/19/18:
+md5 number:
+777ca9dcc04c12e5c92f464321617670	iwgsc_refseqv1.1_genes_2017July06.zip
+777ca9dcc04c12e5c92f464321617670, so matches
+# looks like I prevly downloaded this file.
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/IWGSC_v1.1_HC_20170706.gff3
+
+11/20/18:
+# talked to vikas
+# to table, add a GC content colm
+# to table, add a GC3 content colm
+# number of domains colm, use pfam or blastp to get this number
+# later: locate snps in RF seqs (genes)
+
+
+# ok, look back in log file, how access perhaps gene rows for desired protein (think bash script will be used (or python if did ??????) to access the 203 RF-like seqs ?????
+
+##########################################
+# refs for building Zhang, 2018 table
+line 2169
+line 2191
+line 2195 => line 2220, gff3_1345_9names.txt
+/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3
+# still need length (aa's), perhaps from .fa file before phylogram of '203' seqs ???
+line 2302
+bash Philip_realgff3.sh sort147_nodotnum.txt > realbashtofile.gff3
+#############################################
+
+
+# perhaps, start df in R, create 1st colm, from these 203 seqs (get their gene seq, expect <203 since apparently isoforms in the 203 proteins ???????)
+
+# from line 2161
+# wc -l iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+# 1743281 iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+wc -l IWGSC_v1.1_HC_20170706.gff3
+ 2028209 IWGSC_v1.1_HC_20170706.gff3
+
+cd /Users/bterry/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3
+
+grep -c '^chr.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3  ## 1743281
+grep -c '.*gene.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3  ## 110790
+# Q: so ***fewer*** 'gene' records in v1.1 than v1.0, but the reverse for 'chr' lines ??????????????????????
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06
+
+# ref line 2169
+#grep '.*gene.*TraesCS1A01G031600.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+#grep '.*gene.*TraesCS1A01G031600.*$' iwgsc_refseqv1.0_HighConf_2017Mar13.gff3
+
+grep -c '^chr.*$' IWGSC_v1.1_HC_20170706.gff3  ## 1920295
+grep -c '.*gene.*$' IWGSC_v1.1_HC_20170706.gff3  ## 107903
+
+# ref line 2195
+grep '.*gene.*$' IWGSC_v1.1_HC_20170706.gff3 > v1.1_gff3_genes.txt
+wc -l v1.1_gff3_genes.txt
+  107903 v1.1_gff3_genes.txt
+# Q: **smaller** than v1.0, line 2195 ????????????????????????????????
+less v1.1_gff3_genes.txt
+
+11/21/18:
+line 2198
+# next, try cut 1,3,4,5,7 in one step ??????????????
+cut -f 1,3,4,5,7 v1.1_gff3_genes.txt > v1.1_gff3_genes_col13457.txt
+head -n 3 v1.1_gff3_genes_col13457.txt
+wc -l v1.1_gff3_genes_col13457.txt
+  107903 v1.1_gff3_genes_col13457.txt
+
+line 2200
+cut -f 9 v1.1_gff3_genes.txt > v1.1_gff3_genes_col9.txt
+head -n 3 v1.1_gff3_genes_col9.txt  ## looks like 'Trae' numbers 'incrementing' ????
+# ID=TraesCS1A02G000100;previous_id=TraesCS1A01G000100;primconf=HC;Name=TraesCS1A02G000100
+# so will need do some editing to get just gene name
+cat v1.1_gff3_genes_col9.txt|perl -pe 's/^ID=(Tr.+);.+/\1/' | wc -l  ##     107903 as expect.
+tail -n 3 v1.1_gff3_genes_col9.txt  ## can't use :p to **stop** relative expn
+
+cat v1.1_gff3_genes_col9.txt|perl -pe 's/^ID=(Tr.+);.+/\1/' | head -n 3 > test1
+cat test1|perl -pe 's/^ID=(Tr.+);.+/\1/' | head -n 3 
+
+cat test1|perl -pe 's/^ID=(Tr.+\d);.+/\1/' | head -n 3 
+cat v1.1_gff3_genes_col9.txt|head -n 3 > testinp.txt
+
+#echo testinp.txt | tr ';' '\11'
+cut f1 testinp.txt | tr ';' '\11'
+cat testinp | tr ';' '\11'
+echo frabacbable | tr 'a' 'b'
+cut -c4-21 testinp.txt > testout
+# looks like this will work ???????
+cut -c4-21 v1.1_gff3_genes_col9.txt | wc -l  ##   107903 as expect
+cut -c4-21 v1.1_gff3_genes_col9.txt > v1.1_gff3_genes_col9gnames.txt
+wc -l v1.1_gff3_genes_col9gnames.txt
+  107903 v1.1_gff3_genes_col9gnames.txt
+head -n 3 v1.1_gff3_genes_col9gnames.txt
+tail -n 3 v1.1_gff3_genes_col9gnames.txt
+
+# 1st 105210 rows v1.1_gff3_genes_col9gnames.txt, no ';' in row
+# 2691 rows have ';' starting from row 105211
+# but, 107903 - 105210 = 2693. So two lines not accounted for ??????
+# to do, tail n = 2691, manually check, where 1st row matches in v1.1_gff3_genes_col9gnames.txt.
+tail -n 2691 v1.1_gff3_genes_col9gnames.txt > bottom2691.txt
+tail -n 2693 v1.1_gff3_genes_col9gnames.txt > bottom2693.txt
+
+11/23/18:
+# to try two things, 'perl -pe' & cut commands, see if can work at 
+accessing just gene name in colm 9 in v1.1_gff3_genes_col9.txt
+cat testinp.txt
+cat testinp.txt|perl -pe 's/^ID=(Tr.+);.+;.+;.+$/\1/'
+# appears to work ????
+# retry
+wc -l v1.1_gff3_genes_col9.txt
+  107903 v1.1_gff3_genes_col9.txt
+cat v1.1_gff3_genes_col9.txt|perl -pe 's/^ID=(Tr.+);.+;.+;.+$/\1/' | head -n 107903 > v1.1_gff3_genes_col9names_2prl.txt
+wc -l v1.1_gff3_genes_col9names_2prl.txt
+  107903 v1.1_gff3_genes_col9names_2prl.txt
+# for v1.1_gff3_genes_col9names_2prl.txt, ***not*** all rows properly handled ????
+# to try
+cut -d ';' -f 1 v1.1_gff3_genes_col9.txt | wc -l  ##   107903 as expect
+cut -d ';' -f 1 v1.1_gff3_genes_col9.txt | head -n 107903 > v1.1_gff3_genes_col9names_cut.txt
+wc -l v1.1_gff3_genes_col9names_cut.txt
+  107903 v1.1_gff3_genes_col9names_cut.txt
+# Still need remove 'ID=' from start ????? but 13 rows with '.d', for example, 
+ID=TraesCS5B02G311400
+ID=TraesCS5B02G311400.1
+ID=TraesCS5B02G311400.1.exon1
+# Perhaps **manually**, remove the '.' from gene name, & extra rows if 'a' gene has more than one row, in file v1.1_gff3_genes_col9names_cut_man.txt
+cp v1.1_gff3_genes_col9names_cut.txt v1.1_gff3_genes_col9names_cut_man.txt
+wc -l v1.1_gff3_genes_col9names_cut_man.txt
+  107891 v1.1_gff3_genes_col9names_cut_man.txt
+# so, 12 rows removed
+# check uniqueness
+sort v1.1_gff3_genes_col9names_cut_man.txt |uniq | wc -l   ##   107891, so all uniq
+# now no ';' or '.' characters, the goal over a day ago.
+# **but** now issue when paste 1,3,4,5,7 colms, 107903 rows together with col9 with now only 107891 rows ????????????
+
+# so, after all that, **new plan**:
+# for file v1.1_gff3_genes_col9names_cut.txt, has 13 rows with "." character, all 107903 rows, 1st paste back with 1,3,4,5,7 file, v1.1_gff3_genes_col13457.txt, then manually remove 12 ?? rows with '.'s or multiple rows with particular gene name.
+# yet to remove 'ID=' from start of v1.1_gff3_genes_col9names_cut.txt
+cut -d '=' -f 2 v1.1_gff3_genes_col9names_cut.txt | head -n 107903 > v1.1_gff3_genes_col9names_cut_ID.txt
+head -n 3 v1.1_gff3_genes_col9names_cut_ID.txt  # 'ID=' now gone from output 
+
+# ref line 2217
+wc -l v1.1_gff3_genes_col13457.txt 
+  107903 v1.1_gff3_genes_col13457.txt
+wc -l v1.1_gff3_genes_col9names_cut_ID.txt
+   107903 v1.1_gff3_genes_col9names_cut.txt
+## now, paste back together colms 1,3,4,5, 7 with colm9.
+
+paste v1.1_gff3_genes_col13457.txt v1.1_gff3_genes_col9names_cut_ID.txt > v1.1_gff3_13457_9names.txt
+head -n 3 v1.1_gff3_13457_9names.txt
+tail -n 3 v1.1_gff3_13457_9names.txt
+# now remove rows with '.' chars, fix so just one row for each gene name (prevly 12 rows removed ???
+# 1st, copy
+cp v1.1_gff3_13457_9names.txt v1.1_gff3_13457_9names_man.txt
+# **WAIT**, 12 rows for mRNA, cause have like 'pseudogene' in the row.
+
+grep '.*\tgene\t.*$' IWGSC_v1.1_HC_20170706.gff3 | wc -l  ## 107891 the **correct** number
+grep '.*\tgene\t.*$' IWGSC_v1.1_HC_20170706.gff3 > v1.1_gff3_genes_only.txt
+wc -l v1.1_gff3_genes_only.txt
+  107891 v1.1_gff3_genes_only.txt
+# but, 109864 occurrences of 'gene' using bbedit to search for count of 'gene ???????
+# for bbedit search '\tgene\t', gives 107891, so go with this number of gege rows in IWGSC_v1.1_HC_20170706.gff3.
+# now repeat get colms 1.3.4.5.7 & separately colm9.
+cut -f 1,3,4,5,7 v1.1_gff3_genes_only.txt > v1.1_gff3_genes_only_col13457_.txt
+head -n 3 v1.1_gff3_genes_only_col13457_.txt
+wc -l v1.1_gff3_genes_only_col13457_.txt
+  107891 v1.1_gff3_genes_only_col13457_.txt, believed to be correct no. rows
+
+# process colm9 to get just gene name,
+v1.1_gff3_genes_only.txt
+line 2200
+cut -f 9 v1.1_gff3_genes_only.txt > v1.1_gff3_genes_only_col9.txt
+head -n 3 v1.1_gff3_genes_only_col9.txt  ## looks like 'Trae' numbers 'incrementing' ????
+# ID=TraesCS1A02G000100;previous_id=TraesCS1A01G000100;primconf=HC;Name=TraesCS1A02G000100
+wc -l v1.1_gff3_genes_only_col9.txt
+  107891 v1.1_gff3_genes_only_col9.txt
+# so will need do some editing to get just gene name
+# try cut *twice*
+# try
+cut -d ';' -f 1 v1.1_gff3_genes_only_col9.txt | wc -l  ##     107891 as expect
+cut -d ';' -f 1 v1.1_gff3_genes_only_col9.txt | head -n 107891 > v1.1_gff3_genes_only_col9names_cut.txt
+wc -l v1.1_gff3_genes_only_col9names_cut.txt
+  107891 v1.1_gff3_genes_only_col9names_cut.txt
+head -n 3 v1.1_gff3_genes_only_col9names_cut.txt
+
+# Still need remove 'ID=' from start ????? but 13 rows with '.d', for example, 
+cut -d '=' -f 2 v1.1_gff3_genes_only_col9names_cut.txt | head -n 107891 > v1.1_gff3_genes_only_col9names_cut_ID.txt
+head -n 3 v1.1_gff3_genes_only_col9names_cut_ID.txt  # 'ID=' now gone from output 
+wc -l v1.1_gff3_genes_only_col9names_cut_ID.txt
+  107891 v1.1_gff3_genes_only_col9names_cut_ID.txt
+# bbedit, v1.1_gff3_genes_only_col9names_cut_ID.txt has no ';'s or '.'s, good.
+
+# finally, paste back to get 1,3,4,5,7,9 colms in one file.
+paste v1.1_gff3_genes_only_col13457.txt v1.1_gff3_genes_only_col9names_cut_ID.txt > v1.1_gff3_genes_only_13457_9names.txt
+head -n 3 v1.1_gff3_genes_only_13457_9names.txt
+tail -n 3 v1.1_gff3_genes_only_13457_9names.txt
+wc -l v1.1_gff3_genes_only_13457_9names.txt
+  107891 v1.1_gff3_genes_only_13457_9names.txt
+# bbedit v1.1_gff3_genes_only_13457_9names.txt, no ';'s or '.'s, good.
+## preceding checks look ok.
+
+11/24/18:
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 11/24/18 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
+
 STOPPED
 
-# fix Rmd file -> html file
+need subset the 203, so bash script ??????
+# ref line 2273
+cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 147 > sort147_nodotnum.txt
+
+
+# ref: line 2301
+bash Philip_no_echo.sh sort147_nodotnum.txt > testbashtofile.gff3
+
+IWGSC_v1.1_HC_20170706.gff3
+
+
+GSDS ??
+phenogram ??
+Zhang table, chrom, ...
+
+
+
+
+
+
+
+
+
+--intron-exon structure, compare betw. chroms
+
+# Q: for table like Zhang, 2018, do we want to only work with subset of the 216 seqs of  pid40, or also the additional 89 seqs in pid35 ??????
+
+# Q: seq of seqs in the proposed table:
+ 
+
+
+
+STOPPED
+
+NEXT, READ THRU Rmd, html files, MODIFY FOR LOGIC, MAKE COMMENTS AS TO WHAT CHANGES NEEDED TO SEE WHAT WANT TO SEE IN IMAGES, ETC.
+
+MAY THEN CREATE A NEW Rmd file, EDIT DOWN TO WHAT VIKAS LOOKING FOR, SUMMARY PARAGRAPH
 
 
 
