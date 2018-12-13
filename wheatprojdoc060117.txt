@@ -13146,17 +13146,490 @@ git status
 git push origin master
 # git remote -v
 
-STOPPED
+sort pid40_216pruned13to203.txt |uniq | wc -l  ## 203 as expect if unique
+sort v1.1_gff3_genes_only_13457_9names.txt | uniq | wc -l  # 107891 as expect if unique
+
+# now, need remove '.d' from pid40_216pruned13to203.txt
+# ref line 2273
+#cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 147 > sort147_nodotnum.txt
+cat pid40_216pruned13to203.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 203 > pid40_216pruned13to203_nodotnum.txt
+head -n 3 pid40_216pruned13to203_nodotnum.txt  ## looks ok
+wc -l pid40_216pruned13to203_nodotnum.txt
+     203 pid40_216pruned13to203_nodotnum.txt
 
 need subset the 203, so bash script ??????
-# ref line 2273
-cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 147 > sort147_nodotnum.txt
-
+Philip_gff3_the203.sh
+# inside will be file v1.1_gff3_genes_only_13457_9names.txt
 
 # ref: line 2301
-bash Philip_no_echo.sh sort147_nodotnum.txt > testbashtofile.gff3
+# bash Philip_no_echo.sh sort147_nodotnum.txt > testbashtofile.gff3
+bash Philip_gff3_the203.sh pid40_216pruned13to203_nodotnum.txt > pid40_216pruned13to203_colm134579.gff3
+# done, < 7 min.
+wc -l pid40_216pruned13to203_colm134579.gff3
+     203 pid40_216pruned13to203_colm134579.gff3
+# note, last 5 rows, for example, have a location, but no chrom number ?????????
+chrUn	gene	79854237	79856213	+	TraesCSU02G089563
 
-IWGSC_v1.1_HC_20170706.gff3
+# num. PPR domains in prot. structure column. Try SMART, Zhang, 2018 paper, p-3.
+# 'Genomic mode', try enter 1st prot. on '203' seqs list, TraesCS1A02G031600. So look on .fa file used for MSA with muscle.
+
+line 12475
+pid40_216pruned13to203.fa in
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# 1st seq:
+>TraesCS1A02G031600.1 gene=TraesCS1A02G031600
+MSPPRLRLLLLLLLLLCARHSSSTSHPSRIWDPHAAFAAATERARSGRLTTEDAHHLFDELLRQGNPVQE
+RPLNNFLAALARAPASASCSDGPALAVALFGRLSRGAGQRVAQPNVFTYGVLMDCCCRACRTDLALAFFG
+RLLRTGLQAGQVVFNTLLKGLCHTKRADEALDVLLHRMPELGCTPDVVAYNTVIHGFFREGQVGKACDMF
+HGMAQKGVMPNVVTYNSVIDGLCKARAMDKAETVLSQMVNDGVRPDNVTYNSLIHGYSSLGNWKEAVRVF
+KEMSRRFTPDVITCTSLMAFLCKNGKSKEAAEIFDSMAMKGLKRDTVSYAILLHGYATEGCLVDMINLFN
+SMATDCILPNCHIFNILINAYAKSGMMGEAMLIFKKMHEQGVSPDVVTYSTVIHAFCKMGSLDIAMDKFN
+QMVDMGVRPNAIVYHSLIQGFCTHGDLVKAKELVTEMRNKAMRPPDIKIFHSIMKNLCTEGRVIEARDIL
+DLMVHIGMRPDVPIFNLLIGGYCLVHKMEDATKMFDDMVSYGLEPCNSTYGILINGYCKNGRIDDGLNLF
+KEMLRKGLKPTTFNYNVILDGLFLAGRTVAAKEKFDEMVESGVSVCIDTYSIVLGGLCRNNCTGEAITLS
+KKLSTMNVKFNIAIVNILIGAFFRVRRNQEAKDLFAAIPANGLVANVVTYSMMMINLIKEGSLEEADDLF
+LSMEKSGCTADSCMLNHIIRRLLERGEIVKAGNYMSKVDAKSYSLEAKTVSLLISLFLGKGRYREHMKLL
+PMKYQFLEEAATVE
+
+# to supply this to 'SMART', see if get count of ppr domains ???????
+# tried, what to think of the output ????????????
+# output:
+# "There were no features detected in the selected region."
+# Q: did I use it right ??????????????
+
+11/25/18:
+
+# next, chek Mapchart s/w, Zhang, 2018 ref., p-3.
+# https://www.wur.nl/en/show/Mapchart.htm (available for windows platform ***only***)
+# may have to count PPR domains wi blastp as before ????????
+
+line 9395
+# get .fa seq lengths
+# python3 fastaseqlen.py PPRv1.1_752_PLS_seqs.fa_plus_88ctls.fa
+# output file: fastaSeqLen752PLSplus88ctls.txt
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+# testing
+python3 fastaseqlen.py test_seqlen.fa
+python3 fastaseqlen_copy.py test_seqlen.fa  ## commented out sev'l testing output prints
+# fastaSeqLengths.txt mv'd to fastaSeqLengths_2testseqs.txt
+python3 fastaseqlen_copy.py pid40_216pruned13to203.fa
+# output: fastaSeqLengths.txt, the lengths of the 203 proteins
+# rename fastaSeqLengths203.txt
+#****************************************
+#Note: 53 seqs < 300 aa in length, Zhang table, shortest is 443 ??????????????????????
+#*******************************************************
+
+# to check, at https://urgi.versailles.inra.fr/download/iwgsc/IWGSC_RefSeq_Annotations/v1.1/
+# the manualy curated gene families folder has a gff3 for PPR gene family. TO SEE. PPR.gff3. Thousands of lines. Need grep \tgene\t to get just genes.
+
+line 13094
+grep '.*\tgene\t.*$' PPR.gff3 | wc -l  ## 1690, in v1.0, I had approx 1602
+# So, looks like these all PPR seqs, *not* helpful for finding RF-like seqs.
+
+11/26/18:
+# do 'summary' of 203 lengths.
+# try ggplot2 of 203 lengths vs 1:203 after 1st sort on 'length' colm2 ?????????
+
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+getwd()
+pid40_203_lens <- read.delim("fastaSeqLengths203.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("gene", "len"))
+dim(pid40_203_lens)
+head(pid40_203_lens)
+class(pid40_203_lens)
+###########################################################
+summary(pid40_203_lens$len)
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#106.0   280.5   477.0   485.1   689.5  1562.0 
+# skewed wi 1562 ??????
+###############################################################
+library(ggplot2)
+# need a sort
+library(dplyr)
+pid40_203_lens_sort <- arrange(pid40_203_lens, len)
+head(pid40_203_lens_sort, n=4)
+sp <- ggplot(pid40_203_lens_sort, aes(x=1:203, y=len))
+sp2 <- sp + geom_point()
+sp2             
+# plot does not have signif. 'jumps', but has two *outlier* points, ~1000, 1562, esp. the latter. The next largest length ~ 900. See pid40_203_len.png
+# could do box plot ??????????
+
+# Task: count domains in seqs, submit to https://pfam.xfam.org/search#tabview=tab1
+pid40_216pruned13to203.fa. Try 'Gathering threshold'
+# error, "." characters at end of seqs
+# *test*, see if pfam site gives *counts*, perhaps take 1st 285 lines of '.fa' file, manually, remove the 20 '."s, submit to pfam
+cat pid40_216pruned13to203.fa | head -n 285 > pid40_216pruned13to203_rem_dots.fa
+# submit, 11:20pm, done say 10am, so < 11hrs for 1st 34 seqs of pid40_216pruned13to203.fa
+# no email message received when done ??????????????????????????????
+# pfam output giving 'counts'. **Perhaps** blastp couple of these seqs with PPR 35 aa seq, compare number counts. Perhaps online at ncbi.
+
+11/27/18:
+# dnloaded pfam hmmer output from the ~ 11 hr run above (for gene ...1A...031600.1). 
+######################################
+Q: have several questions about what looking at. How to use this output ?????????
+# talked to vikas,
+# concerning output:
+# Searched 34 out of 34 uploaded sequences.
+# Database Searched: pfam
+#
+# If you have any comments or questions about the use of this service,
+# please contact us at: hmmer-help@ebi.ac.uk
+
+# You can retrieve the full results by going to:
+# http://www.ebi.ac.uk/Tools/hmmer/results/score/32843E48-F204-11E8-9BEB-C362F75AEC3D
+score results | HMMER
+www.ebi.ac.uk
+Biosequence analysis using profile hidden Markov Models using HMMER
+#*******************************************
+NOTE: remaining portion of 203 **yet** to submit.
+#*********************************************
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/domain_hmmer/hmmer_email_out_34subset.txt
+file has email summary for **only** 1st 34/203 seqs.
+################################
+
+11/28/18:
+wc -l hmmer_email_out_34subset.txt
+     918 hmmer_email_out_34subset.txt
+# further work on hmmer_email_out_34subset.txt file, Vikas interest in extracting hmm colm, for ' PPR ' in 'hmm' colm. 316 rows.
+grep -c '.*\sPPR\s.*$' hmmer_email_out_34subset.txt | wc -l
+# Q: failing with grep & search in bbedit. Could a modified shell script, Philip_gff3_the203.sh help ??????????
+
+# STOPPED
+
+# ***subcellular*** location of RFL seqs: check out TargetP for this task. http://www.cbs.dtu.dk/services/TargetP/
+# For now, take default, 'no cutoff'. Select 'plant'. Selecting 'perform cleavage site predictions'.	Submit file pid40_216pruned13to203.fa.
+# my site 'banned' ???????????
+# sent email: hhs+webface@cbs.dtu.dk => later to 2nd address
+############################################
+# Got message when submitted job: 'Your site cpe-97-98-138-58.neb.res.rr.com (%.neb.res.rr.com) has been banned'.
+# Don't know a reason why my computer is banned????????????????????????/
+# **BUT** ran at UNL, to **see** bottom output for 'Explain the output"
+#######################################
+
+11/29/18:
+# vikas **interest** in comparing GC, domains, & qqch else (??) when available ????
+
+# resuming attempt to extract PPR records from hmmer_email_out_34subset.txt
+
+cut -d ' ' -f 2,3,4,7,8 test_himmer_out.txt
+gene=TraesCS1A02G031600    
+# only outputting out colm 2, ???????????????????????????
+
+# perhaps try read into R, split colms this way ????????????
+#arab26hits <- read.delim("arab26_ctls_prot1161hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qnam", "snam", "eval", "pid", "len", "qlen", "slen", "bscor"))
+
+rm(list=ls())
+tsthimmerout <- read.delim("test_himmer_out.txt", header=FALSE, stringsAsFactors=FALSE, sep="")
+dim(tsthimmerout)
+head(tsthimmerout, n=2)
+#                     V1                      V2  V3  V4  V5  V6        V7    V8 V9 V10 #V11   V12     V13
+#1 >TraesCS1A02G031600.1 gene=TraesCS1A02G031600 532 563 531 564 PF12854.7 PPR_1  2  33  34 38.67 5.9e-10
+#2 >TraesCS1A02G031600.1 gene=TraesCS1A02G031600 566 599 566 599 PF12854.7 PPR_1  1  34  34 24.19 2.0e-05
+#      V14 V15 V16    V17
+#1 2.3e-13   1   1 CL0020
+#2 7.7e-09   1   1 CL0020
+write.table(tsthimmerout, file="tsthimmerout_tabs.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+# ok, try, cut & grep
+cut -f 2,3,4,7,8 tsthimmerout_tabs.txt  # got 5 colms as expect
+cut -f 2,3,4,7,8 tsthimmerout_tabs.txt >  tsthimmerout_tabs_23478.txt
+cut -f 8,2,3,4,7 tsthimmerout_tabs.txt  # no change in order ???????????
+
+# perhaps read into R, place colm 8 1st, write out. Possibly then would work wi grep or bbedit ??
+ 
+grep -c '.*\tPPR$' tsthimmerout_tabs_23478.txt | wc -l # perhaps need car retn, line feed in relative expn following 'PPR' to succeed ???????????????
+
+# perhaps read into R, place colm 8 1st, write out. Possibly then would work wi grep or bbedit ??
+
+11/30/18:
+grep -c '.*\tPPR\r' tsthimmerout_tabs_23478.txt | wc -l  ## fails
+
+rm(list=ls())
+tst23478 <- read.delim("tsthimmerout_tabs_23478.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(tst23478)
+head(tst23478, n=2)
+tst82347 <- data.frame(hmm=tst23478$V5, gene=tst23478$V1, start=tst23478$V2, end=tst23478$V3, name=tst23478$V2)
+head(tst82347, n=2)
+write.table(tst82347, file="tsthimmerout_tabs_82347.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+# back at bash prompt,
+grep -c '^PPR\t.*$' tsthimmerout_tabs_82347.txt | wc -l  ## fails
+grep -c 'PPR\t' tsthimmerout_tabs_82347.txt | wc -l  ## fails
+grep 'PPR\t' tsthimmerout_tabs_82347.txt  ## seems to have worked.
+#####################################################
+# so why prev. two lines *inconsistent* ???????????????
+########################################################
+grep '^PPR\t' tsthimmerout_tabs_82347.txt  ## seems to have worked.
+
+# in view of preceeding, to test when have tabs, 'PPR' still at end of line
+grep '^.*\tPPR\r' tsthimmerout_tabs_23478.txt  ## fails
+# so try following:
+# convert the seq 34 hmmer output file from spaces to tabs
+# then convert 'PPR' to 1st colm, perhaps same R session ??
+# then try grep with 'PPR\t' as above
+
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/domain_hmmer")
+getwd()
+tst23478 <- read.delim("hmmer_email_out_34subset.txt", header=FALSE, stringsAsFactors=FALSE, sep="")
+dim(tst23478)  ## [1] 918  30
+head(tst23478, n=2)
+#tst82347 <- data.frame(hmm=tst23478$V5, gene=tst23478$V1, start=tst23478$V2, end=tst23478$V3, name=tst23478$V2)
+#head(tst82347, n=2)
+write.table(tst23478, file="hmmer_email_out_34subset_tabs.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+head -n 3 hmmer_email_out_34subset_tabs.txt
+# Q: why still have colm header line ????????
+# remove **manually** hmmer_email_out_34subset_tabs.txt
+
+cut -f 2,3,4,7,8 hmmer_email_out_34subset_tabs.txt >  hmmer_email_out_34subset_tabs_23478.txt
+wc -l hmmer_email_out_34subset_tabs_23478.txt
+     917 hmmer_email_out_34subset_tabs_23478.txt
+head -n 3 hmmer_email_out_34subset_tabs_23478.txt
+
+# trying put 'PPR' colm as 1st colm, so can make grep work.
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/domain_hmmer")
+getwd()
+tst23478 <- read.delim("hmmer_email_out_34subset_tabs_23478.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(tst23478)  ## [1] 918  30
+head(tst23478, n=2)
+#tst82347 <- data.frame(hmm=tst23478$V5, gene=tst23478$V1, start=tst23478$V2, end=tst23478$V3, name=tst23478$V4)
+head(tst82347, n=2)
+write.table(tst82347, file="hmmer_email_out_34subset_tabs_82347.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+hmmer_email_out_34subset_tabs_82347.txt # looks ok
+
+grep 'PPR\t' hmmer_email_out_34subset_tabs_82347.txt | wc -l  ## 316, seems to have worked.
+grep '^PPR\t' hmmer_email_out_34subset_tabs_82347.txt | wc -l ## 316 seems to have worked.
+grep '^PPR\t' hmmer_email_out_34subset_tabs_82347.txt > hmmer_email_out_34subset_tabs_82347_PPR.txt
+head -n 3 hmmer_email_out_34subset_tabs_82347_PPR.txt
+
+# Now have gene (??) names with start/end location in 34 (203) prot. seqs, thus number PPR domains (PF01535.20) for each protein seq.
+# Q: sum these each prot/gene (??) for domain colm each table ????
+# Q: vikas compare GC wi these domains (but all the same domains ??). Perhaps go back check evalues, bit scores ???
+# Q: additional/different colms from hmmer output ???????
+
+# talked to vikas
+--he demo'd how handle 'hmmer_email_out_34subset.txt' *from command line* to get info for 'Zhang Table'. See file 'vikasexamples.txt'.
+
+12/01/18:
+
+--*next*, since takes some time for online hmmer to run, remove '.' from all 203 seqs, submit to hmmer. Finally process to yield Zhang Table colms for 'domain number'. 
+###################################################
+Still Q: if gene or prot names in our 'Table' ?????? *For now*, get prot. names, cause, can process them to a gene name.
+################################################
+# attempt to remove '.'s from pid40_216pruned13to203.fa with command line tools
+cat pid40_203test_3seqs.fa | grep -v "^>"  ## ok
+cat pid40_203test_3seqs.fa | grep -v "^>" |perl -pe 's/(.*)\./\1/'
+# looks like it worked.
+# send to file, check in bbedit.
+cat pid40_203test_3seqs.fa | grep -v "^>" |perl -pe 's/(.*)\./\1/' > pid40_203test_3seqs_tstoutput.fa
+# BUT, how arrange so new file has 'name' lines **&** seq lines minus '.' characters ?????????????????
+# don't know how to do without spending time programming this. So make a copy of pid40_216pruned13to203.fa, pid40_216pruned13to203man_dots.fa, then **manually** remove the '.' at end some seqs.
+cp pid40_216pruned13to203.fa pid40_216pruned13to203man_dots.fa
+# now, no more '.'s in seqs this file. 203 dots in '>' rows remain
+
+# now ready to submit to hmmer online site.
+# Task: count domains in seqs, submit to https://pfam.xfam.org/search#tabview=tab1
+pid40_216pruned13to203man_dots.fa from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter.
+Try 'Gathering threshold' setting.
+# start, 10:59pm. Q: queued behind zero other jobs, began running immedly ?????? Done 11:01pm.
+# save 'summary' from email to file hmmer_email_out203.txt in directory /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+wc -l hmmer_email_out203.txt
+    5968 hmmer_email_out203.txt
+
+#############################################
+From: hmmer-help@ebi.ac.uk <hmmer-help@ebi.ac.uk>
+Sent: Saturday, December 1, 2018 11:01 PM
+To: pterry@huskers.unl.edu
+Subject: Your search results for job 02659F74-F5EF-11E8-9F94-8EA853F04F9B
+ 
+# Your job id was: 02659F74-F5EF-11E8-9F94-8EA853F04F9B
+
+# Please find a summary of your search results below.
+#
+# If you have any comments or questions about the use of this service,
+# please contact us at: hmmer-help@ebi.ac.uk
+#
+#-------------------------------------------------------------------------------
+#
+# Searched 203 out of 203 uploaded sequences.
+# Database Searched: pfam
+#
+# You can retrieve the full results by going to:
+# http://www.ebi.ac.uk/Tools/hmmer/results/score/02659F74-F5EF-11E8-9F94-8EA853F04F9B
+#################################################
+# removed lines above header line manually
+# initially, follow vikas example, retain '.1' on protein name ???????????  Can always change if want.
+
+cat hmmer_email_out203.txt|tr -s " " "\t"|grep "PF01535.20"|cut -f1,8|sort|uniq -c|perl -pe 's/(\d+).+>(\S+).+/\2\t\1/' | wc -l  ## 203 as expect
+
+cat hmmer_email_out203.txt|tr -s " " "\t"|grep "PF01535.20"|cut -f1,8|sort|uniq -c|perl -pe 's/(\d+).+>(\S+).+/\2\t\1/' > hmmer_email_out203_domain_ct.txt
+# note: has 2 or 3 'spaces' on left side of 1st colm
+# so redo as follows:
+cat hmmer_email_out203.txt|tr -s " " "\t"|grep "PF01535.20"|cut -f1,8|sort|uniq -c|perl -pe 's/(\d+).+>(\S+).+/\2\t\1/' | tr -d " " > hmmer_email_out203_domain_ct.txt
+
+12/02/18:
+
+join -t'\t' fastaSeqLengths203.txt hmmer_email_out203_domain_ct.txt | head -n 3
+# tried sevl ways specify delimiter, no success with any ????????????????
+
+# so just proceed to try input the two files into R, ..., make ggplot2 scatter plot
+# make ggplot2 scatterplot, seq length vs seq PPR count.
+# files needed, hmmer_email_out203_domain_ct.txt (seq PPR count) & fastaSeqLengths203.txt (seq lenths, dir .../vikas_filter)
+# consider producing a file with 3 colms, seq name, seq len., PPR domains/seq from these two files before bringing into R for ggplot2.
+# failed above.
+
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+fastalens <- read.delim("fastaSeqLengths203.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(fastalens)  ## [1] 203   2
+head(fastalens, n=2)
+PPRcts <- read.delim("hmmer_email_out203_domain_ct.txt", header=FALSE, stringsAsFactors=FALSE)
+dim(PPRcts)  ## [1] 203   2
+head(PPRcts, n=2)
+
+all(fastalens$V1 %in% PPRcts$V1)
+all(PPRcts$V1 %in% fastalens$V1)
+# if identical, expect TRUE for both
+
+df <- data.frame(names=fastalens$V1, lens=fastalens$V2, cts=PPRcts$V2)
+
+head(df, n=2)
+library(ggplot2)
+sp <- ggplot(df, aes(x=lens, y=PPRcts))
+sp2 <- sp + geom_point()
+sp2             
+write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+
+# comments on lengths_vs_cts.png
+# Only about 3-4 points fall outside plot pattern.
+# sevl lengths wi same number of cts, so some flexibility of length for given cts ???
+
+# Now, take stock, come up wi overview of next steps ?????????????/
+--finish table
+# Q: use gene or prot. names ??????
+# chrom number (to get from gene/prot name), to modify query from vikasexamples.txt. Use on 1st colm in file:
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/pid40_216pruned13to203_colm134579.gff3
+# location: get start, stop, strand by modifying query from vikasexamples.txt. On 3rd, 4th, & 5th colm of file:
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/pid40_216pruned13to203_colm134579.gff3
+# intron: will try GSDS
+# length(aa):
+have in file /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table_names_lens_cts.txt
+# domain number:
+Have in file:
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table_names_lens_cts.txt
+# sub location: 
+Have in output from targetP
+
+# Note: plotted PPRcts vs lengths, description results above.
+# Note: consider couple more analyses relative to 'table'. 
+# regression analysis for colms in 'table' ????????
+# plot extra space on seqs (not in PPR domain) vs seq length
+
+--GC content: have code from vikas
+--graph of RF-like seq locations of 203 seqs, use phenogram
+--snps
+
+12/03/18:
+# of items listed above, have not tried GC content. Perhaps try next, in case a problem.
+# use .fa file have removed '.' characters from end of aa seq, pid40_216pruned13to203man_dots.fa in directory: /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter.
+# wait, need *gene* seqs, not prot.seqs for this Q: how get?
+# needed file to subset to 203 genes:
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/IWGSC_v1.1_HC_20170706_cds.fasta
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/GC_est
+#usuage: perl GC_estimate_VB.pl Fasta_File > outputfile
+perl GC_estimate_VB.pl pid40_216pruned13to203man_dots.fa > pid40_216pruned13to203man_dots_GC.txt
+# *ERROR*
+# GC_estimate_VB.pl line 8.
+# BEGIN failed--compilation aborted at GC_estimate_VB.pl line 8.
+# perhaps check wi JJ? Perhaps 'use Bio::SeqIO;' available on crane ?????????
+
+# 1st, try run like did on crane with 'align_convert_fas_to_phy.pl'.
+
+STOPPED
+
+##################################################
+# talked to Vikas, *to doc.* pencil, 12/03/18
+...
+###################################################
+
+12/09/18:
+# TO DO, build 'zhang table' in dframe, incorporate in Rmd file with appropriate  phylograms.
+# start wi 'table' file: /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table_names_lens_cts.txt
+# for gff3 file: /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/pid40_216pruned13to203_colm134579.gff3
+#now, modify 1st colm pid40_216pruned13to203_colm134579.gff3, remove 'chr' from colm 1
+#then, load 'table' & gff3 file minus 'chr' in R. When load gff3 file, add colm names (chr, gene, start, end, strand, & gname).
+
+12/10/18:
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+cat pid40_216pruned13to203_colm134579.gff3 | perl -pe 's/chr(\w+)/\1/' | wc -l ## 203
+cat pid40_216pruned13to203_colm134579.gff3 | perl -pe 's/chr(\w+)/\1/' > pid40_216pruned13to203_colm134579_chr.gff3
+# read in the two data files
+
+# now in R
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table3 <- read.delim("table_names_lens_cts.txt", stringsAsFactors=FALSE)
+dim(table3)  ## [1] 203   3
+head(table3, n=2)
+
+gff3_6 <- read.delim("pid40_216pruned13to203_colm134579_chr.gff3", header=FALSE, stringsAsFactors=FALSE, col.names=c("chr", "gene", "start", "end", "str", "gname"))
+dim(gff3_6)  ## [1] 203   6
+head(gff3_6, n=2)
+
+#create new dframe wi the 7 avail. colms (see if assigning colm names while create df will #set colm names, whatever names were before ????????
+
+#all(table3$names %in% PPRcts$V1)
+#all(PPRcts$V1 %in% fastalens$V1)
+# if identical, expect TRUE for both
+
+table7col <- data.frame(RFL_prot_ID=table3$names, Chr=gff3_6$chr, Start=gff3_6$start, End=gff3_6$end, Strand=gff3_6$str, Len=table3$lens, domain_number=table3$cts)
+
+dim(table7col)  ## [1] 203   7
+head(table7col, n= 3)
+
+#write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+write.table(table7col, file="table7cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+# then check output file in bbedit ??????
+# manually, spot check gene/prot name colms at 5 rows betw. the two files, each matches.
+# **yet** to add, two colms, '**intron**' & '**subcel location**' to total 9 colms.
+
+12/11/18:
+# for sub. cellular location colm in new table, using targetP. I note colms separated by 'spaces'. So, try vikas 'squeezing' approach to replace with '\t' chars.
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/targetP/targetP_203_out.txt
+
+cat targetP_203_out.txt | head -n 216 | tail -n 203 | more  ## ok
+cat targetP_203_out.txt | head -n 216 | tail -n 203 |tr -s " " "\t" | head -n 5
+cat targetP_203_out.txt | head -n 216 | tail -n 203 |tr -s " " "\t" > targetP_203_out_tabs.txt
+Now cut colms 1 & 8 (f1,8)
+cat targetP_203_out.txt | head -n 216 | tail -n 203 |tr -s " " "\t" |cut -f1,7 > targetP_203_out_tabs_col_1_7.txt
+
+# **ready** read into R, add to able sub. cell location, 8th colm
+
+12/12/18:
+
+STOPPED
+
+
+
+then test grep, bbedit
+
+
+# GC perl scrip
+
+
+# perhaps order colms as per template table ??????
+
+
 
 
 GSDS ??
