@@ -13613,18 +13613,412 @@ cat targetP_203_out.txt | head -n 216 | tail -n 203 |tr -s " " "\t" > targetP_20
 Now cut colms 1 & 8 (f1,8)
 cat targetP_203_out.txt | head -n 216 | tail -n 203 |tr -s " " "\t" |cut -f1,7 > targetP_203_out_tabs_col_1_7.txt
 
-# **ready** read into R, add to able sub. cell location, 8th colm
-
 12/12/18:
+# slip a save to ***github*** in here
+
+# note: try plotting few things from 'table'. For example, names for particular chrom, vs 
+'start', or length, or domain number. 
+
+12/13/18:
+# **ready** read into R, add to 'table' sub. cell location, 8th colm
+# copy targetP_203_out_tabs_col_1_7.txt to hmmer203seqs dir.
+
+# now in R
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+#table3 <- read.delim("table_names_lens_cts.txt", stringsAsFactors=FALSE)
+#dim(table3)  ## [1] 203   3
+#head(table3, n=2)
+
+table7col <- read.delim("table7cols.txt", stringsAsFactors=FALSE)
+dim(table7col)  ## [1] 203   7
+head(table7col, n=2)
+
+targetp <- read.delim("targetP_203_out_tabs_col_1_7.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("name", "subcel"))
+dim(targetp)  ## [1] 203   2
+head(targetp, n=2)
+
+#create new dframe wi the 7 avail. colms (see if assigning colm names while create df will #set colm names, whatever names were before ????????
+
+all(table7col$RFL_prot_ID %in% targetp$name)
+all(targetp$name %in% table7col$RFL_prot_ID)
+# if identical, expect TRUE for both
+
+table8col <- data.frame(RFL_prot_ID=table7col$RFL_prot_ID, Chr=table7col$Chr, Start=table7col$Start, End=table7col$End, Strand=table7col$Strand, Len=table7col$Len, domain_number=table7col$domain_number, Subcel=targetp$subcel)
+
+dim(table8col)  ## [1] 203   8
+head(table8col, n= 3)
+
+#write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+write.table(table8col, file="table8cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+# ck table8cols.txt in bbedit
+# TO DO, doc. 'S', 'C' ??????????????????
+
+12/15/18:
+# a 9th colm, intron, try use GSDS
+# comments: Perhaps, run GSDS, looking for introns. Run two groups, 203 seqs, and 88 ctls seqs separately.
+# or run 203, then 88
+# go find .gff3 files for these ??
+# red line 4787
+# line 4142 ## looks like where I subset 
+# bash Philip_realgff3.sh oGroups144col1_to_131_nodotnum_sort.txt > 131_sort.gff3
+# using iwgsc_refseqv1.0_HighConf_2017Mar13.gff3, subsets 691 rows, 'gene' and other rows. 
+# oGroups144col1_to_131_nodotnum_sort.txt ## has 131 seqs minus '.d'.
+# run whole 691 rows with GSDS ???????????????
+# output from GSDS saved as '.png' file.
+
+# from line 13155
+#cat pid40_216pruned13to203.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 203 > pid40_216pruned13to203_nodotnum.txt ## ok 
+cat pid40_216pruned13to203.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' > pid40_216pruned13to203_nodotnum.txt ## ok 
+
+#cat pid40_216pruned13to203.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 203 
+head -n 3 pid40_216pruned13to203_nodotnum.txt  ## looks ok
+wc -l pid40_216pruned13to203_nodotnum.txt
+     203 pid40_216pruned13to203_nodotnum.txt
+# ok, now, 
+# create Philip_203gff3.sh
+
+bash Philip_203gff3.sh pid40_216pruned13to203_nodotnum.txt > 203.gff3
+# started ~ 12:15am, 12/16/18.
+# was done by 6am.
+
+12/16/18:
+wc -l 203.gff3
+    1212 203.gff3
+
+cat 203.gff3 | grep "gene" | wc -l  ## 203
+cat 203.gff3 | grep "gene" | wc -l  ## 203
+cat 203.gff3 | grep "gene" | cut -f3,9 |more
+
+# ref:line 4188
+## 1212 rows, 203 with 'gene' rows. 27 rows of 'chrUn' for the 5 gene names in the 203.
+
+# could do following, further check on the 203 ?????
+#cat gff3_genes_col9.txt|perl -pe 's/^ID=(Tr.+);.+/\1/' | head -n 110790 > gff3_genes_col9names.txt
+
+## sort gff3_genes_col9names.txt |uniq | wc -l   ## 691 as expect
+sort 131.gff3 |uniq | wc -l   ## 110790 as expect
+     691  ## thus, all rows unique.
+
+cat 203.gff3 | grep "gene" | cut -f9 |perl -pe 's/^ID=(Tr.+);.+/\1/' |head -n 3
+## not working ???????????????????????
+
+# finally submit 203.gff3 to GSDS site. http://gsds.cbi.pku.edu.cn
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/203.gff3
+## 1:35pm
+# to retrieve from GSDS site, rt click, 'save image', as '.png', 5MT41V.png. Then manually score this. Create new file, beginning from file with protein names (since couple rows with '.d' where 'd'=2). That file would be pid40_216pruned13to203.txt. So, copy this file to pid40_216pruned13to203_intron.txt
+cp pid40_216pruned13to203.txt pid40_216pruned13to203_intron.txt
+# Manually edit by adding 'tab' plus intron count to each row.
+##################################################################
+# Q: TraesCS1A02G067000.1, TraesCS1A02G067400.1, TraesCS1A02G067600.1, TraesCS1B02G038300.1, TraesCS1B02G038400.1, TraesCS1B02G038500.1, TraesCS1B02G072900.2, TraesCS1B02G073100.1, TraesCS1B02G074600.1, TraesCS1B02G085300.1, TraesCS1B02G085900.1, TraesCS1B02G092600.1, TraesCS1D02G033100.1, TraesCS1D02G055300.1, TraesCS1D02G056200.1, TraesCS1D02G058200.1, TraesCS1D02G058200.1, TraesCS1D02G067600.1, TraesCS1D02G068700.1, TraesCS1D02G068800.1, TraesCS1D02G068800.2, TraesCS1D02G076500.1, TraesCS5B02G250800.1, TraesCS6A02G014800.1, TraesCS6A02G099100.1, TraesCS6A02G099118.1, TraesCS6B02G021200.1, TraesCS6B02G021600.1, TraesCS6B02G021641.1, TraesCS6B02G045200.1, TraesCS6B02G127603.1, TraesCS6B02G129200.1, TraesCS6D02G018941.1, TraesCS6D02G047700.1, TraesCS6D02G076500.1, TraesCS6D02G083100.1, TraesCS6D02G083400.1, TraesCSU02G089563.1, TraesCSU02G090200.1 and introns betw UTRs ??????????????????????????
+###################################################################
+12/17/18:
+
+################################,####################################
+TraesCS1B02G039620 (TraesCS1B01G038600LC ???????????, note differences in number, PROBABLY REMOVE, ALL FOULED UP, TO KEEP IN REGISTER, PERHAPS NAME THE PROTEIN FROM THE GENE WITH PROTEIN EXTENSION, OR PERHAPS SOME OTHER SOLUTION ???????) For now, perhaps place a 'blank' ???????????????????????? row 39.
+####################################################################
+
+12/18/18:
+# now, try incorporate 'intron' colm into 'table8' to create 'table9'.
+
+table8col <- read.delim("table8cols.txt", stringsAsFactors=FALSE)
+dim(table8col)  ## [1] 203   7
+head(table8col, n=2)
+
+introndf <- read.delim("pid40_216pruned13to203_intron.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("name", "intron"))
+dim(introndf)  ## [1] 203   2
+head(introndf, n=2)
+
+#create new dframe wi the 8 + 1 = 9 avail. colms (see if assigning colm names while create df will #set colm names, whatever names were before ????????
+
+all(table8col$RFL_prot_ID %in% introndf$name)
+all(introndf$name %in% table8col$RFL_prot_ID)
+# if identical, expect TRUE for both
+
+table9col <- data.frame(RFL_prot_ID=table8col$RFL_prot_ID, Chr=table8col$Chr, Start=table8col$Start, End=table8col$End, Intron=introndf$intron, Strand=table8col$Strand, Len=table8col$Len, domain_number=table8col$domain_number, Subcel=table8col$Subcel)
+
+dim(table9col)  ## [1] 203   8
+head(table9col, n= 3)
+
+#write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+write.table(table9col, file="table9cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+#################################################################
+# ck table9cols.txt in bbedit, looks ok, perhaps change underscores 'Subcel' colm to dashes ???????
+###################################################################
+
+# next, perhaps phenograms
+pheno_gram.33904.png
+pheno_gram.1A.10.60protnames128.png
+
+# to start, perhaps create input file like phen_input131protnames.txt for my 203 seqs
+chr	pos	phenotype
+1A	14577948	TraesCS1A01G031600
+1A	14584912	TraesCS1A01G031700
+
+12/21/18:
+# perhaps start with gff3 input file to GSDS, perhaps 203.gff3,  or rather 'table9cols.txt. Q: could use gene or protein name ???????
+pheno_gram.33904.png
+# *phen_input131.txt*, use template for form input file for 203 seqs to phenogram.
+# Q: will I need chrom lengths for phenogram? Perhaps at start of say wheat genome gff3 file ???????
+
+##gff-version 3
+##sequence-region   chr1A 40098 594002067
+##sequence-region   chr1B 168082 689851782
+# Q: why two numbers RHS of these rows ???????????????????????????????????
+########################################################################
+# Q: where should one look for 'chrom. lengths' for v1.1 wheat genome ????????????
+##########################################################################
+
+# /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table9cols.txt
+
+cat table9cols.txt | cut -f2,3 > phen_203_all_chroms.txt
+# rep("my_string", 2)
+
+# now in R
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table9 <- read.delim("table9cols.txt", stringsAsFactors=FALSE)
+dim(table9)  ## [1] 203   9
+head(table9, n=2)
+
+phenotype <- rep("RF-like_seq", 203)
+head(phenotype, n=3)
+length(phenotype)  ## 203
+phen_all_rows <- data.frame(chr=table9$Chr, pos=table9$Start, phenotype=phenotype)
+
+write.table(phen_all_rows, file="phen_all_203rows.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+##########################################################
+# don't forget remove chrUN rows before submit to phenogram ??????????
+################################################################
+cp phen_all_203rows.txt phen_all_203minus5rows.txt
+
+# now try phenogram for **all** chroms: 
+# input: phen_all_203minus5rows.txt
+# title: all203minus5giving198
+
+# genome: apparently prevly used file Chr_Size_Refv1.txt in dir .../pyMLorthoMCL131norice9. Compared size colm wih RHS colm top IWGSC_v1.1_HC_20170706.gff3 file in dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06
+#################################################################
+# percentwise, small diffs so use top of v1.1 file (IWGSC_v1.1_HC_20170706.gff3) for these size values.
+################################################################
+# to 'get' the size values, chr_chr_size_Refv1.1.txt
+cat chr_size_Refv1.1.txt | cut -f4 | more  ## fails
+cat chr_size_Refv1.1.txt | tr -s " " "\t"| cut -f4| more  ## ok
+cat chr_size_Refv1.1.txt | tr -s " " "\t"| cut -f2,4 | perl -pe 's/chr(\w+\t\d+)/\1/' | more
+################################################################
+# should chrUn rows be excluded ???????? They have 'start' value, and 'chrom' length ???????????????
+##################################################################
+cat chr_size_Refv1.1.txt | tr -s " " "\t"| cut -f2,4 | perl -pe 's/chr(\w+\t\d+)/\1/' > chr_size_Refv1.1_colm2and4.txt
+# then add header (ID	size), removed 'Un' row for now ???????????????????
+
+12/22/18:
+
+# now resume run *all* chroms phenogram again
+# genome file: chr_size_Refv1.1_colm2and4minus_Un.txt
+# phenotype spacing: default: 'proximity' alg ?????????????????
+# phenotype color: default: 'exhaustive search colors' ??????????????????
+# image format: default: png
+# chromosome only: left unchecked, ???????????????????
+# zoom options: none selected this run
+# additional options: none selected this run, but possibly some might be useful for this **all** chroms run ?????????????????????
+# click 'plot'
+# 'Download higher resolution image': pheno_gram.79071.png
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+# ok, pheno_gram.79071.png looks good.
+
+# 2nd, now try *single* chrom (say all seqs on 1A, etc.). See if can use same input file ???
+ # input: template will be phen_input128protnames.txt (actually gene names)
+ 
+# now in R
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table9 <- read.delim("table9cols.txt", stringsAsFactors=FALSE)
+dim(table9)  ## [1] 203   9
+head(table9, n=2)
+
+#phenotype <- rep("RF-like_seq", 203)
+#head(phenotype, n=3)
+#length(phenotype)  ## 203
+phen_all_rows <- data.frame(chr=table9$Chr, pos=table9$Start, phenotype=table9$RFL_prot_ID)
+
+write.table(phen_all_rows, file="phen_inp203rows_protnames.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+# phen_inp203rows_protnames_minus5_198.txt
+
+# template for *single* chrom.
+/Users/bterry/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice/phen_input128protnames.txt
+
+# input: phen_inp203rows_protnames_minus5_198.txt 
+# title: all203minus5giving198_just_1A
+# genome file: chr_size_Refv1.1_colm2and4minus_Un.txt
+# phenotype spacing: default: 'proximity' alg ?????????????????
+# phenotype color: default: 'exhaustive search colors' ??????????????????
+# image format: default: png
+
+# chromosome only: try *check* it ???????????????????
+# zoom options: 
+# chromosome: 1A
+# start bp: none this run
+# end bp: none this run
+
+# additional options: none selected this run, but possibly some might be useful for this 
+# annotation: check it
+# click 'plot'
+######################################################################
+# Q: *not* getting 'annotation' did previously ???????????????????????????
+#######################################################################
+# try rerun with start=10000000, end=100000000
+# title: 	203_1A.10to100mill
+# output file: pheno_gram.74130.png
+##########################################################
+# Q: can't get annotation names from phenotype colm to be displayed as did previously ????????? **Sent** email for help.
+#############################################################
+
+# retry, don't select 'chromosome only', voila, worked!
+
+12/23/18:
+# to run phenogram for chroms 1A (so can retitle) 1B, 1D, & for 2 & 6.
+title: 203_1A_10to100mill
+# pheno_gram.45569.png
+
+title: 203_1B_10to100mill
+# pheno_gram.82973.png
+
+title: 203_1B_10to150mill
+# pheno_gram.43901.png
+
+12/24/18:
+# title: 203_1D_10to100mill
+# pheno_gram.50648.png
+
+#################################################################
+# So, precursor to chroms 1A, 1B, 1D still apparently reflected in distribution **pattern** see on phenograms, since patterns are similar.
+#################################################################
+
+12/26/18:
+
+# finish chrom's 2 & 6 phenograms,
+# title: 203_2A_700to780mill
+# pheno_gram.18055.png
+
+# title: 203_2B_680to780mill
+# pheno_gram.61626.png
+
+# title: 203_2D_550to650mill
+# pheno_gram.11229.png
+
+# title: 203_6A_1to100mill
+# pheno_gram.28181.png
+
+# title: 203_6B_1to125mill
+# pheno_gram.39033.png
+
+# title: 203_6D_1to100mill
+# pheno_gram.76450.png
+
+#################################################################
+# relative number seqs concentrated together similar for chroms A, B, D within chrom 1, 2, 6. Like ancestor sequence for 1, 2, or 6 common to current A, B, or D within a numbered chrom.
+#################################################################
+
+#################################################################
+# then, do GC analysis of the 203 genes assoc'd with the RF-like protein seqs.
+# exactly **why** vikas interested ????????????????????????????????????????
+#################################################################
+# Q: how get the appropriate seqs ??????????????????????????????????????????
+# /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06
+# which of following ?????????????????????????????????
+IWGSC_v1.1_HC_20170706_cds.fasta ## Q: **organization** of this file ????????????????
+IWGSC_v1.1_HC_20170706_transcripts.fasta
+head -n 50 IWGSC_v1.1_HC_20170706_transcripts.fasta > test.fa
+# Note: Q: transcripts longer than whatever organization is in 'cds' file ????????
+
+# ref: line 12475
+# getseq.awk ??????
+ 
+./getseq.awk IWGSC_v1.1_HC_20170706_transcripts.fasta pid40_216pruned13to203.txt > pid40_216pruned13to203_tx.fa
+# 203 '>' as expect
+
+# now, copy pid40_216pruned13to203_tx.fa over to dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/GC_est
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+12/27/18:
+
+# then prepare to run GC_estimate_VB.pl on Crane so can use 'Bio::SeqIO' ????????
+cd /Users/bterry/mbook2017/vikas17
+find . -name 'align_convert_fas_to_phy.pl' -print
+./wheatproj/hmmpipeline/FRprotseqs/align_convert_fas_to_phy.pl
+# to do:
+# copy GC_estimate_VB.pl to crane (from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/GC_est)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+mkdir GC_est
+cd GC_est
+pwd
+logout
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/GC_est)
+scp GC_estimate_VB.pl pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+
+# copy pid40_216pruned13to203_tx.fa to crane (from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs)
+
+ref: line 11758
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+
+scp pid40_216pruned13to203_tx.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
 
 STOPPED
+
+# try run these two on crane
+# ref: line 12663
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+ls -al
+chmod 755 GC_estimate_VB.pl
+ls -al
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+module load bioperl
+
+#./align_convert_fas_to_phy.pl pid40_216pruned13to203.fa.aln.hmmaln.fa
+
+perl GC_estimate_VB.pl pid40_216pruned13to203_tx.fa > pid40_216pruned13to203_tx_GCest.txt
+ls -al
+wc -l pid40_216pruned13to203_tx_GCest.txt
+203 pid40_216pruned13to203_tx_GCest.txt
+less pid40_216pruned13to203_tx_GCest.txt
+exit
+logout
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/GC_est
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est/pid40_216pruned13to203_tx_GCest.txt .
+# check in bbedit, looks fine.
+#################################################################
+# check wi vikas what to do with this ??????????????????????????????????
+#################################################################
+
+# Now what next ?????????????????????????????????????????
+ 
+
+
+
+
+
+
 
 
 
 then test grep, bbedit
 
 
-# GC perl scrip
+# GC perl script
 
 
 # perhaps order colms as per template table ??????
