@@ -13505,7 +13505,6 @@ sp2 <- sp + geom_point()
 sp2             
 write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
 
-
 # comments on lengths_vs_cts.png
 # Only about 3-4 points fall outside plot pattern.
 # sevl lengths wi same number of cts, so some flexibility of length for given cts ???
@@ -13517,7 +13516,7 @@ write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.name
 /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/pid40_216pruned13to203_colm134579.gff3
 # location: get start, stop, strand by modifying query from vikasexamples.txt. On 3rd, 4th, & 5th colm of file:
 /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06/pid40_216pruned13to203_colm134579.gff3
-# intron: will try GSDS
+ # intron: will try GSDS
 # length(aa):
 have in file /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table_names_lens_cts.txt
 # domain number:
@@ -13750,8 +13749,8 @@ write.table(table9col, file="table9cols.txt", quote=FALSE, sep="\t", row.names=F
 ###################################################################
 
 # next, perhaps phenograms
-pheno_gram.33904.png
-pheno_gram.1A.10.60protnames128.png
+#pheno_gram.33904.png
+#pheno_gram.1A.10.60protnames128.png
 
 # to start, perhaps create input file like phen_input131protnames.txt for my 203 seqs
 chr	pos	phenotype
@@ -13972,8 +13971,6 @@ cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vi
 
 scp pid40_216pruned13to203_tx.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
 
-STOPPED
-
 # try run these two on crane
 # ref: line 12663
 ssh -Y pterry@crane.unl.edu
@@ -14001,11 +13998,69 @@ cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vi
 scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est/pid40_216pruned13to203_tx_GCest.txt .
 # check in bbedit, looks fine.
 #################################################################
-# check wi vikas what to do with this ??????????????????????????????????
+# check wi vikas what to do with this, if this what wanted  ??????????????????????????????????
 #################################################################
 
+# slip a save to ***github*** in here
+
 # Now what next ?????????????????????????????????????????
- 
+So, copied 
+pheno_gram.79071.png
+pheno_gram.45569.png
+lengths_vs_cts.png
+to /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc dir.
+
+# next, render, modify as needed 21 + 3 = 24 images to this point in /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc/v1.1_logfile_doc.Rmd file.
+
+# then, Rmd/html manuscript template ?????????
+# call it v1.1_manuscript_template.Rmd
+
+STOPPED
+
+# initially copy v1.1_logfile_doc.Rmd to start v1.1_manuscript_template.Rmd.
+cp v1.1_logfile_doc.Rmd v1.1_manuscript_template.Rmd
+
+01/02/18:
+# working on python3 script as *workshop* in process
+# from .../vikas17
+find . -name '*red_wheatnames.txt' -print
+./wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL135price9/pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt
+# place in /Users/bterry/mbook2019/python010319
+# worked on 122 'ids', 135 'entries'
+
+# find getseq.awk
+find . -name 'getseq.awk' -print
+./131RFlike/getseq.awk
+
+01/09/19:
+############################################################################
+# talked to Vikas today, comments, issues:
+# looking thru Table1
+# 'No. of wheat seqs including isoforms', 'unique wheat sequences without isoforms'
+# to do frac_align for the final 203 seqs
+# try get list 207 seqs at pag
+# phylogram of pid50 (vikas to get info on choice of pid for degree of relatedness of the seqs)
+# elaborate on 'pid50+88ctls section
+# Q: the 196 section ?
+# Q: issue 203, 53 < 300 aas ?????? (Zhang table shortest 443
+# Q: for moment not throwing out 1592 aa seq in 203 group
+# vikas would like see tablecol9, whole file
+# GSDS/introns, TO DO: DON'T COUNT introns between UTRs
+# GC estimate, vikas purpose: 'signature'
+# vikas, to check into whether use to GC estimate for 'CDS', or 'transcripts' or both ??????
+# Q: FORGOT TO ASK, WHERE TO LOOK FOR 'chrom' LENGTHS ???????????????
+# vikas, exclude 'chrUN' seqs from phenogram ??????, then just display 'all', and 1 individual chrom.
+###########################################################################
+
+01/10/19:
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 01/10/19 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
 
 
 
@@ -14013,9 +14068,7 @@ scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blast
 
 
 
-
-
-then test grep, bbedit
+then test grep, bbeditlab
 
 
 # GC perl script
