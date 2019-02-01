@@ -14062,8 +14062,202 @@ git status
 git push origin master
 # git remote -v
 
+# mkdir '011019', on 3 tb extl drive.
+# backup mbook2018, mbook2019, & ~/planets/wheatprojdoc060117.txt to this dir.
+
+01/11/19:
+# at PAGxxvii
+
+01/27/19:
+# resuming work on RF-like proteins research
+# put the 203 table on box for vikas (tablecol9), perhaps split into two tables to so can see all of each colm.
+--calc frac_align for the 203 seqs
+--redo GSDS count of introns with vikas comments (i.e., introns **only between** exons).
+--GC calcn colm in Zhang style table (transcripts **&** 'cds')
+# phylogram of pid50 (vikas to get info on choice of pid for degree of relatedness of the seqs)
+# Q: FORGOT TO ASK, WHERE TO LOOK FOR 'chrom' LENGTHS ???????????????
+# finish up Rmd file, html to box & vikas
+# vikas, **exclude** 'chrUN' seqs from phenogram ??????, then just display 'all', and 1 individual chrom.
+
+01/28/19:
+# so redo GSDS count of introns (i.e., introns **only between** exons): 
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+
+# ok, copy pid40_216pruned13to203_intron.txt (from line 13711) to pid40_216pruned13to203_intron-exons.txt
+cp pid40_216pruned13to203_intron.txt pid40_216pruned13to203_intron-exons.txt
+# now manually edit pid40_216pruned13to203_intron-exons.txt to count only introns between exons. done.
+
+# next, run GC content, for both transcripts, & cds (prevly did for transcripts, see file pid40_216pruned13to203_tx_GCest.txt)
+# ref line 13948
+
+IWGSC_v1.1_HC_20170706_transcripts.fasta
+IWGSC_v1.1_HC_20170706_cds.fasta
+# from line 13941
+./getseq.awk IWGSC_v1.1_HC_20170706_transcripts.fasta pid40_216pruned13to203.txt > pid40_216pruned13to203_tx.fa
+# 203 '>' as expect
+
+# line 13965
+/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+
+# so, for 'cds' file, 1st, create 'cds.fa' for cds seqs
+copied IWGSC_v1.1_HC_20170706_cds.fasta to /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+# now, to run getseq.awk
+./getseq.awk IWGSC_v1.1_HC_20170706_cds.fasta pid40_216pruned13to203.txt > pid40_216pruned13to203_cds.fa
+# Note: top of IWGSC_v1.1_HC_20170706_cds.fasta misleading. Actual seqs in the 203 much longer in pid40_216pruned13to203_cds.fa.
+# Next, scp to crane for run with GC_estimate_VB.pl.
+
+scp pid40_216pruned13to203_cds.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+
+# ref line 13974
+# try run these two on crane
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+ls -al
+#chmod 755 GC_estimate_VB.pl
+ls -al
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est
+module load bioperl
+
+#./align_convert_fas_to_phy.pl pid40_216pruned13to203.fa.aln.hmmaln.fa
+
+perl GC_estimate_VB.pl pid40_216pruned13to203_cds.fa > pid40_216pruned13to203_cds_GCest.txt
+ls -al
+wc -l pid40_216pruned13to203_cds_GCest.txt
+203 pid40_216pruned13to203_cds_GCest.txt
+less pid40_216pruned13to203_cds_GCest.txt
+exit
+logout
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/GC_est
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est/pid40_216pruned13to203_cds_GCest.txt .
+# check in bbedit, looks fine, **NEARLY THE SAME** values as in pid40_216pruned13to203_tx_GCest.txt
+
+# perhaps now, create table10cols.txt. Do like recreating table9cols.txt since have to include new 'intron' colm plus add pid40_216pruned13to203_tx_GCest.txt. Then create two tables from this 10 colm table by selecting colms from table10cols.txt that want to display together.
+
+# Note: comparing pid40_216pruned13to203_cds.fa & pid40_216pruned13to203_tx.fa, 1st seq for each the same length, just additional doc. in '>' like for 'tx' file. Note, 2nd seq in each file differences, for example, 'CDS' does **not** start at 1 ?????????????????
+
+# ref: line 13723
+# now, try incorporate 'intron' & 'GCest' colms into 'table8' to create 'table10'.
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+
+01/29/19:
+# start R
+table8col <- read.delim("table8cols.txt", stringsAsFactors=FALSE)
+dim(table8col)  ## [1] 203   7
+head(table8col, n=2)
+
+introndf <- read.delim("pid40_216pruned13to203_intron-exons.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("name", "intron"))
+dim(introndf)  ## [1] 203   2
+head(introndf, n=2)
+
+gc_tx <- read.delim("pid40_216pruned13to203_tx_GCest.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("name", "GC_tx"))
+dim(gc_tx)  ## [1] 203   2
+head(gc_tx, n=2)
+
+#create new dframe wi the 8 + 2 = 10 avail. colms (see if assigning colm names while create df will #set colm names, whatever names were before ????????
+
+all(table8col$RFL_prot_ID %in% introndf$name)
+all(introndf$name %in% table8col$RFL_prot_ID)
+# if identical, expect TRUE for both
+
+all(table8col$RFL_prot_ID %in% gc_tx$name)
+all(gc_tx$name %in% table8col$RFL_prot_ID)
+# if identical, expect TRUE for both
+
+table10col <- data.frame(RFL_prot_ID=table8col$RFL_prot_ID, Chr=table8col$Chr, Start=table8col$Start, End=table8col$End, Intron=introndf$intron, Strand=table8col$Strand, Len=table8col$Len, domain_number=table8col$domain_number, GC_tx=gc_tx$GC_tx, Subcel=table8col$Subcel)
+
+dim(table10col)  ## [1] 203   8
+head(table10col, n= 3)
+
+#write.table(df, file="table_names_lens_cts.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+write.table(table10col, file="table10cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+#################################################################
+# ck table10cols.txt in bbedit, looks ok, perhaps change underscores 'Subcel' colm to dashes ???????
+# note: when print, **two** colms wrap
+###################################################################
+
+# upload one or more tables to box.
+# placed copy of table10cols.txt in box at GeneFamily/manuscript dir.
+
+# then, subset colms with 'cut' command to get two subset tables ????????????
+
+# talked to vikas,
+--bigpint R package
+--'summary' for table10.txt colms GC_tx, Len, domain_number
+--vikas wanted rename one of colms ????????????????
+--histogram, boxplot for GC_tx, Len
+--within a cluster, (chr 1), GC_tx. Decide how to cluster, see phenogram chr1A. Perhaps also 1B, 1D if clustered enough ?????? Perhaps within each band ??????????
+--finish new Rmd file, removing all the 'links' the details in res. log file
+-- for snp analysis, need chr, start, end
+
+01/30/19:
+# in dir /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+pheno_gram.45569.png, 1A, 10to100mill has all 31
+pheno_gram.82973.png, 1B, 10to100mill has 37 of 43, so a group well away from cluster, perhaps a cluster itself ?????????
+pheno_gram.43901.png, 1B, 10to150mill has 39 of 43
+pheno_gram.50648.png, 1D, 10to100mill  has 38 of 38
+
+# ok, do box plot wi ggplot2 for chr 1A, 1B, 1D
+
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10df <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+str(table10df)
+dim(table10df)  ## [1] 203   10
+head(table10df, n=2)
+
+table10df112 <- head(table10df, 112)
+# produces 112 rows seqs
+dim(table10df112)  ## [1] 112  10
+head(table10df112, n=2)
+
+table10df112$Chr <- factor(table10df112$Chr)
+head(table10df112$Chr)
+
+str(table10df112)
+# ref. huber book, sect. 3.62
+library(ggplot2)
+p = ggplot(table10df112, aes( x = Chr, y = GC_tx, fill = Chr))
+p + geom_boxplot()
+# saved as GCbox1A1B1D112.png. Note, median similar for each chrom. Also, erach has 2 outliers similarly located.
+# to do, try use dplyr to subset the rows for 1A, 1B, 1D in order to run summary fcn.
+
+#meta_citplus <- metadata %>%
+#  filter(cit == "plus") %>%
+#  select(sample, generation, clade)
+
+#meta_citplus
 
 
+library("dplyr")
+table10df1A31 <- table10df112 %>% 
+  filter(Chr == "1A") %>% 
+  select(Chr, GC_tx)  
+dim(table10df1A31)  ## [1] 31  2
+head(table10df1A31, 2)
+summary(table10df1A31$GC_tx)
+#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#  37.27   40.42   45.58   45.80   47.22   63.00 
+# summary can't **quickly** see diffs can see easily with boxplot
+
+01/31/19:
+# talked to vikas
+# for now prioritize 'snp' and locations of 203 RF-like seqs
+ 
+02/01/19:
+# today, screen would not light up, did reboot of 3.5 yr old macbook
+
+# slip a save to ***github*** in here
+
+
+ 
+STOPPED
 
 
 
