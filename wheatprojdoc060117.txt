@@ -14225,7 +14225,9 @@ str(table10df112)
 library(ggplot2)
 p = ggplot(table10df112, aes( x = Chr, y = GC_tx, fill = Chr))
 p + geom_boxplot()
-# saved as GCbox1A1B1D112.png. Note, median similar for each chrom. Also, erach has 2 outliers similarly located.
+##############################################################
+# saved as GCbox1A1B1D112.png. Note, median similar for each chrom. Also, each has 2 outliers similarly located.
+#################################################################
 # to do, try use dplyr to subset the rows for 1A, 1B, 1D in order to run summary fcn.
 
 #meta_citplus <- metadata %>%
@@ -14251,13 +14253,395 @@ summary(table10df1A31$GC_tx)
 # for now prioritize 'snp' and locations of 203 RF-like seqs
  
 02/01/19:
-# today, screen would not light up, did reboot of 3.5 yr old macbook
+# today, screen would not light up, did reboot of 3.5 yr old macbook, seems to be working now.
+##################################################################
+# slipped a save to ***github*** in here
+##################################################################
 
-# slip a save to ***github*** in here
+# now,prioritizing 'snp' task, trying familiarize with 'Tassel' s/w
+# **requires** java 1.8, I have 1.6.0_29-b11-402
+
+# Downloaded wi vikas, upgraded to java 1.8
+# and installed tassel 5 thru the '.dmg'.
+# next, try look thru some of the doc. to see how tassel runs.
+# tassel youtube videos, 
+#############################################################
+Q: which tassel 5 topic/task interested in ???????
+################################################################
+# 1. TASSEL installation and increasing heap size
+# Note: heap size default was 8Gb, inc'd to 10Gb in tutorial (but may be too much for this macbook ??????????)
+# TASSEL GWAS101, ... viewed several more videos
+
+02/03/19:
+# /Users/bterry/mbook2019/vikas19/tassel5/TASSELTutorialData5
+philip-terry-2:TASSELTutorialData5 bterry$ ls
+282_GBS2.7_Depth7Mask.h5		mdp_genotype.vcf
+NAM_RILs1-5_GBS2.7_Depth7Mask.h5	mdp_kinship.txt
+d8_sequence.phy				mdp_phenotype.txt
+mdp_genotype.hmp.txt			mdp_population_structure.txt
+mdp_genotype.plk.map			mdp_traits.txt
+mdp_genotype.plk.ped
+
+# ok, how to proceed ???????
+# vikas, think starts with tassel5 user interface, but videos, start with command line ?????
+# which one(s) of these tutorial data files to explore ?????
+# How much help would looking back at Gota course, spr2018 ????????
+wc -l mdp_genotype.hmp.txt
+    3094 mdp_genotype.hmp.txt
 
 
  
+02/06/19:
+Back to working on v1.1_manuscript_template.Rmd, to divide 'Zhang' table into two tables, so won't cutoff protein ID colm.
+
+# so run R, create two tables
+# ref, line 14147
+# start R
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+rm(list=ls())
+
+table10col <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10col)  ## [1] 203   10
+head(table10col, n=2)
+# next, create table1st5col.txt, then table2nd7col.txt
+
+# line 14160
+#create 1st new dframe wi 5 colms (see if assigning colm names while create df will #set colm names, whatever names were before ????????
+
+# ref line 14170
+#table10col <- data.frame(RFL_prot_ID=table8col$RFL_prot_ID, Chr=table8col$Chr, Start=table8col$Start, End=table8col$End, Intron=introndf$intron, Strand=table8col$Strand, Len=table8col$Len, domain_number=table8col$domain_number, GC_tx=gc_tx$GC_tx, Subcel=table8col$Subcel)
+
+table1st5col <- data.frame(RFL_prot_ID=table10col$RFL_prot_ID, Chr=table10col$Chr, Start=table10col$Start, End=table10col$End, Len=table10col$Len, domain_number=table10col$domain_number)
+
+dim(table1st5col)  ## [1] 203   6
+head(table1st5col, n= 3)
+
+write.table(table1st5col, file="table1st6cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+table2nd7col <- data.frame(RFL_prot_ID=table10col$RFL_prot_ID, Chr=table10col$Chr, Start=table10col$Start, Intron=table10col$Intron, Strand=table10col$Strand, GC_tx=table10col$GC_tx, Subcel=table10col$Subcel)
+
+dim(table2nd7col)  ## [1] 203   7
+head(table2nd7col, n= 3)
+
+write.table(table2nd7col, file="table2nd7cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+#################################################################
+# ck table1st5cols.txt, table2nd7cols.txt in bbedit, looks ok, perhaps change underscores 'Subcel' colm to dashes ???????
+
+# now, place these two tables in v1.1_manuscript_template.Rmd file, to check if 'wraps' ???????
+# no missing prot names, so ok.
+# perhaps, move GC_tx, 2nd to 1st table, 'End', 1st to 2nd ??????????????
+###################################################################
+
+02/07/19:
+
+# back to tassel task.
+file from vikas , Variant_Files dir. on 'box', cp to: /Users/bterry/mbook2019/vikas19/tassel5/R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.vcf
+
+-rw-rw-rw-@  1 bterry  staff  33829910 Feb  7 12:53 R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.vcf
+
+
+wc -l R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.vcf
+   27367 R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.vcf
+# Q: only ~27000 lines ????????????????????????
+
+less R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.vcf
+
+
+
+less R_and_NonR_lines_VariantCalls2018.recode.vcf
+# need learn about format of this file ???????????????????????
+
+
+02/08/19:
+# talked to vikas yesterday, items
+# vikas used Ensembl VEP to produce /Users/bterry/mbook2019/vikas19/tassel5/VEP/VariantEffectPredictor_Run1.txt
+# Q: take gene colm, snp ID colm ?????????
+# find any overlap between these rows, and the rows of the 203/216 RF-like seqs (think have python script for this ??????
+
+# try learn tassel5 later ????????????????
+
+# talked to vikas, venny, grep -F, python3, ways to subset ...Run1.txt rows for proteins wi snps & in 203/216.
+grep -x -f A.txt B.txt
+grep -xF -f A.txt B.txt   ## not clear on this, but can try ?????????
+
+## think have a python script (/Users/bterry/mbook2019/python010319
+/testing.py ?????) to find list protein names in one file present in a 2nd file. Q: if multiple occurrences of the protein in rows 2nd file, will all rows in 2nd file be reported (think it should) ??????????????
+# test input:
+head -n 3 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt > teststd_inp.txt
+
+head -n 5 pprhmmsearchsubset_p_prots820plus9_fa_aln_hmmaln_phy_phyml_tree_nexus_2colors.835_red_wheatnames.txt > test1starg_inp.txt
+
+# now, 
+cat teststd_inp.txt | python3 testing.py test1starg_inp.txt  ## ok,
+# now test if for ...Run1.txt as 1st arg input, if teststdinp.txt with say just 2 rows of gene names, say the 1st & 3rd protein name in VariantEffectPredictor_Run1.txt.
+
+cd /Users/bterry/mbook2019/vikas19/tassel5/VEP
+head -n 25 VariantEffectPredictor_Run1.txt > Run1_1st25.txt
+
+TraesCS1A02G001800.1
+TraesCS1A02G006100.1
+
+# create teststdinp2.txt file with these two prot. names
+cat teststdinp2.txt | python3 testing.py Run1_1st25.txt  ## seems ok, might want not to print out the query prot. name, but for now, leave.
+
+# so ready to run testing.py wi query colm 1 of table10cols.txt (as std inp) vs VariantEffectPredictor_Run1.txt, see if any snps located inside any of the 203 RF-like genes.
+# Q: what to do with the 5 'Un' rows at bottom end of 203 prot. names in colm 1 of table10cols.txt ??????????????????????????????????????????????????
+# Q: for now, leave them in ?????????????????????
+cat table10cols.txt | cut -f1 | tail -n 203 | head -n 5
+wc -l VariantEffectPredictor_Run1.txt
+   36330 VariantEffectPredictor_Run1.txt
+cat table10cols.txt | cut -f1 | tail -n 203 | python3 testing.py VariantEffectPredictor_Run1.txt
+# RESULT: 75 rows of output, does it mean 75 snps associated with an RF gene/protein ???????
+
+02/09/19:
+# to email vikas with this result (done)
+
+######################################################
+https://stackoverflow.com/questions/16706005/exact-grep-f-command-in-linux
+# testing grep -f ????????????
+grep -f A.txt B.txt
+grep -f teststd_inp.txt test1starg_inp.txt
+# finds same output as testing.py, but in different order.
+grep -f teststdinp2.txt Run1_1st25.txt
+# similar to testing.py, just without the prot. name from teststdinp2.txt as he 1st column.
+
+# don't know how to put this in a pipeline for 'grep -f' ?????
+# so create the input file 1st, then apply 'grep -f'
+cat table10cols.txt | cut -f1 | tail -n 203 > table10col1.txt
+# now, 
+grep -f table10col1.txt VariantEffectPredictor_Run1.txt | wc -l  ## 75 as expected
+grep -f table10col1.txt VariantEffectPredictor_Run1.txt > vep_Run1_203map_grepf.txt
+# result: 75 rows, same order as with testing.py. Since no duplicate rows, therefore same order as testing.py.
+# so, since preceding worked, won't test following command now:
+grep -x -f A.txt B.txt
+######################################################
+
+02/10/19:
+# not 'following' vikas email response of 02/09/19?
+# don't follow "Transcript" and "SNPIDs" separately ????????????????????????/
+
+The next step will be to run sort|uniq on "Transcript" and "SNPIDs" separately and make a list of SNPs that are within RFL and unique transcripts that contain these SNPs.
+
+02/11/19:
+# 1st, 
+cat vep_Run1_203map.txt | cut -f1 | wc -l  ## 75
+cat vep_Run1_203map.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1sortuniq.txt
+# failed, cause 'space' rather than tab betw. 1st & 2nd colms.
+
+cat table10cols.txt | cut -f1 | tail -n 203 | python3 testing.py VariantEffectPredictor_Run1.txt > test203stdout.txt
+
+# both the '>' std out & the 'output.write' stmnt within testing.py file both produced the 'tab' colm splitting desired. Since the '>' produced blank lines between rows of output, go with the 'output.write' output.
+
+cat vep_Run1_203map.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1sortuniq.txt
+# gives 36 rows.
+
+# now, do 'sort|uniq for colm 2, the snp name colm
+cat vep_Run1_203map.txt | cut -f2 | sort|uniq > vep_Run1_203map_col2sortuniq.txt
+########################################################
+# Q: why only 59 rows ???????????????????????????
+###########################################################
+# ok, see if get same thing if do for colm 1 of vep_Run1_203map_grepf.txt
+cat vep_Run1_203map_grepf.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1grepfsortuniq.txt
+# 59 rows as above, spot check every 10 rows, exact match.
+################################################################
+# Q: rows 7 & 8, same snp mapping to two protein names ??????????????
+# Q: I assume diff. genes since different protein names ??????????????
+################################################################
+
+################################################################
+# Q: vikas mention snp input file to VEP. Q: was it R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.hmp.txt
+ ?????????????????????????????
+# Q: think vikas translated from '.vcf' to '.hmp' ????????????????????
+# Q: apparently did not use tassel5 yet ???????????????????
+################################################################
+
+
+02/12/19:
+# Following Vikas email today, try reproduce his excel spreadsheet in R.
+# To accomplish, take vep_Run1_203map.txt file. Take colm 1, check if sequence same as colm 1 of table10cols.txt.
+
+# Note: vikas request list uniq snps (already have, 59, either vep_Run1_203map_col2sortuniq.txt or vep_Run1_203map_col1grepfsortuniq.txt files.
+################################################################
+# Q: where get info. to subset into R, non-R the 59 snps ???????????????
+################################################################
+
+
+02/13/19:
+# talked to vikas
+# apparently, can find R & nonR snps by inputing sort|uniq list of snps 59 snps from vep_Run1_203map_col2sortuniq.txt to either Tassel5 or VCF tools ?????????????????
+# tomorrow, 3pm, will learn how to do. input file can be R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.hmp.txt
+ or the .vcf file this hmp file came from.
+ # get flapjact s/w (flapjack_macos_1_18_06_29.dmg)
+ # done installing
+ 
+ # for now, Try repeat some of what vikas did in join_vep_Run1_203map_table10cols_v2.xlsx
+# If want to display 75 snps from vep_Run1_203map.txt along with their calc'd position relative to genes (inside, or up or downstream +-5000 nucleotides), 
+# 1st, get colms 1 & 2 from vep_Run1_203map.txt (75 rows) & 1,3,4 from table10cols.txt. 
+
+cat table10cols.txt | cut -f1,3,4 > table10cols_cols134.txt
+cat vep_Run1_203map.txt | cut -f1,2 > vep_Run1_203map_cols12.txt
+
+02/14/19:
+
+Then, see https://stat545.com/bit001_dplyr-cheatsheet.html,
+# In R session, prepare two df's, coerce to tibbles
+
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP")
+getwd()
+
+table10cols_cols134 <- read.delim("table10cols_cols134.txt", header=TRUE, stringsAsFactors=FALSE)
+
+dim(table10cols_cols134) ## [1] 203   3
+View(table10cols_cols134)
+head(table10cols_cols134, n=2)
+
+vep_Run1_203map_cols12 <- read.delim("vep_Run1_203map_cols12.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("RFL_prot_ID", "snp"))
+
+dim(vep_Run1_203map_cols12)  ## [1] 75  2
+View(vep_Run1_203map_cols12)
+head(vep_Run1_203map_cols12, n=2)
+
+#install.packages("tidyverse")
+library(tidyverse) ## dplyr provides the join functions
+#as_tibble(pedestrian)
+table10cols_cols134_tb <- as_tibble(table10cols_cols134)
+vep_Run1_203map_cols12_tb <- as_tibble(vep_Run1_203map_cols12)
+
+ijtabvep_tb <- inner_join(table10cols_cols134_tb, vep_Run1_203map_cols12_tb)
+dim(ijtabvep_tb) ## [1] 75  4
+View(ijtabvep_tb)
+head(ijtabvep_tb, n=2)
+
+write.table(ijtabvep_tb, file="ijtabvep4cols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+inner_join(x, y): Return all rows from x where there are matching values in y, and all columns from x and y. If there are multiple matches between x and y, all combination of the matches are returned. This is a mutating join.
+
+# next, do 3 calc's. Use 'mutate'
+# 1st, remove 1st 4 char from snp colm
+
+02/15/19:
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP")
+getwd()
+iftabvec <- read.delim("ijtabvep4cols.txt", header=TRUE, stringsAsFactors=FALSE)
+dim(iftabvec) ## [1] 203   3
+View(iftabvec)
+head(iftabvec, n=2)
+
+colm4 <- read.delim("colm4.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("snpaddr"))
+dim(colm4)  ## [1] 75  1
+View(colm4)
+head(colm4, n=2)
+
+ijtabvec_addr <- data.frame(RFL_prot_ID=iftabvec$RFL_prot_ID, Start=iftabvec$Start, End=iftabvec$End, snpaddr=colm4$snpaddr)
+
+dim(ijtabvec_addr)  ## [1] 75  4
+View(ijtabvec_addr)
+head(ijtabvec_addr, n=2)
+
+write.table(ijtabvec_addr, file="ijtabvep_snpaddr.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+library(dplyr)
+ingenecalc <- ijtabvec_addr %>% mutate(ingene=ifelse(((snpaddr > Start) & (snpaddr < End)),1,0))
+head(ingenecalc, n=2)
+View(ingenecalc)
+
+upstrdist <- ingenecalc %>% mutate(updist=ifelse((snpaddr < Start), snpaddr - Start, "NA"))
+head(upstrdist, n=2)
+View(upstrdist)
+
+dnstrdist <- upstrdist %>% mutate(dndist=ifelse((snpaddr > End), snpaddr - End, "NA"))
+head(dnstrdist, n=2)
+View(dnstrdist)
+
+write.table(dnstrdist, file="ijtabvep3calccols.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+# so have calcs if snp in, up or down stream in a file.
+
+# to do, compare vikas 1, 0 prot names from the '75' with mine in file ijtabvep3calccols.txt.
+# try filter/select/distinct wi dplyr 
+
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP")
+getwd()
+iftabvec3calcs <- read.delim("ijtabvep3calccols.txt", header=TRUE, stringsAsFactors=FALSE)
+dim(iftabvec3calcs) ## [1] 75  7
+View(iftabvec3calcs)
+head(iftabvec3calcs, n=2)
+
+library(dplyr)
+
+ingenegrps <- iftabvec3calcs %>% filter(ingene == 1)
+head(ingenegrps, n=2)
+View(ingenegrps)  ## 33 rows
+
+ingenegrps_0 <- iftabvec3calcs %>% filter(ingene == 0)
+head(ingenegrps_0, n=2)
+View(ingenegrps_0)  ## 42 rows
+
+RFLprots1uniq <- ingenegrps %>% select(RFL_prot_ID) %>% distinct()
+View(RFLprots1uniq)  ## 18 as vikas
+
+write.table(RFLprots1uniq, file="RFLprots1uniq.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+RFLprots0uniq <- ingenegrps_0 %>% select(RFL_prot_ID) %>% distinct()
+View(RFLprots0uniq)  ## 20 as vikas
+
+write.table(RFLprots0uniq, file="RFLprots0uniq.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+##########################################################################
+# so match vikas wi 18 uniq prot seqs wi snp within gene, & 20 outside gene.
+##########################################################################
+
+# Now, work with Tassel5, VCF tools, Flapjack. Yesterday, Vikas placed 4 files on 'box'.
+/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
+
+ForFlapjack_R_and_NonR_lines_RFL_SNPs.recode.txt
+R_and_NonR_lines_RFL_SNPs.log
+R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+R_and_NonR_lines_RFL_SNPs.recode.vcf
+
+
+02/18/19:
+# vikas indicated he uploaded 3 more files, think for FlapJack ????????
+# looking in the box, looks like only two files are new ???????????????
+ForFlapjack_Subgroup2R_and_NonR_lines_RFL_SNPs.recode.txt
+ForFlapjack_Subgroup2Homogeneous_R_and_NonR_lines_RFL_SNPs.recode.txt
+
+
+# apparently, try display in FlapJack
+# initially, try ForFlapjack_Subgroup2R_and_NonR_lines_RFL_SNPs.recode.txt
+
+# next, ForFlapjack_Subgroup2Homogeneous_R_and_NonR_lines_RFL_SNPs.recode.txt
+
+
+
+
+
 STOPPED
+
+# Now, work with Tassel5, VCF tools, Flapjack. Yesterday, Vikas placed 4 files on 'box'.
+/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
+
+ForFlapjack_R_and_NonR_lines_RFL_SNPs.recode.txt
+R_and_NonR_lines_RFL_SNPs.log
+R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+R_and_NonR_lines_RFL_SNPs.recode.vcf
+
+
+
+
+
+
+
+
+# **yet** to try venny. 
+table10col1.txt, VariantEffectPredictor_Run1.txt as input files
+
+
 
 
 
