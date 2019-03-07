@@ -9914,7 +9914,7 @@ job.16008211.out (END)
 
 # try again, perhaps up request to 8 hr, set number nodes to 1
 
-scp slurm_makeblastdb_protv1.1_1161.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+scp   pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
 
 ssh -Y pterry@crane.unl.edu
 # Rrq096mN 
@@ -14614,14 +14614,625 @@ ForFlapjack_Subgroup2Homogeneous_R_and_NonR_lines_RFL_SNPs.recode.txt
 
 # apparently, try display in FlapJack
 # initially, try ForFlapjack_Subgroup2R_and_NonR_lines_RFL_SNPs.recode.txt
-
+# 23 rows
 # next, ForFlapjack_Subgroup2Homogeneous_R_and_NonR_lines_RFL_SNPs.recode.txt
+# 21 rows
+# both of these, **appear** to be colms which distinguish R, nonR rows.
+
+02/19/19:
+# slipped a save to ***github*** in here
+
+# talked to vikas
+# need redo 21, 23 row flapJack files in FlapJack (previously, cut off RHS colms)
+# so, one '1', four '2's in FlapJack display of the '21' lines.
+# Q: only 2 of my five rating '1' or '2' are from chrom 1. Two from chrom 2, one from chrom 6.
+# the '1' is in a **cluster** of RF-like proteins on chrom 2B
+###########################################################################
+# Q: discarding some apparently reasonable colms by avoiding colm with 'het' snps ?????
+###########################################################################
+# test outputting image from FlapJack
+# image.png (note: my screen shot has **better** resolution)
+# Q: could a combination of the snps be used to relate to an 'R' line ???????
+
+02/20/19:
+vikas tasks:
+i) make list of '1's
+TraesCS2A02G530700.1	748437526	748439046	S2A_748437723
+(see ijtabvep4cols.txt)
+ii) what gene is it in (if is in)
+TraesCS2A02G530700.1	748437526	748439046	748437723	1	NA	NA
+# so is within a gene (see ijtabvep3calccols.txt)
+iii) to check 'science' genome pub paper for exptly verified R lines in wheat
+IWGSC, *Science* **361**, 661 (2018)
 
 
+02/21/19:
+# talked to vikas
+--to create table wi two colms, gene name & snp name (note are 4 such snps). To upload to box
+# to accomplish, start with file: ijtabvep4cols.txt, copy to ijtabvep4cols4snps.txt, then manually remove all but the 4 snps to be saved. 
+Finally use cut command to select colms 1 & 4. 
+# in dir /Users/bterry/mbook2019/vikas19/tassel5/VEP
+
+cat ijtabvep4cols4snps.txt | cut -f1,4 > ijtabvep2cols4snps.txt
+
+Check to see if still have colm headers => yes
+Uploaded to box
+Emailed vikas as to the name of file uploaded.
+
+02/22/19:
+cd ~/mbook2017/vikas17
+
+find . -name 'FunctionallyCharacterizedRfs_fasta.txt' -print
+mbook18/vikas18
+
+--vikas 6 exptl R genes, from other species (part of the 88 ctls I using previously). To do, check their location in phylogram compared to these four snps locations.
+
+FunctionallyCharacterizedRfs_fasta.txt
+cd ~/mbook2017/vikas17
+
+find . -name 'FunctionallyCharacterizedRfs_fasta.txt' -print
+/Users/bterry/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthomcl131vikas6
+cd /Users/bterry/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthomcl131vikas6
+grep -c "^>" FunctionallyCharacterizedRfs_fasta.txt  ## 6  ??????
+grep "^>" FRknownseqs.fa > grepoutput  ## 11 rows as expect
+grep "^>" FunctionallyCharacterizedRfs_fasta.txt
+>CAR70003.1_At1g12700_Arabidopsis_thaliana
+>BAM64814.1_bvCRP-1_Beta_vulgaris
+>API57808.1_RFP1_Brassica_rapa
+>AAM52339.1_fertilityrestorer_Petuniaxhybrida
+>AJG06104.1_restorer-of-fertility_Raphanus_sativus
+>Q76C99.1_Rf1_Oryza_sativa
 
 
+# Get names of the 6 ctls, check Rmd/html output for image to search location these seqs in phylogram ?????????
+
+--also, check whether the (2) snps are in/outside their gene ?????????
+
+
+--try relate RF1, RF3 (fig 4, IWGSC, *Science* **361**, 661 (2018, chrom 1A, 1B) to the 34 chrom 1A & 1B snps in this study ???????????? Get whatever can from literature ?????
+
+cd /Users/bterry/mbook2018
+find . -name 'eaar*' -print
+
+02/23/19:
+IWGSC, *Science* **361**, 661 (2018)
+# looking for location of Rf1, Rf3, Rf8, Rf4, see Fig.4c, Fig.S54. Also refs 
+45, 165, 166, 168
+# Note, Fig S54, states '**approximate** position of the mapped Rf genes is indicated' 
+# Rf1, Rf3, (see see ref 166, 167)
+# Rf4, (see ref 166)
+# Rf8, (see ref 168)
+# ref 166: Journal of Agriculture Biotechnology, j. agric. biotechnol. (ncbi, unl libr **don't have** ??????
+# ref 167, for Rf1, Geyer, Mol. Genet. Genomics 293 451 (2018)
+# Q: T. timopheevii, looks like this reference says Rf1 (apparently on chrom 1A), wi modifier on chrom 1B of **T. timopheevii**. Looks like **don't** have a specific genome address on T. timopheevii? Also, **how** relating this to new hexaploid wheat genome?
+
+# I note, fig. S54A, the breakdown by number of RFL genes per chrom. and subgenome compared to the breakdown in our 203 protein sequences matches probably within +-1 for each category.
+
+02/24/19:
+# to email vikas wi some of these comments ??????????????????
+
+02/25/19:
+# appears no list of the 207 RFL genes advertised in wheat genome seq. science paper ?????
+
+Q: what now, pub what have, any possible initiative involving some expts with wheat plants ?????????
+
+02/27/19:
+PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa 
+find . -name 'PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa ' -print
+# talked to vikas yesterday. 
+# 1st, open from list_wheatids_pid50_plus88ctls_phyml_tree_chrcolor_forRmd.txt from dir: note '.png' in .../v1.1Rmd_doc, but forRmd.txt still on 'pro'.
+
+# Note: **could(??)** still check on pid35 + 88, compare position vikas6 file as did for list_wheatids_pid50_plus88ctls_phyml_tree_chrcolor_forRmd.txt above, same pro dir ??????????????
+
+#######################################################################
+# TO DO, make table for RFs (fig S54(B)
+#######################################################################
+
+
+# talked to vikas
+# blast genes (or proteins) or both ???????
+# Q: what is query, target ?????????????
+#######################################################################
+# Wants 216 (pid40 blastp hits). TO CHECK: THAT THE 4 snp HITS ARE INCLUDED ????????????
+# YES, see .../cikas19/tassel5/VEP/ijtabvep4cols4snps.txt
+#######################################################################
+
+02/28/19:
+# ref: line 10025
+find . -name 'slurm_blastp_88ctls_vs_prot1161_ev06_outfmt6cust.sh' -print
+
+line 9917
+slurm_makeblastdb_protv1.1_1161.sh
+rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+
+# prevly,
+Attempting to identify most closely related seqs of the 1161 to RF-like ctls, blastp 88 RF-like ctls (query) vs 1161 seqs (target).
+# think here, do vikas6 (query) wi 203 seqs as target ???????????
+
+#######################################################################
+# to check if TraesCS1A02G067500.1 is still outlier on pid50 phylogram with **no** 88ctls ?????
+#######################################################################
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+list_WheatIDs_pid40.fa  ## target of new blastp run
+list_WheatIDs_pid40.txt
+
+line 9884, 09/18/18
+slurm_makeblastdb_protv1.1_1161.sh
+
+03/01/19:
+# see line 10048
+#cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+#scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/blastpctls88vs_prots1161/rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp .
+
+wc -l rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+  237410 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+
+# head -n 6 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+
+# leaves 16958 for vikas6
+
+>CAR70003.1_At1g12700_Arabidopsis_thaliana  
+grep -c "^CAR70003" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 2792
+
+>BAM64814.1_bvCRP-1_Beta_vulgaris
+grep -c "^BAM64814" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 2625
+
+>API57808.1_RFP1_Brassica_rapa
+grep -c "^API57808" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 2873
+
+>AAM52339.1_fertilityrestorer_Petuniaxhybrida
+grep -c "^AAM52339" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 2666
+
+>AJG06104.1_restorer-of-fertility_Raphanus_sativus
+grep -c "^AJG06104" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 3090
+
+>Q76C99.1_Rf1_Oryza_sativa
+grep -c "^Q76C99" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp  ## 2912
+
+#################################################################
+sum(c(2792,2625,2873,2666,3090,2912))  ## [1] 16958, matches line 10055
+#################################################################
+
+# ready proceed, appropriately subsetting to get what want.
+
+03/02/19:
+
+# see line 10057
+# perhaps subset for the 6 vikas6 ctls above, copy to ../vikas6hits
+# /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits
+
+# to save memory, do from command line with grep
+
+grep "^CAR70003" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > /vikas6hits/arabctl.blastp
+
+grep "^BAM64814" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Betactl.blastp
+
+grep "^API57808" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Brassica.blastp
+
+grep "^AAM52339" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Petun.blastp
+
+grep "^AJG06104" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Raphanus.blastp
+
+grep "^Q76C99" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Oryza.blastp
+
+# next, subset each of the 6 with python pgm
+
+#line 14434
+#cat table10cols.txt | cut -f1 | tail -n 203 | python3 testing.py VariantEffectPredictor_Run1.txt > test203stdout.txt
+
+cat list_WheatIDs_pid40.txt | python3 testing.py arabctl.blastp > vikas6arabpid40_216_hits.blastp
+
+# have 7 rows of TraesCS1A02G031600.1 ??????????????????????????
+# check 88 query blastp input for multiple CAR70003? Result: just '1' as expect.
+# check 1161 input file for multiple TraesCS1A02G031600.1 ?????????
+# from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+cd /Users/bterry/mbook2018
+find . -name 'PPRv1.1_1161_P_seqs_subset.fa' -print
+#############################################################
+# TraesCS1A02G031600.1 present just once in PPRv1.1_1161_P_seqs_subset.fa
+#############################################################
+
+# Q: why 7 hits in vikas6arabpid40_216_hits.blastp ????????
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	3.00e-83	29.958	474	602	784	273
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	1.26e-75	25.994	654	602	784	253
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	1.42e-66	27.130	575	602	784	228
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	1.64e-56	30.056	356	602	784	200
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	2.38e-48	26.087	414	602	784	176
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	2.42e-23	30.811	185	602	784	100
+TraesCS1A02G031600.1	CAR70003.1_At1g12700_Arabidopsis_thaliana	TraesCS1A02G031600.1	1.75e-15	23.077	234	602	784	75.9
+
+# the seven have different evalues, pid's ??????????????????????
+# Q: why seven ????????????????
+# Q: might this affect original blastp pid values? For example, if ran a sort|uniq without checking for duplications, then would not have noted multiple values for a prot. seq. 
+# Q: how were the 216 for 40 pid selected ???????????????
+################################################################
+# PROBABLY NEED GO BACK CHECK IF THERE WAS DUPLICATION IN THE PROT. SEQ HITS BEFORE THE PID SELECTION ??? 
+###############################################################
+
+03/03/19:
+# rename test_output.txt to vikas6arabpid40_216_hits.blastp (done)
+
+# then run testing.py on rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp, see if get same output as when ran on subset, arabctl.blastp.
+
+wc -l rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+tail -n 37410 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > last37410.txt
+
+head -n 200000 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp | tail -n 100000 > test100000_200000.blastp
+# so 7 
+
+# following not needed
+#cat list_WheatIDs_pid40.txt | python3 testing.py rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6arabpid40_216_hits.blastp
+
+# since find 7 TraesCS1A02G031600.1 associated with 'CAR...' in rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp, 
+########################################################
+# Q: none in 7 have pid > 31%. So, how does TraesCS1A02G031600.1 appear in pid40 (216) ????????????????
+# Q: so 1 CAR... in 88 ctls in blastp query, 1 TraesCS1A02G031600.1 in 1161 target .fa file, BUT 7 COMBINATION CAR... and TraesCS1A02G031600.1 rows in rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp, each with different evalues & pid's. And the highest pid is ~ 31%, so should not have been scored in pid >= 40% ???????????
+#########################################################
+
+03/04/19:
+# check blastp target file for unique rows, PPRv1.1_1161_P_seqs_subset.fa
+# bbedit of PPRv1.1_1161_P_seqs_subset.fa shows 1161 '>' rows
+grep -c "^>" PPRv1.1_1161_P_seqs_subset.fa   # 1161 as expect
+grep "^>" PPRv1.1_1161_P_seqs_subset.fa | wc -l  # 1161 as expect
+################################################################
+grep "^>" PPRv1.1_1161_P_seqs_subset.fa | sort|uniq | wc -l  ## 1161 unique rows
+################################################################
+
+# Try repeat say pid40 from blastp output. Lets see what we get ???????????????
 
 STOPPED
+
+# try find pid >= 40 in rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+wc -l rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+  237410 rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp
+
+# try wi dplyr (filter, arrange)
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls")
+getwd()
+
+blastphits <- read.delim("rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(blastphits) ## [1] 237410      8
+View(blastphits)
+head(blastphits, n=2)
+
+library(dplyr)
+pid40test <- blastphits %>% filter(pid > 40)
+dim(pid40test)  ## [1] 3432    8
+head(pid40test, n=4)
+View(pid40test)  ## 3432 rows
+
+pid40testsortrev <- blastphits %>% filter(pid > 40) %>% arrange(desc(pid))
+dim(pid40testsortrev)  ## [1] 3432    8
+head(pid40testsortrev, n=4)
+tail(pid40testsortrev, n=4)
+View(pid40testsortrev)  ## 3432 rows
+
+write.table(pid40testsortrev, file="pid40testsortrev.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+###########################################################################
+# Q: perhaps vikas did thru sort|uniq. So do a write, later do sort|uinq from unix command line.
+cat pid40testsortrev.txt | cut -f2 | sort|uniq | wc -l  ## 216 as prev pid40
+###########################################################################
+
+03/05/19:
+
+STOPPED
+
+pid40testsortrevuniq <- blastphits %>% filter(pid > 40) %>% arrange(desc(pid)) %>% distinct(sseqid, .keep_all= TRUE)
+dim(pid40testsortrevuniq)  ## [1] 216   8
+head(pid40testsortrevuniq, n=4)
+tail(pid40testsortrevuniq, n=4)
+# ALSO WRITE pid40testsortrevuniq TO FILE, SO CAN CHECK IF HAS ...031600.1 seq ??????????
+write.table(pid40testsortrevuniq, file="pid40testsortrevuniq.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+#################################################################
+# result, ...031600.1 seq, present once. Note: spread pid ~ 40% to 79%
+#################################################################
+
+###############################################################
+# Q: check on if can help by using 'evalue' colm ??????????????????????
+###############################################################
+pid40testevalsortuniq <- blastphits %>% filter(pid > 40) %>% arrange(eval) %>% distinct(sseqid, .keep_all= TRUE)
+dim(pid40testevalsortuniq)  ## [1] 216   8
+head(pid40testevalsortuniq, n=4)
+tail(pid40testevalsortuniq, n=4)
+#################################################################
+# range 0 to e-11
+#################################################################
+
+##############################################################
+# TO DO: perhaps box plot pid, eval for the 216 (ref 01/30/19)
+##############################################################
+
+
+
+# finally back to vika6. Might 1st subset all hits for each of 6 (think done above, 873 for 'CAR70003.1), then sout by evalue, examine. Then subset by uniq seq namehits, for each of the vikas6, then compare to phylogram. Sort initially by eval, & later by pid. Could also boxplot.
+
+
+# /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits
+
+/vikas6hits/arabctl.blastp
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+CAR70003hits <- read.delim("vikas6arabpid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(CAR70003hits) ## [1] 873   9
+View(CAR70003hits)
+head(CAR70003hits, n=2)
+
+library(dplyr)
+CAR70003hitssorteval <- CAR70003hits %>% arrange(eval)
+dim(CAR70003hitssorteval)  ## [1] 873   9
+head(CAR70003hitssorteval, n=4)
+tail(CAR70003hitssorteval, n=4)
+# range eval = e-96 to e-07
+write.table(CAR70003hitssorteval, file="CAR70003hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+# now, make uniq, then write.
+
+CAR70003hitssortevaluniq <- CAR70003hits %>% arrange(eval) %>% distinct(sseqid, .keep_all= TRUE)
+dim(CAR70003hitssortevaluniq)  ## [1] 160   9
+head(CAR70003hitssortevaluniq, n=4)
+tail(CAR70003hitssortevaluniq, n=4)
+write.table(CAR70003hitssortevaluniq, file="CAR70003hitssortevaluniq.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+# range to e-96 e-40, so making unique removed bunch of larger eval rows ??
+
+
+03/06/19:
+# talked to vikas yesterday
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits
+i) best hit(s) each of vikas6 ctls on the pid40 216 seqs. Create CAR70003hitssorteval.txt for other 5 of vikas6. For this file, take top 3 for this file.
+
+# for 2nd vikas6 ctl: 
+#grep "^BAM64814" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Betactl.blastp
+
+#cat list_WheatIDs_pid40.txt | python3 testing.py arabctl.blastp > vikas6arabpid40_216_hits.blastp
+
+cat list_WheatIDs_pid40.txt | python3 testing.py Betactl.blastp > discard2.blastp
+
+# rename test_output.txt to vikas6Betapid40_216_hits.blastp (done)
+wc -l vikas6Betapid40_216_hits.blastp
+     824 vikas6Betapid40_216_hits.blastp
+
+# R/dplyr to get sorted on eval colm
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+
+BAM64814hits <- read.delim("vikas6Betapid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(BAM64814hits) ## [1] 824   9
+View(BAM64814hits)
+head(BAM64814hits, n=2)
+
+library(dplyr)
+BAM64814hitssorteval <- BAM64814hits %>% arrange(eval)
+dim(BAM64814hitssorteval)  ## [1] 824   9
+head(BAM64814hitssorteval, n=4)
+tail(BAM64814hitssorteval, n=4)
+# range eval = e-175 to e-07
+write.table(BAM64814hitssorteval, file="BAM64814hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 3rd vikas6 ctl: refer 14812, 
+#grep "^API57808" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Brassica.blastp
+
+#cat list_WheatIDs_pid40.txt | python3 testing.py arabctl.blastp > vikas6arabpid40_216_hits.blastp
+
+cat list_WheatIDs_pid40.txt | python3 testing.py Brassica.blastp > discard3.blastp
+
+# rename test_output.txt to vikas6Brassicapid40_216_hits.blastp (done)
+wc -l vikas6Brassicapid40_216_hits.blastp
+     906 vikas6Brassicapid40_216_hits.blastp
+
+# R/dplyr to get sorted on eval colm
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+
+API57808hits <- read.delim("vikas6Brassicapid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(API57808hits) ## [1] 906   9
+View(API57808hits)
+head(API57808hits, n=2)
+
+library(dplyr)
+API57808hitssorteval <- API57808hits %>% arrange(eval)
+dim(API57808hitssorteval)  ## [1] 906   9
+head(API57808hitssorteval, n=4)
+tail(API57808hitssorteval, n=4)
+# range eval = e-97 to e-07
+write.table(API57808hitssorteval, file="API57808hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 4th vikas6 ctl: refer 14814, 
+#grep "^AAM52339" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Petun.blastp
+
+#cat list_WheatIDs_pid40.txt | python3 testing.py arabctl.blastp > vikas6arabpid40_216_hits.blastp
+
+cat list_WheatIDs_pid40.txt | python3 testing.py Petun.blastp > discard4.blastp
+
+# rename test_output.txt to vikas6Petunpid40_216_hits.blastp (done)
+wc -l vikas6Petunpid40_216_hits.blastp
+     913 vikas6Petunpid40_216_hits.blastp
+
+# R/dplyr to get sorted on eval colm
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+
+AAM52339hits <- read.delim("vikas6Petunpid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(AAM52339hits) ## [1] 913   9
+View(AAM52339hits)
+head(AAM52339hits, n=2)
+
+library(dplyr)
+AAM52339hitssorteval <- AAM52339hits %>% arrange(eval)
+dim(AAM52339hitssorteval)  ## [1] 913   9
+head(AAM52339hitssorteval, n=4)
+tail(AAM52339hitssorteval, n=4)
+# range eval = e-96 to e-07
+write.table(AAM52339hitssorteval, file="AAM52339hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 5th vikas6 ctl: refer 14816, 
+#grep "^AJG06104" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Raphanus.blastp
+
+#cat list_WheatIDs_pid40.txt | python3 testing.py arabctl.blastp > vikas6arabpid40_216_hits.blastp
+
+cat list_WheatIDs_pid40.txt | python3 testing.py Raphanus.blastp > discard5.blastp
+
+# rename test_output.txt to vikas6Raphanuspid40_216_hits.blastp (done)
+wc -l vikas6Raphanuspid40_216_hits.blastp
+     963 vikas6Raphanuspid40_216_hits.blastp
+
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+AJG06104hits <- read.delim("vikas6Raphanuspid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(AJG06104hits) ## [1] 963   9
+View(AJG06104hits)
+head(AJG06104hits, n=2)
+
+library(dplyr)
+AJG06104hitssorteval <- AJG06104hits %>% arrange(eval)
+dim(AJG06104hitssorteval)  ## [1] 963   9
+head(AJG06104hitssorteval, n=4)
+tail(AJG06104hitssorteval, n=4)
+# range eval = e-111 to e-07
+write.table(AJG06104hitssorteval, file="AJG06104hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 6th vikas6 ctl: refer 14818, 
+#grep "^Q76C99" rice1st_88ctls_prot1161_ev06_outfmt6cust.blastp > vikas6hits/Oryza.blastp
+
+#cat list_WheatIDs_pid40.txt | python3 testing.py arabctl.blastp > vikas6arabpid40_216_hits.blastp
+
+cat list_WheatIDs_pid40.txt | python3 testing.py Oryza.blastp > discard6.blastp
+
+# rename test_output.txt to vikas6Oryzapid40_216_hits.blastp (done)
+wc -l vikas6Oryzapid40_216_hits.blastp
+    1058 vikas6Oryzapid40_216_hits.blastp
+
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+Q76C99hits <- read.delim("vikas6Oryzapid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(Q76C99hits) ## [1] 1058    9
+View(Q76C99hits)
+head(Q76C99hits, n=2)
+
+library(dplyr)
+Q76C99hitssorteval <- Q76C99hits %>% arrange(eval)
+dim(Q76C99hitssorteval)  ## [1] 1058    9
+head(Q76C99hitssorteval, n=4)
+tail(Q76C99hitssorteval, n=4)
+# range eval = 0 to e-07
+write.table(Q76C99hitssorteval, file="Q76C99hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+ 
+# talked to vikas
+# try calc 'frac_align' for the vikas6 ctl hits (dplyr, mutate fcn)
+# note on internet, https://www.biostars.org/p/164403/
+"I would personally feel relatively confident with something like qlen/slen=1±0.25 && qlen/alen=1±0.25."
+# ok, so qlen/slen would be colms 7 over 8 in file
+
+
+# so calc 'cov' (coverage) for arabidopsis ctl (CAR70003) (1st vikas6 ctl)
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+CAR70003hits <- read.delim("vikas6arabpid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(CAR70003hits) ## [1] 873   9
+View(CAR70003hits)
+head(CAR70003hits, n=2)
+
+library(dplyr)
+CAR70003hitssortevalcov <- CAR70003hits %>% arrange(eval) %>% mutate(cov = qlen/slen)
+dim(CAR70003hitssortevalcov)  ## [1] 873  10
+head(CAR70003hitssortevalcov, n=4)
+tail(CAR70003hitssortevalcov, n=4)
+# range eval = e-96 to e-07
+write.table(CAR70003hitssortevalcov, file="CAR70003hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+#####################################################################
+# could do a box plot for 'cov' colm, to judge if coverage is adequate here, i.e., all 6 vikas6 ctls on same plot ?????
+#####################################################################
+
+03/07/19:
+
+STOPPED
+
+# for 2nd vikas6 ctl: (BAM64814)
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+
+BAM64814hits <- read.delim("vikas6Betapid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(BAM64814hits) ## [1] 824   9
+View(BAM64814hits)
+head(BAM64814hits, n=2)
+
+library(dplyr)
+BAM64814hitssorteval <- BAM64814hits %>% arrange(eval)
+dim(BAM64814hitssorteval)  ## [1] 824   9
+head(BAM64814hitssorteval, n=4)
+tail(BAM64814hitssorteval, n=4)
+# range eval = e-175 to e-07
+write.table(BAM64814hitssorteval, file="BAM64814hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+
+
+
+
+
+# then compare best hits wi phylogram. No pid40_88ctls phylogram. Will need to use pid50_88 phylogram.
+
+
+
+
+
+# could try compare pid for say  seven...031600.1 with one used to create the pid40 216 seqs (Q: how, look back where originally created ????????????)
+
+
+# TO SEND vikas an email discussing ?????????????/
+
+
+
+
+# dir to work wi vikas6 hits for 216 of pid40, /PPRv1.1plus_88ctls/vikas6hits
+
+R
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP")
+getwd()
+iftabvec <- read.delim("ijtabvep4cols.txt", header=TRUE, stringsAsFactors=FALSE)
+dim(iftabvec) ## [1] 203   3
+View(iftabvec)
+head(iftabvec, n=2)
+
+
+# subset for the 216 prot. seqs (python pgm ?????????)
+# then check if 'evalue' can distinguish ...
+
+# line 14576 (dplyr)
+
+
+
+
+
+
+
 
 # Now, work with Tassel5, VCF tools, Flapjack. Yesterday, Vikas placed 4 files on 'box'.
 /Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
