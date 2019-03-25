@@ -14391,10 +14391,10 @@ cat teststdinp2.txt | python3 testing.py Run1_1st25.txt  ## seems ok, might want
 # Q: what to do with the 5 'Un' rows at bottom end of 203 prot. names in colm 1 of table10cols.txt ??????????????????????????????????????????????????
 # Q: for now, leave them in ?????????????????????
 cat table10cols.txt | cut -f1 | tail -n 203 | head -n 5
-wc -l VariantEffectPredictor_Run1.txt
+wc -ld 
    36330 VariantEffectPredictor_Run1.txt
 cat table10cols.txt | cut -f1 | tail -n 203 | python3 testing.py VariantEffectPredictor_Run1.txt
-# RESULT: 75 rows of output, does it mean 75 snps associated with an RF gene/protein ???????
+# RESULT: 75 rows of output, does it mean 75 snps associated with an RF gene/protein, i.e., within or +- 5000 of gene ???????
 
 02/09/19:
 # to email vikas with this result (done)
@@ -14436,16 +14436,16 @@ cat table10cols.txt | cut -f1 | tail -n 203 | python3 testing.py VariantEffectPr
 # both the '>' std out & the 'output.write' stmnt within testing.py file both produced the 'tab' colm splitting desired. Since the '>' produced blank lines between rows of output, go with the 'output.write' output.
 
 cat vep_Run1_203map.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1sortuniq.txt
-# gives 36 rows.
+# gives 36 rows, protein names.
 
 # now, do 'sort|uniq for colm 2, the snp name colm
 cat vep_Run1_203map.txt | cut -f2 | sort|uniq > vep_Run1_203map_col2sortuniq.txt
 ########################################################
-# Q: why only 59 rows ???????????????????????????
+# Q: 59 rows (snp column) ???????????????????????????
 ###########################################################
 # ok, see if get same thing if do for colm 1 of vep_Run1_203map_grepf.txt
 cat vep_Run1_203map_grepf.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1grepfsortuniq.txt
-# 59 rows as above, spot check every 10 rows, exact match.
+# 59 rows as above (snp column), spot check every 10 rows, exact match.
 ################################################################
 # Q: rows 7 & 8, same snp mapping to two protein names ??????????????
 # Q: I assume diff. genes since different protein names ??????????????
@@ -14953,7 +14953,7 @@ tail(pid40testevalsortuniq, n=4)
 
 
 
-# finally back to vika6. Might 1st subset all hits for each of 6 (think done above, 873 for 'CAR70003.1), then sout by evalue, examine. Then subset by uniq seq namehits, for each of the vikas6, then compare to phylogram. Sort initially by eval, & later by pid. Could also boxplot.
+# finally back to vika6. Might 1st subset all hits for each of 6 (think done above, 873 for 'CAR70003.1), then sort by evalue, examine. Then subset by uniq seq namehits, for each of the vikas6, then compare to phylogram. Sort initially by eval, & later by pid. Could also boxplot.
 
 
 # /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits
@@ -15157,19 +15157,18 @@ View(CAR70003hits)
 head(CAR70003hits, n=2)
 
 library(dplyr)
-CAR70003hitssortevalcov <- CAR70003hits %>% arrange(eval) %>% mutate(cov = qlen/slen)
-dim(CAR70003hitssortevalcov)  ## [1] 873  10
+CAR70003hitssortevalcov <- CAR70003hits %>% arrange(eval) %>% mutate(qs = qlen/slen, ql = qlen/len)
+dim(CAR70003hitssortevalcov)  ## [1] 873  11
 head(CAR70003hitssortevalcov, n=4)
 tail(CAR70003hitssortevalcov, n=4)
 # range eval = e-96 to e-07
 write.table(CAR70003hitssortevalcov, file="CAR70003hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
-#####################################################################
-# could do a box plot for 'cov' colm, to judge if coverage is adequate here, i.e., all 6 vikas6 ctls on same plot ?????
-#####################################################################
+
 
 03/07/19:
+# slip a save to ***github*** in here
+# email vikas on above 'coverage', web site comment. (done)
 
-STOPPED
 
 # for 2nd vikas6 ctl: (BAM64814)
 R
@@ -15183,16 +15182,293 @@ View(BAM64814hits)
 head(BAM64814hits, n=2)
 
 library(dplyr)
-BAM64814hitssorteval <- BAM64814hits %>% arrange(eval)
-dim(BAM64814hitssorteval)  ## [1] 824   9
-head(BAM64814hitssorteval, n=4)
-tail(BAM64814hitssorteval, n=4)
+BAM64814hitssortevalcov <- BAM64814hits %>% arrange(eval) %>% mutate(qs = qlen/slen, ql = qlen/len)
+dim(BAM64814hitssortevalcov)  ## [1] 824  11
+head(BAM64814hitssortevalcov, n=4)
+tail(BAM64814hitssortevalcov, n=4)
 # range eval = e-175 to e-07
-write.table(BAM64814hitssorteval, file="BAM64814hitssorteval.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+write.table(BAM64814hitssortevalcov, file="BAM64814hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 3rd vikas6 ctl: refer 14812, (API57808)
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+
+API57808hits <- read.delim("vikas6Brassicapid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(API57808hits) ## [1] 906   9
+View(API57808hits)
+head(API57808hits, n=2)
+
+library(dplyr)
+API57808hitssortevalcov <- API57808hits %>% arrange(eval) %>% mutate(qs = qlen/slen, ql = qlen/len)
+dim(API57808hitssortevalcov)  ## [1] 906  11
+head(API57808hitssortevalcov, n=4)
+tail(API57808hitssortevalcov, n=4)
+# range eval = e-97 to e-07
+write.table(API57808hitssortevalcov, file="API57808hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 4th vikas6 ctl: refer 14814, (AAM52339)
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+
+AAM52339hits <- read.delim("vikas6Petunpid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(AAM52339hits) ## [1] 913   9
+View(AAM52339hits)
+head(AAM52339hits, n=2)
+
+library(dplyr)
+AAM52339hitssortevalcov <- AAM52339hits %>% arrange(eval) %>% mutate(qs = qlen/slen, ql = qlen/len)
+dim(AAM52339hitssortevalcov)  ## [1] 913  11
+head(AAM52339hitssortevalcov, n=4)
+tail(AAM52339hitssortevalcov, n=4)
+# range eval = e-96 to e-07
+write.table(AAM52339hitssortevalcov, file="AAM52339hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 5th vikas6 ctl: refer 14816, (AJG06104)
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+AJG06104hits <- read.delim("vikas6Raphanuspid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(AJG06104hits) ## [1] 963   9
+View(AJG06104hits)
+head(AJG06104hits, n=2)
+
+library(dplyr)
+AJG06104hitssortevalcov <- AJG06104hits %>% arrange(eval) %>% mutate(qs = qlen/slen, ql = qlen/len)
+dim(AJG06104hitssortevalcov)  ## [1] 963  11
+head(AJG06104hitssortevalcov, n=4)
+tail(AJG06104hitssortevalcov, n=4)
+# range eval = e-111 to e-07
+write.table(AJG06104hitssortevalcov, file="AJG06104hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+
+# for 6th vikas6 ctl: refer 14818, (Q76C99)
+R
+rm(list=ls())
+setwd("~//mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits")
+getwd()
+Q76C99hits <- read.delim("vikas6Oryzapid40_216_hits.blastp", header=FALSE, stringsAsFactors=FALSE, col.names=c("seqs216", "qseqid", "sseqid", "eval", "pid", "len", "qlen", "slen", "bitsc"))
+dim(Q76C99hits) ## [1] 1058    9
+View(Q76C99hits)
+head(Q76C99hits, n=2)
+
+library(dplyr)
+Q76C99hitssortevalcov <- Q76C99hits %>% arrange(eval) %>% mutate(qs = qlen/slen, ql = qlen/len)
+dim(Q76C99hitssortevalcov)  ## [1] 1058   11
+head(Q76C99hitssortevalcov, n=4)
+tail(Q76C99hitssortevalcov, n=4)
+# range eval = 0 to e-07
+write.table(Q76C99hitssortevalcov, file="Q76C99hitssortevalcov.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+#####################################################################
+# could do a box plot for 'cov' colm, to judge if coverage is adequate here, i.e., all 6 vikas6 ctls on same plot ?????
+#####################################################################
+
+03/08/19:
+# talked to vikas
+# create file with top hits for 6 ...cov... above. Check where the 4 flapjack 'identified' seqs appear in these files.
+
+# the 6 files: /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas6hits
+
+AAM52339hitssortevalcov.txt	BAM64814hitssortevalcov.txt
+AJG06104hitssortevalcov.txt	CAR70003hitssortevalcov.txt
+API57808hitssortevalcov.txt	Q76C99hitssortevalcov.txt
+
+1. CAR70003hitssortevalcov.txt
+2. BAM64814hitssortevalcov.txt
+3. API57808hitssortevalcov.txt
+4. AAM52339hitssortevalcov.txt
+5. AJG06104hitssortevalcov.txt
+6. Q76C99hitssortevalcov.txt
+
+head -n 3 CAR70003hitssortevalcov.txt > vikas6tops.txt
+head -n 5 BAM64814hitssortevalcov.txt >> vikas6tops.txt
+head -n 3 API57808hitssortevalcov.txt >> vikas6tops.txt
+head -n 1 AAM52339hitssortevalcov.txt >> vikas6tops.txt
+head -n 2 AJG06104hitssortevalcov.txt >> vikas6tops.txt
+head -n 3 Q76C99hitssortevalcov.txt >> vikas6tops.txt
+
+#########################################################################
+# vikas6tops.txt, 17 *arbitrary* rows from 6 vikas6 'cov' blastp output files.
+#########################################################################
+
+# location of best hit for each of the 4 seqs identified wi flapjack (see file ijtabvep4cols4snps.txt) in dir /Users/bterry/mbook2019/vikas19/tassel5/VEP
+
+# the 4 seqs (last 3 digits of snp)   593       723          430         111 
+
+1. CAR70003hitssortevalcov.txt(1strow) 83       214          302         238
+2. BAM64814hitssortevalcov.txt         94        93          346         355
+3. API57808hitssortevalcov.txt         65       217          327         209
+4. AAM52339hitssortevalcov.txt         21       148           50         177
+5. AJG06104hitssortevalcov.txt         75       266          425         308
+6. Q76C99hitssortevalcov.txt           15(1row)  98          131         102
+
+# only pattern, '593' snp on average, smallest evalue, or closest related to the 6 ctls.
+# TO DO: go to 'tair', look for'CAR70003' ?????????????
+
+# talked to vikas
+# requests to box (.../Variant_Files/vikas6ctls)
+--vikas6tops.txt
+--the 6 'cov' files (see above)
+
+############################################################################
+TO DO: look for arabidopsis CAR70003... on 'tair' site, person talked to at pag2019 ???
+#############################################################################
+
+03/09/19:
+# upload to box two requested phenograms (done)
+
+03/11/19:
+# to go to GSDS site, split current file into number subsets so readable size print. Place in v1.1_logfile_doc.Rmd file in /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc dir.
+
+03/12/19:
+# test a 1st subfile of 203.gff3 (/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/203.gff3). 1st 304 lines hits a 'cutoff' between two of the 203 seqs.
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+ls 203*
+head -n 304 203.gff3 > 203_1st304lines.gff3
+# submit 203.gff3 to GSDS site. http://gsds.cbi.pku.edu.cn
+# output file: IPVUDS.png (35 rows)
+################################################################
+# Q: line 39, WHAT TO DO WITH THIS LINE ???????????
+# in 203_1st304lines.gff3 file, lines 205-262 refer to this gene. Don't see anything in these lines indicating the issue with output line 39 in IPVUDS.png file ???????????
+# check vikas, if this .png file big enough format, will go ahead with following 3 subsets ??????
+# need settle 'output line 39 in .png file 1st' ???????????????????????????
+################################################################
+# test subset the 2nd subset, as 'issue' there to resolve also ?????????????
+
+
+03/13/19:
+head -n 608 203.gff3 | tail -n 304 > 203_2nd304lines.gff3  ## 608, another ok break.
+wc -l 203_2nd304lines.gff3
+     304 203_2nd304lines.gff3
+072300 (gene) -> 067980 (cds)
+# 9:20am, http://gsds.cbi.pku.edu.cn not responding  ???????????????????????
+# 9:1pm, site back up
+# input format: gff3
+# browse for 203_2nd304lines.gff3
+# image format: PNG
+# submit
+# rt clk, 'save image as' => G3N6CF.png  (52 rows)
+# Note: 35 + 52 rows = 87, uneven in output, so, TO DO, redo, arrange so 41 seqs in each of 5 output gsds images (except last is 39). So the cutoffs in 203.gff3 to achieve this are: (LHS integers are row in table10cols.txt file.
+
+42 TraesCS1B02G039700.1  gff3 line 1 thru 270
+83 TraesCS1D02G056600.1   gff3 line 271 thru 529
+124 TraesCS2B02G126900.1  gff3 line 530 thru 784
+165 TraesCS6B02G021600.1  gff3 line 785 thru 996
+204 TraesCSU02G090205.1  gff3 line 997 thru 1212
+
+# now, create 5 files from 203.gff3 according to the lines above, run each file on GSDS site. Should have the five gsds files, but check the above Q's for think 3 rows ????????
+
+03/14/19:
+head -n 270 203.gff3 > 203_1stof5subsets.gff3
+wc -l 203_1stof5subsets.gff3
+     270 203_1stof5subsets.gff3
+# submit to http://gsds.cbi.pku.edu.cn => LYCF24.png
+head -n 529 203.gff3 | tail -n 259 > 203_2ndof5subsets.gff3
+wc -l 203_2ndof5subsets.gff3
+     259 203_2ndof5subsets.gff3
+# submit to http://gsds.cbi.pku.edu.cn => P3YUJP.png
+#######################################################################
+# Note, for ...072900 gene, gff3 has **diff.** rows for for '.1', '.2' prot. seqs 
+#######################################################################
+#######################################################################
+# Q: WHAT IS OUTPUT(PHYLOGENETIC TREE/ORDER) ?????????????????????
+#######################################################################
+
+03/15/19:
+# TO CHECK: FOR '39' ROW, CHECK IN GFF3 FILE FOR ...039620 gene, if 'LC' ref in one of the rows ???????????????????
+# 117 occurrences of TraesCS1B02G039620 in 203.gff3.
+# rows 205-262
+############################################################################
+# note lines 205, 206 of 203.gff3, TraesCS1B01G038600LC found in each ???????
+############################################################################
+
+chr1B	IWGSC_v1.1_201706	gene	19053658	19068672	26	-	.	ID=TraesCS1B02G039620;Name=TraesCS1B02G039620,TraesCS1B01G038600LC;derived_from=PPRFinder_96;manually_curated=yes;curation_team=IWGSC_steinn;primconf=HC
+chr1B	IWGSC_v1.1_201706	mRNA	19053658	19068672	26	-	.	ID=TraesCS1B02G039620.1;Parent=TraesCS1B02G039620;Name=TraesCS1B02G039620;Note=TraesCS1B01G038600LC;primconf=HC;secconf=HC5
+
+# talked to vikas
+# check what version of iwgsc used to prepare 203.gff3 ??????????
+# line 13680
+# create Philip_203gff3.sh
+#bash Philip_203gff3.sh pid40_216pruned13to203_nodotnum.txt > 203.gff3
+###################################################################
+# so check Philip_203gff3.sh file, should have name iwgsc file used to prepare 203.gff3 ?
+# it is: IWGSC_v1.1_HC_20170706.gff3
+###################################################################
+# check gene before/ after TraesCS1B02G039620 in 203.gff3 file, the seq producing TraesCS1B01G038600LC on gsds image.
+
+# TraesCS1B02G039200 (lines 201-204)
+# TraesCS1B02G039625 (lines 263-66)
+############################################################################
+# comment: 'gene' line never has '.d' ending in its line, rest of line types do. Also diff. for problem gene TraesCS1B02G039620, the TraesCS1B01G038600LC has the **wrong** gene name number, 038600, but gene name number is 039620 ('gene' & 'mRNA' lines. Rest of 56 lines for this gene the correct 039620 number. If kept this gene, still the 'unusual' number of introns if just removed incorrect 038600 number in gene, mRNA lines. But if tried this, perhaps should have producer of gff3 file do, since I don't know how to create gff3 files ??????
+# perhaps send Kellye email, explain issue with this gff3 file entry, ask what to think. For gsds image, would think not keep line 39? Q: might one still keep this RF-like prot. seq, based on rest of data ????????? But if length is an outlier, as are the number of introns ??????????
+############################################################################
+email vikas wi these two findings (see betw # rows above).
+
+03/16/19:
+
+03/18/19:
+# to finish remaining three GSDS images for the 203 RF-like seqs, place all five in ???? dir, incorporate in .Rmd file
+# see 03/13/19 to finish 3rd thru 5th gsds image for 203.gff3
+# /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+head -n 784 203.gff3 | tail -n 255 > 203_3rdof5subsets.gff3
+wc -l 203_3rdof5subsets.gff3
+     255 203_3rdof5subsets.gff3
+# submit to http://gsds.cbi.pku.edu.cn => Y4YZV8.png
+# 'save image as' => Y4YZV8.png
+
+head -n 996 203.gff3 | tail -n 212 > 203_4thof5subsets.gff3
+wc -l 203_4thof5subsets.gff3
+     212 203_4thof5subsets.gff3
+# submit to http://gsds.cbi.pku.edu.cn => YSIFYF.png
+# 'save image as' => YSIFYF.png
+
+head -n 1212 203.gff3 | tail -n 216 > 203_5thof5subsets.gff3
+wc -l 203_5thof5subsets.gff3
+     216 203_5thof5subsets.gff3
+# submit to http://gsds.cbi.pku.edu.cn => 6MBKBL.png
+# 'save image as' => 6MBKBL.png
+
+# now, copy 2 of these 5 .png files initially over to /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc
+dir., arrange so they display thru v1.1_logfile_doc.Rmd file.
+ 
+203_1stof5subsets.gff3  LYCF24.png  copied
+203_2ndof5subsets.gff3  P3YUJP.png  copied
+203_3rdof5subsets.gff3  Y4YZV8.png
+203_4thof5subsets.gff3  YSIFYF.png
+203_5thof5subsets.gff3  6MBKBL.png
+
+03/19/19:
+
+##############################################################################
+# next, reknit, display html file, see if these two images ok. Done, but not done, but **NOT** showing the legends for the two gsds example plots??? Check vikas if big enough ??????
+##############################################################################
+
+03/20/19:
+
+# TO DO: GITHUB
+
+STOPPED
+
+# now, extend v1.1_logfile_doc.Rmd file from line 14010 (tho, used subset of higher numbered lines to obtain GSDS images).
+
+
+
+# TO SEND KELLYE AN EMAIL WITH THE GFF3 PROBLEM ????????????
 
 
 
 
+
+
+ 
 
 
 
