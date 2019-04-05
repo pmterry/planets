@@ -15453,13 +15453,167 @@ dir., arrange so they display thru v1.1_logfile_doc.Rmd file.
 
 03/20/19:
 
-# TO DO: GITHUB
+03/24/19:
+# slipped a save to ***github*** in here
 
 STOPPED
 
 # now, extend v1.1_logfile_doc.Rmd file from line 14010 (tho, used subset of higher numbered lines to obtain GSDS images).
 
 
+03/25/19:
+# talked to vikas
+# upload a version of 'manuscript' to box with add'l lines from last 1500 lines of log file. Place date in file name title.
+SO, from /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc dir
+copy v1.1_manuscript_template.Rmd v1.1_manuscript_template032519.Rmd
+Then, append below section 6, stuff from ~ 14000 to 15500 lines from log file, currently in v1.1_logfile_doc.Rmd
+# done to let vikas use to prepare subset of information.
+# upload to box, in RF_GeneFamily/manuscript dir.
+# note: Appended the lines from last ~1500 lines of res. log file to bottom of Rmd/html file, section 7 in that file.
+
+
+03/27/19:
+# build relevant pub list for RF-like sequences. So new list as 19 items. So, place in v1.1_manuscript_template.Rmd, 'Some references' section.
+
+03/29/19:
+# to do:
+append sec 7 to v1.1_manuscript_template032519.Rmd (done)
+update sec 6, references section, 7 to 19 references (done), 
+
+02/30/19:
+
+insert comments for subsets of the references by some category definitions, & list in this order. (done)
+
+03/31/19:
+
+Copy to v1.1_manuscript_template033119.Rmd
+cp v1.1_manuscript_template.html v1.1_manuscript_template033119.html
+# upload to box, remove any previously 'dated' '.html' file (done)
+# email vikas
+
+ 
+# table or phenogram for RF1,  RF3, RF4, RF8 in S54B in sci genome paper. Q: where did these come from ????????????????
+
+# figure S54B,
+**Approximate** location on IWGSC RefSeq v1.0
+RF1, chr1A (within cluster)
+RF3, chr1B (within cluster)
+RF4, chr6B (within cluster)
+RF8, chr2D (not within cluster)
+###############################################################
+# Q: need see references where these RF genes found ?????????????????????????//
+###############################################################
+
+# section: pot'l genome seq errors (for example, seqs in ch1 area from ch2 or ch6 in phylogram)
+# go to phylogram ????????????? on mbook
+# dnload from 'pro'& 'box', 
+/Users/bterry/mbook2019/vikas19/potlwheatgeneerrors
+/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txt
+
+# make pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot.png
+# manually find genes/proteins in '203' from chr 2 & 6 associated with chrom 1.
+# so 3 areas in chr1 area of phylogram which has chr 2 or 6 seqs
+# area1: 2 chr2, two 'single' seqs
+TraesCS2B02G126900.1
+TraesCS2B02G126905.1
+
+# area2: 5 chr2 seqs
+TraesCS2A02G478045.1
+TraesCS2A02G478046.1
+TraesCS2B02G501396.1
+TraesCS2D02G477278.1
+TraesCS2D02G477283.1
+
+# area3: 3 chr6 seqs
+TraesCS2D02G477283.1
+TraesCS6B02G341800.1
+TraesCS6D02G290900.1
+
+#############################################################################
+# patterns: in group of 5 & grp of 3, spread across subchromosomes ????????????
+#############################################################################
+
+
+04/02/19:
+# while trying to learn bit more about Rf genes in fig. S54B (IWGSC, Science 361, 661 (2018)), reading ref 167, Geyer et al, 2018, WHAT TO THINK ????????????? QTL, etc., NOT REAL DEFINITIVE RESULTS ?????????????
+# Appears 'penetrance' not being under control. Authors cannot definitively say what loci are controlling restoration of function). So given theses Geyer results, how best to proceed? Can any of the marker loci in Geyer paper help locate them in bread wheat genome?
+If we just use snp locations wih 203 RF genes, if non RF genes impt, we will miss them?
+
+04/04/19:
+# talked to vikas
+# find location in phylogram for 5 'Un' seqs in the 203 seqs
+
+use following file in figtree:
+/Users/bterry/mbook2019/vikas19/potlwheatgeneerrors
+/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txt
+
+cp Screen_Shot_2019-04-04_9.09.16_PM.png pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot_Un_purple.png
+
+# so the 5 'Un' seqs of the 203 all in one of the two blue chr 6 groups on the phylogram. Split into two groups, group of 2 & group of 3
+
+1st grp of 2
+TraesCSU02G089563.1	Un
+TraesCSU02G089705.1	Un
+
+2nd grp of 2
+TraesCSU02G089700.1	Un
+TraesCSU02G090200.1	Un
+
+Adjacent to 2nd grp of 2
+TraesCSU02G090205.1	Un
+
+# copy 2 of possible 5 GSDS images to 'manuscript' Rmd file from 'log' Rmd file
+# now, GSDS/introns section of /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc
+/v1.1_manuscript_template.Rmd has 1st 2 of 5 GSDS images for the 203 Rf genes.
+
+cp v1.1_manuscript_template.html v1.1_manuscript_template040419.html
+# now, copy v1.1_manuscript_template040419.html up to box, 'manuscript dir. (done)
+
+# send vikas email
+--new 'manuscript.html' file with 1st two of 5 GSDS images uploaded to manuscript dir in box.
+--located the five 'Un' seqs of the 203 in 203 seq phylogram.
+All located in one of the two chr 6 groups. One group of 2, then a 2nd group of 2 near the 5th Un seq.
+
+04/05/19:
+# some vikas Q's:
+line 8999
+# number of each ctl group in clustal submit comment.
+PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa_88ctls (clustal submit comment)
+# Q: how these ctl seqs selected ????????????????
+
+# nexus file name: PPRv1.1.1913plus88ctls.txt
+# latter may be name of file work with on figtree ????????
+# Q: name after 'red' seqs selected in figtree ????????????
+
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+# taxlabels, lines 5 thru 2005 in PPRv1.1.1913plus88ctls1stcolor.txt
+
+PPRv1.1.1913plus88ctls_orig.txt ## (try in figtree, see if looks like PPRv1.1.1913plus88ctls1stcolor.txt but with no coloring ?????????????
+
+line 5790
+grep -c "^>" arab26fujii2011namesshort.fa   # 26 as expect
+# Q: perhaps got some of the ctls seqs from 'fujii' reference ???????
+
+line 5756
+## talked to vikas, comments
+
+line 5737
+## file used to manually select RFlike names originally from Fujii, 2011, table S1, 
+# so check S1 from Fujii ???????
+
+line 5676
+i. resume search for soybean seqs as follows:
+https://soybase.org/dlpages/, try submit list of 41 soybean genes from Fujii, 2011,table S1.
+
+line 5645
+ii) perhaps check fujii, 2011 list, table S1, with sykes sup. table 1, see how compares, if any proteins want to use from Sykes?  
+
+# slip a save to ***github*** in here
+
+
+
+
+STOPPED
 
 # TO SEND KELLYE AN EMAIL WITH THE GFF3 PROBLEM ????????????
 
