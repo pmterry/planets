@@ -525,6 +525,7 @@ AK066315 Q: what to think ????????????????
 ## so, 'FR' & lengths to select from 42 rows from table S1, 'sci reports'
 AB470408 266/35 = 7.6
 AB179840 790/35 = 22.57
+
 AB112811 794/35 = 22.69
 AB110443 791/35 = 22.6
 AB110444 266/35 = 7.6
@@ -15608,7 +15609,297 @@ https://soybase.org/dlpages/, try submit list of 41 soybean genes from Fujii, 20
 line 5645
 ii) perhaps check fujii, 2011 list, table S1, with sykes sup. table 1, see how compares, if any proteins want to use from Sykes?  
 
+###############################################################
 # slip a save to ***github*** in here
+################################################################
+
+# talked to vikas
+# would like figtree viewable file, /Users/bterry/mbook2019/vikas19/potlwheatgeneerrors
+/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txt
+# to upload to box.
+# table10cols.txt, which GC calc file did I use for table10cols.txt, cds or tx's ?????
+line 14135
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est/pid40_216pruned13to203_cds_GCest.txt .
+# check in bbedit, looks fine, **NEARLY THE SAME** values as in pid40_216pruned13to203_tx_GCest.txt
+line 14156
+gc_tx <- read.delim("pid40_216pruned13to203_tx_GCest.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("name", "GC_tx"))
+# built table10cols.txt with GC_tx calc
+#######################################################################
+# will look back, doc in rmd/html file, the input files for 'tx' & 'cds" GC calcs
+#######################################################################
+
+04/06/19:
+#######################################################################
+ok, "rough" documentation of the sources for prepn of the 4 ctl species + vikas6 ctls (total 88 seqs)
+
+bracky9namesshort.fa
+FRknownseqs_shtname_9.fa
+soybean41to_ver2names38dot1dotpshort.fa
+arab26fujii2011namesshort.fa
+FunctionallyCharacterizedRfs_fasta.txt
+
+soybean: soybean41to_ver2names38dot1dotpshort.fa
+
+cd /Users/bterry/mbook2018/vikas18
+find . -name 'soybean41to_ver2names38.txt' -print
+line 5737
+find . -name 'Glyma_Correspondence_Report_20180207232909.csv' -print
+./131RFlike/soybeanstuff/Glyma_Correspondence_Report_20180207232909.csv
+
+colm 1 this file has entries from table S1, so translating betw names for genes in different versions of soybean names ?????
+
+line 5737
+https://www.soybase.org/correspondence/index.php
+Q: what was list I submitted ?????????
+probably the 41 from Fijii, table S1
+
+line 5740
+so new file with manually selected ver2 name for Fujii, 2011 soybean names will be soybean41to_ver2names38.txt. 41 seqs reduced to 38 with this mapping.
+
+line 5744
+now, submit this file to https://soybase.org/dlpages/#dnarna, 'Download longest transcript or predicted protein sequence for gene calls' section using soybean41to_ver2names38.txt file.
+output file was soybean41to_ver2names38.txt.prot.fa (had 54 '>' ?????
+Q: tried today, gave 38 '>' ?????????
+line 5749
+soybean41to_ver2names38.txt => soybean41to_ver2names38dot1dotp.txt (done)
+think some bbedit/reg expns here
+
+line 5880
+soybean41to_ver2names38dot1dotp.fa =bbedit=> soybean41to_ver2names38dot1dotpshort.fa
+
+bracky: bracky9namesshort.fa
+
+bracky9names.fa
+cd /Users/bterry/mbook2018/vikas18/131RFlike
+find . -name 'bracky9names.fa' -print
+./bracky9names.fa
+line 5614
+From ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/brachypodium_distachyon/pep/ got Brachypodium_distachyon.v1.0.pep.all.fa (31029 '>' lines). 
+
+line 5652
+./getseq.awk Brachypodium_distachyon.v1.0.pep.all.fa bracky9namesCAPS.txt > bracky9names.fa
+
+line 5793
+bracky9names.fa  =bbedit=> bracky9namesshort.fa
+
+arabidopsis: arab26fujii2011namesshort.fa
+
+line 5787
+arab26fujii2011names.fa =bbedit=> arab26fujii2011namesshort.fa
+
+line 5731
+./getseq.awk Arabidopsis_thaliana.TAIR10.pep.all.fa arab26fujii2011namesCAPS.txt > arab26fujii2011names.fa
+
+rice: FRknownseqs_shtname_9.fa
+
+line 601
+create FRknownseqs_shtname_9.fa from FRknownseqs_shtname.fa (remove '408' & '444')
+
+vikas6 ctl seqs
+
+FunctionallyCharacterizedRfs_fasta.txt
+###########################################################################
+
+04/08/19:
+cp v1.1_manuscript_template.html v1.1_manuscript_template040819.html
+
+04/10/19:
+###########################################################################
+# doc. input seqs (tx vs cds) for GC percent calculations.
+line 13990
+perl GC_estimate_VB.pl pid40_216pruned13to203_tx.fa > pid40_216pruned13to203_tx_GCest.txt
+line 14093-4
+# two possible inputs from IWGSC_v1.1 for tx, cds
+IWGSC_v1.1_HC_20170706_transcripts.fasta
+IWGSC_v1.1_HC_20170706_cds.fasta
+line 14127
+perl GC_estimate_VB.pl pid40_216pruned13to203_cds.fa > pid40_216pruned13to203_cds_GCest.txt
+# Note: more info in header of tx file than cds ??????????
+line 14140
+# Note: comparing pid40_216pruned13to203_cds.fa & pid40_216pruned13to203_tx.fa, 1st seq for each the same length, just additional doc. in '>' like for 'tx' file. Note, 2nd seq in each file differences, for example, 'CDS' does **not** start at 1 ?????????????????
+# Q: any reason to choose one of these, tx or cds for GC estimate calcn ????????
+###########################################################################
+
+cp v1.1_manuscript_template.html v1.1_manuscript_template041019.html
+# upload v1.1_manuscript_template041019.html to box 'manuscript' dir. (done)
+
+04/11/19:
+# doc rice9 ctls
+
+
+## create FRknownseqs_shtname_9.fa from FRknownseqs_shtname.fa (remove '408' & '444')
+
+line 569
+## To do, same test for FRknownseqs_copy.fa
+line 436
+NCBIrefcolm.txt file,
+line 425
+cut -d ' ' -f 2 srep35152-s1_tableS1_copy.txt | head -n 42 > NCBIrefcolm.txt
+line 414
+To do: from srep35152-s1.pdf, table S1, take the 42 rows (see p-2, srep35152.pdf), the values in colm 3, 'NCBI reference', get the protein sequences from batch entrez search.
+## 1st get colm 3 out of table S1. For now, use BBedit, but later like to put in unix command line with pipes ???????????????
+line 406
+--get 'cloned' RFSs (see sykes, p-2, sci reports, 1st full paragraph ?????????????
+06/25/17:
+In Sykes paper, p-354, section 'Phylogenetic Analysis of the RFL Cluster', refers to supplementary table S1, 143 rows, *multiple* species.
+
+In sci. reports paper, page 2, 1st full paragraph, refers to CMS/Rf systems in supp. table S1 (*all* rice species).
+
+cd
+cd mbook2017
+find . -name 'srep35152-s1.pdf' -print
+./vikas17/wheatproj/srep35152-s1.pdf
+
+04/12/19:
+#talked to vikas
+i. check out 'BMC Plant Biology' journal, & 'The Plant Journal'
+ii. KASP marker design (use 'Polymarker')
+iii. finish documenting '88 ctls'
+
+#################################################################################
+# resume documenting rice9 ctls
+# to check, the steps I followed starting with srep35152.pdf ref paper ??????
+line 426
+find . -name 'NCBIrefcolm.txt' -print
+./vikas17/wheatproj/NCBIrefcolm.txt
+
+04/13/19:
+line 436
+manually examine table S1. Sort of curate which select for 'restorer for CMS' genes to use in phylogeny with wheatproj PPR proteins.
+
+line 526 - 537
+# 11 ncbi refs of the table S1 oroteins, chosen *from* ncbi doc.
+
+line 548
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+ls -lh
+cat *seq.txt > FRknownseqs.fa  ## 11 seqs
+line 571
+## looks like success, so rename FRknownseqs_shtname.fa
+line 602
+## create FRknownseqs_shtname_9.fa from FRknownseqs_shtname.fa (remove '408' & '444')
+## subtracting two seqs < 10 domains long (see line 526)
+# TO DO: doc rice9 to 'manuscript' Rmd
+
+# CHECK VIKAS AS TO DOC. FOR EACH OF THE 'RICE9' ??????????????
+# Q: are the NCBI reference numbers ok the reference, or looking into the NCBI doc. for each, perhaps some modification or name should be used ??????????
+
+grep "^>" FRknownseqs_shtname_9.fa  ## 9 rows as expect
+>AB110443
+>AB112811
+>AB179840
+>AB900791
+>AB900792
+>AB900793
+>AB900794
+>KJ680249
+>KJ680248
+#################################################################################
+
+04/14/19:
+#############################################################################
+# resume documenting vikas6 (ref vikas email of 04/10/19)
+# reference, line 14679, contents of FunctionallyCharacterizedRfs_fasta.txt
+
+Arabidopsis thaliana: https://www.ncbi.nlm.nih.gov/protein/CAR70003.1
+DEFINITION  pentatricopeptide repeat(PPR)-containing protein At1g12700
+
+bvCRP-1 [Beta vulgaris]: https://www.ncbi.nlm.nih.gov/protein/BAM64814.1
+TITLE     Unusual and typical features of a novel restorer-of-fertility gene
+            of sugar beet (Beta vulgaris L.)
+
+Brassicarapa_RFP1: https://www.ncbi.nlm.nih.gov/protein/API57808.1
+fertility restorer gene, BrRfp1
+
+Petunia x hybrida: https://www.ncbi.nlm.nih.gov/nuccore/AY102719
+TITLE     A pentatricopeptide repeat-containing gene restores fertility to
+            cytoplasmic male-sterile plants
+
+# Q: does this match >AAM52339.1_fertilityrestorer_Petuniaxhybrida ==> yes
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC125068/
+# Q: a paper, where get seq ????????
+# Q: species, abstract saying 'Petunia' ???????????????????
+
+RF1_ORYSI: https://www.ncbi.nlm.nih.gov/protein/Q76C99.1
+DEFINITION  RecName: Full=Protein Rf1, mitochondrial; AltName: Full=Fertility
+            restorer; AltName: Full=Protein PPR; AltName: Full=Restorer for
+            CMS; Flags: Precursor.
+ORGANISM  Oryza sativa Indica Group
+
+# TO DO: check thru wi vikas, see if looks ok for vikas6 ???????????????
+# TO Doc. in Rmd files. (done)
+#############################################################################
+
+# Then additional tasks discussed on Fri.
+
+i. BMC Plant Biology, The Plant Journal
+
+ii. Kasp marker
+
+PolyMarker, http://www.polymarker.info/, description on this page unclear ??????????
+
+# Q: 11506, where from  ???????????????????????????
+# perhaps ensembl 'dnload dna seqs'	 ?????????????????
+            
+04/15/19:
+cd /Users/bterry/mbook2019/vikas19/ensembl
+less Triticum_aestivum.IWGSC.dna.chromosome.1A.fa
+>1A dna:chromosome chromosome:IWGSC:1A:1:594102056:1 REF
+CTAAACCCTAAACCCTAAACCCTAAACCCTAAACCCCTAACCCTAAACCCTAACCAAAAC
+CCTAAACCCTAAACCCCTAAACCCTAAACCCTAACCTAAACCTACCTAAACCATACATTG
+TTCCATTGGCCAGAGGCTGTTCACCTTGGAGACCTGATGCGGTTATGAGTACGACCGGGC
+
+wc -l Triticum_aestivum.IWGSC.dna.chromosome.1A.fa
+ 9901702 Triticum_aestivum.IWGSC.dna.chromosome.1A.fa
+wc Triticum_aestivum.IWGSC.dna.chromosome.1A.fa
+ 9901702 9901705 604003814 Triticum_aestivum.IWGSC.dna.chromosome.1A.fa
+
+grep -c "^>" Triticum_aestivum.IWGSC.dna.chromosome.1A.fa  ## 1 row as expect
+# Q: is there s/w for locating a snp location and surrounding bases?
+# perhaps could use 'head/tail' reduce size of file, then locate in more manual fashion ???
+# lines are 60 characters long
+
+head -n 11 Triticum_aestivum.IWGSC.dna.chromosome.1A.fa | tail -n 11
+head -n 11 Triticum_aestivum.IWGSC.dna.chromosome.1A.fa | tail -n 10
+
+# file has 9901702 lines, perhaps take 1/4th of them work with, 2475425 ????????
+
+# talked to vikas
+# 'about' PolyMarker, don't follow 'Output: mask' ??????????????????????????
+# Use http://plants.ensembl.org/Triticum_aestivum/Info/Index site to create input to PolyMarker for design of 4 primers.ac
+
+# place all in one file. Call it 4polymarkerinput.txt
+
+# steps
+# in http://plants.ensembl.org/Triticum_aestivum/Info/Index, 'search' box, for S1B_18683593 snp, place 1B:18683493-18683693
+# Export ???, set confign, 100 for 5' & 3', next,
+# output format, 'text' (check, vikas may favor 'compressed')
+# next see screen:
+>1B dna:chromosome chromosome:IWGSC:1B:18683393:18683793:1
+CGCCTCCGCCTCCGGCCCCGCCTCCATGCCCGCCACTCCTACTCCACCTCGCATCCCTCA
+CGCAGCCAGGGCTGGGATCCCCACGCCGCCTTCGCTGCTGCCACGGAGCGAGCTCGATCT
+GGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACCAATTGCTCCTGCAGGCTAAT
+CCGGTCAACATGCGCCTTCCCAACGACCTTCTCACCGCCCTGGCTCGCGCGCCTGCGTCC
+GCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCTTCAGCCGTTTGTCCCAAGGT
+GCCCGCCAACGGGTGGTGCAGCCAACGGCCTGCACCTACGGCATCCTCATGGACTGCTGC
+TGCCGCGCAAACCGCCAGGATCTGGCGCTCGCCTTCTTCGC
+
+# now, put just the seq in bbedit, arrange as in example PolyMarker input file:
+
+>1B dna:chromosome chromosome:IWGSC:1B:18683393:18683793:1
+
+SNP1,1B,
+CGCCTCCGCCTCCGGCCCCGCCTCCATGCCCGCCACTCCTACTCCACCTCGCATCCCTCA
+CGCAGCCAGGGCTGGGATCCCCACGCCGCCTTCGCTGCTGCCACGGAGCGAGCTCGATCT
+GGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACCAATTGCTCCTGCAGGCTAAT
+CCGGTCAACATGCGCCTTCCCAACGACCTTCTCACCGCCCTGGCTCGCGCGCCTGCGTCC
+GCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCTTCAGCCGTTTGTCCCAAGGT
+GCCCGCCAACGGGTGGTGCAGCCAACGGCCTGCACCTACGGCATCCTCATGGACTGCTGC
+TGCCGCGCAAACCGCCAGGATCTGGCGCTCGCCTTCTTCGC
+
+# Q: why did it give me 401 seqs ?????????????
+
 
 
 
