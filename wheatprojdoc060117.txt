@@ -15871,40 +15871,464 @@ head -n 11 Triticum_aestivum.IWGSC.dna.chromosome.1A.fa | tail -n 10
 
 # place all in one file. Call it 4polymarkerinput.txt
 
+04/16/19:
+
+# slip a save to ***github*** in here
+
 # steps
-# in http://plants.ensembl.org/Triticum_aestivum/Info/Index, 'search' box, for S1B_18683593 snp, place 1B:18683493-18683693
-# Export ???, set confign, 100 for 5' & 3', next,
+# in http://plants.ensembl.org/Triticum_aestivum/Info/Index, 'search' box, for S1B_18683593 snp, place 1B:18683593-18683593
+# Export data, set confign, 100 for 5' & 3', next, [but if prev step gives 201 already, set flanking sides to zero, appear get same result => 201 bases
 # output format, 'text' (check, vikas may favor 'compressed')
 # next see screen:
->1B dna:chromosome chromosome:IWGSC:1B:18683393:18683793:1
-CGCCTCCGCCTCCGGCCCCGCCTCCATGCCCGCCACTCCTACTCCACCTCGCATCCCTCA
-CGCAGCCAGGGCTGGGATCCCCACGCCGCCTTCGCTGCTGCCACGGAGCGAGCTCGATCT
-GGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACCAATTGCTCCTGCAGGCTAAT
-CCGGTCAACATGCGCCTTCCCAACGACCTTCTCACCGCCCTGGCTCGCGCGCCTGCGTCC
-GCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCTTCAGCCGTTTGTCCCAAGGT
-GCCCGCCAACGGGTGGTGCAGCCAACGGCCTGCACCTACGGCATCCTCATGGACTGCTGC
-TGCCGCGCAAACCGCCAGGATCTGGCGCTCGCCTTCTTCGC
+# 1st snp, 1B:18633593
+>1B dna:chromosome chromosome:IWGSC:1B:18683493:18683693:1
+CCACGGAGCGAGCTCGATCTGGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACC
+AATTGCTCCTGCAGGCTAATCCGGTCAACATGCGCCTTCCCAACGACCTTCTCACCGCCC
+TGGCTCGCGCGCCTGCGTCCGCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCT
+TCAGCCGTTTGTCCCAAGGTG
 
-# now, put just the seq in bbedit, arrange as in example PolyMarker input file:
-
->1B dna:chromosome chromosome:IWGSC:1B:18683393:18683793:1
+# now, arrange as in 'example' PolyMarker input file:
 
 SNP1,1B,
-CGCCTCCGCCTCCGGCCCCGCCTCCATGCCCGCCACTCCTACTCCACCTCGCATCCCTCA
-CGCAGCCAGGGCTGGGATCCCCACGCCGCCTTCGCTGCTGCCACGGAGCGAGCTCGATCT
-GGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACCAATTGCTCCTGCAGGCTAAT
-CCGGTCAACATGCGCCTTCCCAACGACCTTCTCACCGCCCTGGCTCGCGCGCCTGCGTCC
-GCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCTTCAGCCGTTTGTCCCAAGGT
-GCCCGCCAACGGGTGGTGCAGCCAACGGCCTGCACCTACGGCATCCTCATGGACTGCTGC
-TGCCGCGCAAACCGCCAGGATCTGGCGCTCGCCTTCTTCGC
+CCACGGAGCGAGCTCGATCTGGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACC
+AATTGCTCCTGCAGGCTAATCCGGTCAACATGCGCCTTCCCAACGACCTTCTCACCGCCC
+TGGCTCGCGCGCCTGCGTCCGCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCT
+TCAGCCGTTTGTCCCAAGGTG
 
-# Q: why did it give me 401 seqs ?????????????
+SNP1,1B,
+CCACGGAGCGAGCTCGATCTGGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACCAATTGCTCCTGCAGGCTAATCCGGTCAACATGCGCCTTCC[G\C]AACGACCTTCTCACCGCCCTGGCTCGCGCGCCTGCGTCCGCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCTTCAGCCGTTTGTCCCAAGGTG
 
+# 2nd snp, 2A:748437723
+>2A dna:chromosome chromosome:IWGSC:2A:748437623:748437823:1
+CTGCCACCACAGAGCGCGTGTGTGCCGGAACGCTAAGACCGGAGGAGGCGCACCACCTGT
+TCGACGAATTGCTGAGCCAAGCCGCCGCCGTCCCGGAACGCGGGCTGAACAACTTTCTTG
+CCGCACTAGCCCGTGCTCCACCCTCAGCTGCCTGCAGCGATGGCCCCGGCCTTGCCATCA
+CCCTCTTCAACCGCATGTCCC
+
+SNP2,2A,CTGCCACCACAGAGCGCGTGTGTGCCGGAACGCTAAGACCGGAGGAGGCGCACCACCTGTTCGACGAATTGCTGAGCCAAGCCGCCGCCGTCCCGGAACG[G/C]GGGCTGAACAACTTTCTTGCCGCACTAGCCCGTGCTCCACCCTCAGCTGCCTGCAGCGATGGCCCCGGCCTTGCCATCACCCTCTTCAACCGCATGTCCC
+
+# 3rd snp, 2B:753796430
+>2B dna:chromosome chromosome:IWGSC:2B:753796330:753796530:1
+AAAAAATGTGGTGAGGGTGTTGCTGGACAAAGGTGAAGTAATCAGGGCCGGAGGTTATCT
+TTCTAAAATTGATGAGAAGAATTTAGTACTTGAAGCTTCAACCGTTTAGCTGCAGTTGAT
+GATCTTCCAGAACCAACTCCAAGCAATAATCTTCCAGAAGAATCCTAAGTATACTGGTTT
+GGAGCGCACTGTGAACGTTTT
+
+
+SNP3,2B,SNP3,2B,AAAAAATGTGGTGAGGGTGTTGCTGGACAAAGGTGAAGTAATCAGGGCCGGAGGTTATCTTTCTAAAATTGATGAGAAGAATTTAGTACTTGAAGCTTCA[T/A]CCGTTTAGCTGCAGTTGATGATCTTCCAGAACCAACTCCAAGCAATAATCTTCCAGAAGAATCCTAAGTATACTGGTTTGGAGCGCACTGTGAACGTTTT
+
+# 4th snp, 6A:66814111
+>6A dna:chromosome chromosome:IWGSC:6A:66814011:66814211:1
+TTTCGTCGAATAGTTGGTGCGCGAGCTCCGGCCAGAGCGTCCCAGAGCCCAGATGATATT
+TGAATTCATCCAGCAGCTCGCTGACTCGTGAGGAGACGGGACTGGAGAAAGAGCGGGGCT
+GGAGGCGCGACATTGCCGCCGTCTAGTTCCTGCAGCGGCAGTGAATGCGGGCGGCAAAGA
+CCAACTCCTTACTCTGGTGGG
+
+SNP4,6A,TTTCGTCGAATAGTTGGTGCGCGAGCTCCGGCCAGAGCGTCCCAGAGCCCAGATGATATTTGAATTCATCCAGCAGCTCGCTGACTCGTGAGGAGACGGG[A/G]CTGGAGAAAGAGCGGGGCTGGAGGCGCGACATTGCCGCCGTCTAGTTCCTGCAGCGGCAGTGAATGCGGGCGGCAAAGACCAACTCCTTACTCTGGTGGG
+
+# yet to do, submit to polymarker. Q: note, never got return email from yesterday submission ????????????????????????
+# Q: new req. primers for /Users/bterry/mbook2019/vikas19/ensembl
+/4snpsinppolymarker.txt file, single space ???????????
+# vikas, yes
+# now, at http://www.polymarker.info/
+# browse WON'T work, file names grayed out, can't select ??????????????????????????????
+# try Manual Input.
+# 'create primers' selected after entered email address (10:41pm)
+# http://www.polymarker.info/snp_files/5cb6a003d31c6f7a52edec1b
+# this 'output' screen seems to be updating every few seconds ???????????????????
+
+# Q: example polymarker output, how understand ???????????????
+ 
+# ok, talking to vikas earlier today, would like to run all chroms phenogram with GC% (as 4 factors, <=25%, <=50%, <= 75%, <= 100%, exactly how best calc. ??????????????
+# & tissue (3 factors)
+# refer to table10cols.txt.
+# see if visually, can see a pattern of location of RFL & these two parameters on all chrom. phenogram. Thinking he would like to display both of these parameters on 'one' phenogram. Q: may only be able to display one at a time on phenogram ???????
+
+04/17/19:
+
+line 13793
+phen_all_203rows.txt
+
+line 13806
+chrom size values
+
+line 13834
+colm gene names
+
+04/18/19:
+# try prepare a phenogram wi phenotype being 'Subcel' colm from file table10cols.txt. Template is 'phenogram-sample.txt example file.
+
+snp	chr	pos	phenotype
+rs133	1	1049155	Albumin
+rs133	1	1049155	Pregnancy
+
+# For my input, colms will be
+prot chr pos phenotype 
+# where phenptype colm is the 'Subcel' colm from table10cols.txt. Don't forget to remove last 5 'Un' rows.
+# ref: line 15253
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+
+library(dplyr)
+phenSubcel <- table10cols %>% select(RFL_prot_ID, Chr, Start, Subcel)
+
+dim(phenSubcel)  ## [1] 203   4
+head(phenSubcel, n=4)
+tail(phenSubcel, n=4)
+colnames(phenSubcel)[4] <- "phenotype"
+colnames(phenSubcel)[3] <- "pos"
+colnames(phenSubcel)[2] <- "chr"
+colnames(phenSubcel)[1] <- "rfl"
+
+write.table(phenSubcel, file="phenSubcel.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+head -n 203 phenSubcel.txt| wc
+# this input to phenogram, after remove last 5 rows, 'Un'
+head -n 199 phenSubcel.txt > phenSubcel_198.txt
+
+line 13820
+steps to run phenogram
+
+# now resume run *all* chroms phenogram again
+# genome file: chr_size_Refv1.1_colm2and4minus_Un.txt
+
+# phenotype spacing: default: 'proximity' alg ?????????????????
+# phenotype color: default: 'exhaustive search colors' ??????????????????
+# image format: default: png
+# chromosome only: left unchecked, ???????????????????
+# zoom options: none selected this run
+# additional options: none selected this run, but possibly some might be useful for this **all** chroms run ?????????????????????
+# click 'plot'
+# 'Download higher resolution image': pheno_gram.13092.png
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+# name: phen_Subcel_198
+# ok, pheno_gram.13092.png, lot of red dots, undetermined tissue, hurting finding of a pattern ???????????????
+
+phen_Subcel_198_1A_10to100mil
+pheno_gram.89739.png
+
+phen_Subcel_198_1B_10to100mil
+pheno_gram.17957.png
+
+# vikas comment: REDO phen_Subcel_198_1A_10to100mil, use names for the 4 values in Subcel colm from targetp web site.
+
+
+# NEXT, prepare GC percent, use mutate, 4 values, 0-<=25, >25-<=50, >50-<=75, >75 percent.
+
+
+# For my input, colms will be
+prot chr pos phenotype 
+# where phenptype colm is the 'GC_tx' colm (colm9) from table10cols.txt. Calc a new colm, converting GC percentages to 4 ranges termed '0-25', '26-50', '51-75', & '76-100'. Don't forget to remove last 5 'Un' rows.
+# ref: line 15253
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+
+library(dplyr)
+phenGC <- table10cols %>% select(RFL_prot_ID, Chr, Start, GC_tx)
+dim(phenGC)  ## [1] 203   4
+head(phenGC, n=4)
+tail(phenGC, n= 4)
+
+# in here need mutate
+
+phenGC5col <- mutate(phenGC, GCfact = ifelse(GC_tx <= 25, "0-25",
+                                             ifelse(GC_tx > 25 & GC_tx <= 50, "26-50", 
+                                                    ifelse(GC_tx > 50  & GC_tx <= 75, "51-75", "76-100"))))
+dim(phenGC5col)  ## [1] 203   4
+head(phenGC5col, n=15)
+tail(phenGC5col, n=2)
+
+max(phenGC5col$GC_tx)  ## [1] 62.99694
+min(phenGC5col$GC_tx)  ## [1] 37.27034
+
+# Q: perhaps need change size of groups since perhaps need separate into smaller groups, for example, no values above 75% ??????????
+
+# now need a select, reduce 5 back to 4 colms
+
+phenGC4col <- phenGC5col %>% select(RFL_prot_ID, Chr, Start, GCfact)
+dim(phenGC4col)  ## [1] 203   4
+head(phenGC4col, n=4)
+tail(phenGC4col, n=4)
+
+colnames(phenGC4col)[4] <- "phenotype"
+colnames(phenGC4col)[3] <- "pos"
+colnames(phenGC4col)[2] <- "chr"
+colnames(phenGC4col)[1] <- "rfl"
+
+write.table(phenGC4col, file="phenGC4col.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+# now before phenogram, 1st remove 'Un', last 5 rows
+head -n 199 phenGC4col.txt > phenGC4col_198.txt
+
+phenGC198_all_chroms
+pheno_gram.12824.png
+# notes: no particular pattern of GC precents on this phenogram ????? But size of groups, etc. might be tweaked, see what would happen ???????????????????????
+
+04/20/19:
+# next, REDO 'Subcel' phenogram, get longer names onto phenogram
+
+# For my input, colms will be
+prot chr pos phenotype 
+# where phenptype colm is a new 'Subcel' colm (colm10) from table10cols.txt but modified to have 'longer' targetP locating names. Create a new colm, converting 'Subcel" names to the longer targetP names. Don't forget to remove last 5 'Un' rows.
+# ref: line 15253
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+
+library(dplyr)
+phenSubcel <- table10cols %>% select(RFL_prot_ID, Chr, Start, Subcel)
+dim(phenSubcel)  ## [1] 203   4
+head(phenSubcel, n=4)
+tail(phenSubcel, n= 4)
+
+# in here need mutate
+
+phenSubcel5col <- mutate(phenSubcel, Subcelong = ifelse(Subcel == "M", "mitochondrial targeting peptide (mTP)",
+                    ifelse(Subcel == "C", "chloroplast transit peptide (cTP)",  
+                    ifelse(Subcel == "S", "secretory pathway signal peptide (SP)",  "Other"))))
+dim(phenSubcel5col)  ## [1] 203   4
+head(phenSubcel5col, n=15)
+tail(phenSubcel5col, n=2)
+
+# now need a select, reduce 5 back to 4 colms
+
+phenSubcel4col <- phenSubcel5col %>% select(RFL_prot_ID, Chr, Start, Subcelong)
+dim(phenSubcel4col)  ## [1] 203   4
+head(phenSubcel4col, n=4)
+tail(phenSubcel4col, n=4)
+
+colnames(phenSubcel4col)[4] <- "phenotype"
+colnames(phenSubcel4col)[3] <- "pos"
+colnames(phenSubcel4col)[2] <- "chr"
+colnames(phenSubcel4col)[1] <- "rfl"
+
+write.table(phenSubcel4col, file="phenSubcelong4col.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+# now before phenogram, 1st remove 'Un', last 5 rows
+head -n 199 phenSubcelong4col.txt > phenSubcelong4col_198.txt
+
+# pheno_gram.68914.png
+# now, names overwriting, so will need to REDO, *shorten* ??????????????
+
+
+# TODO Predotar ???????
+line 13304
+Submit file pid40_216pruned13to203.fa (to targetp)
+# note: this file has at least one spurious char at end of a seq (here the 2nd seq in the file, a '.' ??????????????????????????????
+# try 1st 7 seqs since 7th 1st with '_' ????????????
+
+04/21/19:
+# try all of pid40_216pruned13to203.fa
+# invalid request error, so try subset of the .fa file, say, 1st 50
+# still invalid request
+# retry 1st 7, worked, so need submit in small portions ??????????????
+# try 1st 25, => error
+# try 1st 15, => error
+# try 1st 10, => ok
+# try 2nd 10 => ok
+# try 3rd 10 => ok
+############################################################################
+# result/analysis: of 1st 30 seqs (of the 203), 6 diffs betw. targetp & Predotar. Vs 6 'M's from targetp, Predotar found 5 'ER' and one 'none'. Note: only could submit around 10 seqs/submission (15 was too many). Pub. supporting Predotar indicates part of reason to create Predotar was cause other pgms were having too many false positives ???????
+Q: how much weight to give to the targetp, predotar results ????????????????/
+############################################################################
+
+# Some additional TODO CHECKS:
+i. Polymarker never sent an email ?
+ii. phenogram Subcelong names ??
+iii. if 'M' seqs have more/less of 53 of 203 < 300 aas ??
+iv. which phenogram loci 'have' the 4 snps near/within them ?????????
+
+# Q: priorities to finish paper ???????
+i. ... ??? perhaps outline what to put in the paper ?????????
+ii. ... ???
+
+04/22/19:
+# talked to vikas
+i. Predotar for all 203 seqs (so, 10 seqs at a time)
+# start with pid40_216pruned13to203.fa
+# perhaps do cut -f1 for table10cols.txt to list 203 prot. names
+cut -f1 table10cols.txt | wc  ##      204     204    4270, has header line
+cat table10cols.txt | tail -n 203 | wc -l  ##      203
+cat table10cols.txt | tail -n 203 | cut -f1 > tab10col1.txt
+cat ../pid40_216pruned13to203.fa | head -n 362 | tail -n 112 > predotar31_40.fa ## ok
+# got 404 ????????
+cat ../pid40_216pruned13to203.fa | head -n 458 | tail -n 96 > predotar41_50.fa ## ok
+# worked
+
+# test cut on colm 6 of predotar output.
+cat predotar_out.txt | head -n 11 | tail -n 10 | cut -f6  ## working ok
+
+04/23/19:
+cat ../pid40_216pruned13to203.fa | head -n 546 | tail -n 79 > predotar51_60.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 637 | tail -n 91 > predotar61_70.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 735 | tail -n 98 > predotar71_80.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 735 | tail -n 98 > predotar71_80.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 816 | tail -n 81 > predotar81_90.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 894 | tail -n 78 > predotar91_100.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 987 | tail -n 93 > predotar101_110.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1068 | tail -n 81 > predotar111_120.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1155 | tail -n 87 > predotar121_130.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1250 | tail -n 95 > predotar131_140.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1319 | tail -n 69 > predotar141_150.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1386 | tail -n 67 > predotar151_160.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1460 | tail -n 74 > predotar161_170.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1538 | tail -n 78 > predotar171_180.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1616 | tail -n 78 > predotar181_190.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1698 | tail -n 82 > predotar191_200.fa ## ok
+# worked
+cat ../pid40_216pruned13to203.fa | head -n 1719 | tail -n 21 > predotar201_203.fa ## ok
+# worked
+
+04/24/19:
+cat ../pid40_216pruned13to203.fa | head -n 362 | tail -n 112 > predotar31_40.fa ## ok
+# got 404 ????????
+# ok, seq 39 is GSDS problem seq, so 1st, try 31-38
+cat ../pid40_216pruned13to203.fa | head -n 331 | tail -n 81 > predotar31_38.fa ## ok
+
+try seqs 39-40
+cat ../pid40_216pruned13to203.fa | head -n 362 | tail -n 31 > predotar39_40.fa ## ok,  worked.
+
+# so, now, copy predotar_out.txt to predotar_out_final.txt & remove all but the 203 seq lines.
+# WAIT: missed >TraesCS1B02G072900.2 gene=TraesCS1B02G072900
+# in table10cols.txt, is seq # 50 of the 203.
+# so create .fa file for this one seq to submit to predotar
+cat ../pid40_216pruned13to203.fa | head -n 467 | tail -n 9 > predotar50_50.fa ## ok
+# NEED run this on predotar to complete predotar_out.txt, then proceed as below
+
+cp predotar_out.txt predotar_out_nohead.txt
+
+cp predotar_out_final.txt predotar_out.txt 
+rm predotar_out_final.txt
+
+cp predotar_out_nohead.txt predotar_out_wihead.txt
+# add header to predotar_out_wihead.txt
+
+# then, prepare file, has colms 1 & Subcel from table10cols.txt & colms 1 & 6 from      predotar_out_wihead.txt. Arrange 4 cols so TargetP & Predotar are the middle two colms.  Now, can compare outputs from TargetP, Predotar in side by side colms. (use dplyr ?????)
+
+04/25/19:
+# ref line 16086
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+
+pred6cols <- read.delim("predotar_out_wihead.txt", stringsAsFactors=FALSE)
+dim(pred6cols)
+head(pred6cols, n=2)
+
+#(dplyr)
+#tab10RFL_targetp <- table10cols %>% select(RFL_prot_ID, Subcel)
+#dim(tab10RFL_targetp)  ## [1] 203   4
+#head(tab10RFL_targetp, n=4)
+#tail(tab10RFL_targetp, n= 4)
+
+# do same for predotar_out_wihead.txt
+#pred6RFL_predn <- pred6cols %>% select(Sequence, Prediction)
+#dim(pred6RFL_predn)  ## [1] 203   4
+#head(pred6RFL_predn, n=4)
+#tail(pred6RFL_predn, n= 4)
+
+# then, df wi desired 4 colms, name colms as create
+#df4 <- data.frame(tab10RFL = table10cols$RFL_prot_ID, "targetp" = table10cols$Subcel, pred_pdn = pred6cols$Prediction, predRFL = pred6cols$Sequence)
+
+df4 <- data.frame(tab10RFL = table10cols$RFL_prot_ID, predRFL = pred6cols$Sequence, targetp = table10cols$Subcel, pred_pdn = pred6cols$Prediction)
+dim(df4)  ## [1] 203   4
+head(df4, n=4)
+tail(df4, n= 4)
+write.table(df4, file="compare_targetp_pred.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+# checking for mismatches betw. colm 3 & 4, gives 53.
+# mitochondrial calls targetp = 94
+# mitochondrial calls predotar = 67
+
+# upshot: targetp, predotar have in the neighborhood 25% discrepancies. Q: value of their results ???????????????????????????????
+# perhaps do do some sort of regression on these two, see pvalue ????????????????
+
+# talked to vikas
+i. create table11 by adding Predotar results to table10cols.txt RHS.
+
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+pred6cols <- read.delim("predotar_out_wihead.txt", stringsAsFactors=FALSE)
+dim(pred6cols)
+head(pred6cols, n=2)
+table10cols$predn <- pred6cols$Prediction
+dim(table10cols)
+head(table10cols, n=2)
+write.table(table10cols, file="table11cols.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+# NOTE: for seq num. 39, num. introns = NA. Q: is this ok???????????????????
+
+
+04/26/19:
+ii. MIPS genes (google)
+# Q: couple different topics under MIPS ???????????????
+iii. see table10cols.txt, for groups of seqs by start/end points, 10,000/100 = 100, then, +- 10kb before/end of start/end, would increase number of probes by 2*100 (?) = 100+200=300 (?)
+
+iv. compare Polymarkers output page with Primers.xlsx (check that match ?)
+v. KASP, to see on youtube ?
+
+
+
+
+
+ii. polymarker input file to box, /Users/bterry/mbook2019/vikas19/ensembl
+/4snpsinppolymarker.txt file, single space 
+placed in .../RF_GeneFamily/manuscript dir. on box.
+
+iii. redo Subcelong phenogram with: Mitochondria, Chloroplast, Signal Peptide, Unknown names.
+iv. start working with vikas powerpoint outline for pub.
+
+talked to vikas
+i. check how calc of num. domains colm in table11cols.txt was done?
 
 
 
 
 STOPPED
+
+
 
 # TO SEND KELLYE AN EMAIL WITH THE GFF3 PROBLEM ????????????
 
