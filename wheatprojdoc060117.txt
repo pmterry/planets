@@ -16125,7 +16125,7 @@ write.table(phenSubcel4col, file="phenSubcelong4col.txt", quote=FALSE, sep="\t",
 head -n 199 phenSubcelong4col.txt > phenSubcelong4col_198.txt
 
 # pheno_gram.68914.png
-# now, names overwriting, so will need to REDO, *shorten* ??????????????
+# now, names OVERWRITING, so will need to REDO, *shorten* ??????????????
 
 
 # TODO Predotar ???????
@@ -16302,11 +16302,13 @@ write.table(table10cols, file="table11cols.txt", quote=FALSE, sep="\t", row.name
 
 
 04/26/19:
+# slip a save to ***github*** in here
+
 ii. MIPS genes (google)
 # Q: couple different topics under MIPS ???????????????
 iii. see table10cols.txt, for groups of seqs by start/end points, 10,000/100 = 100, then, +- 10kb before/end of start/end, would increase number of probes by 2*100 (?) = 100+200=300 (?)
 
-iv. compare Polymarkers output page with Primers.xlsx (check that match ?)
+iv. compare Polymarkers output page with Primers.xlsx (check that match?, THEY APPEAR TO)
 v. KASP, to see on youtube ?
 
 
@@ -16322,6 +16324,400 @@ iv. start working with vikas powerpoint outline for pub.
 
 talked to vikas
 i. check how calc of num. domains colm in table11cols.txt was done?
+
+line 13435
+# now ready to submit to hmmer online site.
+# Task: count domains in seqs, submit to https://pfam.xfam.org/search#tabview=tab1
+pid40_216pruned13to203man_dots.fa from 
+
+line 13473
+cat hmmer_email_out203.txt|tr -s " " "\t"|grep "PF01535.20"|cut -f1,8|sort|uniq -c|perl -pe 's/(\d+).+>(\S+).+/\2\t\1/' | tr -d " " > hmmer_email_out203_domain_ct.txt
+
+# looks like for each of 203 (?), hmmer_email_out203.txt, gives hmm acc for each domain in gene/protein, then preceding line counts PF01535.20 rows (correspond with 'PPR' name).
+# Q: how does it 'count', perhaps 'uniq -c' ???????
+
+# so, **if** preceding ok, then have PPR domains in 203 RFL seqs
+#######################################################################
+# Q: BUT, other hmm Acc rows in one of 203 seqs in hmmer_email_out203.txt
+PF13041.6       PPR_2
+PF12854.7       PPR_1
+PF01535.20      PPR
+PF13812.6       PPR_3
+PF17177.4       PPR_long
+# note: start locations, SOME OVERLAP for these different hmm Acc's ????????????????
+# perhaps hmm Acc's sort of related, thus overlap of their locations for particular 203 seq ??????????????????????
+TO CHECK: seq 39, what does its hmm Acc pattern look like ????????????????
+#######################################################################
+
+04/27/19:
+# so, for 'domain_number' field in table11cols.txt, submitted pid40_216pruned13to203man_dots.fa to https://pfam.xfam.org/search#tabview=tab1 Batch sequence search, pfam.
+# after several processing steps, got hmmer_email_out203_domain_ct.txt which added to table11cols.txt as 'domain_number'. Subset on PF01535.20, 'PPR' rows from pfam output.
+ref: lines 13435, 13473
+
+# upload table11cols.txt to box. .../GeneFamily/manuscript
+
+04/28/19:
+ref: line 16080
+# next, REDO 'Subcel' phenogram, get longer names onto phenogram (but not TOO long)
+Names OVERWRITING, so will need to REDO, *shorten* ??????????????
+Use Mitochondria, Chloroplast, Signal_Peptide, Unknown names.
+
+# For my input, colms will be
+prot chr pos phenotype 
+# where phenptype colm is a new 'Subcel' colm (colm10) from table10cols.txt but modified to have 'longer' targetP locating names. Create a new colm, converting 'Subcel" names to the longer targetP names. Don't forget to remove last 5 'Un' rows.
+# ref: line 15253
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+
+library(dplyr)
+phenSubcel <- table10cols %>% select(RFL_prot_ID, Chr, Start, Subcel)
+dim(phenSubcel)  ## [1] 203   4
+head(phenSubcel, n=4)
+tail(phenSubcel, n= 4)
+
+# in here need mutate
+
+phenSubcel5col <- mutate(phenSubcel, Subcelong = ifelse(Subcel == "M", "Mitochondria",
+                    ifelse(Subcel == "C", "Chloroplast",  
+                    ifelse(Subcel == "S", "Secretory_pathway",  "Unknown"))))
+dim(phenSubcel5col)  ## [1] 203   4
+head(phenSubcel5col, n=15)
+tail(phenSubcel5col, n=2)
+
+# now need a select, reduce 5 back to 4 colms
+
+phenSubcel4col <- phenSubcel5col %>% select(RFL_prot_ID, Chr, Start, Subcelong)
+dim(phenSubcel4col)  ## [1] 203   4
+head(phenSubcel4col, n=4)
+tail(phenSubcel4col, n=4)
+
+colnames(phenSubcel4col)[4] <- "phenotype"
+colnames(phenSubcel4col)[3] <- "pos"
+colnames(phenSubcel4col)[2] <- "chr"
+colnames(phenSubcel4col)[1] <- "rfl"
+
+write.table(phenSubcel4col, file="phenSubcelong4col.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+# now before phenogram, 1st remove 'Un', last 5 rows
+head -n 199 phenSubcelong4col.txt > phenSubcelong4col_198.txt
+# run phenogram
+chr_size_Refv1.1_colm2and4minus_Un.txt (file for genome)
+# pheno_gram.91241.png
+# note: may need new title in this .png for pub? Also, a phenogram for Predotar ???????????
+
+
+# NOW, attempt to understand PolyMarker process
+# For example, 1st snp, S1B_18683593
+# How relate to Example Output Mask ?????????????????/
+# I note: 'contig_regions, Primers.csv, appears to be the two inputs to ensembl
+# Q: where are A, B, 'common' in genome ?????????????
+# Q: why A & B seqs don't appear in seq near snp in input seqs ???????????????
+# Q: what vikas doing with the BLASTN ???????????????
+
+04/29/19:
+talked to vikas
+i. phenogram: label as 'Mitochondrial' or 'Not_mitochondrial', or 'Targeted_to_mitochondria' or 'Not_targeted_to_mitochondria'
+# Q: Perhaps can do with 'mutate ifelse' ????????
+ii. Predotar phenogram: need predotar output colm with 'mitochondrial' & 'not_mitochondrial'
+iii. work thru polymarker output, try place output on genome (note, inverse, etc. used ??????????????????/)
+iv. check two journals, BMC Plant Biology & ...Integrative..., which wouild our paper best fit ???????????????
+
+04/30/19:
+
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+
+table10cols <- read.delim("table10cols.txt", stringsAsFactors=FALSE)
+dim(table10cols)
+head(table10cols, n=2)
+
+predhalfway <- read.delim("pred_output_colm_halfway.txt", stringsAsFactors=FALSE, header=FALSE, col.names=c("halfway"))
+dim(predhalfway)
+head(predhalfway, n=2)
+
+library(dplyr)
+tab3cols <- table10cols %>% select(RFL_prot_ID, Chr, Start)
+dim(tab3cols)  ## [1] 203   3
+head(tab3cols, n=4)
+tail(tab3cols, n= 4)
+
+#> x <- data.frame("SN" = 1:2, "Age" = c(21,15), "Name" = c("John", "Dora"), stringsAsFactors = FALSE)
+
+df4cols <- data.frame("rf1" = tab3cols$RFL_prot_ID, "chr" = tab3cols$Chr, "pos" = tab3cols$Start, "halfway" = predhalfway$halfway, stringsAsFactors = FALSE)
+dim(df4cols)  ## [1] 203   4
+head(df4cols, n=4)
+tail(df4cols, n= 4)
+
+# in here need mutate
+df5cols <- mutate(df4cols, phenotype = ifelse(halfway == "mitochondrial", "Mitochondria", "Not_mitochondrial"))
+dim(df5cols)  ## [1] 203   5
+head(df5cols, n=15)
+tail(df5cols, n=2)
+
+# now need a select, reduce 5 back to 4 colms
+
+phendf4cols <- df5cols %>% select(rf1, chr, pos, phenotype)
+dim(phendf4cols)  ## [1] 203   4
+head(phendf4cols, n=4)
+tail(phendf4cols, n=4)
+
+write.table(phendf4cols, file="phendf4cols_pred.txt", quote=FALSE, sep="\t", row.names=FALSE)
+
+# now before phenogram, 1st remove 'Un', last 5 rows
+head -n 199 phendf4cols_pred.txt > phendf4cols_pred_198.txt
+# run phenogram
+chr_size_Refv1.1_colm2and4minus_Un.txt (file for genome)
+# pheno_gram.1478.png
+# note: may need new title in this .png for pub? Also, a phenogram for Predotar ???????????
+
+05/01/19:
+# try understand polyMarker output
+# blast & help links broken (see https://wheat-urgi.versailles.inra.fr/Tools/BLAST)??????
+# Q: can I access a file which can blast on 'crane' ????????
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+
+cd ~/mbook2018
+find . -name 'iwgsc_refseqv1.1_genes_2017July06.zip' -print
+./vikas18/131RFlike/annotation1.1/iwgsc_refseqv1.1_genes_2017July06.zip
+./vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/iwgsc_refseqv1.1_genes_2017July06.zip
+
+# Q: looks like no file in this directory with just the seq. of bases in each chromosome ????????
+# Q: so what file might vikas did a blast with on 'inra' BLAST ???????????????
+
+05/02/19:
+
+TO DO, upload to box pred phenogram pheno_gram.1478.png
+
+SNP1,1B,CCACGGAGCGAGCTCGATCTGGCAACCTCACCTCGGAGGACGCACACAAGCTGTTCGACCAATTGCTCCTGCAGGCTAATCCGGTCAACATGCGCCTTCC[G/C]AACGACCTTCTCACCGCCCTGGCTCGCGCGCCTGCGTCCGCAGCCTGCAGCAACGGCCCCGCCCTTGCCCTCGCCCTCTTCAGCCGTTTGTCCCAAGGTG
+
+18 bases to right of [G/C]
+AACGACCTTCTCACCGCC
+
+Q: how relate to 'A' 'primer'??
+ggcggtgagaaggtcgtt
+
+Check if is rev comp for 18 bases to right of [G/C].
+aacgaccttctcaccgcc, so yes.
+
+So, for this snp, SNP1,1B, rev comp of 'A' primer is the 18 base seq to right of [G/C]
+
+Note, blastn of primer 'A' of this snp has 11 hits, two have identities of 18/18, 9 have 16/16 ??????????
+
+Q: e-value, 0.37, 5.9 ???????????
+
+Q: convention for writing rev comp, looks like write it in reverse direction as 3' to 5' on its strand ????????????
+
+Q : how to think of 'fam' & 'hex' ???????????????????????????????????????
+
+Q: primer type vs snp type ????????????
+
+Q: don't have polymarker output looks like example outlook ?????????????
+
+##################################################
+Ok, primer 'B', ggcggtgagaaggtcgtt, except for 'G' on end, same as primer 'A', thus also 18 bases long.
+
+Ok, so what of 'common' seq., tgcaggctaatccggtcaac, 20 bases long. Do a blastn to see where it is located.
+
+ends on 201 input, upstream ending 12 bases ahead of snp base forward strand.
+
+# Ok, so how this 'common' involved ?????????
+
+cd ~/mbook2019
+find . -name 'Glover*' -print
+
+See the potential JOURNALs for the pub. ************** (done)
+
+05/03/19:
+cd ~/mbook2019
+find . -name 'document.pdf' -print
+
+05/04/19:
+# looking over /Users/bterry/mbook2019/vikas19/vikas_ppt_presentatn
+/RFLGeneFamilyCargillRLines_PPT_v5b_FINAL.pptx, try build a .Rmd file in preparation for writing manuscript.
+
+# ERROR: THIS NOT VIKAS PPT PRESENTATION I NEED TO ACCESS, THO THE NAME SEEMS OK ?????
+
+
+05/05/19:
+# working thru RFLGeneFamilyCargillRLines_PPT_v5b_FINAL.pptx & v1.1_manuscript_template.Rmd to update v1.1_manuscript_template.Rmd ahead of creating a manuscript for publication. FINAL manuscript will be different from this file (omit some of info. in this file). So, after 'improve' this file, then perhaps prepare 'FINAL' manuscript based on parts want to use from this file ????????
+
+05/06/19:
+# reviewing res. logfile notes, preparing to add to logfile Rmd file
+
+05/09/19:
+# up thru line 16550 of 'log' research notes file
+
+# talked to vikas
+# perhaps make list to images, etc. want to collect for pub.
+
+cd mbook2019
+find . -name '*FINAL.pptx' -print
+./vikas19/vikas_ppt_presentatn/RFLGeneFamilyCargillRLines_PPT_v5b_FINAL.pptx
+
+# file names from /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc
+/v1.1_manuscript_template.Rmd
+pptx slide 8: image: PPRv1.1.1913plus88ctls1stcolor_guess_P_PLS_forRmd.png file
+pptx slide 10: pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.png
+
+05/11/19:
+pptx slide 12: full (203 - 5 = 198) , pheno_gram.79071.png
+# prepare tiff file. cp pheno_gram.79071.png to /Users/bterry/mbook2019/vikas19/vikas_ppt_presentatn
+# open in Preview, same as tiff wi 'LZW', & '300'
+# Q: can phenogram output be saved other than '.png' ? YES, so did for full 203. Output is pheno_gram.38631.pdf for input file phen_all_203minus5rows.txt from .../hmmer203seqs dir.
+# next, open in Preview, same as tiff wi 'LZW', & '300'. Then export as tiff. Result seems fine (pheno_gram.38631.tiff)
+
+####################
+STOPPED, to get tiff for 1A
+####################
+
+pptx slide 13: chr 1A, 10to100mil, pheno_gram.45569.png
+
+pptx slide 14: gsds, (vikas used 2nd of 5 slides), P3YUJP.png
+pptx slide 16: probably same modifications needed ???
+pptx slide 18: some Q's  ???????????????????
+pptx slide 19: how use this output ????????????
+
+Q: should PCA, NJ phylogram slides been in here ????????????????
+
+pptx slide 21: TO GO, FIND CALCN of THE 75, 59, 36 ??????????
+cd mbook2019
+find . -name 'VariantEffectPredictor_Run1.txt' -print
+./vikas19/tassel5/VEP/VariantEffectPredictor_Run1.txt
+cd vikas19/tassel5/VEP
+
+# line 14397
+cat table10cols.txt | cut -f1 | tail -n 203 | python3 testing.py VariantEffectPredictor_Run1.txt
+# RESULT: 75 rows of output, does it mean 75 snps associated with an RF gene/protein, i.e., within or +- 5000 of gene ???????
+
+philip-terry-2:VEP bterry$ head -n 2 VariantEffectPredictor_Run1.txt
+#Uploaded_variation	Location	Allele	Consequence	IMPACT	SYMBOL	Gene	Feature_type	Feature	BIOTYPE	EXON	INTRON	HGVSc	HGVSp	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	DISTANCE	STRAND	FLAGS	SYMBOL_SOURCE	HGNC_ID	TSL	APPRIS	SIFT	CLIN_SIG	SOMATIC	PHENO
+S1A_1145442	1A:1145442-1145442	A	synonymous_variant	LOW	-	TraesCS1A02G001800	Transcript	TraesCS1A02G001800.1	protein_coding	2/2	-400	264	88	K	aaG/aaA	-	-	1	-	-	-	--
+
+# Q: how gotten VariantEffectPredictor_Run1.txt ??????????????????
+
+grep -f table10col1.txt VariantEffectPredictor_Run1.txt > vep_Run1_203map_grepf.txt
+# result: 75 rows, same order as with testing.py. Since no duplicate rows, therefore same order as testing.py.
+
+# how got 59 or 36  ???????
+# from line 14439
+cat vep_Run1_203map.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1sortuniq.txt
+# gives 36 rows, protein names.
+
+# what about the 59 ?????????
+# now, do 'sort|uniq for colm 2, the snp name colm
+cat vep_Run1_203map.txt | cut -f2 | sort|uniq > vep_Run1_203map_col2sortuniq.txt
+########################################################
+# Q: 59 unique rows (snp column) ???????????????????????????
+###########################################################
+
+
+pptx slide 22: flapjack ??????
+# line 14600
+Vikas placed 4 files on 'box'.
+/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
+
+# what are they ??? Where from ????
+
+# initially, try ForFlapjack_Subgroup2R_and_NonR_lines_RFL_SNPs.recode.txt
+# 23 rows
+# next, ForFlapjack_Subgroup2Homogeneous_R_and_NonR_lines_RFL_SNPs.recode.txt
+# 21 rows
+# both of these, **appear** to be colms which distinguish R, nonR rows.
+
+# Q: difference these (23 & 21 rows & pptx slide 22 ?????????????????
+
+pptx slide 23: Q: how slide gotten ???, Q: subgroup 2 & non R lines ?????
+
+05/12/19:
+pptx slide 24: Q: 'gene expression' ????????????????
+
+pptx slide 25: Q: 'expression data', where from, are they tx's,  ????????
+# Q: slide says 'chromosome 1B', browser asking for a gene or protein name. How to square these two ???????????????????
+
+pptx slides 28-38, Q's, see my pencil comments/questions ??????????????
+
+
+# ok, now the treatment for an image in figtree to prepare for a pub (vikas discussed, 05/10/19), and a dir. where the resulting tiff/etc files can be stored ??????????
+
+# for slide 10 of RFLGeneFamilyCargillRLines_PPT_v5b_FINAL.pptx, place following 4 files in /Users/bterry/mbook2019/vikas19/vikas_ppt_presentatn dir.
+
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txt.pdf
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txt.png
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txtline1.5.tiff
+# note: shows gsds seq #39 as lowest limb on phylogram.
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.5.txt
+
+# the .png image above 'straight' from figtree, **not** what vikas suggesting for pub.
+#########################################################################
+# rather, suggests:
+i. in figtree, do steps previously did set up an image (see ????)
+ii. in figtree, 'appearance' on lhs, set line width 1.0 to 1.5
+iii. export pdf
+iv. import this pdf to Preview
+v. export tiff file (compression = LZW, Resolution = 300)
+vi. Note, in 'preview', if click 'green' button, then can do 'cmd + or -' to make image larger or smaller.
+#########################################################################
+
+# now, for slide 8, need the 'tree' file which produced PPRv1.1.1913plus88ctls1stcolor_guess_P_PLS_forRmd.png image, so can convert to tiff (keep 1.0 for now, ???).
+
+05/13/19:
+
+copied from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls PPRv1.1.1913plus88ctls1stcolor.txt
+copied to
+/Users/bterry/mbook2019/vikas19/vikas_ppt_presentatn
+# then,
+cp PPRv1.1.1913plus88ctls1stcolor.txt PPRv1.1.1913plus88ctls1stcolor_line1.0.txt
+# looked at line wt = 1.5. Question if would help this image, so for now, did not create file with 1.5 ???????????????
+# so just follow 6 steps above to create tiff file.
+# testing printing the tiff from preview, changing size did not change size of printout. Perhaps a screen capture  to change size, but then back to .png file ??????????
+
+# but wait, test line size 0.5
+# so, open in figtree, PPRv1.1.1913plus88ctls1stcolor.txt, change to line = 0.5, export as pdf, PPRv1.1.1913plus88ctls1stcolor_line0.5.txt.pdf.
+# next, import .pdf file into preview, export tiff file (compression = LZW, Resolution = 300) => PPRv1.1.1913plus88ctls1stcolor_line0.5.txt.tiff
+
+#############################################################
+# TO DO: search appropriate wheat file for number PPR seqs (v1.0 was 1602)
+#############################################################
+
+05/14/19:
+# talked to vikas
+i. update manuscript Rmd as per log Rmd
+ii. upload to box (probably the box manuscript dir ???) File name v1.1_manuscript_template_051419.html
+iii. email vikas, notify
+iv. phenogram ...
+
+v. location #39 gsds seq in phylogram (slide 10 in vikas ppt file.
+vi. 1602 in v1.1 ??????
+vii. 0.5 line width for slide 10 test
+viii. put 'final' files (tiff's) in new manuscript box dir. as complete ?????
+
+05/15/19:
+# vikas created dir on box: .../RF_GeneFamily/Manuscript_May2019 for final form for pub. files. So list here as upload them
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txtline1.5.tiff
+# Q: which slide 8 tiff, 0.5 or 1.0 ????????
+
+# slip a save to ***github*** in here
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
