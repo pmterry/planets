@@ -14485,6 +14485,7 @@ cat vep_Run1_203map_grepf.txt | cut -f1 | sort|uniq > vep_Run1_203map_col1grepfs
 cat table10cols.txt | cut -f1,3,4 > table10cols_cols134.txt
 cat vep_Run1_203map.txt | cut -f1,2 > vep_Run1_203map_cols12.txt
 
+
 02/14/19:
 
 Then, see https://stat545.com/bit001_dplyr-cheatsheet.html,
@@ -14566,7 +14567,7 @@ write.table(dnstrdist, file="ijtabvep3calccols.txt", quote=FALSE, sep="\t", row.
 # to do, compare vikas 1, 0 prot names from the '75' with mine in file ijtabvep3calccols.txt.
 # try filter/select/distinct wi dplyr 
 
-rm(list=ls())
+ rm(list=ls())
 setwd("~/mbook2019/vikas19/tassel5/VEP")
 getwd()
 iftabvec3calcs <- read.delim("ijtabvep3calccols.txt", header=TRUE, stringsAsFactors=FALSE)
@@ -16683,7 +16684,7 @@ cp PPRv1.1.1913plus88ctls1stcolor.txt PPRv1.1.1913plus88ctls1stcolor_line1.0.txt
 # but wait, test line size 0.5
 # so, open in figtree, PPRv1.1.1913plus88ctls1stcolor.txt, change to line = 0.5, export as pdf, PPRv1.1.1913plus88ctls1stcolor_line0.5.txt.pdf.
 # next, import .pdf file into preview, export tiff file (compression = LZW, Resolution = 300) => PPRv1.1.1913plus88ctls1stcolor_line0.5.txt.tiff
-
+# vikas satisfied wi this file 0.5 file, so copy to box .../Manuscript_May2019
 #############################################################
 # TO DO: search appropriate wheat file for number PPR seqs (v1.0 was 1602)
 #############################################################
@@ -16701,24 +16702,741 @@ vii. 0.5 line width for slide 10 test
 viii. put 'final' files (tiff's) in new manuscript box dir. as complete ?????
 
 05/15/19:
-# vikas created dir on box: .../RF_GeneFamily/Manuscript_May2019 for final form for pub. files. So list here as upload them
-pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txtline1.5.tiff
+
 # Q: which slide 8 tiff, 0.5 or 1.0 ????????
+
+###################################################################
+# vikas created dir on box: .../RF_GeneFamily/Manuscript_May2019 for final form for pub. files. So list here as upload them.
+
+slide 10:
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.txtline1.5.tiff
+slide 8:
+PPRv1.1.1913plus88ctls1stcolor_line0.5.txt.tiff
+slide 12:
+pheno_gram.52614.tiff (this file replaced following line, has "' '(RFL)"
+pheno_gram.79876.tiff 
+slide 13:
+# pheno_gram.52684.tiff
+slide 14 (5 figs)
+1st_LYCF24.png.tiff
+2nd_P3YUJP.png.tiff
+3rd_Y4YZV8.png.tiff
+4th_YSIFYF.png.tiff
+5th_6MBKBL.png.tiff
+###################################################################
+
+
+# working with pptx slide 12 ('full' phenogram)
+line 13801
+# phen_all_203minus5rows.txt, pheno_gram.79071.png
+# try remove phenotype display on phenogram by putting ' ' in this colm of input file. If fails, then in this colm try 'Restorer-of-fertility-like(RFL)'
+# ok, use R to build these two files.
+
+05/16/19:
+#############################################################
+# apparently laptop went down overnight ????????????????
+# note: new version flapjack available, run update installer later
+# in /Users/bterry dir.
+#############################################################
+
+# ref, line 13780
+# now in R
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table9 <- read.delim("table9cols.txt", stringsAsFactors=FALSE)
+dim(table9)  ## [1] 203   9
+head(table9, n=2)
+
+#phenotype <- rep("RF-like_seq", 203)
+phenotype_sp <- rep(" ", 203)
+head(phenotype_sp, n=3)
+length(phenotype_sp)  ## 203
+phen_all_rows_sp <- data.frame(chr=table9$Chr, pos=table9$Start, phenotype=phenotype_sp)
+head(phen_all_rows_sp, n=3)
+
+write.table(phen_all_rows_sp, file="phen_all_203rows_sp.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+phenotype_RFL <- rep("Restorer-of-fertility-like(RFL)", 203)
+head(phenotype_RFL, n=3)
+length(phenotype_RFL)  ## 203
+
+phen_all_rows_RFL <- data.frame(chr=table9$Chr, pos=table9$Start, phenotype=phenotype_RFL)
+head(phen_all_rows_RFL, n=3)
+write.table(phen_all_rows_RFL, file="phen_all_203rows_RFL.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+
+##########################################################
+# don't forget remove chrUN rows before submit to phenogram ??????????
+################################################################
+cp phen_all_203rows_sp.txt phen_all_203_sp_minus5rows.txt
+cp phen_all_203rows_RFL.txt phen_all_203_RFL_minus5rows.txt
+
+# now try phenogram for **all** chroms: 
+# refer line 16664-7, export as pdf, convert to tiff
+# input: phen_all_203_sp_minus5rows.txt
+# title: all203minus5giving198
+# title: ## NO TITLE
+# result, ERROR, perhaps ' ' in phenotype field ?????????????/
+
+# see line 13821
+# chr_size_Refv1.1_colm2and4minus_Un.txt
+
+
+# now try phenogram for **all** chroms: 
+# input: phen_all_203_RFL_minus5rows.txt
+# title: all203minus5giving198
+# title: ## NO TITLE
+# pheno_gram.52614.pdf
+# now, create tiff in preview, LZW & 300, pheno_gram.52614.tiff (all chroms)
+# note: printer could not print this tiff file ??????????
+# upload to box, .../RF_GeneFamily/Manuscript_May2019, vikas pptx slide 12
+
+
+# working with pptx slide 13 ('1A' phenogram)
+# ref, line 13850
+# input: phen_inp203rows_protnames_minus5_198.txt 
+# title: ## NO TITLE
+# genome file: chr_size_Refv1.1_colm2and4minus_Un.txt
+# phenotype spacing: default: 'proximity' alg ?????????????????
+# phenotype color: default: 'exhaustive search colors' ??????????????????
+# image format: default: pdf
+
+# chromosome only: try *check* it ???????????????????
+# zoom options: 
+# chromosome: 1A
+# start bp: 10000000
+# end bp: 100000000
+
+# title:  ## NO TITLE
+# output file: pheno_gram.52684.pdf
+# now convert to tiff with preview
+# pheno_gram.52684.tiff
+# upload to box, .../RF_GeneFamily/Manuscript_May2019, vikas pptx slide 13
+
+05/17/19:
+#########################################################################
+# check sequence number 39 stats in table11cols.txt
+
+RFL_prot_ID	Chr	Start	End	Intron	Strand	Len	domain_number	GC_tx	Subcel	predn
+
+
+TraesCS1B02G039200.1	1B	18867715	18870069	0	+	785	15	46.2845010615711	M	mitochondrial
+
+TraesCS1B02G039620.1	1B	19053658	19068672	NA	-	1562	11	53.3077251387111	_	possibly plastid
+
+TraesCS1B02G039625.1	1B	19061029	19062117	0	-	363	7	39.5775941230487	_	possibly mitochondrial
+
+# ratio domain_number/len for TraesCS1B02G039620.1 vs the other two seqs, 0.3674
+
+# note: domain number relatively low, predotor 'possibly plastid, GC_tx may be relatively (need calc mean for this colm to tell ???)
+#########################################################################
+
+
+# next, 5 gsds images (can one get pdf, if not, what do, just use png into preview to get tiff ?????????????)
+# to test, try for 1st of 5 images, see if can get pdf ?????
+# Note: options are 'png', & 'svg'. Check vikas if svg might be better ???????
+# response: thinks only png can be handled by Preview, so just take the 5 GSDS images from above, process them thru Preview to tiff, upload to box, .../RF_GeneFamily/Manuscript_May2019 for slide 14.
+# ref: line 15443
+
+203_1stof5subsets.gff3  LYCF24.png
+203_2ndof5subsets.gff3  P3YUJP.png
+203_3rdof5subsets.gff3  Y4YZV8.png
+203_4thof5subsets.gff3  YSIFYF.png
+203_5thof5subsets.gff3  6MBKBL.png
+
+# LYCF24.png => Q: don't get same options as when brought in pdf file ?????
+# for example, allows 'compression LZW', but then, no option for 'Resolution' ?????
+# just an option to check/uncheck 'Alpha' ????????
+# vikas suggestion: 1st open LYCF24.png in Preview. Save as pdf (LYCF24.png.pdf). Then open this pdf in Preview (note, went from portrait to landscape ???). Then try export to tiff. Came out in landscape. Tools/rotate left gave portrait (LYCF24.png.tiff). Since 5 of these, perhaps rename before upload to box (LYCF24.png.tiff). 
+
+So 1st_LYCF24.png.tiff
+
+# prepare other 4 gsds tiff images, then upload all to box, .../RF_GeneFamily/Manuscript_May2019 for slide 14.
+
+P3YUJP.png => P3YUJP.png.pdf => 2nd_P3YUJP.png.tiff
+
+Y4YZV8.png => Y4YZV8.png.pdf => 3rd_Y4YZV8.png.tiff
+
+YSIFYF.png => YSIFYF.png.pdf => 4th_YSIFYF.png.tiff
+
+6MBKBL.png => 6MBKBL.png.pdf => 5th_6MBKBL.png.tiff
+
+# all 5 tiff files uploaded to box, .../RF_GeneFamily/Manuscript_May2019 for slide 14.
+
+
+05/18/19:
+# NEXT, slide 15, count for subcel location from predotor s/w
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+cut -f11  table11cols.txt | head -n 3
+cut -f11  table11cols.txt > predotor_col11.txt
+
+
+grep -c "mitochondrial" predotor_col11.txt   # 70
+grep -c "ER" predotor_col11.txt   # 26
+grep -c "plastid" predotor_col11.txt   # 14
+grep -c "none" predotor_col11.txt  ## 93
+# total = 203
+# so, now make table: Perhaps, wait, see what format vikas would like ???????
+
+
+05/21/19:
+# talked to vikas
+i. redo full 203 phenogram with space before (RFL)
+ii. slide 15 table in Word (in SupplementaryTables_v1.docs file, Q: should this be v1.1 ????????, add to the Word file.
+iii. slide 16, Q: do we want all rows of table11cols.txt ?????????????
+Q: If want to 1st put into Excel, then transfer to Word ????????
+Q: Can one transfer the table11cols.txt file to Excel ?????
+Q: or from R, save in .csv file, then import into Excel? Since see directions on internet  for the latter step, and example in 'Writing data' section of s/w carpentry course on writing dataframe from R to .csv file (https://carriebrown.github.io/r-novice-gapminder/13-writing-data/), try this.
+
+
+05/22/19:
+# refer line 16286 above for R code
+
+R
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table11cols <- read.delim("table11cols.txt", stringsAsFactors=FALSE)
+dim(table11cols)
+head(table11cols, n=2)
+write.table(table11cols, file="table11cols.csv", quote=FALSE, sep=",", row.names=FALSE)
+
+# We can examine our file right from within RStudio. In the lower-left pane under the Files tab, find the gapminder-aus.csv file. Click on it and select View File.
+
+# from internet: https://www.hesa.ac.uk/support/user-guides/import-csv
+importing *.csv formatted data into Excel
+
+    Download and save your *.csv file to your chosen location.
+    Start Excel with a blank workbook open.
+    Select 'Data' on the ribbon, and then 'From Text'. ...
+    Browse for the *.csv file you want to open, and click 'Import'.
+    In the Text import wizard, ensure the 'Delimited' option is selected.
+
+# text wizard, step 3 of 3, => Accepted 'Column data format = 'General' ?????????????
+# data 'looks ok' in Excel
+# saved as table11cols.xlsx
+
+# now for ii. above, create slide 15 table in SupplementaryTables_v1.docs Word file.
+# 
+
+cd /Users/bterry/mbook2019
+find . -name 'SupplementaryTables_v1.docx' -print
+./vikas19/vikas_ppt_presentatn/Tables/SupplementaryTables_v1.docx
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+
+compare_targetp_pred.txt
+
+cut -f3  compare_targetp_pred.txt > comp_col3.txt
+
+grep -c "M" comp_col3.txt   # 93
+grep -c "_" comp_col3.txt   # 83
+grep -c "S" comp_col3.txt   # 10
+grep -c "C" comp_col3.txt   # 17
+# total 203 as expect
+
+STOPPED
+
+# next, (i.) above
+# need to replace pheno_gram.52614.tiff (all chroms) in box, fix annotation below phenogram, i.e., put space before (RFL), i.e., Restorer-of-Fertility-like (RFL)
+
+# ref., line 16784
+# now try phenogram for **all** chroms: 
+# input: phen_all_203_RFL_minus5rows.txt
+# NO, will need modify this file. Perhaps easiest with R
+
+# line 16741
+rm(list=ls())
+setwd("~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+table9 <- read.delim("table9cols.txt", stringsAsFactors=FALSE)
+dim(table9)  ## [1] 203   9
+head(table9, n=2)
+
+phenotype_RFL <- rep("Restorer-of-fertility-like (RFL)", 203)
+head(phenotype_RFL, n=3)
+length(phenotype_RFL)  ## 203
+
+phen_all_rows_RFL <- data.frame(chr=table9$Chr, pos=table9$Start, phenotype=phenotype_RFL)
+head(phen_all_rows_RFL, n=3)
+write.table(phen_all_rows_RFL, file="phen_all_203rows_RFL.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+
+##########################################################
+# don't forget remove chrUN rows before submit to phenogram ??????????
+################################################################
+cp phen_all_203rows_RFL.txt phen_all_203_RFL_minus5rows.txt
+
+# see line 13821
+# chr_size_Refv1.1_colm2and4minus_Un.txt
+
+# now try phenogram for **all** chroms: 
+# input: phen_all_203_RFL_minus5rows.txt
+# title: all203minus5giving198
+# title: ## NO TITLE
+# pheno_gram.52614.pdf (superseded)
+# pheno_gram.79876.pdf
+# now, create tiff in preview, LZW & 300, pheno_gram.79876.tiff (all chroms)
+# note: printer could not print this tiff file ??????????
+# upload to box, .../RF_GeneFamily/, vikas pptx slide 12
+# will wait till tomorrow to remove pheno_gram.52614.pdf from box ???
+
+
+05/23/19:
+
+# more on steps (order ???) customizing slide 15 in word:
+1. bold colm header names  [HOW ?????? open diff menu, 'Bold' button these]
+2. resize the table [HOW ????, double click on 'right' side boundary each colm]
+3. Q: exclusion of TraesCS1B02G039620, Q: issue several parts on pptx file, need coordinate ???
+4. remove table lines (ok)
+5. return lines for table header (ok)
+6. ???? anything else ???????????
+
+05/29/19:
+# upload 10 files to .../references/prevlymappedRfs dir on box.
+
+# they are:
+
+philip-terry-2:prevlymappedRfs bterry$ ls
+122_2017_2885_MOESM1_ESM.pdf
+122_2017_2885_MOESM2_ESM.xlsx
+Geyer2016_Article_DistributionOfTheFertility-res.pdf
+Würschum2017_Article_GeneticArchitectureOfMaleFerti.pdf
+Zhou2005_Article_SSRMarkersAssociatedWithFertil.pdf
+cs-13-3-CS0130030317.pdf
+cs-24-1-CS0240010017.pdf
+cs-35-4-CS0350041137.pdf
+cs-7-5-CS0070050493.pdf
+prevlymappedRfs.txt
+
+prevlymappedRfs.txt lists the prevlymappedRfs uploaded to box. This file serves as key to file name and the reference paper.
+
+
+# talked to vikas, couple add'l tasks
+i. cp /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table11cols.xlsx to .../Manuscript_May2019/Supplementary_Tables on 'box'. (done).
+
+ii. create 3rd table in /Users/bterry/mbook2019/vikas19/vikas_ppt_presentatn/Tables/SupplementaryTables_v1.docx
+Predotar subcellular locations for RFL genes.
+
+# looks like 3rd table done.
+# to do: SupplementaryTables_v1.docx to to .../Manuscript_May2019/Supplementary_Tables on 'box'. (done)
+
+05/30/19:
+##########################################################################
+# did backup mbook2018, mbook2019, etc. to 3 tb extl hdrive. Note: < 1 Tb of 3 Tb available used before started this backup session.
+##########################################################################
+
+
+06/05/19:
+# reading thru reference vikas provided, 'Genome-wide analysis of the pentatricopeptide repeat gene family in different maize genomes and its important role in kernel development' (bad english)
+
+06/06/19:
+talked to vikas
+# power point slides 25 & 26. Test if can make heatmap from s/w referenced in slide 25. That is, Expression data obtained and plotted using wheat expression browser: 
+http://www.wheat-expression.com
+# in this case, place the seqs of all 4 (genes/proteins??)? 'Populate with example' places names (TraesCS7D02G442000LC), apparently gene names ????????
+# vikas, saying place 4 seqs, but looks like supposed to list the 'gene names' as input ???????
+# Next, probably deselect all ????, then at least select 'Comparison of stamen, pistal, & pistalloidy expression'
+# then probably hit 'Heatmap'
+# 4 proteins in file ijtabvep2cols4snps.txt, perhaps use part of name before '.d', as input to Wheat Expression Browser.
+# but before do, go thru flapjack rows, ... see how got the 4 seqs ??????????
+
+06/07/19:
+
+TraesCS1B02G039100
+TraesCS2A02G530700
+TraesCS2B02G560000
+TraesCS6A02G099300
+
+# Q: is my output a heatmap, no variation in color across map ????????????
+
+#######################################################################
+# Q: Trying to understand slides 22, 23. [Q: input for slide 22 ???????????????]
+
+# Q: In /Users/bterry/mbook2019/vikas19/tassel5/VEP/VariantEffectPredictor_Run1.txt file, do I need to verify that snps here are in 203 RFL's, i.e., their 'Location' is within the gene location in file table11cols.txt (or did I do this ?????), did, see ijtabvep3calccols.txt
+
+# Q: why vikas use '23' rows in slide 23 ??????????????????
+
+# Q: generation of:
+
+line 14361, why prepare following file: ?????????????????????/.
+# Q: In /Users/bterry/mbook2019/vikas19/tassel5/VEP/VariantEffectPredictor_Run1.txt file, 
+
+lines 14604 to 633 for flapjack ??????????????????????
+# Q: how got these box files ???????????????????
+#######################################################################
+
+06/09/19:
+
+/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box/ForFlapjack_Subgroup2R_and_NonR_lines_RFL_SNPs.recode.txt
+
+# new ver. flapjack available, 1.18... => 1.19...
+# now unclear how use flapjack ??????????????????????
+
+
+######################################################################
+06/10/19:
+talked to vikas, items:
+i. discussed wheat expression browser. He tried for the 'Heatmap' with 11 studies selected (1st 6 and several near end), but the heatmap did not have distinct parts displayed. So will abandon for now, go with the representation in slides 25 & 26. 
+
+ii. Q: why vikas use '23' rows in slide 23 rather than image with 21 rows? To display/compare Cargill 100+ series from Cargill < 100 series. > 100 series can distinguish from non-Cargill lines. < 100 do not distinguish Cargill, non-Cargill.
+
+iii. doc. uses for VariantEffectPredictor_Run1.txt file (line 14361 forward ??????
+# Q: what was the input to VEP to produce this file ??????????????
+
+iv. lines 14604 to 633 for flapjack ??????????????????????
+# Q: how got these box files, perhaps tassel5 ????????????/
+# Q: see lines 14604-14614
+# hapmap file, R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+
+06/11/19:
+
+# maybe add'l way to identify 4 snps than Flapjack (t-test). See Tassel5 User Guide ???
+# input: apparently, R_and_NonR_lines_RFL_SNPs.recode.hmp.txt [Q: how got this file ???]
+https://bitbucket.org/tasseladmin/tassel-5-source/wiki/UserManual
+# Q: not finding 'tutorial at end of this manual' ???????????????
+
+# so try: applications/tassel5/tutorialdata
+# note: new version Tasel5 avilable
+Applications/Tassel 5.app/Open/TutorialData/...hmp.txt/Data/NumericalGenotype/
+# gave 'message' about 'Genotypes will be converted to the probability that an allele elected at random at a site is the major allele'
+# ok, => still not numbers ??????????????
+# Q: so, question at this point, how get display with numbers ?????????????
+# Note: in doc: qqch about 'genotype viewer' and selecting 'ReferenceProbability' ????
+
+# or presented a different way, pencil sheet 3 questions:
+
+a. ForFlap...recode.txt (rows are taxa, colms are snps =Flapjack=> display
+# Q: how get this input file ??????
+
+b. R&nonR_RFL_snps...hmp.txt  (rows are snps, colms are taxa) =tassel5=> numericalGenotype (see above, can't get final step ????????)
+
+c. Q: input in VEP to get =VEP=> VariantEffectPredictor_Run1.txt
+# Q: what is input file ????????????????????
+##########################################################################
+
+06/12/19:
+Talked to vikas
+i. look for source for Len colm in tab??cols.txt file
+
+06/13/19:
+# from line 12476
+# from dir 
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+ls IW*
+# ./getseq.awk IWGSC_v1.1_HC_20170706_pep.fasta pid40_216pruned13to203.txt > pid40_216pruned13to203.fa
+# check have 203 '>' in bbedit, yes.
+# so, check if find "." extensions in IWGSC_v1.1_HC_20170706_pep.fasta (66.5 Mb)
+wc -l IWGSC_v1.1_HC_20170706_pep.fasta
+ 1049413 IWGSC_v1.1_HC_20170706_pep.fasta
+head -n 500 IWGSC_v1.1_HC_20170706_pep.fasta > test_IWGSC500.txt
+rm test_IWGSC500.txt
+tail -n 500 IWGSC_v1.1_HC_20170706_pep.fasta > tail_IWGSC500.txt
+# most seqs have "." as last char, but not all ?????????
+
+grep '.*TraesCS1A02G031600.1' IWGSC_v1.1_HC_20170706_pep.fasta > test31600.txt
+
+less IWGSC_v1.1_HC_20170706_pep.fasta
+/>TraesCS1A02G031600.1
+>TraesCS1A02G031600.1 gene=TraesCS1A02G031600
+MSPPRLRLLLLLLLLLCARHSSSTSHPSRIWDPHAAFAAATERARSGRLTTEDAHHLFDELLRQGNPVQE
+RPLNNFLAALARAPASASCSDGPALAVALFGRLSRGAGQRVAQPNVFTYGVLMDCCCRACRTDLALAFFG
+RLLRTGLQAGQVVFNTLLKGLCHTKRADEALDVLLHRMPELGCTPDVVAYNTVIHGFFREGQVGKACDMF
+HGMAQKGVMPNVVTYNSVIDGLCKARAMDKAETVLSQMVNDGVRPDNVTYNSLIHGYSSLGNWKEAVRVF
+KEMSRRFTPDVITCTSLMAFLCKNGKSKEAAEIFDSMAMKGLKRDTVSYAILLHGYATEGCLVDMINLFN
+SMATDCILPNCHIFNILINAYAKSGMMGEAMLIFKKMHEQGVSPDVVTYSTVIHAFCKMGSLDIAMDKFN
+QMVDMGVRPNAIVYHSLIQGFCTHGDLVKAKELVTEMRNKAMRPPDIKIFHSIMKNLCTEGRVIEARDIL
+DLMVHIGMRPDVPIFNLLIGGYCLVHKMEDATKMFDDMVSYGLEPCNSTYGILINGYCKNGRIDDGLNLF
+KEMLRKGLKPTTFNYNVILDGLFLAGRTVAAKEKFDEMVESGVSVCIDTYSIVLGGLCRNNCTGEAITLS
+KKLSTMNVKFNIAIVNILIGAFFRVRRNQEAKDLFAAIPANGLVANVVTYSMMMINLIKEGSLEEADDLF
+LSMEKSGCTADSCMLNHIIRRLLERGEIVKAGNYMSKVDAKSYSLEAKTVSLLISLFLGKGRYREHMKLL
+PMKYQFLEEAATVE
+>TraesCS1A02G031700.1 gene=TraesCS1A02G031700
+MPRFSSTTPMSPPRLLLLLCARHSSSTSHPSRIWDPHAAFVAATQRARSGTLTTEDAHHLFDELLRQGNP
+VQERPLTNFLAALARASASAFFSNGPALAVALFGRLSRGAGRRVAQPNVFTYGVLMDCYCRARRLDLAIA
+FFGRLLKTGLEADQVVFSTLLKGLCHAKRSDEALDVLLHRMPELGCTPDVVAYSTVIHGFFKEGQVGKAC
+NLFHGMAQQGVAPDVVTYNSVIDALCKARAMDKAEYFLGQMVDSGVVPNNVTYNSLIHGYSSSGHSKEAV
+RVLKEMTSKGIIPDVFTCNSLMASLCKNGRSKEAAEIFNSMSMKGLKPNTISYAILLHGYATEGCLVDMI
+NLFNSMATDCILPNCHIFNILIYAYAKSGKLDKAMLIFKDMQKQGVSPDAVTYSTVIHAFCKKGRLDDAV
+IKFNQMIDTGVRPEASAYRSLIQGFCTHGDLVKAKEYVTEMMKKGMLPPDIMFFSSIMQKLCTEGRVIEA
+RDILDLIVRIGMRPNVFMFNILIGGYCLVCKMEDATKMFEDMVSFGLEPCNITYGILINGYCKNRRIDDG
+LILFQEMLHKGLKPTTFNYNVILDGLFLAGRTVAAKEKFDEMVESGVSVCTDTYSIVLAGLCRNNCSSEV
+IMLFQKLRAMNMKFNIRIVTIMIDAFYKVRRNQEAKDLFAAIPSNGLVANVVTYSIMMKNLIKEGSVEEA
+DTLFINGEERLYCKLLDVKSYYQKVTGKRRDSQGWKLYVES.
+>TraesCS1A02G031800.1 gene=TraesCS1A02G031800
+:
+
+# So, most seqs have "." at end, but some don't ????????
+# so, could remove all "." from pid40_216pruned13to203.fa
+# manually or by computer (perl -pe substitution ??????) ????????
+# finally, rerun fastaseqlen_copy.py on modified pid40_216pruned13to203.fa, take resulting length calc replace in table??cols.txt.
+################################################################
+# check if ok vikas, don't want to do this if won't work.
+################################################################
+# vikas, try this
+# testing:
+pid40_216pruned13to203_1st2.fa
+cat pid40_216pruned13to203_1st2.fa|perl -pe 's/(.+)\.$/\1/'
+################################################################
+# looks like worked, so ***TO PROCEED*** as described above
+################################################################
+
+
+
+#cat sort147.txt|perl -pe 's/(Tr.+)\.[0-9]$/\1/' | head -n 3
+#cat pid40_216pruned13to203.fa|perl -pe 's/([A-Z].+)\.$/\1/' | head -n 3
+# Q: seq lines not ending with ".", and loss of lines beginning with '>' ???????
+
+ii. try finish 'numericalGenotype' thru tassel5 ?????
+# progress almost done previously for tutorialdata/...hmp.txt
+# additional steps (user guide not totally correct in its explanation) were select 'numericGenotype' from dropdown window, upper left hand window displays ...Probability.
+# need export, do file/save_as, 
+
+################################################################
+# new window appears, choices here: file name, file location, format, Include taxa annotations (Q: what choices to make?????????????) 
+################################################################
+
+# follow with t-test calcn (need arrange so can loop t-test calcs) ??????
+
+# input file for Ensembl VEP in ...\Variant_files dir on box, an ...hmp.txt file, is R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.hmp.txt
+# Q: like see how this file prepared [perhaps Tassel5 ???????????????]
+
+06/14/19:
+Trying to upgrade to bioc 3.9
+The downloaded binary packages are in
+	/var/folders/nf/r9hknbmn597bkc676t9y1hs80000gp/T//RtmpLMi8Xi/downloaded_packages
+Warning message:
+In doTryCatch(return(expr), name, parentenv, handler) :
+  unable to load shared object '/Library/Frameworks/R.framework/Resources/modules//R_X11.so':
+  dlopen(/Library/Frameworks/R.framework/Resources/modules//R_X11.so, 6): Library not loaded: /opt/X11/lib/libcairo.2.dylib
+  Referenced from: /Library/Frameworks/R.framework/Resources/modules//R_X11.so
+  Reason: Incompatible library version: R_X11.so requires version 11403.0.0 or later, but libcairo.2.dylib provides version 11203.0.0
+> 
+#############################################################
+# Apparently failed (tho think prevly did upgrade ???????????
+#############################################################
+
+talked to vikas:
+i. finish 'numericalGenotype' thru tassel5 for ??? input data
+# then add addl colm to designate R, nonR, factor colm
+# then try follow M. Morgan 'Developing robust & efficient code' to write pgm to calc t-test for each colm of 'numericalGenotype'output format data. Q: how relate to Flapjack determination of R lines ???????????????
+# try do with tidyverse as in M. Morgan example ?????
+
+06/16/19:
+R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+
+cd /Users/bterry/mbook2019/vikas19
+find . -name 'R_and_NonR_lines_RFL_SNPs.recode.hmp.txt' -print
+./tassel5/VEP/vikas_box/R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+
+# running Tassel5
+# start from 'Applications
+# file/open/tutorialdata/mdp_genotype.hmp.txt
+###########################################################
+# output file, mdp_genotype_with_Probability.txt, TROUBLE opening in bbedit, bbedit opens with spurious characters, missing characters 
+###########################################################
+# ok instead of tutorial data, try R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+# now, try get numericGenotype output file ?????
+# this file has 54 taxa, thinking want file with like 23 taxa ???????????????
+# but only '.hmp' file on box, so have opened it.
+# Now, to save as 'numericGenotype'
+###############################################################
+# file/saveAs, new window opens, ... CAN'T GET 'numericGenotype' format to select ??????
+# TO RETRY, click 'DATA', THEN 'numerical Genotype' gives a new sequence, then 'numericGenotype' then available. Q: which of the 2 seqs do you 'highlight' (one has 'probability', one does not ?????????)
+# Q: lot of tassel5 display elts besides A, T, G, C ?????????????????
+################################################################
+
+06/17/19:
+# email from vikas, indicating t-test not appropriate for our 'R, nonR' statistical test.
+# Q: how best go about determining an appropriate approach ????
+
+# start Tassel5 from Application
+file/open/ R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+# Tassel5 displays name of only one seq. at this point ?????????????
+# clic Data/numerical genotype, 'message window, 'ReferenceProbability from Genotype' appears, message 'genotypes will be converted to the probability that an allele selected at random at a site is the major allele. In other words, homozygous major is 1.0, homozygous minor is 0.0, & heterozygous is 0.5'.
+##################################################################
+# Q: meaning, implication of this message ?????????????????
+##################################################################
+# now, have 2nd seq in upper LHS box. 
+# now, select 'numericGenotype' in box, upper RHS.
+# Q: '?' char. in cells ??????????, and colms not in same order as prev repn with A,T,G,C,etc. ????
+
+# file/save_as/ tricky new window appears, fill in name, format select 'numericGenotype', clic ok, (the 2nd window allows choose a dir., here VEP/vikas_box
+# checked, had saved .../VEP/vikas_box/R_and_nonR.txt (.txt added during save step.
+# delete row 1, <Numeric> as per vikas suggestion.
+# This time, no problem with printing R_and_nonR.txt.
+# I note, lot of 'NA' values in this table ????????????
+# I note, the order of colms has changed once again ????????????
+
+# checking Gota notes from spring, 2018 course, I note he routinely delt with 'NA' values.
+
+# talked to vikas
+i. 
+email link 
+https://stackoverflow.com/questions/4862178/remove-rows-with-all-or-some-nas-missing-values-in-data-frame
+# Remove rows with all or some NAs (missing values) in data.frame/matrix ???????
+
+ # Q: how set up fisher exact test in contingency table ?????????
+ # Q: R_and_nonR.txt has 3 different possible values in the table in addition to NA'. So a table would not be square ???????????
+        snp1   snp0   snp0.5 
+ R
+ nonR
+# What to think ????????
+##################################################################
+# vikas says look at glm code in reference link. Q: ok, how use the output from glm ???????
+# & fisher exact test after remove 'NA' & '0.5' values
+##################################################################
+
+06/19/19:
+# look into 'glm' bit. 
+# try run example in vikas referral
+# ran, then Q: how use with our R_and_nonR.txt data ??????????????????????/
+
+# looking for examples of running GLM on mutiple independent variables
+http://www.ams.sunysb.edu/~zhu/ams394/Lab10.pdf
+# see slide/page 4 of 13
+# perhaps get input file, go thru the code ????????
+
+another url ????
+https://www.theanalysisfactor.com/generalized-linear-models-glm-r-part4/
+
+06/20/19:
+# To do: insert taxacode colm in R_and_nonR.txt
+# perhaps 1st, open in R, could try 'rep' command ???? for new colm 
+
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
+rnonrsnps <- read.delim("R_and_nonR.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 54 60
+head(rnonrsnps, n=2)
+
+library(dplyr)
+newrnonrdf <- rnonrsnps %>% mutate(taxacode = c(rep(0,14),rep(1,39),rep(0,1))) %>% select(taxacode, everything())
+head(newrnonrdf, n=2)
+dim(newrnonrdf)  ## [1] 54 61
+newrnonrdf[1:15,1:2]
+tail(newrnonrdf[,1:2])  # Q: what is RUTH, R or nonR ???????
+write.table(newrnonrdf, file="R_and_nonR_withtaxacode.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+# Q: what is RUTH taxa, R or nonR => nonR, vikas
+
+# ok, wait till tomorrow to resume on GLM
+
+# Now, try move forward with Fisher Exact test
+# will want remove 'NA' from each snp colm before use
+# also '0.05' values, will only use 1, 0 vaues in a column
+# contingency table
+# so fill in for snp S1A_14577791
+        snp1   snp0
+ R
+ nonR
+
+# is preceding table an appropriate contingency table for the test ???????
+# from
+https://www.google.com/search?client=firefox-b-1-d&q=r+explain+fisher+exact+test+output
+
+The primary difference between the two is that Fisher's Exact Test is used ONLY when one of the four cells of a 2x2 table has less than five observations. Fisher's Exact Test is often used with small sample sizes (n < 20) and when researching rare outcomes. The p-value is not interpreted with Fisher's Exact Test.
+
+from
+https://www.scalelive.com/fishers-exact-test.html
+
+Fisher's Exact Test is very similar to the chi-square test in that researchers are testing the association or relationship between two dichotomous categorical variables. The primary difference between the two is that Fisher's Exact Test is used ONLY when one of the four cells of a 2x2 table has less than five observations. 
+
+###############################################################
+# May be that pair GLM with chi sq test, not Fishers exact test depending on values in contingency table
+
+########################################################################
+# removing 'NA' values. I note an example of removing 'NA's, removes all rows in a table with 'NA' in any column of the row. 
+###############################################################
+# Q: is that applicable here ????
+###############################################################
+
+06/21/19:
+# unclear how setup contingency table (Irizarry, Love, or vikas ref.)
+
+# In R/dplyr 
+  
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
+
+#subset 1st 3 colms
+# import R_andnonR_...taxacode.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 54 61
+head(rnonrsnps, n=2)
+
+library(dplyr)
+cols1st3 <- rnonrsnps %>% select(X.Marker., taxacode, S1A_14577791)
+dim(cols1st3)  ## [1] 54  3
+head(cols1st3, n=4)
+tail(cols1st3, n=4)
+
+# next, remove 'NA'
+cols1st3noNA <- cols1st3 %>% 
+  na.omit()
+
+# and '0.5'
+cols1st3noNAor0.5 <- cols1st3noNA %>% 
+  filter(S1A_14577791 != 0.5)
+
+head(cols1st3noNAor0.5, n=3)
+dim(cols1st3noNAor0.5)  ## [1] 45  3    
+
+# now create contingency table
+# p-89
+# count R, nonR, snp 1's & 0's, 
+# count <- matrix(..., nrow=2)
+# need the values for the 4 cells
+
+snp1rows <- cols1st3noNAor0.5 %>% filter(S1A_14577791 == 1)
+snp1ct <- dim(snp1rows)[1]
+snp1ct  [1] 44  3
+
+snp0rows <- cols1st3noNAor0.5 %>% filter(S1A_14577791 == 0)
+snp0ct <- dim(snp0rows)[1]  
+snp0ct  ## [1] 1
+
+
+Rct = 
+
+
+
+
+
+
+
+nonRct =
+
+
+
+# talked to vikas
+i. vikas ran GLM from Tassel5 pgm. Two input files, Trait_June21.txt, & R_and_NonR_lines_RFL_SNPs.recode.hmp.txt (Q: was this latter the 1st input ??????)
+# Output are two files:
+R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt
+# To do: need grab rows with P-value < 0.05 in R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+, and use to subset R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt (grep -f)
+# note: thought in Tassel5 display, rows with p-value < 0.05 were sorted at top of row, (10 such) but in R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt file, 10 rows with p-value < 0.05, but not sorted ????????
+# Q: 'taxacode'in 1st colm ???????
+# Q: TO DO: this file up to box, vikas to edit it bit more before goes into box manuscript dir.
+# TO DO: anyway, perhaps grab 'Marker' colm for the '10' from R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+ & use wi grep -f on R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt to subset that file. Then copy subset file to box.
+
+TO DO: get names of the 4 snps, check that they in the '10' ????????
+
+ii. review 'reports' article, get add'l references for manuscript
 
 # slip a save to ***github*** in here
 
 
 
-
-
-
-
-
-
-
-
-
-
+# ref. line 17122
+# look for source for Len colm in tab??cols.txt file
+...
 
 
 
