@@ -17378,6 +17378,7 @@ tail(cols1st3, n=4)
 # next, remove 'NA'
 cols1st3noNA <- cols1st3 %>% 
   na.omit()
+dim(cols1st3noNA)
 
 # and '0.5'
 cols1st3noNAor0.5 <- cols1st3noNA %>% 
@@ -17387,7 +17388,7 @@ head(cols1st3noNAor0.5, n=3)
 dim(cols1st3noNAor0.5)  ## [1] 45  3    
 
 # now create contingency table
-# p-89
+# p-89, crawley small book
 # count R, nonR, snp 1's & 0's, 
 # count <- matrix(..., nrow=2)
 # need the values for the 4 cells
@@ -17400,17 +17401,48 @@ snp0rows <- cols1st3noNAor0.5 %>% filter(S1A_14577791 == 0)
 snp0ct <- dim(snp0rows)[1]  
 snp0ct  ## [1] 1
 
+Rct = cols1st3noNAor0.5 %>% filter(taxacode == 1)
+Rct <- dim(Rct)
+Rct  ## [1] 30  3
+Rct[1]  ## [1] 30
 
-Rct = 
+nonRct = cols1st3noNAor0.5 %>% filter(taxacode == 0)
+nonRct <- dim(nonRct)
+nonRct  ## [1] 15  3
+nonRct[1]  ## [1] 15
 
+# need filter by *two* parameters to obtain cells within contingency table
 
+# note: S1A_14577791 snp *not* in either output file from Tassel5 ?????
+# For next calcn from R_and_nonR_withtaxacode.txt, select a snp contained within those two tables.
 
+Randsnp1 <- cols1st3noNAor0.5 %>% filter(taxacode == 1 & S1A_14577791 == 1)
+class(Randsnp1)
+dim(Randsnp1)[1]  ## [1] 29
 
+Randsnp0 <- cols1st3noNAor0.5 %>% filter(taxacode == 1 & S1A_14577791 == 0)
+class(Randsnp0)
+dim(Randsnp0)[1]  ## [1] 1
 
+nonRsnp1 <- cols1st3noNAor0.5 %>% filter(taxacode == 0 & S1A_14577791 == 1)
+class(nonRsnp1)
+dim(nonRsnp1)[1]  ## [1] 15
 
+nonRsnp0 <- cols1st3noNAor0.5 %>% filter(taxacode == 0 & S1A_14577791 == 0)
+class(nonRsnp0)
+dim(nonRsnp0)[1]  ## [1] 0
 
-nonRct =
+# next, create contingency table matrix
+S1A_14577791_tab <- matrix(c(dim(Randsnp1)[1],dim(Randsnp0)[1],dim(nonRsnp1)[1],dim(nonRsnp0)[1]), nrow=2)
+S1A_14577791_tab
 
+     [,1] [,2]
+[1,]   29   15
+[2,]    1    0
+
+STOPPED
+
+# S2A_748437723 (think one of the '4'), try make contingency table for this snp, then try run chisq (or fisher exact if appropriate) on this & S1A_14577791.
 
 
 # talked to vikas
@@ -17431,16 +17463,250 @@ TO DO: get names of the 4 snps, check that they in the '10' ????????
 ii. review 'reports' article, get add'l references for manuscript
 
 # slip a save to ***github*** in here
+# backed up to extl 3 tb hdrive
+mbook2019
+mbook2018
+planets/wheatprojdoc060117.txt
 
+06/23/19:
 
+06/29/19:
+############################################################
+# back from bioconductor, updated firmware on airport time capsule (2 Tb).
+# now, automatic backup appears *not* to be working ????????????????
+##############################################################
+
+07/01/19:
 
 # ref. line 17122
 # look for source for Len colm in tab??cols.txt file
-...
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+ls *203.fa
+pid40_216pruned13to203.fa
+ls *1st2.fa
+pid40_216pruned13to203_1st2.fa
+cat pid40_216pruned13to203_1st2.fa|perl -pe 's/(.+)\.$/\1/'
+cat pid40_216pruned13to203_1st2.fa|perl -pe 's/(.+)\.$/\1/' > testout1st2.fa  ## ok
+rm testout1st2.fa
+wc pid40_216pruned13to203.fa
+    1719    1922  109338 pid40_216pruned13to203.fa
+cat pid40_216pruned13to203.fa|perl -pe 's/(.+)\.$/\1/' > pid40_216pruned13to203nodots.fa
+wc pid40_216pruned13to203nodots.fa
+    1719    1922  109208 pid40_216pruned13to203nodots.fa
+# so 30 '.' char at end of lines removed.
 
+# finally, rerun fastaseqlen_copy.py on modified pid40_216pruned13to203nodots.fa, take resulting length calc replace in table??cols.txt.
+# compare sum length colm with this new sum, see if diff. is 30 ???????
 
+# ref line 13218
+python3 fastaseqlen_copy.py pid40_216pruned13to203nodots.fa
+# output: fastaSeqLengths.txt, the lengths of the 203 proteins
+# rename fastaSeqLengths203nodots.txt
+mv fastaSeqLengths.txt fastaSeqLengths203nodots.txt
+#****************************************
+#Note: 53 seqs < 300 aa in length, Zhang table, shortest is 443 ??????????????????????
+#*******************************************************
+#cut -f2 fastaSeqLengths203.txt| sum  ## not working ???????
+#cut -f2 fastaSeqLengths203nodots.txt| sum  ## not working ???????
+# note: pid40_216pruned13to203nodots.fa still has 4 '\.$' dots, all on line *by self*
+# so just remove these manually, 
+# note: 130 '\.$' removed of 203 seqs, but left 4 (does not agree with '30' above ?????)
+# so, retry perl with
+cat pid40_216pruned13to203.fa|perl -pe 's/(.*)\.$/\1/' > pid40_216pruned13to203nodots134.fa
+# ok, removed the 134 '\.%' dots. However, for the 4 on a line by self, left blank line.
+
+# To do, remove these manually, after copy to new name pid40_216pruned13to203nodots134noblank.fa.
+cp pid40_216pruned13to203nodots134.fa pid40_216pruned13to203nodots134noblank.fa
 
 STOPPED
+
+07/02/19:
+
+# then rerun fastaseqlen_copy.py
+python3 fastaseqlen_copy.py pid40_216pruned13to203nodots134noblank.fa
+# output: fastaSeqLengths.txt, the lengths of the 203 proteins
+# rename pid40_216pruned13to203nodots134noblank.txt
+#mv fastaSeqLengths.txt pid40_216pruned13to203nodots134noblank.txt  ## error
+mv pid40_216pruned13to203nodots134noblank.txt fastaSeqLengths203nodots134noblank.txt
+
+# bring into R, compare sum this column with that in table??cols.txt (or fastaSeqLengths203.txt). Would expect diff of 134 ???????
+
+
+# line 16434
+rm(list=ls())
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+getwd()
+
+table11cols <- read.delim("hmmer203seqs/table11cols.txt", stringsAsFactors=FALSE)
+dim(table11cols)
+head(table11cols, n=2)
+
+#http://www.milanor.net/blog/aggregation-dplyr-summarise-summarise_each/
+## without group
+#mtcars %>% 
+#  summarise (mean_mpg = mean(mpg))
+
+library(dplyr)
+sumLen <- table11cols %>% select(Len) %>% summarize(sumLen = sum(Len))
+sumLen  ## [1] 98473
+
+sum(table11cols$Len)  ## [1] 98473
+
+
+# now sum for fastaSeqLengths203nodots134noblank.txt
+twocolmdf <- read.delim("fastaSeqLengths203nodots134noblank.txt", stringsAsFactors=FALSE, header=FALSE, col.names=c("protID", "Len"))
+dim(twocolmdf)  ## [1] 203   2
+head(twocolmdf, n=2)
+
+sumLen2 <- twocolmdf %>% select(Len) %>% summarize(sumLen2 = sum(Len))
+sumLen2  ## 1   98339
+
+sum(twocolmdf$Len)  ## [1] 98339
+
+# 98473 - 98339 = 134, therefore fastaSeqLengths203nodots134noblank.txt colm two can be substituted for Len colm in table11cols.txt to now adjust Len colm after subtract for '.' in 134 of the 203 seqs.
+#######################################################################
+TO DO, perhaps in a table12cols.txt when prepare
+#######################################################################
+
+# ref line 17458
+
+cd /Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box/R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+# want 'Marker' column for colm 'P' where P < 0.05
+# try do with dplyr
+
+rm(list=ls())
+setwd("/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box/")
+getwd()
+
+june21noteffectsdf <- read.delim("R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt", stringsAsFactors=FALSE)
+dim(june21noteffectsdf)  ## [1] 26 18
+head(june21noteffectsdf, n=2)
+
+# filter rows < 0.05, then select colms Marker & 'P'
+library(dplyr)
+
+marker_p <- june21noteffectsdf %>% filter(p <0.05) %>% select(Marker, p)
+dim(marker_p) ## [1] 10  2
+marker_p
+Marker          p
+#1   S1A_49245501 8.5895e-05
+#2   S1B_18683593 8.8464e-05
+#3  S2A_748437723 3.8070e-09
+#4  S2A_748451475 1.2490e-02
+#5  S2A_748503311 4.6800e-02
+#6  S2A_748503316 4.6800e-02
+#7  S2A_748503319 4.6800e-02
+#8  S2A_748503326 1.6700e-03
+#9  S2B_753796430 5.1000e-03
+#10  S6A_66814111 3.5890e-02
+################################################################
+# note: all 4 of the snps included in above 10 => targeted to mito ??????????????
+################################################################
+marker <- june21noteffectsdf %>% filter(p <0.05) %>% select(Marker)
+dim(marker) ## ## [1] 10  1
+marker
+
+# finally write a file with just these 10 snp names, to be used with grep -f to subset the 'effects' file.
+
+write.table(marker, file="nonEffects10snps.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+
+# now subset R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt wih grep -f using nonEffects10snps.txt
+
+# ref line 16607
+#grep -f table10col1.txt VariantEffectPredictor_Run1.txt > vep_Run1_203map_grepf.txt
+grep -f nonEffects10snps.txt R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt > Effectsgrepf.txt
+#####################################################################
+# no header on this output file. Q: should the header be put back on ????
+# vikas: Yes
+################################################################
+
+07/03/19:
+cp Effectsgrepf.txt Effectsgrepfheader.txt
+# then, manually add header from R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt file.
+
+# TO do: calc gene length for table??cols.txt, add to the table. Q: order of colms ????
+
+# talked to vikas
+# now, vikas, no need gene length calc colm in table11cols.txt
+# could practice remove blank line by perl -pe ?????
+1. wants 10 rows from R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt wi P colm < .05 in a file to box (calling this the 'GLM' file) ?????????? Will need resubset, but return all colms rather than just the 'marker' colm (nonEffects10snps.txt). Perhaps rename this R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt to R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21_P_less.05.txt ????????
+2. Effectsgrepfheader.txt (what would be a better name, the 'Effectsgrepf_P_less0.05.txt' ?????)
+3. R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt (the full 'GLM' file from tassel5 ?????)
+4. R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt (the full 'EFFECTS' file from tassel5 ?????)
+# to place these in 'Variant_Files' dir. on box.
+5. review paper refs ??????
+6. check if '4' snps with subcel mitochondrial target ????
+# if use table11cols.txt, 
+
+From /Users/bterry/mbook2019/vikas19/tassel5/VEP/ijtabvep2cols4snps.txt
+
+RFL_prot_ID	snp         targetP   predn
+TraesCS1B02G039100.1	M         M
+TraesCS2A02G530700.1	C         plastid
+TraesCS2B02G560000.1	M         plastid
+TraesCS6A02G099300.1	-         'possibly M'
+# Q: diff '-' & 'none' for targetP ?????????????????????///
+
+7. check if snp in/up/down from gene location ????
+
+07/04/19:
+From /Users/bterry/mbook2019/vikas19/tassel5/VEP/ijtabvep2cols4snps.txt
+
+RFL_prot_ID	snp
+TraesCS1B02G039100.1	S1B_18683593    within gene
+TraesCS2A02G530700.1	S2A_748437723   within gene
+TraesCS2B02G560000.1	S2B_753796430   3', downstream
+TraesCS6A02G099300.1	S6A_66814111    within gene
+
+07/05/19:
+1. (above)
+# ref line 17577
+rm(list=ls())
+setwd("/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box/")
+getwd()
+
+june21GLMdf <- read.delim("R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt", stringsAsFactors=FALSE)
+dim(june21GLMdf)  ## [1] 26 18
+head(june21GLMdf, n=2)
+
+# filter rows < 0.05, then select all colms
+library(dplyr)
+
+marker_p <- june21GLMdf %>% filter(p <0.05)
+dim(marker_p) ## [1] 10  2
+marker_p
+
+# finally write a file with just these 10 snp names, to be used with grep -f to subset the 'effects' file.
+
+write.table(marker_p, file="R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21_Pless.05allcolms.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+# prev file ready for box (/Variant_Files dir) DONE
+
+2. Effectsgrepfheader.txt, rename 
+R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21_GLM_Pless.05.txt
+cp Effectsgrepfheader.txt R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21_GLM_Pless.05.txt
+
+# prev ready for box (/Variant_Files dir) DONE
+
+3. R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt (the full 'GLM' file from tassel5 ?????)
+
+# prev ready for box (/Variant_Files dir) DONE
+
+4. R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt (the full 'EFFECTS' file from tassel5 ?????)
+
+# prev ready for box (/Variant_Files dir) DONE
+
+STOPPED
+
+5. Yet to do
+6. ...
+7. ...
+
+8. RNAseq wkshops from bioconductor ???
+
+07/09/19:
+Working on (5) above, references from review (Bohra et al., Plant Cell Rep (2016)35:967-993)
+
 
 
 
