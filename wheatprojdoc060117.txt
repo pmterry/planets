@@ -17440,6 +17440,26 @@ S1A_14577791_tab
 [1,]   29   15
 [2,]    1    0
 
+> chisq.test(S1A_14577791_tab)$p.value
+[1] 1
+Warning message:
+In chisq.test(S1A_14577791_tab) :
+  Chi-squared approximation may be incorrect
+# Q: ?????????????????????????????????????????????????????????
+# Q: did not use 'factors' ?????????
+
+> chisq.test(S1A_14577791_tab,correct=F)
+
+	Pearson's Chi-squared test
+
+data:  S1A_14577791_tab
+X-squared = 0.51136, df = 1, p-value = 0.4745
+######################################################################
+# OK, snp S1A_14577791 can't be used to distinguish R, nonR lines.
+Think removed NA, 0.5 rows from input data.
+######################################################################
+
+
 STOPPED
 
 # S2A_748437723 (think one of the '4'), try make contingency table for this snp, then try run chisq (or fisher exact if appropriate) on this & S1A_14577791.
@@ -17707,614 +17727,1006 @@ STOPPED
 07/09/19:
 Working on (5) above, references from review (Bohra et al., Plant Cell Rep (2016)35:967-993)
 
+# slipped a save to ***github*** in here
 
+07/10/19:
+vikas mentioned, 06/19/19
+Plant Cell Rep (2016) 35:967–993, a review
+Cytoplasmic male sterility (CMS) in hybrid breeding in field crops
+Abhishek Bohra et al
+# Some comments:
+p-698
+# Three-line (A, B, R) breeding for harnessing hybrid vigor
+# Q: this section ???????????????
+p-976
+# Q: one gene ????????
+p-979
+Whole genome sequencing of mitochondria
+p-981
+substoichiometric shifting ?????????????????
+High throughput sequencing and degradome analysis to elucidate the role of miRNA	
+??????????????
+Investigating proteomes for greater insights ???????????????????
+p-982
+Marker assisted selection (MAS) to accelerate CMS-hybrid breeding
+Rapid discovery of potential restorers from a wider germplasm
+set, precise introgression of Rf-containing chromosomal
+segments to diverse genetic backgrounds, rapid
+discrimination among parental lines, and ensuring the
+genetic purity (parents/hybrids) constitute crucial steps in
+CMS-based hybrid breeding.
 
+# Q: Rf3 and Rf4 genes ??????????????????????????????????
+p-984
+Perspectives
+# Q: GWAS ??????????????????????
 
-# TO SEND KELLYE AN EMAIL WITH THE GFF3 PROBLEM ????????????
+07/12/19:
+###################################################################
+# response from vikas on email on Bohra paper. Wait till see to discuss further ????
+###################################################################
 
+# to do, backup to 3 tb ext'l hdrive, preparation try set up new google router, etc.
+# Note: apparently backups on time capsule 2 Tb now working again ???????????
+# but messages on how much being backed up, questionable ???????????????
 
+07/14/19:
 
+# plan try chisq.test on one of 'the 4' snps since tassel5 glm found significant p-value for S2A_748437723.
 
+# in R_and_nonR_withtaxacode.txt file, appears to be ERROR for taxa NEO5548. Looks like a 'nonR' line, so taxacode should = 0.
+# so make the change, in new name R_and_nonR_withtaxacode_corr.txt
+cp R_and_nonR_withtaxacode.txt R_and_nonR_withtaxacode_corr.txt
+# then restart my run of chisq code with S2A_748437723 snp colm
 
+07/15/19:
+# resume chisq test for S2A_748437723 snp colm
 
- 
-
-
-
-# then compare best hits wi phylogram. No pid40_88ctls phylogram. Will need to use pid50_88 phylogram.
-
-
-
-
-
-# could try compare pid for say  seven...031600.1 with one used to create the pid40 216 seqs (Q: how, look back where originally created ????????????)
-
-
-# TO SEND vikas an email discussing ?????????????/
-
-
-
-
-# dir to work wi vikas6 hits for 216 of pid40, /PPRv1.1plus_88ctls/vikas6hits
-
-R
 rm(list=ls())
-setwd("~/mbook2019/vikas19/tassel5/VEP")
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
 getwd()
-iftabvec <- read.delim("ijtabvep4cols.txt", header=TRUE, stringsAsFactors=FALSE)
-dim(iftabvec) ## [1] 203   3
-View(iftabvec)
-head(iftabvec, n=2)
+
+#subset 1st 3 colms
+# import R_andnonR_...taxacode.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_corr.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 54 61
+head(rnonrsnps, n=2)
+
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S2A_748437723)
+dim(cols3)  ## [1] 54  3
+head(cols3, n=4)
+tail(cols3, n=4)
+
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 53  3
+
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S2A_748437723 != 0.5)
+
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 45  3    
+
+# now create contingency table
+# p-89, crawley small book
+# count R, nonR, snp 1's & 0's, 
+# count <- matrix(..., nrow=2)
+# need the values for the 4 cells
+
+snp1rows <- cols3noNAor0.5 %>% filter(S2A_748437723 == 1)
+snp1ct <- dim(snp1rows)[1]
+snp1ct   ## [1] 23
+
+snp0rows <- cols3noNAor0.5 %>% filter(S2A_748437723 == 0)
+snp0ct <- dim(snp0rows)[1]  
+snp0ct  ## [1] 22
+
+Rct = cols3noNAor0.5 %>% filter(taxacode == 1)
+Rct <- dim(Rct)
+Rct  ## [1] 29  3
+Rct[1]  ## [1] 29
+
+nonRct = cols3noNAor0.5 %>% filter(taxacode == 0)
+nonRct <- dim(nonRct)
+nonRct  ## [1] 16  3
+nonRct[1]  ## [1] 16
+
+# need filter by *two* parameters to obtain cells within contingency table
+
+# note: S1A_14577791 snp *not* in either output file from Tassel5 ?????
+# For next calcn from R_and_nonR_withtaxacode.txt, select a snp contained within those two tables.
+
+Randsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S2A_748437723 == 1)
+class(Randsnp1)
+dim(Randsnp1)[1]  ## [1] 23
+
+Randsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S2A_748437723 == 0)
+class(Randsnp0)
+dim(Randsnp0)[1]  ## [1] 6
+
+nonRsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S2A_748437723 == 1)
+class(nonRsnp1)
+dim(nonRsnp1)[1]  ## [1] 0
+
+nonRsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S2A_748437723 == 0)
+class(nonRsnp0)
+dim(nonRsnp0)[1]  ## [1] 16
+
+# next, create contingency table matrix
+S2A_748437723_tab <- matrix(c(dim(Randsnp1)[1],dim(nonRsnp1)[1],dim(Randsnp0)[1],dim(nonRsnp0)[1]), nrow=2)
+S2A_748437723_tab
+
+chisq.test(S2A_748437723_tab,correct=F)
 
 
-# subset for the 216 prot. seqs (python pgm ?????????)
-# then check if 'evalue' can distinguish ...
+Pearson's Chi-squared test
 
-# line 14576 (dplyr)
+data:  S2A_748437723_tab
+X-squared = 25.956, df = 1, p-value = 3.493e-07
 
+chisq.test(S2A_748437723_tab)
 
+	Pearson's Chi-squared test with Yates' continuity correction
 
+data:  S2A_748437723_tab
+X-squared = 22.879, df = 1, p-value = 1.725e-06
+##################################################################
+# So looks like S2A_748437723 significant as tassel5 glm result.
+# p-88, crawley bk, crit value = 3.841 
+##################################################################
 
+######################################################################
+# OK, prely, snp S1A_14577791 can't be used to distinguish R, nonR lines.
+Think removed NA, 0.5 rows from input data.
+BUT, STEP ASSIGNING VALUES TO TABLE CELLS PLACED CELL 2,1 & 1,2 INCORRECTLY
+NOTE, APPARENTLY ASSIGNED CELLS WRONG, WOULD NEED ASSIGN CORRECTLY, RERUN CHISQ ??????
+######################################################################
 
+# talked to kent eskridge about gma & snp data:
+# concerns/issues:
+# popn structure or perhaps pedigree concerns
+# check if tassel5 glm output by snp ?????
+# says need do correlation check (covariance matrix ???), remove duplication of snps before do glm ????
+# then do glm all remaining snps at once (like multiple linear regression, include all the remaining predictor variables in the glm formula)
+# UNCLEAR: what output looks like ?????
 
+07/16/19:
+# trying understand what tassel5 did, what I would be doing if do chi square or GLM ??????
 
+# what was input to Ensembl VEP pgm ????????????????????
 
-# Now, work with Tassel5, VCF tools, Flapjack. Yesterday, Vikas placed 4 files on 'box'.
-/Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
+# output of hmp file from an Ensembl process (VEP) ???????
 
-ForFlapjack_R_and_NonR_lines_RFL_SNPs.recode.txt
-R_and_NonR_lines_RFL_SNPs.log
+# input for tassel5 (2 files), line 17469
+cd /Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
+Trait_June21.txt 
 R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
-R_and_NonR_lines_RFL_SNPs.recode.vcf
+
+# output from tassel5 (2 files) (line 17471)
+# GLM output
+R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+# Effects, HOW FOUND ??????????
+R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt
+
+# Q: where got R_and_nonR_withtaxacode.txt ????????
+# Q: why use as chisq input ???????
+
+# line 17312, R_and_nonR.txt, where got ???????
+# line 17244, numeric genotype ???????
+# Q: so R_and_nonR_withtaxacode_corr.txt candidate do both chisq, GLM on ???????
+# Q: IS THIS THE FILE BEFORE TASSEL5 GLM RUN, thus appropriate for me to try chisq, GLM ??????
+# Q: kent concerns, pedigree, popn, duplication predictors (correlation/covariance matrix ???????????????????????
+# Q: dominance by chi sq with 0.5 included ???????
+# Q: Diego ??????????????
+
+# vikas comments from yesterday: 
+1. review article:
+multi lines vs 1 cms => cms  ???????????????????????????
+focus on omics section, not pre-omics sections
+mapping restorer loci (any species)  ?????????????????
+
+2. report to wheat genome sequence folks
+58 (gsds # 39) 
+in phylogram, seeing say in chr 1 area, chr 6 proteins 
+
+3. FTP site, 
+markers, MAS, the web site where got the protein or gene seqs  ???????????????
+# vikas checked, *no* RF, restore mappings
+
+FUTURE:
+timopheezi mitochondrial marker, => verify cytoplasm for cargill lines, are they timopheezi?
 
 
+# ok, wait on preceding items till talk vikas again, for now rerun chi sq on snp = SiA_14577791, refer: line 17783
+
+#####################################################
+# rerun chisq test for SiA_14577791 snp colm
+######################################################
+
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
+
+#subset 1st 3 colms
+# import R_andnonR_...taxacode.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_corr.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 54 61
+head(rnonrsnps, n=2)
+
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S1A_14577791)
+dim(cols3)  ## [1] 54  3
+head(cols3, n=4)
+tail(cols3, n=4)
+
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 54  3, so no 'NA's to remove
+
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S1A_14577791 != 0.5)
+
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 45  3    
+
+# now create contingency table
+# p-89, crawley small book
+# count R, nonR, snp 1's & 0's, 
+# count <- matrix(..., nrow=2)
+# need the values for the 4 cells
+
+snp1rows <- cols3noNAor0.5 %>% filter(S1A_14577791 == 1)
+snp1ct <- dim(snp1rows)[1]
+snp1ct   ## [1] 44
+
+snp0rows <- cols3noNAor0.5 %>% filter(S1A_14577791 == 0)
+snp0ct <- dim(snp0rows)[1]  
+snp0ct  ## [1] 1
+
+Rct = cols3noNAor0.5 %>% filter(taxacode == 1)
+Rct <- dim(Rct)
+Rct  ## [1] 29  3
+Rct[1]  ## [1] 29
+
+nonRct = cols3noNAor0.5 %>% filter(taxacode == 0)
+nonRct <- dim(nonRct)
+nonRct  ## [1] 16  3
+nonRct[1]  ## [1] 16
+
+# need filter by *two* parameters to obtain cells within contingency table
+
+# note: S1A_14577791 snp *not* in either output file from Tassel5 ?????
+# For next calcn from R_and_nonR_withtaxacode.txt, select a snp contained within those two tables.
+
+Randsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S1A_14577791 == 1)
+class(Randsnp1)
+dim(Randsnp1)[1]  ## [1] 28
+
+Randsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S1A_14577791 == 0)
+class(Randsnp0)
+dim(Randsnp0)[1]  ## [1] 1
+
+nonRsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S1A_14577791 == 1)
+class(nonRsnp1)
+dim(nonRsnp1)[1]  ## [1] 16
+
+nonRsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S1A_14577791 == 0)
+class(nonRsnp0)
+dim(nonRsnp0)[1]  ## [1] 0
+
+# next, create contingency table matrix
+S1A_14577791_tab <- matrix(c(dim(Randsnp1)[1],dim(nonRsnp1)[1],dim(Randsnp0)[1],dim(nonRsnp0)[1]), nrow=2)
+S1A_14577791_tab
+#     [,1] [,2]
+#[1,]   28    1
+#[2,]   16    0
+
+chisq.test(S1A_14577791_tab,correct=F)
+
+Pearson's Chi-squared test
+
+data:  S1A_14577791_tab
+X-squared = 0.56426, df = 1, p-value = 0.4525
+
+Warning message:
+In chisq.test(S1A_14577791_tab, correct = F) :
+  Chi-squared approximation may be incorrect
+
+# PROBLEM: '+' indicating something not supplied ????????
+chisq.test(S1A_14577791_tab)
+	Pearson's Chi-squared test with Yates' continuity correction
+
+data:  S1A_14577791_tab
+X-squared = 7.1007e-30, df = 1, p-value = 1
+
+Warning message:
+In chisq.test(S1A_14577791_tab) :
+  Chi-squared approximation may be incorrect
+
+# Q: warning messages ??????????????????/
+# Q: looping to do chisq on all this snp data ????  
+# Q: consider summarize of dplyr ???????????????
+
+07/18/19:
+##################################################################
+# vikas email, varietal SNPS file, iwgsc_refseqv1.0_varietal_SNP_vcf.zip
+# Q: after expanding, what to look for ????????????????
+# Q: most of these files very large ????????????
+# Q files end with vcf.gz.tbi or vcf.gz. What to use to open ????????????/
+# vikas took look, nothing of interest for us here, so, delete this dir, 
+/Users/bterry/mbook2019/vikas19/varietalsnps/iwgsc_refseqv1.0_varietal_SNP_vcf
+# done
+###############################################################
+
+07/19/19:
+# to try glm for the two snps did above for chisq.test
+
+# ref: Fox & Weisberg book, p-236
+# Q: p-235, any issue with how assign 0, 1 for taxacode colm ?????????
+
+# try glm for S2A_748437723 snp colm
+
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
+
+#subset 3 colms
+# import R_andnonR_...taxacode_corr.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_corr.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 54 61
+head(rnonrsnps, n=2)
+
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S2A_748437723)
+dim(cols3)  ## [1] 54  3
+head(cols3, n=4)
+tail(cols3, n=4)
+
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 53  3
+
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S2A_748437723 != 0.5)
+
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 45  3
+
+S2A_748437723.mod <- glm(taxacode ~ S2A_748437723, family=binomial, data=cols3noNAor0.5)
+
+summary(S2A_748437723.mod)
+
+Call:
+  glm(formula = taxacode ~ S2A_748437723, family = binomial, data = cols3noNAor0.5)
+
+Deviance Residuals: 
+  Min        1Q    Median        3Q       Max  
+-0.79806  -0.79806   0.00008   0.00008   1.61201  
+
+Coefficients:
+  Estimate Std. Error z value Pr(>|z|)  
+(Intercept)     -0.9808     0.4787  -2.049   0.0405 *
+  S2A_748437723   20.5469  2242.3668   0.009   0.9927  
+---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+Null deviance: 58.574  on 44  degrees of freedom
+Residual deviance: 25.782  on 43  degrees of freedom
+AIC: 29.782
+
+Number of Fisher Scoring iterations: 18
+
+##########################################################
+# Q: what to make of this output ??????????????
+# this snp had low tassel5 p-value, here not similar low p-value ?????????????
+##########################################################
+
+# ok, talked to vikas, regenerated a new file from tassel5 to test wi chisq & glm.
+# /Users/bterry/mbook2019/vikas19/tassel5/VEP/vikas_box
+/R_and_NonR_lines_RFL_SNPs_Homozygous_50pSNPsMAF5p_50pTaxa_GLMinput_ReferenceProbability.txt
+# Note: vikas did not run a new tassel glm on this new tassel filtration at this time.
+# 52 rows, 26 snp colms (prev had 54 rows & 59 snp colms). Note: it contains the '4' snps previously identified as distinguishing R, nonR lines, S1B_18683593, S2A_748437723, S2B_753796430, & S6A_66814111).
+# so looks like need to bring in taxacode colm, then say, make sure the '4' are included snps, then pick two snps wi small tassel5 p-values, & two without (outside of the 11 (??) prevly identified as tassel5 glm hits (low p-value), test with chisq & my R version of glm.
+###############################################################
+# note: looks like has no '0.5' values ?????????????????????????
+###############################################################
 
 
+07/20/19:
+# so to prepare a file from this '...ReferenceProbability.txt' file for input for chisq & glm analysis, a template may be 'R_and_nonR_withtaxacode_corr.txt' file from ~/mbook2019/vikas19/tassel5/VEP/vikas_box dir. File has taxacode colm. Q: Was R_and_nonRT.txt, the precursor to this file?
 
+# see ref. line 17309 to 17322
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
+#rnonrsnps <- read.delim("R_and_nonR.txt", stringsAsFactors=FALSE)
+rnonrsnps <- read.delim("R_and_NonR_lines_RFL_SNPs_Homozygous_50pSNPsMAF5p_50pTaxa_GLMinput_ReferenceProbability.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 52 27
+head(rnonrsnps, n=2)
 
+library(dplyr)
+newrnonrdf <- rnonrsnps %>% mutate(taxacode = c(rep(0,14),rep(1,23),rep(0,1), rep(1,13), rep(0,1))) %>% select(taxacode, everything())
+#newrnonrdf <- rnonrsnps %>% mutate(taxacode = c(rep(0,14),rep(1,39),rep(0,1))) %>% select(taxacode, everything())
 
+head(newrnonrdf, n=2)
+dim(newrnonrdf)  ## [1] 52 28
+newrnonrdf[1:15,1:2]
+tail(newrnonrdf[,1:2])
+write.table(newrnonrdf, file="R_and_nonR_withtaxacode_ReferenceProbability.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
 
-# **yet** to try venny. 
-table10col1.txt, VariantEffectPredictor_Run1.txt as input files
+# think now, check prev. tassel5 glm, want to choose two (perhaps also members of the '4' snps) and two snps not <0.05 glm pvalue to run chisq & my R glm alg. (fox & weisberg, p-236.
 
+line 17910, 
+ref. file R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+# there pick the following snps for chisq, R glm analysis
+# low tassel5 pvalues for  glm, & in '4' snps
+S1B_18683593, S2A_748437723
+# above 0.05 pvalue snps for tassel5 glm
+S1B_69260277, S1D_50022849
 
+# RECHECK: that 1st 2 are members of the '4' => YES
 
+# now ready for chisq, glm
 
+07/21/19:
+# ref: line 17783
 
+# input file: R_and_nonR_withtaxacode_ReferenceProbability.txt
+# 1st run chisq for snp S2A_748437723
 
-then test grep, bbeditlab
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
 
+#subset3 colms
+# import R_and_nonR_withtaxacode_ReferenceProbability.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_ReferenceProbability.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 52 28
+head(rnonrsnps, n=2)
 
-# GC perl script
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S2A_748437723)
+dim(cols3)  ## [1] 52  3
+head(cols3, n=4)
+tail(cols3, n=4)
 
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 44  3
 
-# perhaps order colms as per template table ??????
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S2A_748437723 != 0.5)
 
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 44  3    
 
+# now create contingency table
+# p-89, crawley small book
+# count R, nonR, snp 1's & 0's, 
+# count <- matrix(..., nrow=2)
+# need the values for the 4 cells
 
+snp1rows <- cols3noNAor0.5 %>% filter(S2A_748437723 == 1)
+snp1ct <- dim(snp1rows)[1]
+snp1ct   ## [1] 23
 
-GSDS ??
-phenogram ??
-Zhang table, chrom, ...
+snp0rows <- cols3noNAor0.5 %>% filter(S2A_748437723 == 0)
+snp0ct <- dim(snp0rows)[1]  
+snp0ct  ## [1] 21
 
+Rct = cols3noNAor0.5 %>% filter(taxacode == 1)
+Rct <- dim(Rct)
+Rct  ## [1] 28  3
+Rct[1]  ## [1] 28
 
+nonRct = cols3noNAor0.5 %>% filter(taxacode == 0)
+nonRct <- dim(nonRct)
+nonRct  ## [1] 16  3
+nonRct[1]  ## [1] 16
 
+# need filter by *two* parameters to obtain cells within contingency table
 
+# note: S1A_14577791 snp *not* in either output file from Tassel5 ?????
+# For next calcn from R_and_nonR_withtaxacode.txt, select a snp contained within those two tables.
 
+Randsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S2A_748437723 == 1)
+class(Randsnp1)
+dim(Randsnp1)[1]  ## [1] 23
 
+Randsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S2A_748437723 == 0)
+class(Randsnp0)
+dim(Randsnp0)[1]  ## [1] 5
 
+nonRsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S2A_748437723 == 1)
+class(nonRsnp1)
+dim(nonRsnp1)[1]  ## [1] 0
 
+nonRsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S2A_748437723 == 0)
+class(nonRsnp0)
+dim(nonRsnp0)[1]  ## [1] 16
 
---intron-exon structure, compare betw. chroms
+# next, create contingency table matrix
+S2A_748437723_tab <- matrix(c(dim(Randsnp1)[1],dim(nonRsnp1)[1],dim(Randsnp0)[1],dim(nonRsnp0)[1]), nrow=2)
+S2A_748437723_tab
 
-# Q: for table like Zhang, 2018, do we want to only work with subset of the 216 seqs of  pid40, or also the additional 89 seqs in pid35 ??????
+chisq.test(S2A_748437723_tab,correct=F)
 
-# Q: seq of seqs in the proposed table:
+Pearson's Chi-squared test
+
+data:  S2A_748437723_tab
+X-squared = 27.537, df = 1, p-value = 1.541e-07
+
+chisq.test(S2A_748437723_tab)
+# 
+WONT WORK ????????????????????/
+########################################################
+S2A_748437723 snp chisq pvalue significant, as tassel5 glm for this snp.
+########################################################
+
  
+# 2nd run chisq for snp S1B_69260277, pvalue > 0.05 for tassel5 glm
 
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
 
+#subset3 colms
+# import R_and_nonR_withtaxacode_ReferenceProbability.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_ReferenceProbability.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 52 28
+head(rnonrsnps, n=2)
 
-STOPPED
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S1B_69260277)
+dim(cols3)  ## [1] 52  3
+head(cols3, n=4)
+tail(cols3, n=4)
 
-NEXT, READ THRU Rmd, html files, MODIFY FOR LOGIC, MAKE COMMENTS AS TO WHAT CHANGES NEEDED TO SEE WHAT WANT TO SEE IN IMAGES, ETC.
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 44  3
 
-MAY THEN CREATE A NEW Rmd file, EDIT DOWN TO WHAT VIKAS LOOKING FOR, SUMMARY PARAGRAPH
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S1B_69260277 != 0.5)
 
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 44  3    
+
+# now create contingency table
+# p-89, crawley small book
+# count R, nonR, snp 1's & 0's, 
+# count <- matrix(..., nrow=2)
+# need the values for the 4 cells
 
+snp1rows <- cols3noNAor0.5 %>% filter(S1B_69260277 == 1)
+snp1ct <- dim(snp1rows)[1]
+snp1ct   ## [1] 37
 
+snp0rows <- cols3noNAor0.5 %>% filter(S1B_69260277 == 0)
+snp0ct <- dim(snp0rows)[1]  
+snp0ct  ## [1] 7
 
+Rct = cols3noNAor0.5 %>% filter(taxacode == 1)
+Rct <- dim(Rct)
+Rct  ## [1] 30  3
+Rct[1]  ## [1] 30
 
+nonRct = cols3noNAor0.5 %>% filter(taxacode == 0)
+nonRct <- dim(nonRct)
+nonRct  ## [1] 14  3
+nonRct[1]  ## [1] 14
 
+# need filter by *two* parameters to obtain cells within contingency table
 
+# note: S1A_14577791 snp *not* in either output file from Tassel5 ?????
+# For next calcn from R_and_nonR_withtaxacode.txt, select a snp contained within those two tables.
 
+Randsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S1B_69260277 == 1)
+class(Randsnp1)
+dim(Randsnp1)[1]  ## [1] 24
 
+Randsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 1 & S1B_69260277 == 0)
+class(Randsnp0)
+dim(Randsnp0)[1]  ## [1] 6
 
+nonRsnp1 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S1B_69260277 == 1)
+class(nonRsnp1)
+dim(nonRsnp1)[1]  ## [1] 13
 
+nonRsnp0 <- cols3noNAor0.5 %>% filter(taxacode == 0 & S1B_69260277 == 0)
+class(nonRsnp0)
+dim(nonRsnp0)[1]  ## [1] 1
 
+# next, create contingency table matrix
+S1B_69260277_tab <- matrix(c(dim(Randsnp1)[1],dim(nonRsnp1)[1],dim(Randsnp0)[1],dim(nonRsnp0)[1]), nrow=2)
+S1B_69260277_tab
 
+chisq.test(S1B_69260277_tab,correct=F)
 
+Pearson's Chi-squared test
 
-p820br9rice9soy38arab26.fa => phylogram for hmmbuild for this fasta file produced phylogram where wheat chromosomes unable to co-locate on resulting phylogram, perhaps
-if the 820 not included, wheat chroms 1, 2, 6 could have co-located ???????
-# for purpose here to separate P & PLS seqs, presumably may help ?????????
+data:  S1B_69260277_tab
+X-squared = 1.1795, df = 1, p-value = 0.2775
 
+Warning message:
+In chisq.test(S1B_69260277_tab, correct = F) :
+  Chi-squared approximation may be incorrect
 
+chisq.test(S1B_69260277_tab)
+# PROBLEM, won't run ???????????????????????/  
 
+##########################################################
+# pvalue for snp S1B_69260277 insignificant as tassel5 glm
+###############################################################
 
+# next, do R glm for preceding two snps
+# to try glm for the two snps did above for chisq.test
 
+# ref: Fox & Weisberg book, p-236
+# Q: p-235, any issue with how assign 0, 1 for taxacode colm ?????????
 
-# probably could transfer to an output file, doc lengths of fasta seq in IWGSC_v1.1_HC_20170706_pep.fasta
-# then with largest length for each prot group, compare wi length of '.1' seq for each group, finally retain seq & name for longest seq for each group ????????
+# 1st try glm for S2A_748437723 snp colm
 
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
 
-#****************************************************************
+#subset 3 colms
+# import R_andnonR_...taxacode_corr.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_ReferenceProbability.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 52 28
+head(rnonrsnps, n=2)
 
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S2A_748437723)
+dim(cols3)  ## [1] 52  3
+head(cols3, n=4)
+tail(cols3, n=4)
 
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 44  3
 
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S2A_748437723 != 0.5)
 
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 44  3
 
-# then on to MEME (Try new ver **5.0**, rather than 4.12.0 prevly used)
-philip-terry-2:iwgsc.2to9 bterry$ ls -al iwsgc139*.fa
--rw-r--r--  1 bterry  staff  79868 Mar 25 20:52 iwsgc139_REPR_PROT_seqs.fa
-philip-terry-2:iwgsc.2to9 bterry$ pwd
-/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+write.table(cols3noNAor0.5, file="R_and_nonR_snp_S2A_748437723_44rows.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
 
-# MEME has 80Mb limit, so will have to break input .fa file into two parts
-# consider use iwsgc139_REPR_PROT_seqs.fa or iwsgc139_REPR_PROT_seqs.fa.aln.hmmaln.fa for input to MEME? Guessing iwsgc139_REPR_PROT_seqs.fa should be fine ????????????
-# 139 '>' lines in fasta. iwsgc139ma	cd _REPR_PROT_seqs.fa has 80 kB,
--rw-r--r--  1 pterry amundsen  79868 Mar 26 09:49 iwsgc139_REPR_PROT_seqs.fa
-# so, can submit all at one time.
 
-06/19/18:
-# 1st try: Your job ID is: appMEME_5.0.01529385634457456677846
-Submitted	6/19/2018, 12:20:34 AM
-Expires	6/23/2018, 12:20:34 AM
-Description	**139_1motif_061918**
-(Primary) Sequences	A set of 139 Protein sequences, between 189 and 874 in length (average length 543.1), from the file ***/Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
-/iwsgc139_REPR_PROT_seqs.fa***.
-Background	A 0-order background model generated from the supplied sequences.
-Discovery Mode	Classic: optimizes the E-value of the motif information content
-Site Distribution	Zero or one occurrence (of a contributing motif site) per sequence.
-Motif Count	Searching for one motif.
-Motif Width	Between 6 wide and 50 wide (inclusive).
+S2A_748437723.mod <- glm(taxacode ~ S2A_748437723, family=binomial, data=cols3noNAor0.5)
 
-# MEME result for MEME description: 139_1motif_061918
-# see file in dir /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9/
--rw-r--r--@ 1 bterry  staff  81513 Jun 19 11:39 meme_139_1motif_061918.txt
+summary(S2A_748437723.mod)
 
+Call:
+  glm(formula = taxacode ~ S2A_748437723, family = binomial, data = cols3noNAor0.5)
 
-# are p-values how evaluate how valid the motif is ??????????
-# relate which motifs, which seqs?
-# motif location?
-# fcn of motifs?
+Deviance Residuals: 
+  Min        1Q    Median        3Q       Max  
+-0.73747  -0.73747   0.00005   0.00005   1.69416  
 
-# Try MAST
+Coefficients:
+  Estimate Std. Error z value Pr(>|z|)  
+(Intercept)     -1.1632     0.5123  -2.270   0.0232 *
+  S2A_748437723   21.7292  3697.0377   0.006   0.9953  
+---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Submitted	6/19/2018, 10:02:31 PM
-Expires	6/23/2018, 10:02:31 PM
-Description	**mast_139_1motif_061918**
-Motifs	One protein motif, with a width of 41, from the file meme_139_1motif_061918.txt.
-Sequences	A set of 154140 protein sequences, between 23 and 4844 in length (average length 454.3), from the database Triticum aestivum.
-Sequence Threshold	Report sequences with E-value ≤ 10.
-Remove Redundant Motifs	Redundant motifs will be removed from your query by MAST.
+(Dispersion parameter for binomial family taken to be 1)
 
-# To try: MEME with 1 motifs, 'anyreps'
-Submitted	6/19/2018, 10:48:37 PM
-Expires	6/23/2018, 10:48:37 PM
-Description	**meme139_anyreps_1motif_061918**
-(Primary) Sequences	A set of 139 Protein sequences, between 189 and 874 in length (average length 543.1), from the file iwsgc139_REPR_PROT_seqs.fa.
-Background	A 0-order background model generated from the supplied sequences.
-Discovery Mode	Classic: optimizes the E-value of the motif information content
-Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
-Motif Count	Searching for one motif.
-Motif Width	Between 6 wide and 50 wide (inclusive).
+Null deviance: 57.682  on 43  degrees of freedom
+Residual deviance: 23.053  on 42  degrees of freedom
+AIC: 27.053
 
-06/20/18:
-# **meme139_anyreps_1motif_061918** run has different length motif than **139_1motif_061918** run.
-# Q: how to deal/use MEME results ????????????????????????
+Number of Fisher Scoring iterations: 19
 
-to try run **meme139_anyreps_2motif_061918**
+########################################################
+# as before, do not get small pvalue as tassel5 glm for snp S2A_748437723 does
+# Q: why, NEED EXPLANATION ??????????????????????????????
+########################################################
 
-Submitted	6/20/2018, 10:57:11 AM
-Expires	6/24/2018, 10:57:11 AM
-Description	**meme139_anyreps_2motif_062018**
-(Primary) Sequences	A set of 139 Protein sequences, between 189 and 874 in length (average length 543.1), from the file iwsgc139_REPR_PROT_seqs.fa.
-Background	A 0-order background model generated from the supplied sequences.
-Discovery Mode	Classic: optimizes the E-value of the motif information content
-Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
-Motif Count	Searching for 2 motifs.
-Motif Width	Between 6 wide and 50 wide (inclusive).
+# 2nd, try glm for S1B_69260277 whose snp colm gave tassel5 glm result pvalue above 0.05.
 
-# viewing meme.html (meme139_anyreps_2motif_062018.txt, txt version), just lot of motifs on each seq., what to think ????????????????
+rm(list=ls())
+setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+getwd()
 
+#subset 3 colms
+# import R_andnonR_...taxacode_corr.txt, randnonrwitaxacode
+rnonrsnps <- read.delim("R_and_nonR_withtaxacode_ReferenceProbability.txt", stringsAsFactors=FALSE)
+dim(rnonrsnps)  ## [1] 52 28
+head(rnonrsnps, n=2)
 
-# talked ***JJ*** about how to try use MEME. Suggests strategy to find motifs in groups of related seqs (for example, promoter seqs in his case). If I try for all 139 seqs, since differences for example, betw. chrom 1, 2, 6 in ML phylogram, appears the MEME alg. reflecting the task it is given (for example, for the 139, for 1motif, it finds diff. motif depending if freq of 0 or 1, vs 'any number of reps'). So perhaps try MEME on chrom 1, 2, 6 separately. Since ML phylogram can group RF-like prots by chrom., perhaps MEME can do also, and would learn motifs unique to the diff. chrom. groups.
+library(dplyr)
+cols3 <- rnonrsnps %>% select(X.Marker., taxacode, S1B_69260277)
+dim(cols3)  ## [1] 52  3
+head(cols3, n=4)
+tail(cols3, n=4)
 
-# aside for from JJ, **'fasta_toolkits'** (crane for say find length each seq of '.fa' file. **'ea_utils'** for fastq file info.
+# next, remove 'NA'
+cols3noNA <- cols3 %>% 
+  na.omit()
+dim(cols3noNA)  ## [1] 44  3
 
+# and '0.5'
+cols3noNAor0.5 <- cols3noNA %>% 
+  filter(S1B_69260277 != 0.5)
 
-# so, subset iwsgc139_REPR_PROT_seqs.fa by chrom 1, 2, 6. Then try MEME on each. Q: How best to do? Perhaps find file may have used to create this '.fa' file. Subset it, then make new '.fa' files with using Vikas 'getseq.awk' file ???????????????
+head(cols3noNAor0.5, n=3)
+dim(cols3noNAor0.5)  ## [1] 44  3
 
-# line 7270 above
-#./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names.d.txt > iwsgc139_REPR_PROT_seqs.fa
+write.table(cols3noNAor0.5, file="R_and_nonR_snp_S1B_69260277_44rows.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
 
-# iwsgc_131_5_3_139names.d.txt already sorted by chrom except last 8 which all chrom1. Wait, there is one '5', three '7's, & three without a chrom specification.
+S1B_69260277.mod <- glm(taxacode ~ S1B_69260277, family=binomial, data=cols3noNAor0.5)
 
-STOPPED
+summary(S1B_69260277.mod)
 
-06/21/18:
+Call:
+  glm(formula = taxacode ~ S1B_69260277, family = binomial, data = cols3noNAor0.5)
 
-# so, just separate by chrom 1, 2, 6. Omit the '5', '7's, & those without chrom specification.  Run each separately wi getseq.awk. Then submit to MEME, any number reps, initially for 1 motif. Perhaps, since last 8 rows (chrom 1's not picked up by orthomcl, omit them also. So, use 1st 125 rows, omitting chrom 5, row 94. So, 74 '1's, 19 '2's, & 
-31 '6's, total 124 rows.
+Deviance Residuals: 
+  Min       1Q   Median       3Q      Max  
+-1.9728  -1.4464   0.9304   0.9304   0.9304  
 
-cd /Users/bterry/macbook2018/vikas18/131RFlike/iwgsc.2to9
+Coefficients:
+  Estimate Std. Error z value Pr(>|z|)  
+(Intercept)     1.792      1.080   1.659   0.0971 .
+S1B_69260277   -1.179      1.134  -1.040   0.2985  
+---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-cat iwsgc_131_5_3_139names.d.txt | head -n 74 > iwsgc_131_5_3_139names_chr1_74.d.txt
-cat iwsgc_131_5_3_139names.d.txt | head -n 93 | tail -n 19 > iwsgc_131_5_3_139names_chr2_19.d.txt
-cat iwsgc_131_5_3_139names.d.txt | head -n 125 | tail -n 31 > iwsgc_131_5_3_139names_chr6_31.d.txt
+(Dispersion parameter for binomial family taken to be 1)
 
-# next getseq.awk to produce '.fa' file for these 3 files
+Null deviance: 55.043  on 43  degrees of freedom
+Residual deviance: 53.714  on 42  degrees of freedom
+AIC: 57.714
 
-./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names_chr1_74.d.txt > iwsgc139_REPR_PROT_seqs_chr1_74.fa
+Number of Fisher Scoring iterations: 4
 
-./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names_chr2_19.d.txt > iwsgc139_REPR_PROT_seqs_chr2_19.fa
+########################################################
+# snp S1B_69260277, as for tassel5 glm, do not get pvalue < 0.05
+########################################################
 
-./getseq.awk iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa iwsgc_131_5_3_139names_chr6_31.d.txt > iwsgc139_REPR_PROT_seqs_chr6_31.fa
 
-# now submit to MEME
-# **meme139_anyreps_1motif_chr1_74_062118**
+07/22/19:
 
-Submitted	6/21/2018, 12:50:55 PM
-Expires	6/25/2018, 12:50:55 PM
-Description	**meme139_anyreps_1motif_chr1_74_062118**
-(Primary) Sequences	A set of 74 Protein sequences, between 189 and 874 in length (average length 577.2), from the file iwsgc139_REPR_PROT_seqs_chr1_74.fa.
-Background	A 0-order background model generated from the supplied sequences.
-Discovery Mode	Classic: optimizes the E-value of the motif information content
-Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
-Motif Count	Searching for one motif.
-Motif Width	Between 6 wide and 50 wide (inclusive).
+cd ~/mbook2019/vikas19/tassel5/VEP/vikas_box/R_and_nonR_withtaxacode_ReferenceProbability.txt
+#colm 10, 16
+cut -f1,2,10,16 R_and_nonR_withtaxacode_ReferenceProbability.txt > R_and_nonR_snp_60277_37723.txt
+cut -f1,2,10 R_and_nonR_withtaxacode_ReferenceProbability.txt > R_and_nonR_snp_S1B_69260277.txt
+cut -f1,2,16 R_and_nonR_withtaxacode_ReferenceProbability.txt > R_and_nonR_snp_S2A_748437723.txt
 
-# result: 29 aa motif, many per seq.
+# To do, run input file initial manipulations for S1B_69260277 & S2A_748437723. Want get output file with no 'NA' or 0.05 rows. Then, these exactly what R glm working with. Then try check with someone, try figure out why tassel5 glm & R glm not getting same result ?????
 
-# **meme139_anyreps_1motif_chr2_19_062118**
+07/23/19:
+# to check, tassel5 tutorial file
+# Looked thru, decided don't know enough to compare tassel5 glm & R glm ??????????
 
-Submitted	6/21/2018, 12:53:46 PM
-Expires	6/25/2018, 12:53:46 PM
-Description	**meme139_anyreps_1motif_chr2_19_062118**
-(Primary) Sequences	A set of 19 Protein sequences, between 228 and 779 in length (average length 574.5), from the file iwsgc139_REPR_PROT_seqs_chr2_19.fa.
-Background	A 0-order background model generated from the supplied sequences.
-Discovery Mode	Classic: optimizes the E-value of the motif information content
-Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
-Motif Count	Searching for one motif.
-Motif Width	Between 6 wide and 50 wide (inclusive).
+07/24/19:
+# doc. S1B_69260277 & S2A_748437723 in email to vikas
 
-# result: 50 aa motif, many per seq.
+07/25/19:
+# send vikas email, input file for R-GLM calcn for S1B_69260277 & S2A_748437723.
+# line 18453
+R_and_nonR_withtaxacode_ReferenceProbability.txt from 
+R_and_NonR_lines_RFL_SNPs_Homozygous_50pSNPsMAF5p_50pTaxa_GLMinput_ReferenceProbability.txt
 
-# **meme139_anyreps_1motif_chr6_31_062118**
-
-Submitted	6/21/2018, 12:56:27 PM
-Expires	6/25/2018, 12:56:27 PM
-Description	**meme139_anyreps_1motif_chr6_31_062118**
-(Primary) Sequences	A set of 31 Protein sequences, between 215 and 837 in length (average length 476.2), from the file iwsgc139_REPR_PROT_seqs_chr6_31.fa.
-Background	A 0-order background model generated from the supplied sequences.
-Discovery Mode	Classic: optimizes the E-value of the motif information content
-Site Distribution	Any number of repetitions (of a contributing motif site per sequence)
-Motif Count	Searching for one motif.
-Motif Width	Between 6 wide and 50 wide (inclusive).
-
-# result: another 29 aa motif, many per seq.
-# Q: is it the same seq?
-# for meme139_anyreps_1motif_chr6_31_062118
-# MOTIF DEAMDLFDEMVQQGVKPBVVTYNSLIDGY MEME-1	width =  29  sites = 155  llr = 6331  E-value = 7.4e-1815
-# for meme139_anyreps_1motif_chr1_74_062118
-MOTIF VTYNTLIDGYCKEGRLDEAMKLFREMTSK MEME-1	width =  29  sites = 370  llr = 15249  E-value = 6.8e-4492
-# so for chrom 1 & 6, same length of motif, but **different** seq of aa's.
-# So, Q: can I benefit from MEME for this RF-like protein project ?????????????
-
-
-
-# gwas for RF proteins ??
-
-
-
-## relationship protein lengths and ML phylogram ???
-
-
-BR = red, Gly = pink, rice(AB) = green arab(AT) = yellow, these +ve ctls group to the left of circular phylogram. Red & pink sort og group together, yellow near pink. but note, some dispersal of a few mostly yellow & green ?????????????????????
-## now highlighting chr 1, 2, 6 in turn
-## they pretty much **spread around** the circular phylogram  ???????????????????
-## PERHAPS SHOULD NOT HAVE USED **ALL** SEQS IN p820br9rice9soy38arab26.fa FOR hmmbuild ?????????????
-## working with p820br9rice9soy38arab26_fa_aln_hmmaln_phy_phyml_tree.txt file, red [=] TraesCS1, chr 1. green [=] TraesCS2, chr 2, purple [=] TraesCS6, chr 6.
-
-
-
-
-
-
-STOPPED
-
-
-
-## a note: vikas metric of aligned length/query seq length  ???????
-
-## Perhaps, **map** the locations of the 1545, 1602 PPR's, and setDiff to list 62 which differ ??? See if in clusters? Look back on phenogram, see if can do ???????????
+# continue with Bohra review paper, what can take from it ?????
 
 
 STOPPED 
- 
 
-## in 131, are all hits within *same* chrom. of query seq. ?????
+07/28/19;
+# did test of time machine restore from new 'My Cloud Home 4 tb extl hdrive system' on new google router system. Recovered testbkup072719.txt using instructions from https://support.apple.com/en-us/HT209152
 
-## find the different ones from the 22, examine
+07/29/19:
+# talked to vikas
+# see .../vikas19/bohra_rev_notes.txt file
+# p-969, p-974 for notes
+# to do, doc. these questions ????????????????????????
 
+07/31/19:
+# Items to for report for 'Annotation_v2.0':
 
-STOPPED 
+1) 
+find . -name '203.gff3' -print
+# in file 203.gff3, lines 201 thru 266, represent 3 genes.
+TraesCS1B02G039200
+TraesCS1B02G039620  TraesCS1B01G038600LC
+TraesCS1B02G039625
+# refer line 15412 above.
+# the 2nd one is #39 from GSDS displays (LYCF24.png).This GSDS display for row 39 has a different gene name for the '2nd' name. That is, TraesCS1B01G038600LC differs from the 1st name on the line, TraesCS1B02G039200, and has 'LC'? But working with the 'HC' gff3 file, IWGSC_v1.1_HC_20170706.gff3 (see line 15405). Is this a problem for this gff3 file ??????
+# Q: line 16656, location this gene on phylogram ????????????
 
+2)
+List of genes that may have switched clusters in final phylogeny of 203.
+##############################################################
+# Note: phylograms are of ***PROTEINS***, so would be just reporting in said phylogram, proximity some green, blue proteins closer to red than their own green, blue groups. ????????????????
+###############################################################
+/Users/bterry/mbook2019/vikas19/potlwheatgeneerrors/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot.png
+# Q: if use this file to 'ID' genes in wrong phylogeny clusters, then want to go back, find precursor file to open in figtree to get names of genes in wrong clusters.
+# perhaps, go back to Rmd presentation, perhaps can trace back to file to display in figtree. 
 
+cd /Users/bterry/mbook2019/vikas19
+find . -name 'pid40_216pruned13to203_phyml_tree_chrcolor*' -print
+./vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
 
+# 3 blue proteins in red area
+TraesCS6B02G341800.1
+TraesCS6D02G290900.1
+TraesCS6A02G311600.1
 
+# 5 green proteins in red area
+TraesCS2B02G501396.1
+TraesCS2D02G477283.1
+TraesCS2A02G478046.1
+TraesCS2D02G477278.1
+TraesCS2A02G478045.1
 
+# 2 green proteins in 'lowest' red area
+TraesCS2BO2G126905.1
+TraesCS2B02G126900.1
 
-iii. subset ~ 110,000 wheat .fa protein seq file using wheat protein names from 131 previously identified RF-like seqs. Check how many isoforms find (.1, .2, etc.) for 131 protein seq names.
+# now for non 1, 2, 6 chrom in other clusters
+# five chr #7, 4 are in blue, 1 in green 
+# in green
+TraesCS7B02G469500.1
+in blue
+TraesCS7D02G487500.1
+TraesCS7B02G372755.1
+TraesCS7D02G231400.1
+TraesCS7D02G231439.1
 
+# no chr #3
+# no chr #4
+# 1 chr #5
+# one chr 5 in blue
+TraesCS5B02G250800.1 (Q: find in radial display, not in 'parallel' display' ???????)
 
-## Note: only 3 '.2' seqs in orthoMCL131.fa, rest are '.1' tx.
+08/02/19:
 
+talked to vikas,
+1. for clusters in 203 phylogram, add
+--two green in lower red cluster
+--other than 1, 2, 6 chroms, black seqs in green, blue clusters
+--table, prot seq, phylogeny cluster headers
 
+2. #39 seq
+--submit 1st gsds sheet (note presence of diff protein name, & with 'LC' in name, all derived from 'HC' file ????????
+--gff3 lines for gene, mRNA for seq # 39. For gene & mRNA rows, why difference protein names in line, & inclusion 'LC' in second name. Why is gsds output different for two names in row (seq) 39 ?
+--get phylogram location for seq #39?
 
+3. finish Rftochrom.txt file including S54 info.
 
+#############################################################################
+# Note: mbook would not come alive, looks like cause let battery run down too low ??????
+###############################################################################
 
+# ok, work on work on (1) above
+# input to figtree will be 
+.../vikas18/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+# see result above, now for the table:
 
-scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/refinPprots131norice9/orthoMCL131.fa.aln.hmmaln .
-less orthoMCL131.fa.aln.hmmaln
-## so stockholm MSA form does not give info on 'trim' size of the stockholm format ????????????????
+Protein Sequence		Phylogram cluster
 
+# three chr 6 proteins in chr 1 cluster
+TraesCS6B02G341800.1		chr 1
+TraesCS6D02G290900.1		chr 1
+TraesCS6A02G311600.1		chr 1
 
+# five chr 2 proteins in chr 1 cluster
+TraesCS2B02G501396.1		chr 1
+TraesCS2D02G477283.1		chr 1
+TraesCS2A02G478046.1		chr 1
+TraesCS2D02G477278.1		chr 1
+TraesCS2A02G478045.1		chr 1
 
+# two chr 2 proteins in 'lowest' chr 1 cluster
+TraesCS2BO2G126905.1		chr 1
+TraesCS2B02G126900.1		chr 1
 
-## To do, color rice9, blue10. Locate chr 1, 2, 3, 4, 5, 6, 7 on phylogram.
-## Check if topology of rice9 vs other groups has changed when removed 135 to 131 ?????
-## locate 3 seqs unique to orthoMCL.
+# one chr 5 protein in chr 6 cluster
+TraesCS5B02G250800.1		chr 6	 (Q: find in radial display, not in 'parallel' display' ??)
 
+# four chr 7 proteins in chr 6 cluster, one chr 7 protein in chr 2 cluster 
+in chr 6
+TraesCS7D02G487500.1		chr 6
+TraesCS7B02G372755.1		chr 6
+TraesCS7D02G231400.1		chr 6
+TraesCS7D02G231439.1		chr 6
+in chr 2
+TraesCS7B02G469500.1		chr 2
 
+#################################################################
+# Assume not the format to send in to iwgsc annot. v2.0
+# Q: excatly what might they do with this info. ?????
+#################################################################
 
-
-
-
-
-
-
-
-
-
-## To do: compare with sizes in fig 3, sci.reports ref. There, spanning ~ 500kb base pair region on chromosome 10. RF regions only ~ 100 Kb. 
-## To Do: Compare with the 3 regions immedly above
-## To Do: compare with the 36 RFproteins from orthofinder ????????????????
-## To **check**: if genes in ref regions fig 3, sci reports in my 9 'RF' genes ?????????????
-
-
-
-
-## perhaps plot start & stop ?????????????????????????
-
-## could **check** distribution of 1602 - 144 "Pentatricopeptide" if can get their start positions from gff3 file ?????
-
-
-
-## try some code from Adam
-
- 
-for line patternfile.txt
-  name = line.strip()
-  for line2 in gff3file.txt
-    if name in line2.split('\t')[8]
-      print line2
-      
-
-
-
+# create file, store in /Users/bterry/mbook2019/vikas19/potlwheatgeneerrors/
+phylogram_seq_cluster_errors.txt
 
 STOPPED
 
+# next, do (2) above
+--name of file, 1st gsds file: .../hmmer203seqs/LYCF24.png (or.png.pdf) **WHICH** ??????
 
-
-
-
-3) ## display location all proteins (genes) all chromosomes same plot. (Q: how do ????
-5) ## gene structure (vikas, online s/w) Q: think this more detailed than (3) above ?????
-6) ## sequence logos (online)
-7) expression data
-
-
-
-## Q: any info on OG5_131220 orthomcl_group ?????????????????
-
-## now venn diagram or 'UpSetR', Gehlenborg ??????????
-
-
-
-
-
-
-
-
+--two gff3 rows
+chr1B	IWGSC_v1.1_201706	gene	19053658	19068672	26	-	.	ID=TraesCS1B02G039620;Name=TraesCS1B02G039620,TraesCS1B01G038600LC;derived_from=PPRFinder_96;manually_curated=yes;curation_team=IWGSC_steinn;primconf=HC
+chr1B	IWGSC_v1.1_201706	mRNA	19053658	19068672	26	-	.	ID=TraesCS1B02G039620.1;Parent=TraesCS1B02G039620;Name=TraesCS1B02G039620;Note=TraesCS1B01G038600LC;primconf=HC;secconf=HC5
  
- 
- 
- 
- 
-## stockholm to fasta format, try internet page ????????????????
-## DON'T HAVE VIKAS SCRIPT ????????????????????
+--phylogram location: 
+# input to figtree will be 
+.../vikas18/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+# examining this file in figtree, protein seq #39, TraesCS1B02G039620.1is the longest branch on the 'lower' chr 1 cluster.
 
-## BUT, Vikas NOW trims manually ????????????????
-## instead, try Gblocks ???????????????????????????????, MIGHT THERE BE A LIMIT IN FILE SIZE TO Gblocks ???????????????????????????????????
+08/05/19:
+# talked to vikas
+# concerning report to wheat annotation v2.0 folks
+# for the phylogram clustering of 203 protein seqs. Probably need some *wording* like some protein seq. IDs which cluster with a different chromosome, in this case with chromosome 1.
 
-## build phylogeny (PhyML eventually ??), now, Mega (ML) ????????, what file format ????????????
-## display in figtree or Mega ?????????????? 
- 
+1. Problem: clustering with different chromosome
 
+Protein Sequence ID		Phylogram cluster
 
+TraesCS6B02G341800.1		chr 1
+TraesCS6D02G290900.1		chr 1
+TraesCS6A02G311600.1		chr 1
 
-## check out 'Download Alignment File' from clustal on PPRhmmsearchsubset_plus9.fa.
-## clustalo-E20170703-061614-0438-15309988-oy.clustal_num
-## Q: perhaps could run this file thru Gblocks to trim, then thru phylogram producing pgm like Mega, then display in Mega or figtree ???????????????
-
-
-## Q: Exactly how did Vikas get to file: PPRhmmsearchsubset_plus9_clustaltree_colored ??????????????????????
-## Q: what downloaded from clustal ??????????????????????, captured in BBedit ????????, then into figtree ?????????????????
-## Q: perhaps 'screen captured' web display from 'Phylogenetic Tree' button, paste in BBedit, save, then load into figtree ????????????????
-
-## Q: difference betw. PPRhmmsearchsubset_plus9_clustaltree_colored_nexus & PPRhmmsearchsubset_plus9_clustaltree & PPRhmmsearchsubset_plus9_clustaltree_colored ?????????????????????
-                               
+TraesCS2B02G501396.1		chr 1
+TraesCS2D02G477283.1		chr 1
+TraesCS2A02G478046.1		chr 1
+TraesCS2D02G477278.1		chr 1
+TraesCS2A02G478045.1		chr 1
 
 
-## ok, regarding the PPRhmmsearchsubset_plus9_clustaltree_colored (BBedit or grep command line ??????), 1st, separate  
-'color' rows out. Take 1st 1558 lines, subtract 1st 4 = 1554 remaining (or 1st 13, don't need to subset PPRhmmsearchsubset.fa. Then, perhaps with bbedit or grep command line (???), 
-find box: \]$
-## save file as ...color  ## potl 'P' proteins 
+2. Problem: gff3 gene & mRNA entries for a gene.
 
-find box not \]$
-## save as non-color  ## potl 'PLS' proteins
+i) attach file LYCF24.png, output. Visualize TraesCS1B02G039620, TraesCS1B01G038600LC  missmatch at http://gsds.cbi.pku.edu.cn. Row TraesCS1B02G039620 has missmatch gene & protein name TraesCS1B01G038600LC? 
 
-## pare down to 
+ii) the problem gff3 rows:
+chr1B	IWGSC_v1.1_201706	gene	19053658	19068672	26	-	.	ID=TraesCS1B02G039620;Name=TraesCS1B02G039620,TraesCS1B01G038600LC;derived_from=PPRFinder_96;manually_curated=yes;curation_team=IWGSC_steinn;primconf=HC
+chr1B	IWGSC_v1.1_201706	mRNA	19053658	19068672	26	-	.	ID=TraesCS1B02G039620.1;Parent=TraesCS1B02G039620;Name=TraesCS1B02G039620;Note=TraesCS1B01G038600LC;primconf=HC;secconf=HC5
 
-
-
-## Q: should PPRhmmsearchsubset.fa (1545 seqs) seqs be subset to those > some length, then append FRknownseqs_shtname_7.fa (or should include the '13s' also (i.e., > 10) ??????
-## test 1-liner code at , https://stackoverflow.com/questions/23992646/sequence-length-of-fasta-file
-## on the ...9.fa file.
-
-## so, append to PPRhmmsearchsubset.fa,
-
-Then do clustal/omega (ensembl) MSA, 'command A', save to txt file, they run thru phylogeny, finally display with figtree (Q: WHICH figtree pgm ????????), want see how compares to 'phylotree.txt.png' produced above. Looking for location the new Rf's in 3rd 'area' of that tree ????????
-
-## so, create 11 fasta files, copy each to new file, shorten name line in each file, & reflect in name new file.
+Each row has missmatch between TraesCS1B02G039620 & TraesCS1B01G038600LC?
 
 
-## may 1st add 3 from sykes (see below) ????? before ...
-## create MSA wi hmmalign (stockholm format output)
-## hmmbuild => hmm
-## run on PPRhmmsearchsubset.fa, see if can pull out 'RF's' from this file.
+08/07/19:
+talked to vikas
+1. send report_annotv2.0.txt with attached LYCF24.PNG to vikas
+2. finish tableRftochrom.txt file
+# Q: what do with after doc. from supp., & S54 ???????
+3. dig up tests of input data for multilinear regression from course stat 870, Fall, 2018
+4. read thru Garciaetal et al 2019.pdf.
+# Q: doc some Q's ?????
+5. check on docker install, 2-4pm, HCC
 
+08/12/19:
 
-## to check 3 on p-353, sykes
-## following blasted vs ... ???????
-## here, perhaps include in prepn of an hmm the following, but how  ???????????????????
-
-i) brachypodium, gi|357139997 => ... gene prediction ???????????
-
-ii) rice, gi|33859441
-
-iii) maize, gi|662249846
-
-
-## Q: how best get some 'RF's' from other species ??????????????
-
-
-STOPPED
+# to do, github save
 
 
 
---take 1545 wheat PPRs (PPRhmmsearchsubset.fa) *plus* cloned RFLs
---muscle (MSA)
---BBedit, 'clean' data
---phylogeny
---plot phylogeny (figtree)
-
-
-
-v) take output from email response (initially not from browser output ???), perhaps subset by colm 7, 'hmm name', but Q: about colm 6, 'hmm acc' ???????
-## Q: how get all the email output (vikas did ?????*****?????). Q: can one get this output like email from the website ?????????
-## Q: looks like at least one can dnload each of the results **separately** for each of the 500 names in the input to online hmmscan. Looks like **can't** get the form of the email output thru website? Q: currently if try 'print' the email output, it shorter than what vikas got ???????********???????????????
-
-## At least concatenate output of multiple submissions to hnnscan, take the 'email' output.
-
- 
+# could repeat chisq, R glm for 2nd pair of snps, see line 18172
 
 
 
 
-iv) sort | uniq | length, see if still have same number as in PPRsec2_1562.txt (i.e., are there any duplicates)? Name this file PPRseqnames.txt 
-TO CHECK that input fasta file, iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa, has these as its 'fasta names' ???????
-v) apply Vikas getseq.awk to iwgsc_refseqv1.0_HighConf_REPR_PROTEIN_2017Apr03.fa & PPRseqnames.txt to get subset of fasta file from sec 2 of PPR.out. I note output from getseq.awk is a fasta fie.
-## Note: if dataframe format will be needed, check my prev. method convert fasta to dataframe, then use 'merge', ref., p-224, vbuffalo book ????????????
 
-## Q: try figure out what Vikas thinking with his blast & phylogeny analysis to 'identify gene models', that is, check ref articles how to find find RFL genes ??????????????????????
-
-STOPPED
-
-if the full sequence E-value is significant but the single best domain E-value is not, the target sequence is **probably** a multidomain remote homolog; but be wary, and watch out for the case where it’s just a repetitive sequence.
-## so Q:, PPR proteins repetitive domains, & two E-Values significantly diff. here, **not** in hmmsrchshortpep.out ****?????????????****
-## line 8217, The two columns headed #doms are two different estimates of the number of distinct domains that the target sequence contains. ... These two numbers should be about the **same**.
-## note, betw. hmmsrchshortpep.out & PPR.out, **order** magnitude diff. in the two numbers. Though they are about the same.
-
-06/11/17:
-## PPR.hmm, 'inclusion threshold' on line 1540. 
-## Q: p-9, sci reports ref, PPR.out drops to <10 at line 542 ??? (Q: confusion, does the 10 domains mean RFLs with at least 10 domains in sec 2 should be retained ????????????)
-## (Q: p-533, mentions PPR proteins 2 to 30 tandem repeats ??????????)
-## inclusion threshold, line 1539 has only 2.2 & 1 for its two estimates of number of domains.
-*******************************************
-## Q: OK, so how to decide among these criteria ???????????????????
-*********************************************
-
-## **sec 3**, line 1598
-## Q: how use sec 3 ???????????*************?????????????????????????
-*********************************************************************
-## Q: perhaps for PPR.out data, for now, don't use sec 3 ??????????????????????
-**********************************************************************
-
-## line 8221, The ! or ? symbol indicates whether this domain does or does not satisfy **both** per-sequence and per-domain inclusion thresholds.
-## Q: is this good criterion for whatever use sec 3 for ??????????????????
-## line 8227, If the independent E-value is significant (<< 1), that means that even this single domain by itself is such a strong hit that it suffices to identify the sequence as a **significant** homolog with respect to the size of the entire original database search. You can be confident that this is a homologous domain.
-## Q: (<< 1), what value ?????????????????????
-## line 8228, The next **four** columns give the endpoints of the reported local alignment with respect to both the query model (“hmm from” and “hmm to”) and the target sequence (“ali from” and “ali to”).
-## think recall I used these endpoints for qqch ????????????????????????????
-## Q: **no** vertical '|' in PPR.out, though in hmmsrchshortpep.out ??????????????????????????????????
-## Q: where is line 385075, perhaps in Trinity.fasta.transdecoder.pep file ?????, YES
-## line 8250, SO WHAT TO DO ?????????
-## Should be able to take 'Sequence' colm from sec 2 of hmmsearch, do %in% to find the sec 2 hits from hmmsrchshortpep.out in Trinity.fasta.transdecoder.pep file, the rows want to build Stockholm MSA file with hmmalign.
-## Q: or do I want to get just the 'domains' specified in the 3rd sec of hmmsrchshortpep.out for each of the 'hits' ??????????????
-## Q: but PPR.out many more domains per hit ????????????***********??????????
-
-08/08-09/17:
-the plant journal (2016) 85, 532-47, file name = cheng...journal.pdf
-## Q: p-544, ***HMMs*** ??????????????******?????????????????
-## also Vikas refs Scientific Reports 6 35152 2016  ## *to see*
-## unl classic libr not working ????????????????????????????????????????
-## and Vikas BMC paper earlier ?????????  ## *to see*
-
-## get all appropriate (above appropriate cutoff) PPR's from PPR.out. 
-
-## Vikas rec. way using pfam to separate P & PLS subsets of PPR ??????
-## then get RFL's, see new refs from Vikas ????????
-## Sci Reports, 6:35152, 2016, p-6, fig 3, Q: non-RFL genes mixed in with RFL genes ????????????????????????????????????????????
-## same ref, p-2, 4 methods **identify RFL proteins within P-class** ??????????
-
-06/11/17:
-
-STOPPED
-## so need a plan to find RF/RFL (???) genes in wheatproj.
-## could start with PPR.hmm from pfam since easy.
-## so finish surveying hmmsearch criteria for output (i.e., in PPR.out file). ## Note criteria, p-544, cheng paper.
-
-
-## line 8822, hmmalign the **1st** output from 1st hmmsearch 
-
-## line 8848, (Q: note, looks like maybe there should *not* be 'redirection' command ">" when run hmmbuild command ?????????????, see p-20, output '.hmm' file name will be name given in hmmbuild command ?????????????
-
-## line 8875, 2nd run of hmmsearch with 'refined' '.hmm'
-
-## line 8937, blastp, Q: do I want to do vs uniprotKB ***??????????***
-## line 9099, slurm blastp (FAILED)
-## ran uniref90, WHAT VALUE ??????????????????, listed in recent trinotate paper ???????,
-## line 9214, ran slurm blastp *uniprotKB* 
-## line 9231, nearly same number hit as uniref90
-## line 9237, names hits different
-## line 9257, compare trinity DE'd wi blastp output from NB-ARC proteins.
-## line 9356, ran 'comm' command
-## to line 10056 (Q: later to review)
-
-STOPPED
-
-
-
+# plan request help setup glm on snp table
