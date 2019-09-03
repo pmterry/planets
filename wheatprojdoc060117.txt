@@ -16571,7 +16571,7 @@ pptx slide 10: pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.png
 05/11/19:
 pptx slide 12: full (203 - 5 = 198) , pheno_gram.79071.png
 # prepare tiff file. cp pheno_gram.79071.png to /Users/bterry/mbook2019/vikas19/vikas_ppt_presentatn
-# open in Preview, same as tiff wi 'LZW', & '300'
+# open in Preview, save as tiff wi 'LZW', & '300'
 # Q: can phenogram output be saved other than '.png' ? YES, so did for full 203. Output is pheno_gram.38631.pdf for input file phen_all_203minus5rows.txt from .../hmmer203seqs dir.
 # next, open in Preview, same as tiff wi 'LZW', & '300'. Then export as tiff. Result seems fine (pheno_gram.38631.tiff)
 
@@ -18673,7 +18673,7 @@ chr1B	IWGSC_v1.1_201706	mRNA	19053658	19068672	26	-	.	ID=TraesCS1B02G039620.1;Pa
  
 --phylogram location: 
 # input to figtree will be 
-.../vikas18/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+.../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
 # examining this file in figtree, protein seq #39, TraesCS1B02G039620.1is the longest branch on the 'lower' chr 1 cluster.
 
 08/05/19:
@@ -18719,12 +18719,233 @@ talked to vikas
 
 08/12/19:
 
-# to do, github save
+# slip a save to ***github*** in here
+
+# still working on R glm result, see line 18381.
+# talked to K. Eskridge, suggest make taxacode, snp colm 'factors. Says, R lang. could have some 'quirk' causing not to get expected result.
+# fox & weisberg, p-234, try make taxacode, S2A_748437723 colms both factors, '1st category rep. failure, others success. For snp data, what to think  ?????????
+# fox & weisberg, p-235, response var., then 1st level = 0, 2nd level = 1 (Q: how assign order of levels ???????????????????)
+
+08/13/19:
+###################################################################
+# can I check gota ?????????????????
+##############################################################
+
+# talked to Diego. No help on R glm question. mentioned look into BGLR, Cran (think Gota may have mentioned ??). See p-20 of its doc. page.
+# morota@vt.edu for gota email address.
+
+08/15/19:
+# attempt to make hm#2, stat844, gota work. Problem installing 'synbreed' package. Perhaps need bioc. 'snpStats 1st. ????????????????????
+
+# talked to vikas
+1. check/doc mechanisms for CMS from Bohra, Garcia reviews ?????
+2. tableRftochrom.txt, fix/finish, copy to 'table' box folder
+3. vikas to finish wheat genome 'errors' email report
+
+08/17/19:
+# working bit on 'docker', still problem, try go back to HCC next Thurs ????
+# installation of synbreed package, perhaps email *gota* (morota@vt.edu), ask if quick soln, else work thru tasks to install from source, locate 'math.h' file, etc. ????????????????? 
+
+# doc steps for 'synbreed' package -> go to HCC, decide on steps ???????????
+# doc 'docker' steps => go to HCC ?????????????
+
+08/18/19:
+# make copy of tableRftochrom.txt file to tableRftochrom_2nd.txt
+cd /Users/bterry/mbook2019/vikas19
+cp tableRftochrom.txt tableRftochrom_2nd.txt
+# modify tableRftochrom_2nd.txt as appropriate
+# read into R, prepare csv file => NOT WORKING
+# instead just enter tableRftochrom.txt into tableRftochrom.xlsx
+
+08/20/19:
+# talked to vikas, for (3) above, to modify his modification of wheat genome 'errors' email report. 
+# testing use 'tr' command here
+# create trtest.txt
+tr '[A-Z]' '[a-z]' < trtest.txt
+# Also, as a check to look at genomes in tern, see if phylogram pattern based on genomes A, B, D in phylogram for the '203' ???????? 
+
+08/21/19:
+--phylogram location: 
+# input to figtree will be 
+.../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+#####################################################################
+# result: basically A, B, D genomes distributed randomly in chr 1, 2, 6 clusters.
+# but see below, further analysis, 08/26/19
+#####################################################################
+
+# Next, convey report_annotv2.0aftervikas.txt to vikas for final review. Here do email with two attachments: report_annotv2.0aftervikas.txt & LYCG24.png. I note the actual email to 'Helene' will be produced from these two files.
+
+08/22/19:
+# talked to vikas
+i. *to do*, relook at figtree & 203 seqs, know prevly saw particular genome's seqs randomly distributed around say cluster for chrom 1, but for 'local' cluster, is there any pattern, use horizontal display to document. That is, perhaps specific chrom 1 seqs from multiple genomes are closer on the phylogram, perhaps see how such phylogram clustering might compare with relation of seqs on phenogram. might help in some way to relate sequences. Vikas, may be a table of paralogs at URGI ???????
+#########################################################################
+ii. when vikas returns email for annotation v2, then send, cc to vikas, stephan **DONE**, 08/23/19
+# OPS, ERROR in email address, need *resend* email to helene.rimbert@inra.fr, not helene.rimber@inra.fr (DONE)
+##########################################################################
+iii. krishnananda article
+iv. to put gota hmwk2 code on crane, generate 'sysbreed' error, see if can fix there ????
+
+08/25/19:
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+#cd /work/baenziger/pterry/wheatproj/refinPprots820
+cd /work/baenziger/pterry
+ls -al  ## only two dirs
+mkdir stat844
+cd /work/baenziger/pterry/stat844
+module list
+module avail
+module load R/3.5
+# Q: now how start R ????
+# try 'r'
+# 'R' did it, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/stat844
+module list
+R
+
+install.packages("synbreed",repos="http://r-forge.r-project.org")
+
+> install.packages("synbreed",repos="http://r-forge.r-project.org")
+Warning in install.packages("synbreed", repos = "http://r-forge.r-project.org") :
+  'lib = "/util/opt/anaconda/deployed-conda-envs/packages/mro/envs/mro-3.5.1/lib/R/library"' is not writable
+Would you like to use a personal library instead? (yes/No/cancel) cancel
+Error in install.packages("synbreed", repos = "http://r-forge.r-project.org") : 
+  unable to install packages
+> q()
+Save workspace image? [y/n/c]: n
+[pterry@c1822.crane stat844]$ pwd
+/work/baenziger/pterry/stat844
+[pterry@c1822.crane stat844]$ exit
+exit
+[pterry@login.crane stat844]$ 
+[pterry@login.crane stat844]$ logout
+Connection to crane.unl.edu closed.
+philip-terry-2:vikas19 bterry$ 
+
+###############################################################
+# Q: ok, take this output to HCC for questions
+###############################################################
+
+# Q: perhaps should have exited 'srun' AFTER exiting 'R' session
+
+08/26/19:
+# further analysis from 08/21/19 above
+# working with file .../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+in figtree
+# display 
+TraesCS1A
+TraesCS1B
+
+# compare
+1A
+
+TraesCS1A02G055800.1
+TraesCS1A02G054500.1
+TraesCS1A02G054700.1
+
+with
+
+1B
+
+TraesCS1B02G072400.1
+TraesCS1B02G072300.1
+
+TraesCS1B02G071612.1
+TraesCS1B02G071642.1
+TraesCS1B02G071600.1
+
+08/26/19:
+
+# the 'B's form two tight groups, the 'A's group is tight. TO CHECK: but the names indicate will be close on phenogram. Suggesting relationship closest for seqs near each other on phylogram. These groups on 2nd cluster in their respective genome A or B.
+
+# For these 1A, 1B, close on phylogram, why are they more closely related than the 'A's are with other 'A's on the phylogram?
+# How do phenogram plots of these A, B seqs compare on the 1A, 1B phenograms ???????
+# pheno_gram.52684.tiff has chr 1A. Need go find 1B ??????????
+
+cd /Users/bterry/mbook2018/vikas18
+# title: 203_1B_10to150mill
+find . -name 'pheno_gram.43901.png' -print
+./131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/pheno_gram.43901.png
+ 
+# TO DO: locate proteins on phylogram in 'gaps' on phenogram ??????????
+# figtree file .../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+############################################################################
+# So the 1 seq betw the 1B groups & the 3 seqs within the 1A group NOT close to the groups on the phylogram  ?????????????
+############################################################################
+
+08/27/19:
+# talked to vikas
+That is, want PARENT of .../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
+BEFORE any coloring
+i. suggest obtain original figtree input file for the 203 prot. seqs, before any coloring from the 'pro'. So looks like such a file on 'pro' is:
+ ~/pro2018/PPRv1.1_1161)88ctls/vikas_filter/pid40_216pruned13to203_phyml_tree.txt
+
+08/28/19:
+# need copy to box, then mbook.
+# on box, use dir. Rf_GeneFamily/figtreetmp for this transfer.
+# copy this to dir on mbook: .../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree.txt
+ 
+# **To check** that std changes was making to these files within figtree are present in this file. [ASSUME FOR MOMENT] ?????
+
+# THEN, TO DO: Make new colorings,
+1st phylogram: copy pid40_216pruned13to203_phyml_tree.txt to pid40_216pruned13to203_phyml_tree_chr1.txt
+cp pid40_216pruned13to203_phyml_tree.txt pid40_216pruned13to203_phyml_tree_chr1.txt
+
+1A red
+1B blue
+1D green
+####################################################################
+# note: pretty much these 3 genomes randomly distributed in chr1 cluster area. No leaking into chr 2 or 6 areas,
+####################################################################
+
+2nd phylogram: copy pid40_216pruned13to203_phyml_tree.txt to pid40_216pruned13to203_phyml_tree_chr2.txt
+cp pid40_216pruned13to203_phyml_tree.txt pid40_216pruned13to203_phyml_tree_chr2.txt
+
+2A red
+2B blue
+2D green
+####################################################################
+# note: pretty much these 3 genomes randomly distributed in chr 2 cluster area. BUT LEAKING of all 3 genomes into chr 1 cluster area ???
+####################################################################
+
+3rd phylogram: copy pid40_216pruned13to203_phyml_tree.txt to pid40_216pruned13to203_phyml_tree_chr6.txt
+cp pid40_216pruned13to203_phyml_tree.txt pid40_216pruned13to203_phyml_tree_chr6.txt
+
+6A
+6B
+6D
+####################################################################
+# note: pretty much these 3 genomes randomly distributed in chr 6 cluster area. BUT bit LEAKING of all 3 genomes into chr 1 cluster area ???
+####################################################################
+
+08/29/19:
+# talked to vikas
+1. would like to get .png files from figtree rather that a screen capture.
+3 To test, load .../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chr1.txt into figtree, try get '.png' out.
+# result: the png file is *significantly smaller*, names smaller. Perhaps a way to modify. However, good control available by just adjusting size inside figtree, then do screen capture. Should be able to make big as can, & still capture all of phylogram.
+# think max with screen capture ...12.36.23.png without run over edge.
+# Q: line width, see line 16687 ???????????????
+
+2. Tx A&M person table (Q: can I find ?????)
+Q: line 16926
+# Q: try find time when discussing vikas ppt presentation, perhaps search research log fine by date?
+# Q: try look thru my hard copy files, see if can find ????????
+
+09/01/19:
+# I note complex situation, all the CMS, & restorer expts reported. Given this situayion, & the goal to understand CMS restoration, can one define a research path forward ???????
+
+find . -name 'rsif*.png' -print
+./mbook2019/vikas19/deeplearning/rsif.2017.0387.pdf
 
 
 
-# could repeat chisq, R glm for 2nd pair of snps, see line 18172
+ii. get Rf primer seqs from Krishnananda et al
+ 
 
+
+
+# do (1) above, doc mechanisms for CMS from Bohra, Garcia reviews
 
 
 
