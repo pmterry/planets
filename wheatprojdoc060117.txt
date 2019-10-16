@@ -18938,10 +18938,226 @@ Q: line 16926
 find . -name 'rsif*.png' -print
 ./mbook2019/vikas19/deeplearning/rsif.2017.0387.pdf
 
+09/03/19;
+# slip a save to ***github*** in here
+
+#talked to vikas
+1. compare TX A&M persons table with new one I made , & with the S54 Rfs, & the 4 snps of vikas as to chromosome location for Rfs reported.
+2. check clarity of chrom 1 phylogram screen capture with figtree ',png' export.
+3. research goal statement (see Sa. Antonio abstract).
+4. copy Rf primer seqs from Krishnananda et al (done)
+
+09/20/19:
+
+10/01/19:
+# Rf primer seqs from Krishnananda et al, if want try blast on https://plants.ensembl.org/Triticum_aestivum/Tools/Blast, how to treat reverse seq ?? Can you just submit directly, no rev comp for example ??
+# Xtxp18 for & rev submitted. Q: how to proceed ???????
+
+10/02/19: # talked to vikas, try the Krishnananda primers on emsembl plant genomes blast. Build file for this, krisjfastaprimers.txt. Then Blast in two groups, 1st eight primer pairs, then remaining 9 primer pairs.
+
+#####################################################################
+# Q: what genomic db should be selected ?????????
+# Q: what search sensitivity ??????????????
+# Q: e-value threshold ????????????????????
+# Q: scoring options ?????????????????
+# Q: filters & masking options ?????????????
+#####################################################################
+
+# start run of 1st eight primer seqs, 10:49pm
+
+10/03/19:
+# talked to vikas:
+for Krishnananda primers on ensembl plant genomes blast,
+try 'normal' (do not give overall name for the run)
+# 1st eight run 10:45pm
+# ensembl reports as 16 'jobs'
+# dnload, print out 'job 1'.
+
+try 'short seqs'
+
+####################################################################
+For analysis, look for for/rev on same chromosome (Q: same primer seq pair ???????????)
+# Q: note: ensembl reports if a hit seq is within an overlapping gene. So perhaps just use that rather than try locate primer seq pairs on same chromosome ????????????? Unless want to know just if a for/rev pair on same chrom. even if now within a gene ????????????
+#####################################################################
+For analysis, look for primers betw start/end of the 203 genes (Q: will this info. be available in chromosome display from ensembl blast ???????????)
 
 
-ii. get Rf primer seqs from Krishnananda et al
- 
+10/04/19:
+# working on /Users/bterry/mbook2019/vikas19/krishnananda/40qqANWOuXvSIqlN-19413933.blast.txt
+file, see if can grep a couple different lines in this file, then further manipulate so for a for/rev primer pair, have list of chromosomes in common, with hits from both 'for' & "rev' for that for'rev primer pair.
+#grep -c "^>" PPRhmmsearchsubset_plus9.fa  ## 1554 as expect
+
+grep -c "^>" 40qqANWOuXvSIqlN-19413933.blast.txt
+grep -c "^Sbjct" 40qqANWOuXvSIqlN-19413933.blast.txt
+
+grep "^>" 40qqANWOuXvSIqlN-19413933.blast.txt
+grep "^Sbjct" 40qqANWOuXvSIqlN-19413933.blast.txt
+
+> EG:6A dna:chromosome chromosome:IWGSC:6A:1:618079260:1 REF
+cut -d ' ' -f 1 iwsgc139_REPR_PROT_seqs_lengths.txt | wc -l  ## 139
+cut -d ' ' -f 2 iwsgc139_REPR_PROT_seqs_lengths.txt | wc -l  ## 139
+
+grep "^>" 40qqANWOuXvSIqlN-19413933.blast.txt | cut -d ' ' -f 2 > Xtxp18for_chr.txt
+grep "^Sbjct" 40qqANWOuXvSIqlN-19413933.blast.txt | cut -d ' ' -f 3 > Xtxp18for_start.txt
+
+grep "^>" 40qqANWOuXvSIqlN-19413933.blast.txt | cut -d ' ' -f 2 |cut -d: -f 2 > Xtxp18for_chr_no.txt
+
+# ok, 
+
+# line 5043
+setwd("/Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthoMCL131norice9")
+
+line 12441
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter")
+
+line 13833
+# 2nd, now try *single* chrom (say all seqs on 1A, etc.). See if can use same input file ???
+
+10/05/19
+*try* short seq run
+# test short seqs Xtxp18for
+# result: like 1000 to 2000 & more for the number of hits for each of the 16 'jobs  ????????????????????
+########################################################################
+# Q: should anything further be done with this short seq run ??????????????
+########################################################################
+
+# any way, to proceed, to do, take Xtxp18rev (job2, 13 hits), add to Xtxp18for for Xtxp18 phenogram display.
+
+grep "^>" 40qqANWOuXvSIqlN-19413934.blast.txt | cut -d ' ' -f 2 |cut -d: -f 2 > Xtxp18rev_chr_no.txt
+grep "^Sbjct" 40qqANWOuXvSIqlN-19413934.blast.txt | cut -d ' ' -f 3 > Xtxp18rev_start.txt
+
+# prepared Xtxp18rev_phen.txt
+
+# now, want both for & rev for Xtxp18 primer pair to run on phenogram. So add together for & rev phen files, Xtxp18for_phen.txt & Xtxp18rev_phen.txt, call new file, Xtxp18forrev_phen.txt 
+cp Xtxp18for_phen.txt Xtxp18forrev_phen.txt
+# then use bbedit to add rev hits.
+
+##########################################################################
+# now run Xtxp18forrev_phen.txt on phenogram. (only 8 of 18 on chroms 1, 2, or 6 ?????)
+##########################################################################
+
+STOPPED
+
+10/06/19:
+# left to do, plot Xtxp18forrev_phen.txt on phenogram with 203 - 5 = 198 '203' genes. Try to combine with phen_all_203_RFL_minus5rows.txt file. So copy this file to /Users/bterry/mbook2019/vikas19/krishnananda directory.
+# rename phen_all_203_RFL_minus5rows.txt to phen_all_203_RFL_minus5rows_Xtxp18forrev.txt
+mv phen_all_203_RFL_minus5rows.txt phen_all_203_RFL_minus5rows_Xtxp18forrev.txt
+# add Xtxp18forrev_phen.txt rows to phen_all_203_RFL_minus5rows_Xtxp18forrev.txt wi bbedit.
+
+# perhaps next, add these to 203 - 5 = 198, run on phenogram. Phenotype column on phenogram input file should distinguish primers from the 198 on phenogram, be able to see any relationships.
+
+##########################################################################
+pheno_gram.34028.png
+# would not appear to be correlation between eighteen Xtxp18forrev_phen.txt hits and 203 minus 5 Rf genes locations on phenogram?
+##########################################################################
+
+For Xtxp18 forward primer sequence, received 539 hits, the lengths varied from 13 to 16 bases, e-val varied from 5.9 to 360, %ID values almost all 100%. Most hits were for 13 bases, with e-val = 360.
+
+10/08/19:
+3 Talked to vikas, to do
+1. dnload *whole table* of results for the 17 primer pairs run on ensembl blast (short seq. setting)
+2. don't supply name for 'whole' run (hopping each 'job' will have the name of its primer seq.
+3. Place in name of each jobs dnloaded file the name of the seq.
+4. test if loads in excel ?????
+5. finally, upload to box
+
+10/09/19:
+# vikas email illumina, table 11, start/stop info for 203 Rf genes
+# Q: where is table 11, and source(s) of start/end positions in it ??????????????
+
+table7
+pid40_216pruned13to203_colm134579_chr.gff3
+pid40_216pruned13to203_colm134579.gff3
+pid40_216pruned13to203_nodotnum.txt
+pid40_216pruned13to203.txt
+IWGSC_v1.1_HC_20170706.gff3
+Philip_gff3_the203.sh
+203.gff3
+pid40_216pruned13to203_nodotnum.txt
+
+10/10/19:
+# talked to vikas, comparing his excel file of the 198 seqs with IWGSC_v1.1_HC_20170706.gff3. Spot checking a few of his excel rows with start/end data in IWGSC_v1.1_HC_20170706.gff3. All seems good. He to pass this info. to Illumina.
+
+# dnload 1st 16 'short seq' jobs, rename each with correct query primer seq.
+
+job1 done Xtxp18for 539 hits
+job2 done Xtxp18rev 7392 hits
+
+10/12/19:
+job3 done Xtxp250for 394 hits
+job4 done Xtxp250rev 4001 hits
+
+job5 done Xtxp406for 860 hits
+job6 done Xtxp406rev 1148 hits
+
+job7 done Xtxp297for 1234 hits
+job8 done Xtxp297rev 310 hits
+
+job9 done Xtxp211for 1402 hits
+job10 done Xtxp211rev 811 hits
+
+job11 done Xtxp50for 978 hits
+job12 done Xtxp50rev 2383 hits
+
+job13 done Xtxp616for 2347 hits
+job14 done Xtxp616rev 1766 hits
+
+job15 done Xtxp304for 539 hits
+job16 done Xtxp304rev 1232 hits
+
+10/13/19:
+
+# Resuming ensembl blasting using 'short seq' setting, next for the last 18 primer seqs in table 2 of krishnananda paper(rows 9 thru 17
+# see krishfastaprimers.txt file for the 18 seqs to be blasted in ensembl plant genomes web site.
+# start run, 12:00 am, 10/13/19
+
+# now, dnload resulting hits, place in dir. /Users/bterry/mbook2019/vikas19/krishnananda/vikas_shortseq/2nd18seqs
+
+job1 done Xtxp31for 410 hits
+job2 done Xtxp31rev 272 hits
+
+job3 done Xtxp38for 410 hits
+job4 done Xtxp38rev 2535 hits
+
+job5 done Xtxp34for 870 hits
+job6 done Xtxp34rev 3760 hits
+
+job7 done Xnhsbm1083for 2779 hits
+job8 done Xnhsbm1083rev 2476 hits
+
+job9 done Xnhsbm1084for 2901 hits
+job10 done Xnhsbm1084rev 822 hits
+
+job11 done Xnhsbm1085for 1709 hits
+job 12 done Xnhsbm1085rev 1432 hits
+
+job 13 done SB2386for 2693 hits
+job 14 done SB2386rev 143 hits
+
+job 15 done Xnhsbm1195for 4191 hits
+job 16 done Xnhsbm1195rev 2529 hits
+
+job 17 done Xnhsbm1197for 1331 hits
+job 18 done Xnhsbm1197rev 276 hits
+
+STOPPED
+
+# yet to upload the 16 + 18 files to 'box'
+
+# new dir on box, Rf_GeneFamily/Kristprimerblasthits. Then two new dirs under: 1st16 & last18. The 16 + 18 hit lists uploaded to these two directories.
+
+# QC in all this provided by associating each file name with the unique length of its contents in case ever a question as to whether an error occurred in the manual steps involved in creating these files. 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
