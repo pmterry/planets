@@ -19148,6 +19148,91 @@ STOPPED
 
 # QC in all this provided by associating each file name with the unique length of its contents in case ever a question as to whether an error occurred in the manual steps involved in creating these files. 
 
+# slip a save to ***github*** in here
+
+10/23/19:
+re-state tasks for pub & nov 11 presentation:
+1. look over prev. Vikas ppt presentation for for comments.
+
+2. put together all the known biological mechanisms related to the function of Rf genes.
+see file /Users/bterry/mbook2019/vikas19/biolmechsRf/biolmechsRf102319.txt
+
+3. any info on detailed location of RF genes in wheat genome paper from aug, '18.
+
+
+cd ~/mbook2019/csce879
+scp run_py_479.sh pterry@crane.unl.edu:/home/amundsen/pterry
+scp basic.py pterry@crane.unl.edu:/home/amundsen/pterry
+
+cp $HOME/run_py_479.sh .
+cp $HOME/basic.py .
+
+sbatch run_py_479.sh basic.py
+
+
+cd $WORK
+cd /work/cse496dl/shared/hackathon/02/mnist/
+
+# cp /work/cse496dl/shared/hackathon/02/mnist/mnist_train_images.npy .
+# -rw-r--r-- 1 795 scott 172480080 Jan 19  2018 mnist_train_images.npy
+# pretty big
+less mnist_train_images.npy
+
+10/31/19:
+# talked to vikas
+1. sent email with Qin (2016) paper attached. (done)
+2. to do: create short summary of RFC complex. (done)
+
+11/02/19:
+# to do, study Qin paper, try learn what known about RFC.
+
+11/08/19:
+talked to vikas, will post 11/11/19 talk at san antonio by 5-6 pm, sunday.
+
+11/19/19:
+# talked to vikas
+i. table of count of RFLs for different species
+ii. which journal?
+11/26/19:
+iii. phenogram for chr 1 a,b,d, 2 a,b,d, 6 a,b,d
+# Q: name/label on these phenograms, and for example ignoring loci not in a cluster ???
+# Q: as per vikas .pptx presentation, do they need to be remade without name/label, and also removal of names of each gene below ????????????????
+Vikas, remove name/title, retain list of gene names below, so will rerun these 9 on phenogram.
+
+12/03/19:
+
+##############################################################
+# **'protocol'** to run phenogram: (ref: line 13795)
+
+1A
+
+# input: phen_inp203rows_protnames_minus5_198.txt 
+# title: none
+# genome file: chr_size_Refv1.1_colm2and4minus_Un.txt
+# phenotype spacing: default: 'proximity' alg ?????????????????
+# phenotype color: default: 'exhaustive search colors' ??????????????????
+# image format: default: png
+
+# zoom options: 
+# chromosome: 1A
+# start bp: 10000000
+# end bp: 100000000
+
+# additional options: none selected this run, but possibly some might be useful for this 
+# retry, don't select 'chromosome only', voila, worked!
+# click 'plot'
+# output file: pheno_gram.42220.png
+# as comparison, run 1A without subsetting the chromosome (pheno_gram.20378.png)
+
+##############################################################
+
+12/04/19:
+# repeat protocol for remaining 8 chromosomes
+
+chr  subset               whole
+1B   pheno_gram.1005.png  pheno_gram.55604.png
+
+Q: should subset be extended to catch 2 more genes ???????????
 
 
 
@@ -19155,8 +19240,15 @@ STOPPED
 
 
 
-
-
+iv. manuscript, fill in as appropriate when receive
+  
+12/02/19
+talked to vikas
+1. looking for Predotar name, ref.
+Small I, et al., Proteomics. 2004 Jun;4(6):1581-90.
+Predotar: A tool for rapidly screening proteomes for N-terminal targeting sequences.
+# based on neural net
+2. try find list of ???? tassel glm found (think 9 of 61)  ????????
 
 
 
