@@ -423,7 +423,7 @@ Replace: \1
 ## try cut
 cut -d ' ' -f 2 srep35152-s1_tableS1_copy.txt | head -n 3  ## ok
 cut -d ' ' -f 2 srep35152-s1_tableS1_copy.txt | head -n 42 > NCBIrefcolm.txt
-## NCBIrefcolm.txt looks ok, 42 rows, has a blank 43 row ??????????????, so removed before proceed.
+##   looks ok, 42 rows, has a blank 43 row ??????????????, so removed before proceed.
 
 06/27/17:
 ## now for batch entrez search at NCBI, upload NCBIrefcolm.txt
@@ -19204,9 +19204,15 @@ Vikas, remove name/title, retain list of gene names below, so will rerun these 9
 ##############################################################
 # **'protocol'** to run phenogram: (ref: line 13795)
 
+# ref. line 13800
+# now try phenogram for **all** chroms: 
+# input: **phen_all_203minus5rows.txt**
+
+# now, individual 9 individual chroms:
+
 1A
 
-# input: phen_inp203rows_protnames_minus5_198.txt 
+# input: **phen_inp203rows_protnames_minus5_198.txt** 
 # title: none
 # genome file: chr_size_Refv1.1_colm2and4minus_Un.txt
 # phenotype spacing: default: 'proximity' alg ?????????????????
@@ -19230,17 +19236,124 @@ Vikas, remove name/title, retain list of gene names below, so will rerun these 9
 # repeat protocol for remaining 8 chromosomes
 
 chr  subset               whole
-1B   pheno_gram.1005.png  pheno_gram.55604.png
+1A pheno_gram.42220.png  pheno_gram.20378.png
+10 to 100 mill
 
-Q: should subset be extended to catch 2 more genes ???????????
+1B pheno_gram.1005.png  pheno_gram.55604.png
+10 to 100 mill => a close pair, & a far 4 cluster  ????????????????
+
+Q: should subset be extended to catch 2 more genes (may be far enough to ignore) but a 4 cluster > half way along the chrom. ???????????
+
+12/05/19:
+# slip a save to ***github*** in here
+
+12/06/19:
+
+1D pheno_gram.43430.png  pheno_gram.44422.png
+10 to 100 mill
+
+2A pheno_gram.51245.png  pheno_gram.28403.png
+700 to 780 mill
+
+2B pheno_gram.28895.png  pheno_gram.46749.png
+680 to 780 mill
+
+2D pheno_gram.94242.png  pheno_gram.88381.png
+550 to 650 mill
+
+6A pheno_gram.8950.png   pheno_gram.28374.png (need to fix subset 1,000,000 or 10,000,000 ????
+1 (actual) to 100 mill
+
+6B pheno_gram.32215.png  pheno_gram.32543.png  (1 to 125 mill, but cluster of 3 not included, need extend  little bit to include ????????)
+1 to 125 mill
+
+6D pheno_gram.17311.png  pheno_gram.38178.png
+1 to 100 mill
+
+
+# Q: perhaps arrange so chr 1 & 6 have same subset loci (1 or 10 to 125), & chr 2's have same from far end of chr's ?????? The latter could be same dist. from far end of chr. Visually, quickly see relation RFLs to ends of chr's ???????????????????????
+
+12/08/19:
+Some doc. on 192 PPR(P type) genes in chr's 1, 2, & 6 using phenogram:
+
+chr #genes %ofsumchr1,2,6genes
+1 112 58.3%
+2 28  14.6%
+6 52  27%
+
+If you compare the pattern of the gene positions on phenograms of chromosomes 1A, 1B, 1D, 2A, 2B, 2D, 6A, 6B, 6D, it is easy to sort them into those in each chromosome, 1, 2, or 6.
+
+chr #genes chrlen
+1A 31 594
+1B 43 690
+1D 38 495
+
+For the  three chromosome 1's, there is a pattern of five location bands (clusters >=2 except ????), all within 19.2% of the bases at the 5' end of the chromosomes
+(1A: 99/594=16.7%, 1B: 133/690=19.2%, 1D: 80/495=16.2%).
+
+chr #genes chrlen
+2A 10 781
+2B  8 801
+2D 10 652
+
+For the three chromosome 2's, there are only approx. 1/4 the number of RFL genes as for the 1's. There is basically one cluster (> 2 genes), each within 5.9% of the bases at the 3' end of the chromosomes (2A: (1 - 748/781) = 4.2%, 2B: (1 - 754/801) = 5.9%, 2D: (1 - 618/652) = 5.2%).
+
+chr #genes chrlen
+6A 19 618
+6B 19 721
+6D 14 474
+
+For the three chromosome 6's, there are only approx. 1/2 the number of RFL genes as for the 1's. There is basically a pattern of five clusters of PPR(P) genes with the 1st & 4th cluster having >= 3 genes. All genes in this pattern of 5 groups is within 17% of the start of the bases from the 5' end of the chromosomes (6A: 69/618 = 11.2%, 6B: 125/721 = 17%, 6D: 55.6/474 = 11.7%).
+
+The pattern of number of bands and their locations are similar for chroms 1 & 6. The relative locations of the larger groups are different. 
+
+For phenograms, perhaps for 1's & 6's, generate phenograms from base 1 to fartherest base from base 1 in chr 1. Do similarly for chr 6 ????????
+
+12/09/19:
+talked to vikas
+# for now, prepare phenograms for chroms 1 & 6 using same distance from 5' end for all 6 chroms. An aside, *relative* size of 3 chroms for chr 1 same as chr 6.
+# So 1 to 125 mill. subset will include all 6 of pattern of 5 for chroms 1 A, B, D & chroms 6 A, B, & D from 5' end of their chroms.
+
+# So for the 6 1 to 125 mill. subsets
+1A pheno_gram.79600.png
+1B pheno_gram.39128.png
+1D pheno_gram.71485.png
+6A pheno_gram.82515.png
+6B pheno_gram.88780.png
+6D pheno_gram.62012.png
+
+# to calc: a subset distance for chr 2 genomes for phenogram plot
+2A 717 mill to 781 = 64 (diff)
+2B 697 mill to 801 =m 104 (diff)
+2D 579 mill to 652 = 73 (diff)
+
+# For chr's 2, make dist say *110* mill from 3' end
+
+2A 671 mill => 780778433
+pheno_gram.76531.png
+# **but** no number bottom range, but chrom. *closed*, so *use it* ????????
+
+# to do to finish [**when back in Lincoln**]
+
+2B 691 mill => 801255821
+2D 542 mill => 651824161
+
+# I note, these individual phenogram chroms, with name labels, perhaps just use them rather than a subset ???????? See every band, with name ????????????????????
+
+12/11/19:
+Talked to vikas. He preferred the *subset* phenograms. So for 1A, B, D & 6A, B, D, used 125 mill subset from 5' end. For 2A, B, D, use 110 mill subset from 3' end of chrom.
 
 
 
+# To check gff3 => gene names avail ????????
 
 
 
-
+12/13/19:
 iv. manuscript, fill in as appropriate when receive
+# file manuscriptcomments121319.txt
+
+
   
 12/02/19
 talked to vikas
@@ -19249,6 +19362,346 @@ Small I, et al., Proteomics. 2004 Jun;4(6):1581-90.
 Predotar: A tool for rapidly screening proteomes for N-terminal targeting sequences.
 # based on neural net
 2. try find list of ???? tassel glm found (think 9 of 61)  ????????
+
+12/19/19:
+/Users/bterry/mbook2019/csce879/hack2
+
+cd ~
+find . -name 'chr_size_Refv1.1_colm2and4minus_Un.txt' -print
+
+./mbook2019/vikas19/krishnananda/chr_size_Refv1.1_colm2and4minus_Un.txt
+
+cd ~
+find . -name 'FRknownseqs_shtname.fa' -print
+
+12/20/19:
+# talked to vikas, apparently incorrect to try take length of chroms from top of gff3 file. Those values *not* the length of a chromosome.
+So tho plan to dnload chrom files with wget -c URL, since crane acct still with Keenan, & HCC staff unavailable till Jan 2, decided try det. length of chroms using laptop.
+
+Just click on iwgsc_refseqv1.0_all_chromosomes.zip at https://urgi.versailles.inra.fr/download/iwgsc/IWGSC_RefSeq_Assemblies/v1.0/
+
+cd /Users/bterry/mbook2019/vikas19/iwgscv1.0chroms
+md5 iwgsc_refseqv1.0_all_chromosomes.zip
+MD5 (iwgsc_refseqv1.0_all_chromosomes.zip) = 60c14e17a616acb6a3c9ea5ab9232186
+# from file: iwgsc_refseqv1.0_all_chromosomes.zip.md5.txt
+MD5 (iwgsc_refseqv1.0_all_chromosomes.zip) = 60c14e17a616acb6a3c9ea5ab9232186
+# so matches
+# so now, test length measuring alg before unzip iwgsc_refseqv1.0_all_chromosomes.zip to determine chrom. lengths
+
+12/22/19:
+
+## test 'awk' pgm wi FRknownseqs_shtname_9.fa 1st for counting seq lengths in fasta file.
+
+# so copy FRknownseqs_shtname_9.fa to /Users/bterry/mbook2019/vikas19/iwgscv1.0chroms
+
+cd ~
+find . -name 'FRknownseqs_shtname_9.fa' -print
+./mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/FRknownseqs_shtname_9.fa
+
+# copied FRknownseqs_shtname_9.fa from /Users/bterry/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+to /Users/bterry/mbook2019/vikas19/iwgscv1.0chroms
+
+cd /Users/bterry/mbook2019/vikas19/iwgscv1.0chroms
+head -n 26 FRknownseqs_shtname_9.fa > FRknownseqs_shtname_2.fa
+
+
+STOPPED
+
+awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' FRknownseqs_shtname_2.fa
+>AB110443
+791
+>AB112811
+794
+## worked!
+
+# now unzip iwgsc_refseqv1.0_all_chromosomes.zip
+# approx. 30 GB used during unzipping
+
+“README” can’t be opened because it is from an unidentified developer.
+# so how to open ??????
+# 'security & privacy' ... got the README file open. What to make of content ?????
+# looks like 'terminal' window closed during the preceding ??????
+
+philip-terry-2:iwgsc_refseqv1.0_all_chromosomes bterry$ ls -al
+total 57857448
+drwxr-xr-x@ 10 bterry  staff          340 Dec  2  2016 .
+drwxr-xr-x   8 bterry  staff          272 Dec 22 13:07 ..
+-rwxr-xr-x@  1 bterry  staff  14789716089 Oct 10  2016 161010_Chinese_Spring_v1.0_pseudomolecules.fasta
+-rwxr-xr-x@  1 bterry  staff     17974200 Oct 10  2016 161010_Chinese_Spring_v1.0_pseudomolecules_AGP.tsv
+-rwxr-xr-x@  1 bterry  staff  14789716499 Oct 10  2016 161010_Chinese_Spring_v1.0_pseudomolecules_parts.fasta
+-rwxr-xr-x@  1 bterry  staff         1965 Oct 10  2016 161010_Chinese_Spring_v1.0_pseudomolecules_parts_to_chr.bed
+-rwxr-xr-x@  1 bterry  staff     12813988 Oct 10  2016 161010_Chinese_Spring_v1.0_pseudomolecules_parts_to_scaffolds.bed
+-rwxr-xr-x@  1 bterry  staff     12768551 Oct 10  2016 161010_Chinese_Spring_v1.0_pseudomolecules_to_scaffolds.bed
+-rwxr-xr-x@  1 bterry  staff          466 Apr 28  2017 Agreement.txt
+-rwxr-xr-x@  1 bterry  staff         3308 Oct 10  2016 README
+
+philip-terry-2:iwgsc_refseqv1.0_all_chromosomes bterry$ ls
+
+161010_Chinese_Spring_v1.0_pseudomolecules.fasta
+161010_Chinese_Spring_v1.0_pseudomolecules_AGP.tsv
+161010_Chinese_Spring_v1.0_pseudomolecules_parts.fasta
+161010_Chinese_Spring_v1.0_pseudomolecules_parts_to_chr.bed
+161010_Chinese_Spring_v1.0_pseudomolecules_parts_to_scaffolds.bed
+161010_Chinese_Spring_v1.0_pseudomolecules_to_scaffolds.bed
+Agreement.txt
+
+# two biggest files are the 'fasta' & parts.fasta, both 14.7 GB.
+
+# try less, see of can learn more ????
+less 161010_Chinese_Spring_v1.0_pseudomolecules.fasta
+>chr1A
+...
+
+grep -c "^>" 161010_Chinese_Spring_v1.0_pseudomolecules.fasta
+22
+grep "^>" 161010_Chinese_Spring_v1.0_pseudomolecules.fasta
+>chr1A
+>chr1B
+>chr1D
+>chr2A
+>chr2B
+>chr2D
+>chr3A
+>chr3B
+>chr3D
+>chr4A
+>chr4B
+>chr4D
+>chr5A
+>chr5B
+>chr5D
+>chr6A
+>chr6B
+>chr6D
+>chr7A
+>chr7B
+>chr7D
+>chrUn
+philip-terry-2:iwgsc_refseqv1.0_all_chromosomes bterry$ 
+
+awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' 161010_Chinese_Spring_v1.0_pseudomolecules.fasta
+>chr1A
+594102056
+>chr1B
+689851870
+>chr1D
+495453186
+>chr2A
+780798557
+>chr2B
+801256715
+>chr2D
+651852609
+>chr3A
+750843639
+>chr3B
+830829764
+>chr3D
+615552423
+>chr4A
+744588157
+>chr4B
+673617499
+>chr4D
+509857067
+>chr5A
+709773743
+>chr5B
+713149757
+>chr5D
+566080677
+>chr6A
+618079260
+>chr6B
+720988478
+>chr6D
+473592718
+>chr7A
+736706236
+>chr7B
+750620385
+>chr7D
+638686055
+>chrUn
+480980714
+philip-terry-2:iwgsc_refseqv1.0_all_chromosomes bterry$ 
+
+# so they **match** the lengths found by vikas.
+
+STOPPED
+
+# so **todo**, use these and *redo* the 9 phenograms with a new 'chrom' file from the preceding.
+
+12/23/19:
+# working on manuscript. Make copy of .../vikas19/RFL_Manuscript_v1b.docx (done, RFL_Manuscript_v1b_pmt.docx)
+
+12/24/19:
+# try check following file for blastp ver. number
+line 9963
+slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+
+cd ~
+find . -name 'slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh' -print
+./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+
+
+# next, view inside file slurm_blastp_rice9_vs_prot1161_ev06_outfmt6cust.sh
+# no ver specified, check 'module spider', multiple ver's, latest 2.7, but check with HCC folks
+
+# MUSCLE
+module load muscle/3.8
+# check with HCC folks if this the ver. ??????
+
+# line 1239
+# PhyMl online at http://www.atgc-montpellier.fr/phyml
+# PhyML 3.0
+
+# NOTE: here, pmtmbook15 **froze**, had to hit 'power' button.
+
+12/25/19:
+# line 13608
+# .../vikas_filter/targetP/targetP_203_out.txt
+# direct output, 'TargetP 1.1 Server - prediction results'
+# but now ver **2.0** exists ???????????????????????
+
+STOPPED
+
+12/26/19:
+Predotar
+# Pub. supporting Predotar indicates part of reason to create Predotar was cause other pgms were having too many false positives
+
+cd ~
+find . -name 'hmmer_email_out203_domain_ct.txt' -print
+./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/hmmer_email_out203_domain_ct.txt
+
+# GC content
+GC_estimate_VB.pl
+# line 14136
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/GC_est/pid40_216pruned13to203_cds_GCest.txt .
+# check in bbedit, looks fine, **NEARLY THE SAME** values as in pid40_216pruned13to203_tx_GCest.txt
+
+# ref line 14157, tx_GCest.txt rather than cds_GCest.txt put put in table 10.
+gc_tx <- read.delim("pid40_216pruned13to203_tx_GCest.txt", header=FALSE, stringsAsFactors=FALSE, col.names=c("name", "GC_tx"))
+
+##########################################################################
+# **TO DO** perhaps to fix, go to most recent table (perhaps '11', and substitute cds for tx in colm 'GC_tx' colm, make it a 'GC_cds' colm ???
+##########################################################################
+
+# line 15709 to 15721, comments on 'tx' vs 'cds'
+
+12/27/19:
+# back to revising 9 phenograms with new 'genome'.
+# 1st, prepare new 'genome'.
+chr_size_Refv1.1_colm2and4minus_Un.txt
+cd ~
+find . -name 'chr_size_Refv1.1_colm2and4minus_Un.txt' -print
+./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/chr_size_Refv1.1_colm2and4minus_Un.txt
+# so put new chrom. file in this dir.
+chr_size_Refv1.0_awk_len.txt
+
+# location online phenograms: http://visualization.ritchielab.org/phenograms
+# ref. line 19215
+rerun phenogram, input = input: **phen_inp203rows_protnames_minus5_198.txt** 
+# 5' 125 mill subset:
+
+1A = pheno_gram.29108.png
+1B = pheno_gram.45845.png
+1D = pheno_gram.3994.png
+6A = pheno_gram.5601.png
+6B = pheno_gram.52423.png
+6D = pheno_gram.45895.png
+
+# use 110 mill subset from 3' end for chrom 2's
+
+12/19/19:
+
+# ref line 19332
+
+2A = 670798557 -> 780798557
+2A = pheno_gram.98659.png
+
+2B = 691256715 -> 801256715
+2B = pheno_gram.65818.png
+
+2D = 541852609 -> 651852609
+2D = pheno_gram.7761.png
+
+# so the 9 pheno_grams using AWK_len to calc. chrom. lengths done.
+
+12/31/19:
+$ reading over Poland, 'The Plant Genome nov., 2012, vol 5, no. 3' GBS for plant breeding & genetics, not getting much out of it ??????
+# need more elementary presentation ???????????????
+
+01/01/20:
+#######################################################################
+# pmtmbook15  laptop**frose** again, turn off/on to recover
+#######################################################################
+
+01/02/20:
+# talked to vikas
+1) AWK 9 phenogram subsets => Word, use 'insert' (presumably Word will accept '.png' files ???????? (done, .../hmmer203seqs/CombinedPhenoFigures.docx)
+2) 82 + 6, verify arab. & soybean numbers  ??????????
+3) blastp, check ver used on crane ???????????
+
+01/03/20:
+# dealing with (2) above:
+# perhaps find file with the 88 ctls, capture the names of the ctl prots, match them up with Table S1 of Fugii, 2011 paper, PNAS, 108(4), 1723-28
+
+# rice9:
+
+# line 602
+## create FRknownseqs_shtname_9.fa from FRknownseqs_shtname.fa (remove '408' & '444')
+# line 525
+# line 436
+## talked to vikas, to manually examine table S1, 'sci reports' paper, each row in 'NCBI 
+
+01/04/20:
+cd ~
+find . -name 'NCBIrefcolm.txt' -print
+
+line 603
+FRknownseqs_shtname_9.fa
+cd ~
+find . -name 'FRknownseqs_shtname_9.fa' -print
+
+line 602
+## create FRknownseqs_shtname_9.fa from FRknownseqs_shtname.fa (remove '408' & '444')
+# reason: see line 525, < 10*35 in length
+######################################################################
+line 414
+batch entrez search (method acquiring 9 seqs from ncbi ??????? 
+# Q: ***do*** I need to redo/relearn how the seqs of the rice9 were acquired ????????
+######################################################################
+# from p-2 of melonek, 2016:
+The best studied cereal CMS/Rf systems are in the genus Oryza (Supplementary Table S1 and references therein).
+The Rf-1 locus located on chromosome 10 in rice has been isolated independently by several groups and shown
+to restore fertility in BT-type CMS (Supplementary Table S1)
+3 Q: ***how consider proteins in table s1, are they all Rf's, at least RFL's*** ???????
+# Note: restorer allele colm of table s1 has an entry for **each** row in table s1 ????
+######################################################################
+
+grep "^>" FRknownseqs_shtname_9.fa
+
+>AB110443
+>AB112811
+>AB179840
+>AB900791
+>AB900792
+>AB900793
+>AB900794
+>KJ680249
+>KJ680248
+
+STOPPED
+
+01/06/20:
+# talked to vikas
+1) prepare file of 88 ctls, their names
+2) check 'coverage' notes for 'blast' runs ?????
+
+
+
+# next, the bracky, arab & soybean, **to match up** names in '88' list with fugii(2011) table S1.
 
 
 
