@@ -19639,7 +19639,9 @@ $ reading over Poland, 'The Plant Genome nov., 2012, vol 5, no. 3' GBS for plant
 
 01/02/20:
 # talked to vikas
-1) AWK 9 phenogram subsets => Word, use 'insert' (presumably Word will accept '.png' files ???????? (done, .../hmmer203seqs/CombinedPhenoFigures.docx)
+1) 9 phenogram subsets => Word, use 'insert' (presumably Word will accept '.png' files ???????? (done, ~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/CombinedPhenoFigures.docx)
+
+# place on box, dir = .../Manuscript_May2019/Supplementary_Figures, done on 01/29/20.
 2) 82 + 6, verify arab. & soybean numbers  ??????????
 3) blastp, check ver used on crane ???????????
 
@@ -19696,8 +19698,923 @@ STOPPED
 
 01/06/20:
 # talked to vikas
-1) prepare file of 88 ctls, their names
-2) check 'coverage' notes for 'blast' runs ?????
+1) to prepare file of 88 ctls, their names
+2) to check 'coverage' notes for 'blast' runs ?????
+
+# slipped a save to ***github*** in here
+
+01/08/20:
+# talked to vikas
+1) for 35% to 50% blast work, look into results 'ctls' clustering in phylograms ??
+2) glm/tassel output ????
+
+01/09/20:
+# refer to line 17468
+i. vikas ran GLM from Tassel5 pgm. Two input files, 
+Trait_June21.txt, (file has 55 rows)
+& R_and_NonR_lines_RFL_SNPs.recode.hmp.txt (file has 60 rows)  (Q: was this latter the 1st input ??????)
+
+# Output are two files:
+R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt  (file has 27 rows)
+R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt  (file has 53 rows)
+
+cd ~
+find . -name 'R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt' -print
+./mbook2019/vikas19/tassel5/VEP/vikas_box/R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt
+
+find . -name 'R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt' -print
+./mbook2019/vikas19/tassel5/VEP/vikas_box/R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt
+
+find . -name 'Trait_June21.txt' -print
+./mbook2019/vikas19/tassel5/VEP/vikas_box/Trait_June21.txt
+
+find . -name 'R_and_NonR_lines_RFL_SNPs.recode.hmp.txt' -print
+./mbook2019/vikas19/tassel5/VEP/vikas_box/R_and_NonR_lines_RFL_SNPs.recode.hmp.txt
+
+Input: (two files)
+Trait_June21.txt, (file has 55 rows)
+R_and_NonR_lines_RFL_SNPs.recode.hmp.txt (file has 60 rows)
+
+Output: (two files)
+R_and_nonR_GLM_Run1_50pmissingSNPLines_MAF5p_June21.txt  (file has 27 rows)
+R_and_nonR_GLM_Effects_Run1_50pmissingSNPLines_MAF5p_June21.txt  (file has 53 rows)
+
+01/11-15/20:
+At pag2020 in san diego.
+
+01/16/20:
+# write summary of pag2020
+# include
+--the 4 IWGSC sessions (Sat., 8am, 10:30am, 1:30am & Tues, 1:30pm)
+--plenary talks
+--commercial connections
+--other notable talks
+
+01/23/20:
+# talked to vikas,
+1) went over pag2020comments.txt file, to do, prioritize as noted in following up with with pag2020 talks documented there.
+
+Followup notes:
+Zhu (her abstract)
+Fei (abstract, exomes)
+Juliana (abstract, ...
+Higgins (meiotic crossover)
+Benbow
+Santantonio
+Jayakodi
+Nilsen
+Joynson
+Dubcovsky
+Mahlandt
+Gu
+Kale
+Adam-Blondon
+Wang
+Maccaferri
+Gwillian (send her snp location ????)
+Hyten (M. Happ ref to vikas)
+PL7 (meiosis, mitosis)
+ML talks (check all including nite session I missed)
+
+01/34/20:
+# reading thru vikas draft v1f
+# lots of questions
+# one thing to do, prepare file with the names of the 88 ctls
+
+line 604
+FRknownseqs_shtname_9.fa
+cd ~
+find . -name 'FRknownseqs_shtname_9.fa' -print
+./mbook2019/vikas19/iwgscv1.0chroms/FRknownseqs_shtname_9.fa
+# the 9 rice names (Q: probably got seqs on ncbi since these names are the 'ncbi reference' names ??????
+
+01/25/20:
+grep "^>" FRknownseqs_shtname_9.fa
+AB110443
+AB112811
+AB179840
+AB900791
+AB900792
+AB900793
+AB900794
+KJ680249
+KJ680248
+
+# ncbi reference names for rice9
+
+
+# now get names bracky9, soybean38, arab26 from fugii, 2011, & vikas6 
+
+bracky9names.txt
+cd ~
+find . -name 'bracky9names.txt' -print
+Bradi1g14190.1
+Bradi2g38110.1
+Bradi2g38120.1
+Bradi2g38400.1
+Bradi2g38440.1
+Bradi2g38450.1
+Bradi2g38460.1
+Bradi2g38760.1
+Bradi4g05910.1
+
+soybean38
+line 5656
+Dnloaded Glycine_max.Glycine_max_v2.0.pep.all.fa.gz from ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/glycine_max/pep/
+line 5741
+line 5830
+soybean41to_ver2names38dot1dotpshort.fa
+
+# to do, find .fa file with *all* 88 ctls, CHECK THOSE NAMES
+
+line 5899
+bracky9namesshort.fa 
+FRknownseqs_shtname_9.fa 
+soybean41to_ver2names38dot1dotpshort.fa 
+arab26fujii2011namesshort.fa
+
+# yet to find vikas6
+line 10004
+rice1st_88ctls_soyfixed.fa
+cd ~
+find . -name 'rice1st_88ctls_soyfixed.fa' -print
+./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/rice1st_88ctls_soyfixed.fa
+
+grep "^>" rice1st_88ctls_soyfixed.fa
+
+
+>AB110443
+>AB112811
+>AB179840
+>AB900791
+>AB900792
+>AB900793
+>AB900794
+>KJ680249
+>KJ680248
+>BRADI1G14190.1
+>BRADI2G38110.1
+>BRADI2G38120.1
+>BRADI2G38400.1
+>BRADI2G38440.1
+>BRADI2G38450.1
+>BRADI2G38460.1
+>BRADI2G38760.1
+>BRADI4G05910.1
+>Glyma.01g058700.1
+>Glyma.01g059900.1
+>Glyma.02g086700.1
+>Glyma.05g151600.1
+>Glyma.16g194800.1
+>Glyma.07g100300.1
+>Glyma.07g101300.1
+>Glyma.07g173300.1
+>Glyma.08g053100.1
+>Glyma.16g163100.1
+>Glyma.16g162800.1
+>Glyma.09g156000.1
+>Glyma.09g171200.1
+>Glyma.09g174600.1
+>Glyma.09g174800.1
+>Glyma.09g175400.1
+>Glyma.09g175100.1
+>Glyma.09g176400.1
+>Glyma.09g175800.1
+>Glyma.09g176000.1
+>Glyma.09g176600.1
+>Glyma.09g176800.1
+>Glyma.09g178300.1
+>Glyma.09g256600.1
+>Glyma.09g263600.1
+>Glyma.10g002900.1
+>Glyma.10g002800.1
+>Glyma.14g202200.1
+>Glyma.15g201200.1
+>Glyma.16g139800.1
+>Glyma.16g160700.1
+>Glyma.16g161900.1
+>Glyma.16g162100.1
+>Glyma.16g165400.1
+>Glyma.16g195000.1
+>Glyma.16g195100.1
+>Glyma.16g199700.1
+>Glyma.18g228500.1
+>AT1G12300.1
+>AT1G63130.1
+>AT1G64585.1
+>AT1G64100.1
+>AT1G63330.1
+>AT4G26800.1
+>AT1G62915.1
+>AT3G22470.1
+>AT1G12620.1
+>AT1G64580.1
+>AT5G16640.1
+>AT1G12700.1
+>AT1G62670.1
+>AT1G63070.1
+>AT1G63150.1
+>AT1G62590.1
+>AT1G06580.1
+>AT1G12770.1
+>AT1G63080.1
+>AT1G62680.1
+>AT1G62910.1
+>AT3G16710.1
+>AT1G62930.1
+>AT1G63400.1
+>AT1G62720.1
+>AT5G41170.1
+>CAR70003.1_At1g12700_Arabidopsis_thaliana
+>BAM64814.1_bvCRP-1_Beta_vulgaris
+>API57808.1_RFP1_Brassica_rapa
+>AAM52339.1_fertilityrestorer_Petuniaxhybrida
+>AJG06104.1_restorer-of-fertility_Raphanus_sativus
+>Q76C99.1_Rf1_Oryza_sativa
+philip-terry-2:vikas_filter bterry$ grep -c "^>" rice1st_88ctls_soyfixed.fa
+88
+
+# so have 88 names, 1st 9 are ncbi reference names
+
+cd ~
+find . -name 'gff3_cols13_144.txt' -print
+./mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/orthogrp/o_mclonline/wheatgff3/gff3_cols13_144.txt
+
+cd ~/./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/
+grep "^>" rice1st_88ctls_soyfixed.fa | perl -pe 's/>(.+)/\1/' > rice1st_88ctls_soyfixed_no_gtr_sign.txt
+
+# ok, check wi vikas, probably wants in Word file, but may be a bit different than rice1st_88ctls_soyfixed_no_gtr_sign.txt ??
+# for example, an indication that the '1st 9 rows are ncbi reference names' ??????
+
+01/27/20:
+# talked to vikas
+i) requested
+
+cd ~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+cp rice1st_88ctls_soyfixed_no_gtr_sign.txt supplementary_file_88ctls.txt
+# then upload to box, dir =.../Manuscript_May2019/Supplementary_Tables
+# done
+
+01/30/20:
+
+02/04/20:
+
+ii) prepare email communication to Rhian (seqSNP, LGC, ?????)
+content: say we have 2(??) seqs, want find kasp primers for (Q: vikas, 2 forward primers, one reverse, one for R seqs, one for nonR seqs ????)
+
+S2A_748437723
+S2B_753796430
+
+# sent, 02/05/20
+
+02/05/20:
+# talked to vikas
+1) discussed Rhian email
+2) affirmed col 11 of col11 table is output from predator
+3) discussed bit RFL_Manuscript_Results_v1b.docx. Learned some fig references coming from file RFL_GeneFamily_CargillLines_..._FINAL
+cd ~
+find . -name 'RFL_GeneFamily' -print
+# fails ????
+# so using file CSSA19_RFL...Screen_v2.pptx in dir.  .../vikas19.
+
+02/06/20:
+# working on RFL_Manuscript_Results_v1b.docx
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+# Figure 1: flow chart figure
+# Figure 2: 1913 phylogram
+# Figure 3: probably pid40_216pruned13to203_phyml_tree_chrcolor file ???????
+# specifically pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.png
+
+# Table 1: table11cols.txt
+
+# p-1, have two phylograms showing 1161 P cluster contains all the ctls, do we want to use ???????
+PPRv1.1.752_PLS_88ctls_4color_forRmd.png
+PPRv1.1.1161_88ctls_4color_forRmd.png
+# in dir. /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc
+# perhaps go back, find out what ctl group each color represents ????????????
+
+# p-3, 5 unanchored seqs probably located chr 6, check if they are clustered on 6 in a phylogram, do I have a phylogram which shows  ???????
+# apparently since vikas referencing  ??????????????
+
+# p-3, error fig 2 probably fig 3 ??????????
+# p-3, Fig 3 may, may not be Fig 3, perhaps 4 & 5 ??????????
+# p-3, Figure 4 (& perhaps 5), phenograms ???????????????
+# p-3, introns, 86.6%, to check ?????????????
+# p-3, plot gene lengths
+# p-4, plot peptide length 
+# p-4, perhaps plot GC % ??????
+
+# Rhian response email: I need to do some steps before respond.
+
+02/07/20:
+# add comments for 'Results' draft, RFL_Manuscript_Results_v1b.docx after copy to RFL_Manuscript_Results_v1b_pmt.docx in dir /Users/bterry/mbook2020/vikas20
+
+# note, vikas was working from CSSA19_RFLGeneFamilyCargillRLines_16-9Screen_v2.pptx
+in dir /Users/bterry/mbook2019/vikas19
+
+02/09/20:
+.../vikas2020/Rmdhtml_reslognotes.txt
+# use, to work on RFL_Manuscript_Results_v1b_pmt.docx
+
+02/11/20:
+# talked to vikas
+# prepare 2nd sample email to Rhian with vikas's seqs found from 'urgi' browser
+
+Rhian requests
+i) check her email 
+
+Please could I request:
+
+A check of the chr2A sequence I have located with the SNP identified marked [C/G]
+
+Chromosome 2A-748437723
+
+TTGCTGAGCCAAGCCGCCGCCGTCCCGGAACG[C/G]GGGCTGAACAACTTTCTTGCCGCACTAGCCCGTGCTC
+
+#TO DO: compare with vikas sequence in dir Rhian_LGC on box
+
+# vikas found from his snp location on chr 2A submitted to URGI:
+SNP2,2A,CTGCCACCACAGAGCGCGTGTGTGCCGGAACGCTAAGACCGGAGGAGGCGCACCACCTGTTCGACGAATTGCTGAGCCAAGCCGCCGCCGTCCCGGAACG[G/C]GGGCTGAACAACTTTCTTGCCGCACTAGCCCGTGCTCCACCCTCAGCTGCCTGCAGCGATGGCCCCGGCCTTGCCATCACCCTCTTCAACCGCATGTCCC
+
+# ok, compare with Rhian email sequence:
+Rhian:
+TTGCTGAGCCAAGCCGCCGCCGTCCCGGAACG[C/G]GGGCTGAACAACTTTCTTGCCGCACTAGCCCGTGCTC
+Vikas
+CTGCCACCACAGAGCGCGTGTGTGCCGGAACGCTAAGACCGGAGGAGGCGCACCACCTGTTCGACGAA
+TTGCTGAGCCAAGCCGCCGCCGTCCCGGAACG[G/C]GGGCTGAACAACTTTCTTGCCGCACTAGCCCGTGCTC
+CACCCTCAGCTGCCTGCAGCGATGGCCCCGGCCTTGCCATCACCCTCTTCAACCGCATGTCCC
+
+# ok, so vikas 2A seq matches Rhian 2A seq. Rhian snp 69 bases both sides excluding snp base.
+# ok, vikas 200 bases not including snp.
+# note: Rhian has [C/G], Vikas has [G/C]. Any significance in the different order?
+
+
+Blast of this sequence against the other chromosomes to detect level of homology – please send the blast results
+
+# image attached. Vikas 2A query (201 bases) matches only 2A 100%.
+
+# now for snp for chr 2B-753796430:
+
+If possible, can you provide the sequence, ~50bp either side of the SNP is useful, for Chromosome 2B-753796430 plus blast results.
+
+02/16/20:
+# sent vikas email suggestions for 1 day DL workshop based on csce879, fall, 2019
+
+02/17/20:
+# forwarded Rhian's response to vikas indicating LGC can create to desired Kasp primers.
+
+02/18/20:
+
+# tasks associated with RFL_Manuscript_v1b_pmt.docx file:
+--check phylograms in 'log.html' file, to substantiate statements on location of ctl seqs in phylograms.
+--check blast 'coverage' ???
+--'unanchored' on chrom 6 (phylogram to show ???????
+
+line 15552
+cd ~/mbook2019
+find . -name 'pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot_Un_purple.png' -print
+./vikas19/potlwheatgeneerrors/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot_Un_purple.png
+
+# so the 5 'Un' seqs of the 203 all in one of the two blue chr 6 groups on the phylogram. Split into two groups, group of 2 & group of 3
+
+1st grp of 2
+TraesCSU02G089563.1	Un
+TraesCSU02G089705.1	Un
+
+2nd grp of 2
+TraesCSU02G089700.1	Un
+TraesCSU02G090200.1	Un
+
+Adjacent to 2nd grp of 2
+TraesCSU02G090205.1	Un
+
+--check if 1161 - 216 (203) P proteins are clustered (phenogram) ????
+--ggplot2, gene lengths, protein lengths ????
+--check gsds, lack of introns in 1161 - 216 (203) P genes ?????
+
+# pag2020
+document identify speakers talks, & DL talks
+
+cd ~/mbook2018
+find . -name 'PPRv1.1.1913plus88ctls1stcolor.txt' -print
+./vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/PPRv1.1.1913plus88ctls1stcolor.txt
+
+line 16675
+copied from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls PPRv1.1.1913plus88ctls1stcolor.txt
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+philip-terry-2:PPRv1.1plus_88ctls bterry$ ls PPRv1.1.1913plus88ctls*
+PPRv1.1.1913plus88ctls1stcolor.txt
+PPRv1.1.1913plus88ctls1stcolor_2001.txt
+PPRv1.1.1913plus88ctls1stcolor_2001_aftperl.txt
+PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile.txt
+PPRv1.1.1913plus88ctls1stcolor_2001_aftperl_listfile_PLS.txt
+PPRv1.1.1913plus88ctls_orig.txt
+philip-terry-2:PPRv1.1plus_88ctls bterry$ pwd
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+02/19/20:
+
+# check where do mid_center, etc in figtree ?????????????
+
+# perhaps line 12758
+in figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# figtree pattern pretty much matches pid40_phyml_tree.txt tree.
+
+# ok, now, to check location of ctls in /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc/PPRv1.1.1913plus88ctls1stcolor_guess_P_PLS_forRmd.png
+# this the fig. 2 for vikas manuscript. But don't know that all the figtree setup steps applied. 
+# So do, redo, starting from PPRv1.1.1913plus88ctls1stcolor.txt in dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+
+# Start from scratch (except have red/black coloring). But, 1st copy file, PPRv1.1.1913plus88ctls1stcolor.txt to test_021920_1913plus88ctls1stcolor.txt. 
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+cp PPRv1.1.1913plus88ctls1stcolor.txt test_021920_1913plus88ctls1stcolor.txt
+
+Then go thru figtree configuring, check midpoint, etc., 
+
+Have midpoint
+Looks like turn off 'node labels', cleaner
+Note: phylogram **not** exactly like fig 2, manuscript, ??????
+Note: can't find **aLRT** ????????????????????????
+
+
+then check for location of 88 ctls , see if all in 'P' portion? Use file .../vikas_filter/rice1st_88ctls_soyfixed_no_gtr_sign.txt.
+# DONE, all **within** 'P' portion
+
+# talked to vikas
+1) can use this file to show possible 6 location for the 5 'Un' seqs.
+.../vikas19/potlwheatgeneerrors/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot_Un_purple.png
+
+# Q: **not** white bcgd ?????????????????????
+############################################################
+# to do: to try get white bcgd, perhaps start with file which made manuscript fig 3, color purple 5 'Un' seqs ?????
+############################################################
+
+############################################################
+2) found all 88 seqs in fig 2, manuscript, Q: will this be in manuscript ??????
+############################################################
+
+02/20/20:
+# continue checking all phylograms in 'log.html' file.
+
+in 'log.html' file,
+
+sec 2.2.11
+PPRv1.1.752_PLS_88ctls_4color (show how ctls cluster away from the putative 752 PLS seqs)
+#########################################################################
+# Q: appears some PLS seqs on the ctl branch cluster, perhaps some P proteins in this putative 752 PLS seqs ??????
+#########################################################################
+
+PPRv1.1.1161_88ctls_4color (show how they integrate with putative 1161 P seqs)
+
+sec 2.3.1
+blastp counts table
+
+sec 2.3.2
+frac_align ??????
+
+sec 2.3.3
+pid50
+list_wheatids_pid50_phyml_tree_chrcolor (some LB's)
+##########################################################################
+# Q: mixing of chr colors including on long branches ??????????????????????
+##########################################################################
+
+sec 2.3.4
+pid50+88
+list_wheatids_pid50_plus88ctls_phyml_tree_chrcolor
+# (one chr 6 clustering nearer to chr1 than chr 2 ????) 
+list_wheatids_pid50_plus88ctls_phyml_tree_4ctlscolor (ctls don't cluster wi the 203)
+########################################################################
+# (most ctls cluster by selves, but some 'blue', probably bracky (?) inside chr 1 cluster)
+########################################################################
+
+sec 2.3.5
+pid35
+pid35_phyml_tree_chrcolor (bunch seqs color like 1,2,6 chr seqs BUT cluster away from chr 1,2,6 cluster, so apparently some chr 1,2,6 seqs in a less related cluster, but still closer to each other than to 'regular' chr 1,2,6 cluster, WHAT to think ????????????)
+
+########################################################################
+# Whole group of chr 1, 2, 6 seqs cluster *separately* from 'regular' cluster of chr 1, 2, 6. These were not in pid50 seqs. *Why* is phylogram placing them in a separate cluster? *Both* blast and phyml separating them.
+########################################################################
+
+
+sec 2.3.6
+pid35+88ctls
+pid35_plus88ctls_phyml_tree_chrcolor (See 7 groups on phylogram. 5 similar to 50pid phylogram. A 6th similar to ‘new’ group on pid35 relative to pid50. Finally, a group with mostly (?) seqs from the 88 ctl seqs. To check, if bracky mostly there? Cretainly at least 1 bracky seq is in the chr1 group ??????)
+
+pid35_plus88ctls_phyml_tree_4ctls (to do: will need lay out, compare two phylograms, try draw some conclusions ?????????)
+
+
+########################################################################
+# note: looks like bracky, rice ctls in with basic clusters of chr 1, 2, 6
+# note: looks like soybean, arabidopsis in own cluster
+# note: to check, which dicots, monocots ???
+########################################################################
+
+sec 2.3.7
+pid40
+pid40_phyml_tree_chrcolor  (similar to pid 50 (216 compared to 206 seqs), some LBs)
+
+SShot2018-11-02pid40chrcolor (duplicate of preceding, just bigger)
+
+
+sec 2.3.8
+pid45
+pid45_phyml_tree_chrcolor (has imilar to pid 40 (212 compared to 216 seqs). quick look, could be the fewer 4 seqs could be all on long branches (LBs) betw pid 40 & 45)
+
+SShot2018-11-02pid45chrcolor (duplicate of previous seq)
+
+so long branch seqs are 6 + 4 = 10. Removing leaves 206 - 10 = 196.
+
+############################################################################
+list_WheatIDs_pid50LB10prunedto196.txt
+# Q: should I try to display this file ???????????
+############################################################################
+
+############################################################################
+pid40 - 10 - 3 = 203
+
+line 12421 1. new phylogram, from pid40 (216) list of seqs, subtr the ten which took pid50 from 206 to 196. Subtract the three seqs from pid40_phyml_tree.txt which are on a LB on phylogram yielding 203 seqs for new phylogram. Display colors for chr 1, 2, 6.
+
+line 12437 to ck 216 vs 203 with setdiff list_WheatIDs_pid40.txt, pid40_216pruned13to203.txt
+
+line 12474 ready to prepare .fa file from vikas pruned pid40 list (pid40_216pruned13to203.txt),
+############################################################################
+
+note, 1 chr5 (magenta), 5 chr7 (blue-green), 5 chrU (orange), total of 11 are in the 203 seqs. They are only co-located in groups chr2 & chr6. pid40_216pruned13to203_phyml_tree_other.txt. Note: 11 of 203 not chr 1, 2, or 6
+
+SShot2018-11-02pid40_216prunedto203otherchrcolor
+or
+pid40_216pruned13to203_phyml_tree_otherchrcolor
+
+note: pid40_216pruned13to203_phyml_tree_color.txt has colored chr1 (red), chr2 (green), & chr6 (blue).
+pid40_216pruned13to203_phyml_tree_chrcolor
+or
+SShot2018-11-02pid40_216pruned13to203chrcolor
+
+03/22/20:
+# now after examining 14 phylogram images, summary of what found:
+
+Three levels of filtering used to try come up with the 203 putative RFL proteins.
+
+i) HMM search using PPR-HMM against the 133,744 wheat peptide sequences (v1.1 IWGSC gff3 annotation file) identified 1,913 potential PPR sequences
+ii) clustal phylogram sepn of putative 1161 'P' seqs followed by blastp using 88 RFL ctl seqs as query (next, work with 35%, 40&, & 50% pid output)
+iii) phyml phylogram to display blastp results => 203 putative wheat candidates for RFs in wheat.
+
+Three 'overview' clusters:
+1) basic chr 1, 2, 6 clusters
+--few chr 2 & chr 6 seqs found in chr 1 cluster
+--ctls bracky & rice found in this basic cluster
+2) additional/separate chr 1, 2, 6 cluster (found in pid35 phylogram)
+3) ctls soybean, arabidopsis found in own separate cluster
+
+# now, run thru images, make comment
+
+1st:
+cd
+find . -name '*purple.png' -print
+./mbook2019/vikas19/potlwheatgeneerrors/pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot_Un_purple.png
+#shows location 5 ***Un*** seqs in purple, located in one of the two chr 6 clusters for the phylograms with the 203 seqs.
+
+2nd:
+test_021920_1913plus88ctls1stcolor.txt (think started from same file as *fig 2* of manuscript.)
+# Start from scratch (except have red/black coloring). But, 1st copy file, PPRv1.1.1913plus88ctls1stcolor.txt to test_021920_1913plus88ctls1stcolor.txt. 
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls
+cp PPRv1.1.1913plus88ctls1stcolor.txt test_021920_1913plus88ctls1stcolor.txt
+
+############################################################################
+I then went thru the 88 ctls, in figtree, found their locationS in test_021920_1913plus88ctls1stcolor.txt. All within the putative 'P' seqs in this phylogram.
+# Q: do we want to do qqch to prove this in manuscript ????
+############################################################################
+
+3rd:
+PPRv1.1.752_PLS_88ctls_4color_forRmd.png
+PPRv1.1.752_PLS_88ctls_4color (show how ctls cluster away from the putative 752 PLS seqs)
+#########################################################################
+# Q: appears some PLS seqs on the ctl branch cluster, or could these be **P** proteins in this putative 752 PLS seqs ??????
+Q: how to check? perhaps blastp the 752 with the 88 ctls, see if get pid for any of he 752 up in the 40, 45, 50 range ??????
+#########################################################################
+
+4th:
+PPRv1.1.1161_88ctls_4color_forRmd.png
+#########################################################################
+# ctls **spread around much** of the 1161 seq phylogram putative 'P' seqs. **suggesting** these 1161 are 'P' seqs.
+3 note: bracky, rice ctls well separated from soybean, rabidopsis
+#########################################################################
+
+02/23/20:
+
+5th:
+list_wheatids_pid50_phyml_tree_chrcolor_forRmd.png (206)
+Think later, LBs here removed in process get to final 203 seqs., apparently 10 seqs removed this way. Do I have a list ?????
+Note: some red (chr 1) at end LBs, but *NOT* connected to basic chr 1 cluster
+
+6th:
+list_wheatids_pid50_plus88ctls_phyml_tree_chrcolor_forRmd.png (206+88)
+A new cluster, are they all ctls ?????
+A red chr 1 seq in a blue chr 6 cluster ???????
+
+7th:
+list_wheatids_pid50_plus88ctls_phyml_tree_4ctlscolor_forRmd.png
+Q: bracky, rice ctls near 'basic' chr 1, 2, 6 clusters, soybean, arabodopsis in own cluster
+
+8th:
+pid35_phyml_tree_chrcolor_forRmd.png (305)
+# cluster of chr 1, 2, & 6 **separated** from base cluster of chr 1, 2, & 6, i.e., but not in pid50? what's different about them to be **clustered but not** with the base chr 1, 2, & 6 ??????
+
+9th:
+pid35_plus88ctls_phyml_tree_chrcolor_forRmd.png (305+88)
+Has 'separated' cluster for chr 1, 2, & 6, & ctls cluster
+
+#########################################################################
+10th:
+pid35_plus88ctls_phyml_tree_4ctls_forRmd.png (305+88)
+Shows ctl cluster, but, note, most of rice & bracky ctls mixed in with 'basic' chr's 1, 2, & 6. But all of soybean & arabidopsis ctl seqs in **ctl cluster**
+#########################################################################
+
+11th:
+pid40_phyml_tree_chrcolor_forRmd.png (216)
+Has LB's
+
+12th:
+pid45_phyml_tree_chrcolor_forRmd.png (212)
+
+13th:
+pid40_216pruned13to203_phyml_tree_chrcolor_forRmd.png (203)
+pid40 - 10 - 3
+The 10 from pid50 - 10, so could identify the 10, diff. following file qnd list for pid50.
+cd
+find . -name 'list_WheatIDs_pid50LB10prunedto196.txt' -print
+./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_WheatIDs_pid50LB10prunedto196.txt (list of the 196)
+
+Q: to check, after remove these 10 from pid40, could test if pid40 - 10 = 206 has 3 LB seqs ?????  Alternatively, compare list of 203 with the 216 - 10, should be 3 LB diffs ??????
+
+#########################################################################
+I note, some chr 2 & 6 chustering with chr 1.
+#########################################################################
+
+14th:
+pid40_216pruned13to203_phyml_tree_otherchrcolor_forRmd.png
+
+Note, has coloring for the 11 non chr 1, 2, 6 in the 203. chr 5 (1), chr 7 (5), 'Un' (5).
+
+02/24/20:
+# now after examining 14 phylogram images, summary of what found:
+
+Three levels of filtering used to try come up with the 203 putative RFL proteins in wheat.
+
+i) HMM search using PPR-HMM against the 133,744 wheat peptide sequences (v1.1 IWGSC gff3 annotation file) identified 1,913 potential PPR sequences
+
+ii) clustal phylogram sepn of putative 1161 'P' seqs followed by blastp using 88 RFL ctl seqs as query (work with 35%, 40&, & 50% pid output)
+
+iii) phyml phylogram to display blastp results => 203 putative wheat candidates for RFs in wheat.
+
+Three 'overview' clusters:
+1) basic chr 1, 2, 6 clusters
+--few chr 2 & chr 6 seqs found in chr 1 cluster
+--ctls bracky & rice found in this basic cluster
+2) additional/separate chr 1, 2, 6 cluster (found in pid35 phylogram)
+3) ctls soybean, arabidopsis found in own separate cluster, bracky, rice ctls found in with basic chr 1, 2, 6 cluster.
+
+# comments concerning the 14 phylogram images from /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc/v1.1_logfile_doc.html
+
+1st (or 14th)
+1st locates 5 'Un' seqs, 14th locates these plus chr5 (1), chr7 (5), total of 11 non 1, 2, or 6 chroms.
+
+2nd:
+do we need evidence to put in manuscript that all 88 ctls in putative 'P' portion of 1913 phylogram?
+
+3rd:
+In ctl branch cluster, some seqs not colored in ctl colors, are these PLS or P seqs? 
+Q: Perhaps need to blastp 88 ctls (query) vs 752 seqs, see if any hits in 40 or 50 pid range?
+
+4th:
+Do we need to demonstrate in the manuscript that ctls spread around 1161 phylogram?
+Note: bracky, rice ctls well separated from soybean, arabidopsis (like # 10).
+
+5th:
+Some chr 2 & chr 6 in basic 1 cluster
+Think this a phylogram where 10 seqs on LBs removed, later used to adjust pid40 on way to 203?
+Q: do we need clarify how *exactly* got from 216 on pid40 to pid40prunedto203?
+
+6th:
+pid50+88, new cluster, ctls?
+
+7th:
+pid50+88, new cluster, ctls soybean, arabidopsis
+ctls bracky, rice in with basic 1, 2, 6 cluster
+Q: where vikas6? ?????????????????????????????????????????????????????????????? Are they near bracky & rice, or soybean & arabidopsis ???????????
+
+8th:
+pid35, 'separated' chr1, 2, 6 cluster.
+What's different about all these clustered 1, 2, & 6 seqs from base cluster of 1, 2, 6?
+
+9th:
+pid35+88
+Additional cluster, ctls? Or are some of these in 'addl' cluster in image 10 (ctls) ??????
+
+10th:
+pid35+88
+ctl cluster (soybean, arabidopsis), has one rice
+ctls bracky, rice in with 'basic' 1, 2, 6 cluster
+Q: could check location vikas6 from here if needed ???????????????
+
+13th:
+pid40_216prunedto203_chrcolor
+Q: perhaps need doc. way got the 13 which were removed from ??????
+pid50, pid40 ?????????????????????
+
+Q: location vikas6 ctls in some of the preceding ??????????????
+
+# leakage ????
+
+# Note: image 752, may be some 'P' seqs in the 752 ??????
+
+
+iii) check 'coverage' ????
+
+iv) perhaps try follow methods, doc steps in vikas part
+
+02/25/20:
+# done with previous part on examining 14 phylogram images as a reviewer.
+
+# now, ggplot2 the 'Len' column in table11cols.txt vs the 203 (x-axis is integers, 1 to 2030
+
+
+#ref.: line 18148
+
+rm(list=ls())
+#setwd("~/mbook2019/vikas19/tassel5/VEP/vikas_box")
+setwd("/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs")
+getwd()
+tab11 <- read.delim("table11cols.txt", stringsAsFactors=FALSE)
+
+dim(tab11)  ## [1] 52 27
+  
+# need create df with two colms, both with header
+# Len & ints colms
+
+ints <- seq(1,203, by=1)
+head(ints, n=4)
+ints_len_df <- data.frame(ints=ints, tablen=tab11$Len)
+head(ints_len_df, n=4)
+#ints_len <- data.frame(chr=table9$Chr, pos=table9$Start, phenotype=phenotype_RFL)
+#write.table(phen_all_rows_RFL, file="phen_all_203rows_RFL.txt", quote=FALSE, sep="\t", row.names=FALSE, col.names=TRUE)
+
+#library(dplyr)
+library("ggplot2")
+
+ggplot(data = ints_len_df, mapping = aes(x = ints, y = tablen)) + geom_point()
+# looks like distribution of points, pretty much *no* 'pattern'
+
+varLen <- var(tab11$Len)
+varlen
+
+sdLen <- sd(tab11$Len)
+sd
+
+meanLen <- mean(tab11$Len)
+meanLen
+
+Len_plot <- ggplot(data = ints_len_df, mapping = aes(x = ints, y = tablen)) + geom_point()
+ggsave(filename = "tab11Len.png", plot = Len_plot)
+
+
+Len_plot_2 <- ggplot(data = ints_len_df, mapping = aes(x = ints, y = tablen)) + geom_point() + geom_smooth(method = lm)
+Len_plot_2
+
+ggsave(filename = "tab11Len_2.png", plot = Len_plot_2)
+
+
+02/26/20:
+
+03/11/20:
+#####################################################################
+# talked to vikas
+# place 11 of 203 phylogram in 'figures' box dir, name it qqch like highlight_11of203_notchr1_2_6.png ???
+
+# orig. phylogram: pid40_216pruned13to203_phyml_tree_otherchrcolor_forRmd.png
+
+cd /Users/bterry/mbook2018/vikas18/v1.1Rmd_doc
+cp pid40_216pruned13to203_phyml_tree_otherchrcolor_forRmd.png highlight_11of203_notchr1_2_6.png
+# **uploaded** highlight_11of203_notchr1_2_6.png to Rf_GeneFamily/Manuscript_May2019/Figures folder on box, https://unl.app.box.com/folder/77143420264
+#####################################################################
+
+03/26/20:
+
+# manuscript 'Results' section comments, in file RFL_Manuscript_Results_v1b_pmt032920.docx uploaded to box dir. Rf_GeneFamily/Manuscript_May2019/Text_Comments. From mbook dir. /Users/bterry/mbook2020/vikas20
+I note, will act on several of my comments after discuss with you.
+
+# email with vikas
+1) to do, as finding variants in pan-genomes, becoming impt in genomics to be able to do. So, practice class 6 with own res. data (slide 17, 2nd class 6 pdf). That is, think I have '.hmp' file vikas created on crane for PPR project. Then I could try what you did on my laptop version of Tassel to find the 4 SNPs you found? NOTE: documenting from 
+
+2) to do: send my manuscript comments to: Rf_GeneFamily/Manuscript_May2019/Text_Comments dir. on box.
+
+03/28/20:
+
+# prepare file with sequence names for those sequences differing between 
+-rw-r--r--@ 1 bterry  staff  4531 Oct  9 23:01 list_WheatIDs_pid40.txt
+# has 216 seqs. 
+# in dir: /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+ # and the 203 sequences in /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/table11cols.txt file.
+
+# try command line, try comm command, p-249, Shotts text (Q: do files need to be same length) ?????
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+cat list_WheatIDs_pid40.txt > file1.txt
+head -n 10 file1.txt
+wc -l file1.txt
+     216 file1.txt
+
+cat hmmer203seqs/table11cols.txt | tail -n 203 | cut -f1 > file2.txt
+head -n 10 file2.txt
+wc -l file2.txt
+     203 file2.txt
+comm -12 file1.txt file2.txt > sharedrows.txt
+wc -l sharedrows.txt
+     201 sharedrows.txt
+# why not 203? Perhaps cause duplicated only counted once ????????????
+comm -23 file1.txt file2.txt > uniqto216.txt
+wc -l uniqto216.txt
+      15 uniqto216.txt
+comm -13 file1.txt file2.txt > uniqto203.txt
+wc -l uniqto203.txt
+       2 uniqto203.txt
+# Note: diff. 15 & 2 = 13  ?????????????????
+# Q: looks like by removing seqs from phylogram of pid50, got this result ????
+
+# Q: what to check next ???????? Perhaps just print out, mark the 2 in table11cols.txt and the 15 in list_WheatIDs_pid40.txt.
+
+# in table11cols.txt, the 2 reported unique to this file NOT in sorted order.
+# so go check, if actually in list_WheatIDs_pid40.txt. '315500' there, in **sorted** order, also '099387' also there, in **sorted** order.
+
+STOPPED
+
+04/01/20:
+
+# from line 16289
+# note: file uploaded to box was from /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs
+# to .../GeneFamily/manuscript
+# so assume, table11cols.txt file working with here same (but possibly check after done rechecking if get expected result of '0' & '13'.
+
+# So, remake file1 & file 2, this time sort both (might do sort uniq just to check if any duplicates in either file), then repeat 'comm' step, see if get expected unique numbers of 0 & 13 ???????????????
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+cat list_WheatIDs_pid40.txt | sort | uniq > file1_216sort.txt
+head -n 10 file1_216sort.txt
+wc -l file1_216sort.txt
+     216 file1_216sort.txt
+
+cat hmmer203seqs/table11cols.txt | tail -n 203 | cut -f1 | sort | uniq > file2_203sort.txt
+head -n 10 file2_203sort.txt
+wc -l file2_203sort.txt
+     203 file2_203sort.txt
+
+comm -12 file1_216sort.txt file2_203sort.txt > sharedrows_sort.txt
+wc -l sharedrows_sort.txt
+     203 sharedrows_sort.txt   ## as expected
+
+comm -23 file1_216sort.txt file2_203sort.txt > sortuniqto216.txt
+wc -l sortuniqto216.txt
+      13 sortuniqto216.txt  ## as expected, only 10 unique genes
+
+comm -13 file1_216sort.txt file2_203sort.txt > sortuniqto203.txt
+wc -l sortuniqto203.txt
+       0 sortuniqto203.txt  ## as expected
+     
+
+
+
+
+
+3) Barchender ref
+
+4) Q: theoretically, if miss any exome bases, if these where snps are, would miss?
+
+6) to do, finish pag summaries
+
+
+
+
+
+
+2) read over RFL_Manuscript_Methods_v1f.doc, provide comments.
+
+
+
+
+
+
+
+
 
 
 
