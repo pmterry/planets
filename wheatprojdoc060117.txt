@@ -1,4 +1,4 @@
-wheatprojdoc060117.txt
+ wheatprojdoc060117.txt
 
 06/01/17:
 ## talked to Vikas, to do:
@@ -14736,7 +14736,7 @@ find . -name 'PPRv1.1.1913_br9rice9soy38arab26plusvikas6.fa ' -print
 # Q: what is query, target ?????????????
 #######################################################################
 # Wants 216 (pid40 blastp hits). TO CHECK: THAT THE 4 snp HITS ARE INCLUDED ????????????
-# YES, see .../cikas19/tassel5/VEP/ijtabvep4cols4snps.txt
+# YES, see .../vikas19/tassel5/VEP/ijtabvep4cols4snps.txt
 #######################################################################
 
 02/28/19:
@@ -18879,7 +18879,8 @@ find . -name 'pheno_gram.43901.png' -print
 That is, want PARENT of .../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree_chrcolor_forRmdline1.0.txt
 BEFORE any coloring
 i. suggest obtain original figtree input file for the 203 prot. seqs, before any coloring from the 'pro'. So looks like such a file on 'pro' is:
- ~/pro2018/PPRv1.1_1161)88ctls/vikas_filter/pid40_216pruned13to203_phyml_tree.txt
+ ~/pro2018/PPRv1.1_1161.ac
+ 88ctls/vikas_filter/pid40_216pruned13to203_phyml_tree.txt
 
 08/28/19:
 # need copy to box, then mbook.
@@ -20590,9 +20591,8 @@ comm -13 file1_216sort.txt file2_203sort.txt > sortuniqto203.txt
 wc -l sortuniqto203.txt
        0 sortuniqto203.txt  ## as expected
      
-
-
-
+# github
+# slip a save to ***github*** in here
 
 
 3) Barchender ref
@@ -20601,18 +20601,966 @@ wc -l sortuniqto203.txt
 
 6) to do, finish pag summaries
 
+04/02/20:
+# phone conversation wi vikas
+
+1) try use dplyr, sort table11cols.txt file, on 1st colm, re-upload to box.
+2) discussing RFL_Manuscript_Methods_v1f_pmt.doc
+
+a) p-2, File listing 13 seqs differing betw. 216 pid40 seqs, & 203 seqs. In dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# rename, i.e., rename to copy to box
+
+cp sortuniqto216.txt sortuniq_pid40_216_LB_diff13.txt
+
+Then copy to box (Rf_GeneFamily/Manuscript_May2019/Text_Comments directory)
+
+# but note, perhaps should be put into existing Word file on box Rf_GeneFamily/Manuscript_May2019/Supplementary_Tables/SupplementaryTables_v1.docx  ????
+
+
+b) p-3, supp file, Word file, the 9 single chrom. phenograms. So will need place somewhere on box if not already there ???????
+
+04/03/20:
+# refer line 19642 ~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/CombinedPhenoFigures.docx)
+# place on box, dir = Rf_GeneFamily/Manuscript_May2019/Supplementary_Figures/CombinedPhenoFigures.docx, done on 01/29/20.
+# checked, file is there
+
+c) p-3, supp file, Word file, with 5 (?) gsds intron images. So will need place somewhere on box if not already there ???????
+# to check following file on box, where on mbook ??
+*SupplementaryFigures.docx*
+# no mention in res. log file ??
+# open on box, *contains* the 5 gsds figures
+# so do a find on mbook, try find
+find . -name 'SupplementaryFigures.docx' -print
+# not found on macbook  ????????????????????????
+# so, dnload from box, view in Word, 
+# I note several seqs with introns, vikas discusses in RFL_Manuscript_Methods_v1f_pmt.doc, p-3
+# copy over to vikas2020 to have a copy on macbook (done)
+# individual gsds image files also on box
+1st_LYCF24.png.tiff
+find . -name '1st_LYCF24.png.tiff' -print
+./mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/hmmer203seqs/1st_LYCF24.png.tiff
+# and 4 others
+# so 5 gsds figs in Word file
+# Rf_GeneFamily/Manuscript_May2019/Supplementary_Figures/SupplementaryFigures.docx
+# also, each of the 5 as individual file, 1st_LYCF24.png.tiff
+, etc. in same dir.
+
+d) p-4, References, vikas to do, but I may just go thru find all references have during whole res. proj ??????????//
+
+3) class 6, 'quality filtering' of my research '.hmp' file. ok, file from crane 'snp' finding run, -rw-rw-rw-@ 1 bterry  staff   4.1M Feb  8  2019 R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.hmp.txt
+
+Vikas says this file already subset down to just 'R_and_NonR_lines' data. Q: like see input (fastq files ??) for crane 'snp' calling run ???
+Anyway, can practice 'quality filtering' on this file.
+Q: log files for the crane run ?????
+
+Vikas says students now sending in their results, so should be able to slides 14 & 15 when all in ???????
+
+Following subset by +- 5 kb from 198 of 203 RFL genes
+R_and_NonR_lines_RFL_SNPs.recode.hmp.txt  ## 59 rows
+
+Q: what to make of following files uploaded to box by vikas ????
+ForFlapjack_R_and_NonR_lines_RFL_SNPs.recode.txt
+R_and_NonR_lines_RFL_SNPs.log  
+
+Q: yet to finish abstracts from pag20 ????
+
+04/14/20:
+phone, Vikas
+1) check if can find my email concerning journal to pub. in. was it 'BMC Plant Biology' ?? (line 16430, 04/29/19) (done, See email, 5/3/19, vikas **concurs*** with choice)
+#############################################################################
+2) will get to place where vikas used tassel5 glm to relate R, nonR samples to snps ??
+#############################################################################
+3) R_and_NonR_lines_VariantCalls2018_MAF0.05_Max-missSNPs0.20_MaxMissLine20p.recode.hmp.txt (27356 rows).
+already variant filtered by vikas. Perhaps add filter for 'remove sites with indels' in a 2nd try to get 4 genes selected for Kasp by vikas. Apparently vikas did not try.
+#############################################################################
+4) still my question: .hmp.txt file, are addresses all from 5' strand, even if a gene/snp is on other strand ???????????? Or does it matter as snp affects both strands ?????????
+#############################################################################
+
+04/16/20:
+#############################################################################
+# vikas email requesting supplementary_file_88ctls_v2.xlsx, **verify** it's contents and also fill in the **blank** cells. Where is supplementary_file_88ctls.txt ????
+Find in BOX: Rf_GeneFamily/Manuscript_May2019/Supplementary_Tables.
+
+04/17/20:
+# line 5794, 2/10/18
+bracky9names.fa  =bbedit=> bracky9namesshort.fa
+find . -name 'bracky9names.fa' -print
+
+Fujii, S., et al., PNAS, 108(4):1723-28 2011
+# look for source 9 bracky seqs in this paper ????
+
+Brachypodium_distachyon.v1.0.pep.all.fa
+find . -name 'Brachypodium_distachyon.v1.0.pep.all.fa' -print
+./mbook2018/vikas18/131RFlike/Brachypodium_distachyon.v1.0.pep.all.fa
+
+File:Brachypodium_distachyon.v1.0.pep.all.fa.gz
+
+Brachypodium_distachyon.v1.0.pep.all.fa
+
+ftp://ftp.ensemblgenomes.org/pub/plants/release-38/fasta/brachypodium_distachyon/pep/
+
+*********************************************************************
+So for bracky 9, in 'Source of peptide sequence' colm, placed ftp.ensemblgenomes.org/pub/plants/release-38/fasta/brachypodium_distachyon/pep/
+
+**********************************************************************
+
+line 525
+rice9
+## so, 'FR' & lengths to select from 42 rows from table S1, 'sci reports'
+
+
+# to check, the steps I followed starting with srep35152.pdf ref paper ??????
+line 426
+find . -name 'srep35152.pdf' -print
+
+
+find . -name 'NCBIrefcolm.txt' -print
+./vikas17/wheatproj/NCBIrefcolm.txt  ## 42 rice names, rice9 probably a subset ?????
+
+04/13/19:
+line 436
+manually examine table S1. Sort of curate which select for 'restorer for CMS' genes to use in phylogeny with wheatproj PPR proteins.
+
+line 526 - 537
+# 11 ncbi refs of the table S1 oroteins, chosen *from* ncbi doc. (i.e., where multiple choices for a gene/protein, went with one doc'd as RFL protein/gene
+# test search of ncbi:
+>BAD08214.1 fertility restorer [Oryza sativa Indica Group]
+MARRAASRAVGALRSDGSIQGRGGRAGGSGAEDARHVFDELLRRGRGASIYGLNRALADVARDSPAAAVS
+...
+
+cd /Users/bterry/macbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+
+# and in FRknownseqs.fa, 
+>lcl|AB110443.1_prot_BAD08214.1_4 [gene=Rf-1] [protein=fertility restorer] [protein_id=BAD08214.1] [location=43907..46282]
+MARRAASRAVGALRSDGSIQGRGGRAGGSGAEDARHVFDELLRRGRGASIYGLNRALADVARDSPAAAVS
+
+# so *match*, so 'Source of peptide sequence' for the rice9 is: 'National Center for Biotechnology Information'.
+# NOTE: selected 9 of 42 from table S1, some of them represented 3 or more times in table S1. I picked based on other colms of table, perhaps length of protein. Do we need mention this in some way ??????????
+
+
+STOPPED
+
+line 5747
+soybean41to_ver2names38.txt.prot.fa
+
+# left to check, soybean &
+Q: soybean numbers in supplementary_file_88ctls.txt **NOT** matching st01.docx names. The 41 - 3 = 38 agrees
+vikas lists https://soybase.org
+Q: try see if there is a MAPPING between these two sets ?????????????
+**YES**, Wm82.a1.v1 or Wm82.a1.v1.1 used by Fugii, 2011, Wm82.a2.v1 used by me, 
+**SEE** a mapping for 1st seq on list at https://soybase.org/correspondence/index.php
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# arabidopsis
+
+AT1G12620.1
+# found sequence on https://www.arabidopsis.org
+# to compare with  
+line 15691
+Arabidopsis_thaliana.TAIR10.pep.all.fa
+find . -name 'Arabidopsis_thaliana.TAIR10.pep.all.fa' -print
+./mbook2018/vikas18/131RFlike/arabidopsistuff/Arabidopsis_thaliana.TAIR10.pep.all.fa
+
+arab26fujii2011namesCAPS.txt
+find . -name 'arab26fujii2011namesCAPS.txt' -print
+./mbook2018/vikas18/131RFlike/arabidopsistuff/arab26fujii2011namesCAPS.txt
+
+arab26fujii2011names.fa
+
+# to compare in arab26fujii2011names.fa & www.arabidopsis.org site, seq of AT1G12620.1
+# MATCHES at:
+https://www.arabidopsis.org/servlets/TairObject?type=aa_sequence&id=1009107283
+
+# SO FINDING arabidopsis seqs on www.arabidopsis.org
+
+# BUT note, my names, don't match table S1, but can find my names by searching them on www.arabidopsis.org
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+# sent email to vikas about supplementary_file_88ctls_v2.xlsx on 04/18/20
+#############################################################################
+
+04/22/20:
+
+#############################################################################
+mbook froze/crashed today.
+#############################################################################
+
+04/28/20:
+# phone call, Vikas
+1) to place ...'methods'....v1h_pmt... file on box
+2) try go thru, make list all refs since start res proj., & a comment of each's significance?
+3 check couple of the 88 ctls, details, how well related to actual 'Rf' gene ?????
+
+05/02/20:
+
+find . -name 'supplementary_file_88ctls_v2.xlsx' -print
+~/mbook2020/vikas20/supplementary_file_88ctls_v2.xlsx
+
+CAR70003.1_At1g12700_Arabidopsis_thaliana
+BAM64814.1_bvCRP-1_Beta_vulgaris
+API57808.1_RFP1_Brassica_rapa
+AAM52339.1_fertilityrestorer_Petuniaxhybrida
+AJG06104.1_restorer-of-fertility_Raphanus_sativus
+Q76C99.1_Rf1_Oryza_sativa
+
+find . -name 'FunctionallyCharacterizedRfs_fasta.txt' -print
+~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/phyml/pyMLorthomcl131vikas6/FunctionallyCharacterizedRfs_fasta.txt
+
+# checking on doc/support for a vikas6 seq, Q76C99.1_Rf1_Oryza_sativa (vikas saying these 6 'functionally characterized' RFs).
+# see https://www.ncbi.nlm.nih.gov/protein/60390261 for aa seq.
+# so 791 seqs matches seq in FunctionallyCharacterizedRfs_fasta.txt
+# see ref. paper at: https://febs.onlinelibrary.wiley.com/doi/epdf/10.1016/S0014-5793%2803%2900480-0
+# FEBS Letters 544 (2003) 99-102
+#################################################################################
+# They cloned the Rf-1 gene. But, 2nd page, they list it as a possible candidate gene
+# p-4, PPR8-1, says yet to prove this the gene responsible for Rf-1 functionality.
+# Q: How relate this to Q76C99.1, a protein in the vikas6 ??????? Ans: says so in 
+https://www.ncbi.nlm.nih.gov/protein/60390261
+# Q: ref. paper refers to this gene as PPR8-1 ???????????????
+#################################################################################
+
+05/03/20:
+
+STOPPED
+
+# to do, locate Q76C99.1 vikas6 ctl on some of my phylograms, see if  near rice9 group?
+find . -name 'supplementary_file_88ctls.txt' -print
+~/mbook2020/vikas20/supplementary_file_88ctls.txt
+
+# test_021920_1913.pluw88ctls... file, Q76... near rice9, but rice9 split 2 places ????
+# Q: what was the input file for figtree (Q: is it a 'phyml' file ??????
+# Q: may have to go to on of the Rmd html files for this info. ?????
+
+#################################################################################
+# perhaps check #4, PPRv1.1161_88ctls_4color_forRmd.png, try the figtree input file to locate 'Q76' ???, => wait, I see it, right by rice9
+#################################################################################
+
+#################################################################################
+# #7, To check, if Q76 by the rice9 
+# or #10
+#################################################################################
+
+05/04/20:
+# try develop quick list of references have gone thru during his research project:
+
+Barchenger, J. Amer Soc Hort Sci 143(6):418 (2018)
+[23279788 ... Restoration.pdf
+# paper similar to ours, computer Idn of PPR in chile pepper
+
+Cheng, Q., Ther & applied genetics (2018) 131:1861
+file name: ???? (can't find free copy, but perhaps got copy from vikas ????))
+# comment: good science ????
+Identification of candidate genes underlying genic male-sterile msc-1 locus via genome resequencing in Capsicum annuum L.
+
+Joeng, K., Ther Appl Genet (2018) 131:183
+./mbook2020/vikas20/Jeong2018_Article_FineMappingOfTheGenicMale-ster.pdf
+# fine mapping, Fine mapping of the genic male-sterile ms1 gene in Capsicum annuum L.
+
+Zhang, Ther & applied genetics (2020) 133:1177
+~/mbook2020/vikas20/Zhang2020_Article_FineMappingOfTheMaleFertilityR.pdf
+# fine mapping ..., includes kasp assay
+Fine mapping of the male fertility restoration gene CaRf032 in Capsicum annuum L.
+
+Happ, G3 9 july 2019, 2153
+~/mbook2020/vikas20/2153.pdf
+# low cost genotyping approach, Generating High Density, Low Cost Genotype Data in Soybean [Glycine max (L.) Merr.]
+
+Wang, (Poland) GigaScience 8 2019 1-11
+~/mbook2019/vikas19/Wangetal_HTPDeepLearningFloweringTimeInWheat_GigaScience_2019.pdf
+# deep learning (not my interest in deep learning), High-throughput phenotyping with deep learning gives insight into the genetic architecture of flowering time in wheat
+
+Fugii, PNAS 108(4) 1723 (2011)
+~/mbook2019/vikas19/1723.full.pdf
+# some ctls from here, ~/mbook2018/vikas18/st01.docx (9 bracky, 26 arabidopsis, 38 soybean)
+Selection patterns on restorer-like genes reveal a conflict between nuclear and mitochondrial genomes throughout angiosperm evolution
+# supp file for Fujii
+~/mbook2018/vikas18/st01.docx
+Table S1
+
+Terry, apr 09, 2019, conf presentation
+~/mbook2019/vikas19/vikas_ppt_presentatn/RFLGeneFamilyCargillRLines_PPT_v5b_FINAL.pptx
+# conf presentation
+
+Krishnananda, Res. J. Biotech 14(7) (2019) 67
+~/mbook2019/vikas19/krishnananda/Krishnanandaetal_RfMarkersForHybridity_ResJBiotech_2019.pdf
+# India, Validation of cytoplasmic genetic male sterility in rabi sorghum hybrids and their parents using diagnostic set of microsatellite markers
+
+Belamkar (lorenz) G3, 8, august (2018) 2735
+~/mbook2020/vikas20/2735.full.pdf
+# GBS, etc. Genomic Selection in Preliminary Yield Trials in a Winter Wheat Breeding Program
+
+Poland The Plant Genome 5(3) (2012), 92
+~/mbook2019/vikas19/tpg-5-3-92.pdf
+# GBS review, Poland, Genotyping-by-Sequencing for Plant Breeding and Genetics
+
+Melonek, J. Scientific Reports, 6:35152 (2016)
+~/mbook2019/vikas19/srep35152.pdf
+# rice9 in supp., ~/mbook2017/vikas17/wheatproj/srep35152-s1.pdf
+
+Arora, S. (Poland) nature biotechnology, 37(Feb) (2019) 139-43
+~/mbook2019/vikas19/s41587-018-0007-9.pdf
+# not sure why have this one ????
+Resistance gene cloning from a wild crop relative by sequence capture and association genetics
+
+Bohra, A., Plant Cell Rep (2016) 35:967
+~/mbook2019/vikas19/Bohra2016_Article_CytoplasmicMaleSterilityCMSInH.pdf
+# review, Cytoplasmic male sterility (CMS) in hybrid breeding in field crops
+
+Dahan, RNA biology 10:9 1469-76 (2013)
+File:  ~/mbook2019/vikas19  The\ Rf\ and\ Rf\ like\ PPR\ in\ higher\ plants\ a\ fast\ evolving\ subclass\ of\ PPR\ genes.pdf
+# review, The Rf and Rf-like PPR in higher plants, a fast- evolving subclass of PPR genes
+
+Garcia, L., Journal ?????
+~/mbook2019/vikas19/Garciaetal_Malesterilityandsomatichybridizationinplantbreeding_Preprints_2019.pdf
+# not peer reviewed, Male sterility and somatic hybridization in plant breeding
+
+05/05/20:
+
+Melonek, The Plant Journal Journal (2019) 97, 281-295
+~/mbook2019/vikas19/Melonek_et_al-2019-The_Plant_Journal.pdf
+# High intraspecific diversity of Restorer-of-fertility-like genes in barley
+
+Wei, C., Ther & Applied Genetics (2019) 132:2525-39
+~/mbook2019/vikas19/Weietal_ConstructionOfRestorerLinesAndMolecularMappingofRfGene_TAAG_2019.pdf
+# RFC restoration of fertility complex, Construction of restorer lines and molecular mapping for restorer gene of hau cytoplasmic male sterility in Brassica napus
+
+Qin, X., New Phytologist (2016) 210:934-945
+~/mbook2019/vikas19/Qin_et_al-2016-New_Phytologist.pdf
+# RFC restoration of fertility complex, 
+The rice DUF1620-containing and WD40-like repeat protein is required for the assembly of the restoration of fertility complex
+
+Migliori, V., Epigenetics 7:8 815-22 (2012)
+~/mbook2019/vikas19/On WD40 proteins Propelling our knowledge of transcriptional control.pdf
+# On WD40 proteins Propelling our knowledge of transcriptional control.pdf
+
+Mascheretti, I., The Plant Cell 25:404-20 (2013)
+~/mbook2019/vikas19/404.full.pdf
+# The WD40-Repeat Proteins NFC101 and NFC102 Regulate Different Aspects of Maize Development through Chromatin Modification
+
+Andres-Colas, N., PNAS, 114(33) (2017)  8883-8888
+~/mbook2019/vikas19/pnas.201705815.pdf
+# Multiple PPR protein interactions are involved in the RNA editing system in Arabidopsis mitochondria and plastids
+
+05/06/20:
+
+Geyer, M., Molecular Genetics and Genomics (2018) 293:451-462
+~/mbook2019/vikas19/Geyer2018_Article_ExploringTheGeneticsOfFertilit.pdf
+# Exploring the genetics of fertility restoration controlled by Rf1
+in common wheat (Triticum aestivum L.) using high-density linkage maps
+# Rf1, multiple loci involved fertility restoration by Rf1 (note: fig S54, several Rfs in Aug 2018 wheat genome seq pub. Science 361 eaar7191) These folks access this pub genome, *To do*: re-look at Fig S54 legend again. *See also*, fig 4
+
+IWGSC, Science 361, 661 (2018)
+~/mbook2018/vikas18/iwgsc_refs/eaar7191.full.pdf
+# 1 of 3(?) pubs for bread wheat genome
+# Shifting the limits in wheat research and breeding using a fully annotated reference genome
+
+Ramirez-Gonzales et al., Science 361 662 (2018)
+/Users/bterry/mbook2018/vikas18/iwgsc_refs/eaar6089.full.pdf
+# The transcriptional landscape of polyploid wheat
+
+hybrid wheat meeting (04/05/19)
+Agenda in email this date.
+
+pag2019 plenary, boyle (pritchard)
+# omnigenic model, Cell 169 june 15, 2017
+/Users/bterry/mbook2019/pag2019/1-s2.0-S0092867417306293-main.pdf
+
+# a 2nd Pritchard ref, 425108.full.pdf
+
+Sykes, T., Genome Biol. Evol 9(2) 351-62
+~/mbook2017/vikas17/wheatproj/Sykes_InsilicoIdentificationOfRfgeneFamilyInRyegrass_GBE_2016.pdf
+# In Silico Identification of Candidate Genes for Fertility
+Restoration in Cytoplasmic Male Sterile Perennial
+Ryegrass (Lolium perenne L.)
+
+Manna, S., Biochimie 113 (20p15) 93-99
+~/mbook2017/vikas17/1-s2.0-S030090841500108X-main.pdf
+# review, An overview of pentatricopeptide repeat proteins and their applications
+
+Fujii, S., The Plant Journal, (2016) 86, 504-13
+fname: pdf won't dnload from internet ??????????????/
+# mentions RFL2, orf291 ?????
+The Restorer-of-fertility-like 2 pentatricopeptide repeat protein and RNase P are required for the processing of mitochondrial orf291 RNA in Arabidopsis
+
+Wurschum, T., Theor Appl Genet (2017) 130:1253-1266
+~/mbook2017/vikas17/RF3.pdf
+# Genetic architecture of male fertility restoration of Triticum timopheevii cytoplasm and fine-mapping of the major restorer locus Rf3 on chromosome 1B
+
+Barkam, A., Annu Rev Plant Biol 2014, 65:415-42
+~/mbook2017/vikas17/annurev-arplant-050213-040159.pdf
+# review, Pentatricopeptide Repeat Proteins in Plants
+
+Luo, M., Nature, 551, 23 November, (2017) p-498 ??????
+/Users/bterry/mbook2017/vikas17/nature24486.pdf
+# genome seq of progenitor of wheat D genome, Aegilops tauschii (Salzberg, an author)
+
+Shen, C. nature communications, 8 April, (2016) 
+~/mbook2017/vikas17/ncomms11285.pdf
+# all chinese authors, Structural basis for specific single-stranded RNA
+recognition by designer pentatricopeptide repeat proteins
+
+Wang, Z., The Plant Cell, 18, 676-687 (2006)
+/Users/bterry/mbook2017/vikas17/tpc1800676.pdf
+# Cytoplasmic Male Sterility of Rice with Boro II Cytoplasm Is Caused by a Cytotoxic Peptide and Is Restored by Two Related PPR Motif Genes via Distinct Modes
+of mRNA Silencing
+
+Kazama, T., The Plant Journal (2016) 85, 707-716
+/Users/bterry/mbook2018/vikas18/Kazama_et_al-2016-The_Plant_Journal.pdf
+# Mitochondrial ORF79 levels determine pollen abortion in cytoplasmic male sterile rice
+ 
+05/07/20:
+
+Zhang, B., Journal of Cotton Research, (2018) 1:12
+/Users/bterry/mbook2018/vikas18
+/Zhangetal_Genome-wideAnalysisOfRf-PPR-like_RFL_Cotton_JCottonRes_2018.pdf
+# Genome-wide analysis of Rf-PPR-like (RFL) genes and a new InDel marker development for Rf1 gene in cytoplasmic male sterile CMS-D2 Upland cotton
+
+Arakawa, T., PLOS One, June 1 (2018)
+/Users/bterry/mbook2018/vikas18/pone.0198409.pdf
+# A fertility-restoring genotype of beet (Beta vulgaris L.) is composed of a weak restorer-of- fertility gene and a modifier gene tightly linked to the Rf1 locus
+
+Sinha, P., The PLant Journal, (2013) 141:431
+fname ???
+# mapping of new Rf8 for Triticum timopheevi cytoplasm ... in wheat (Triticum aestivum L.) ...
+# Q: mixing these two species ????????????????????/
+
+Gaborieau, L., Front. Plant Sci. 7:1816 (2016)
+~/mbook2018/vikas18/fpls-07-01816.pdf
+# review, The Propensity of Pentatricopeptide Repeat Genes to Evolve into Restorers of Cytoplasmic Male Sterility
+
+Cheng, S., The Plant Journal (2016) 85, 532-47
+fname: can't get dwn as clean pdf, can't get to print ????  https://onlinelibrary.wiley.com/doi/epdf/10.1111/tpj.13121
+# Small, structures [*impt* paper]
+Redeﬁning the structural motifs that determine RNA binding
+and RNA editing by pentatricopeptide repeat proteins in land
+plants
+
+Bevan, M., 346 | NATURE | VOL 543 | 16 MARCH 2017
+~/mbook2017/vikas17/Bevan_GenomicInnovationForCropImprovement_Nature_2017.pdf
+# Review, has **diagram** of bred wheat evolution
+Genomic innovation for crop improvement
+
+
+Chen, L., BMC Plant Biology (2018) 18:366
+~/mbook2019/vikas19/12870_2018_Article_1572.pdf
+# Genome-wide analysis of the pentatricopeptide repeat gene family in different maize genomes and its important role in kernel development
+
+Geyer, M., Mol Breeding (2016) 36: 167
+~/mbook2019/vikas19/prevlymappedRfs/Geyer2016_Article_DistributionOfTheFertility-res.pdf
+# Distribution of the fertility-restoring gene Rf3 in common and spelt wheat determined by an informative SNP marker
+
+Li, F., BMC Plant Biology (2019) 19:168
+~/mbook2019/vikas19/document.pdf
+# GWAS, China, Genetic architecture of grain yield in bread wheat based on genome-wide association studies
+
+Glover, N., Trends in Plant Science, July 2016, 21(7) 609
+~/mbook2019/vikas19/ensembl/kasp_primers/Glover_HomoeologsWhatAreTheyAndHowDoWeInferThem_TrendsinPlantSci_2016.pdf
+# Review, Homoeologs: What Are They and How Do We Infer Them?
+
+Rasheed, A., Theor Appl Genet (2016) 129:1843–1860
+~/mbook2019/vikas19/potljournals/Rasheed2016_Article_DevelopmentAndValidationOfKASP.pdf
+# China, CIMMYT
+Development and validation of KASP assays for genes underpinning key economic traits in bread wheat
+
+05/08/20:
+
+Ramirez-Gonzales, R., Bioinformatics, 31(12), 2015, 2038–2039
+~/mbook2020/vikas20/btv/btv069.pdf
+# PolyMarker: A fast **polyploid** primer design pipeline
+
+Small, I., Proteomics 2004, 4, 1581–1590
+~/mbook2019/vikas19/Small_et_al-2004-PROTEOMICS.pdf
+# Predotar: A tool for rapidly screening proteomes for
+N-terminal targeting sequences
+
+Woodson, J., Nature Reviews | genetics  volume 9 | May 2008 | 383
+~/mbook2019/vikas19/WoodsonAndChory_CoordinationOfGeneExpressionOrganellarAndNuclearGenome_NatReviewGenetics_2008.pdf
+# *review*, Coordination of gene expression *between* organellar and nuclear genomes
+
+
+05/09/20:
+############################################################################
+# looking thru phylograms a bit.
+line 18888n
+.../vikas19/vikas_ppt_presentatn/pid40_216pruned13to203_phyml_tree.txt
+# no color, precursor to various colored phylograms
+############################################################################
+
+
+############################################################################
+****************************************************************************
+05/10/20:
+# ok, try organize, fix preceding list of references:
+
+1) potential references for paper:
+
+a) wheat
+
+Belamkar (lorenz) G3, 8, august (2018) 2735
+~/mbook2020/vikas20/2735.full.pdf
+# GBS, etc. Genomic Selection in Preliminary Yield Trials in a Winter Wheat Breeding Program
+
+Geyer, M., Molecular Genetics and Genomics (2018) 293:451-462
+~/mbook2019/vikas19/Geyer2018_Article_ExploringTheGeneticsOfFertilit.pdf
+# Exploring the genetics of fertility restoration controlled by Rf1
+in common wheat (Triticum aestivum L.) using high-density linkage maps
+# Rf1, multiple loci involved fertility restoration by Rf1 (note: fig S54, several Rfs in Aug 2018 wheat genome seq pub. Science 361 eaar7191) These folks access this pub genome, *To do*: re-look at Fig S54 legend again. *See also*, fig 4
+
+IWGSC, Science 361, 661 (2018)
+~/mbook2018/vikas18/iwgsc_refs/eaar7191.full.pdf
+# 1 of 3(?) pubs for bread wheat genome
+# Shifting the limits in wheat research and breeding using a fully annotated reference genome
+
+Ramirez-Gonzales et al., Science 361 662 (2018)
+/Users/bterry/mbook2018/vikas18/iwgsc_refs/eaar6089.full.pdf
+# The transcriptional landscape of polyploid wheat
+
+hybrid wheat meeting (04/05/19)
+Agenda in email this date.
+
+Wurschum, T., Theor Appl Genet (2017) 130:1253-1266
+~/mbook2017/vikas17/RF3.pdf
+# Genetic architecture of male fertility restoration of Triticum timopheevii cytoplasm and fine-mapping of the major restorer locus Rf3 on chromosome 1B
+
+Luo, M., Nature, 551, 23 November, (2017) p-498 ??????
+/Users/bterry/mbook2017/vikas17/nature24486.pdf
+# genome seq of progenitor of wheat D genome, Aegilops tauschii (Salzberg, an author)
+
+Geyer, M., Mol Breeding (2016) 36: 167
+~/mbook2019/vikas19/prevlymappedRfs/Geyer2016_Article_DistributionOfTheFertility-res.pdf
+# Distribution of the fertility-restoring gene Rf3 in common and spelt wheat determined by an informative SNP marker
+
+Rasheed, A., Theor Appl Genet (2016) 129:1843–1860
+~/mbook2019/vikas19/potljournals/Rasheed2016_Article_DevelopmentAndValidationOfKASP.pdf
+# China, CIMMYT
+Development and validation of KASP assays for genes underpinning key economic traits in bread wheat
+
+Sinha, P., Genetica, (2013) 141:431
+Sinha2013_Article_GeneticAnalysisAndMolecularMap.pdf
+# Genetic analysis and molecular mapping of a new fertility restorergeneRf8forTriticum timopheevicytoplasm in wheat (TriticumaestivumL.) using SSR markers
+# ref 168, in IWGSC, Science 361, 661 (2018)
+
+
+b) not wheat
+
+Barchenger, J. Amer Soc Hort Sci 143(6):418 (2018)
+/Users/bterry/mbook2020/vikas20
+/[23279788 - Journal of the American Society for Horticultural Science] Genome-wide Identification of Chile Pepper Pentatricopeptide Repeat Domains Provides Insight into Fertility Restoration.pdf
+# extensive discussion of Rf's in 'Intro'
+
+# paper similar to ours, computer Idn of PPR in chile pepper
+
+Fugii, PNAS 108(4) 1723 (2011)
+~/mbook2019/vikas19/1723.full.pdf
+# some ctls from here, ~/mbook2018/vikas18/st01.docx (9 bracky, 26 arabidopsis, 38 soybean)
+Selection patterns on restorer-like genes reveal a conflict between nuclear and mitochondrial genomes throughout angiosperm evolution
+# supp file for Fujii
+~/mbook2018/vikas18/st01.docx
+Table S1
+
+05/11/20:
+
+Melonek, J. Scientific Reports, 6:35152 (2016)
+~/mbook2019/vikas19/srep35152.pdf
+# Evolutionary plasticity of restorer-of-fertility-like proteins in rice
+# rice9 in supp., ~/mbook2017/vikas17/wheatproj/srep35152-s1.pdf
+
+Cheng, S., The Plant Journal (2016) 85, 532-47
+fname: can't get dwn as clean pdf, can't get to print ????  https://onlinelibrary.wiley.com/doi/epdf/10.1111/tpj.13121
+# Small, structures [**impt** paper]
+Redeﬁning the structural motifs that determine RNA binding
+and RNA editing by pentatricopeptide repeat proteins in land
+plants
+
+Bevan, M., 346 | NATURE | VOL 543 | 16 MARCH 2017
+~/mbook2017/vikas17/Bevan_GenomicInnovationForCropImprovement_Nature_2017.pdf
+# Review, has **diagram** of bred wheat evolution
+Genomic innovation for crop improvement
+
+Ramirez-Gonzales, R., Bioinformatics, 31(12), 2015, 2038–2039
+~/mbook2020/vikas20/btv/btv069.pdf
+# PolyMarker: A fast **polyploid** primer design pipeline
+
+Small, I., Proteomics 2004, 4, 1581–1590
+~/mbook2019/vikas19/Small_et_al-2004-PROTEOMICS.pdf
+# Predotar: A tool for rapidly screening proteomes for N-terminal targeting sequences
+
+
+
+2) other references
+
+Cheng, Q., Ther & applied genetics (2018) 131:1861
+file name: ???? (can't find free copy, but perhaps got copy from vikas ????))
+# try access thru unl libr, gets to page some computer/date issue, can't continue ?????
+# comment: good science ????
+Identification of candidate genes underlying genic male-sterile msc-1 locus via genome resequencing in Capsicum annuum L.
+
+Joeng, K., Ther Appl Genet (2018) 131:183
+~/mbook2020/vikas20/Jeong2018_Article_FineMappingOfTheGenicMale-ster.pdf
+# fine mapping, Fine mapping of the genic male-sterile ms1 gene in Capsicum annuum L.
+# Q: how related to RFL system ???????????
+
+Zhang, Ther & applied genetics (2020) 133:1177
+~/mbook2020/vikas20/Zhang2020_Article_FineMappingOfTheMaleFertilityR.pdf
+# fine mapping ..., includes kasp assay
+Fine mapping of the male fertility restoration gene CaRf032 in Capsicum annuum L.
+# Q: how related to RFL system ???????????
+
+Happ, G3 9 july 2019, 2153
+~/mbook2020/vikas20/2153.pdf
+# low cost genotyping approach, Generating High Density, Low Cost Genotype Data in Soybean [Glycine max (L.) Merr.]
+
+Wang, (Poland) GigaScience 8 2019 1-11
+~/mbook2019/vikas19/Wangetal_HTPDeepLearningFloweringTimeInWheat_GigaScience_2019.pdf
+# deep learning (not my interest in deep learning), High-throughput phenotyping with deep learning gives insight into the genetic architecture of flowering time in wheat
+
+Terry, apr 09, 2019, conf presentation
+~/mbook2019/vikas19/vikas_ppt_presentatn/RFLGeneFamilyCargillRLines_PPT_v5b_FINAL.pptx
+# conf presentation
+
+Krishnananda, Res. J. Biotech 14(7) (2019) 67
+~/mbook2019/vikas19/krishnananda/Krishnanandaetal_RfMarkersForHybridity_ResJBiotech_2019.pdf
+# India, Validation of cytoplasmic genetic male sterility in rabi sorghum hybrids and their parents using diagnostic set of microsatellite markers
+
+Poland The Plant Genome 5(3) (2012), 92
+~/mbook2019/vikas19/tpg-5-3-92.pdf
+# GBS review, Poland, Genotyping-by-Sequencing for Plant Breeding and Genetics
+
+Arora, S. (Poland) nature biotechnology, 37(Feb) (2019) 139-43
+~/mbook2019/vikas19/s41587-018-0007-9.pdf
+# not sure why have this one ????
+Resistance gene cloning from a wild crop relative by sequence capture and association genetics
+
+Bohra, A., Plant Cell Rep (2016) 35:967
+~/mbook2019/vikas19/Bohra2016_Article_CytoplasmicMaleSterilityCMSInH.pdf
+# review, Cytoplasmic male sterility (CMS) in hybrid breeding in field crops
+
+Dahan, RNA biology 10:9 1469-76 (2013)
+File: ~/mbook2019/vikas19   The\ Rf\ and\ Rf\ like\ PPR\ in\ higher\ plants\ a\ fast\ evolving\ subclass\ of\ PPR\ genes.pdf
+# review, The Rf and Rf-like PPR in higher plants, a fast- evolving subclass of PPR genes
+# looks like a good review
+
+Garcia, L., Journal ?????
+~/mbook2019/vikas19/Garciaetal_Malesterilityandsomatichybridizationinplantbreeding_Preprints_2019.pdf
+# not peer reviewed, Male sterility and somatic hybridization in plant breeding
+# somatic hybridization ???????????????????????
+
+Melonek, The Plant Journal Journal (2019) 97, 281-295
+~/mbook2019/vikas19/Melonek_et_al-2019-The_Plant_Journal.pdf
+# High intraspecific diversity of Restorer-of-fertility-like genes in barley
+# intraspecific [=] between various landraces, genotypes of barley
+
+Wei, C., Ther & Applied Genetics (2019) 132:2525-39
+~/mbook2019/vikas19/Weietal_ConstructionOfRestorerLinesAndMolecularMappingofRfGene_TAAG_2019.pdf
+# RFC restoration of fertility complex, Construction of restorer lines and molecular mapping for restorer gene of hau cytoplasmic male sterility in Brassica napus
+# Bunch refs to Rf's (Many Rf genes encode PPR proteins, including Rf4 (Tang et al. 2014), Rf5 (Hu et al. 2012), Rf6 (Huang et al. 2015), and Rfp (Liu et al. 2016))
+# think abstract not well written  ?????
+
+Qin, X., New Phytologist (2016) 210:934-945
+~/mbook2019/vikas19/Qin_et_al-2016-New_Phytologist.pdf
+# RFC restoration of fertility complex, 
+The rice DUF1620-containing and WD40-like repeat protein is required for the assembly of the restoration of fertility complex
+
+Migliori, V., Epigenetics 7:8 815-22 (2012)
+~/mbook2019/vikas19/On WD40 proteins Propelling our knowledge of transcriptional control.pdf
+# On WD40 proteins Propelling our knowledge of transcriptional control.pdf
+
+Mascheretti, I., The Plant Cell 25:404-20 (2013)
+~/mbook2019/vikas19/404.full.pdf
+# The WD40-Repeat Proteins NFC101 and NFC102 Regulate Different Aspects of Maize Development through Chromatin Modification
+
+Andres-Colas, N., PNAS, 114(33) (2017)  8883-8888
+~/mbook2019/vikas19/pnas.201705815.pdf
+# Multiple PPR protein interactions are involved in the RNA editing system in Arabidopsis mitochondria and plastids
+
+pag2019 plenary, boyle (pritchard)
+# omnigenic model, Cell 169 june 15, 2017
+/Users/bterry/mbook2019/pag2019/1-s2.0-S0092867417306293-main.pdf
+
+# a 2nd Pritchard ref, 425108.full.pdf
+
+Sykes, T., Genome Biol. Evol 9(2) 351-62
+~/mbook2017/vikas17/wheatproj/Sykes_InsilicoIdentificationOfRfgeneFamilyInRyegrass_GBE_2016.pdf
+# In Silico Identification of Candidate Genes for Fertility
+Restoration in Cytoplasmic Male Sterile Perennial
+Ryegrass (Lolium perenne L.)
+
+05/12/20:
+
+Manna, S., Biochimie 113 (2015) 93-99
+~/mbook2017/vikas17/1-s2.0-S030090841500108X-main.pdf
+# review, An overview of pentatricopeptide repeat proteins and their applications
+# some nice diagrams of PPR proteins, also non plant PPR's
+
+Fujii, S., The Plant Journal, (2016) 86, 504-13
+fname: pdf won't dnload from internet ??????????????/
+https://onlinelibrary.wiley.com/doi/epdf/10.1111/tpj.13185
+# mentions RFL2, orf291 ?????
+The Restorer-of-fertility-like 2 pentatricopeptide repeat protein and RNase P are required for the processing of mitochondrial orf291 RNA in Arabidopsis
+
+Barkam, A., Annu Rev Plant Biol 2014, 65:415-42
+~/mbook2017/vikas17/annurev-arplant-050213-040159.pdf
+# review, Pentatricopeptide Repeat Proteins in Plants
+
+Shen, C. nature communications, 8 April, (2016) 
+~/mbook2017/vikas17/ncomms11285.pdf
+# all chinese authors, Structural basis for specific single-stranded RNA
+recognition by designer pentatricopeptide repeat proteins
+
+Wang, Z., The Plant Cell, 18, 676-687 (2006)
+/Users/bterry/mbook2017/vikas17/tpc1800676.pdf
+# Cytoplasmic Male Sterility of Rice with Boro II Cytoplasm Is Caused by a Cytotoxic Peptide and Is Restored by Two Related PPR Motif Genes via Distinct Modes of mRNA Silencing
+
+Kazama, T., The Plant Journal (2016) 85, 707-716
+/Users/bterry/mbook2018/vikas18/Kazama_et_al-2016-The_Plant_Journal.pdf
+# Mitochondrial ORF79 levels determine pollen abortion in cytoplasmic male sterile rice
+
+Zhang, B., Journal of Cotton Research, (2018) 1:12
+/Users/bterry/mbook2018/vikas18
+/Zhangetal_Genome-wideAnalysisOfRf-PPR-like_RFL_Cotton_JCottonRes_2018.pdf
+# Genome-wide analysis of Rf-PPR-like (RFL) genes and a new InDel marker development for Rf1 gene in cytoplasmic male sterile CMS-D2 Upland cotton
+# looks like lot of work input ??????
+
+Arakawa, T., PLOS One, June 1 (2018)
+/Users/bterry/mbook2018/vikas18/pone.0198409.pdf
+# A fertility-restoring genotype of beet (Beta vulgaris L.) is composed of a weak restorer-of- fertility gene and a modifier gene tightly linked to the Rf1 locus
+
+Gaborieau, L., Front. Plant Sci. 7:1816 (2016)
+~/mbook2018/vikas18/fpls-07-01816.pdf
+# review, The Propensity of Pentatricopeptide Repeat Genes to Evolve into Restorers of Cytoplasmic Male Sterility
+# discusses 'complex' 
+
+Chen, L., BMC Plant Biology (2018) 18:366
+~/mbook2019/vikas19/12870_2018_Article_1572.pdf
+# Genome-wide analysis of the pentatricopeptide repeat gene family in different maize genomes and its important role in kernel development
+# a phrase in abstract: Most PPR genes are encoded by plastid and mitochondrial genomes ??????
+
+Li, F., BMC Plant Biology (2019) 19:168
+~/mbook2019/vikas19/document.pdf
+# GWAS, China, Genetic architecture of grain yield in bread wheat based on genome-wide association studies
+# not PPR
+
+Glover, N., Trends in Plant Science, July 2016, 21(7) 609
+~/mbook2019/vikas19/ensembl/kasp_primers/Glover_HomoeologsWhatAreTheyAndHowDoWeInferThem_TrendsinPlantSci_2016.pdf
+# Review, Homoeologs: What Are They and How Do We Infer Them?
+
+Woodson, J., Nature Reviews | genetics  volume 9 | May 2008 | 383
+~/mbook2019/vikas19/WoodsonAndChory_CoordinationOfGeneExpressionOrganellarAndNuclearGenome_NatReviewGenetics_2008.pdf
+# *review*, Coordination of gene expression *between* organellar and nuclear genomes
+# looks like good paper
+
+Watson-Haigh et al. BMC Genomics (2018) 19:941
+/Users/bterry/mbook2019/vikas19/12864_2018_Article_5228.pdf
+# DAWN: a resource for yielding insights into the diversity among wheat genomes
+
+Washburn, J., 5542–5549 | PNAS | March 19, 2019 | vol. 116 | no. 12
+/Users/bterry/mbook2019/vikas19/5542.full.pdf
+# (buckler, deep learning) Evolutionarily informed deep learning methods for predicting relative transcript abundance from DNA sequence
+
+Ching T et al. 2018  J. R. Soc. Interface 15: 20170387.
+/Users/bterry/mbook2019/vikas19/deeplearning/rsif.2017.0387.pdf
+# (review, deep learning) Opportunities and obstacles for deep learning in biology and medicine
+# review
+
+International Wheat Initiative EWG on Breeding Methods (02/06/19)
+# need fname, etc ??????????????????????????????????????????
+
+Krishnananda, I., Res. J. Biotech Vol. 14 (7) July (2019)
+/Users/bterry/mbook2019/vikas19
+/krishnananda/Krishnanandaetal_RfMarkersForHybridity_ResJBiotech_2019.pdf
+# Validation of cytoplasmic genetic male sterility in rabi sorghum hybrids and their parents using diagnostic set of microsatellite markers
+
+Getting started with Ensembl, www.ensembl.org 
+/Users/bterry/mbook2019/vikas19/module1_feb2009_ensembl.pdf
+# Tutorial
+
+Papikian, A., NATURE COMMUNICATIONS | (2019)10:729
+/Users/bterry/mbook2019/vikas19
+/Papikian-Jacobsen_Site-specificmanipulationofEpigenome_NatComm_2019.pdf
+# Site-specific manipulation of Arabidopsis loci using CRISPR-Cas9 SunTag systems
+
+Bradbury, Bioinformatics, Vol. 23 no. 19 2007, pages 2633–2635
+/Users/bterry/mbook2019/vikas19/tassel5/bradbury2007bioinformatics.pdf
+# Buckler, TASSEL: software for association mapping of complex traits in diverse samples
+
+Saxena, R., Theoretical and Applied Genetics (2018) 131:1605–1614
+/Users/bterry/mbook2018/vikas18/
+31RFlike/annotation1.1/Saxena2018_Article_MolecularMappingAndInheritance.pdf
+# Molecular mapping and inheritance of restoration of fertility (Rf) in A4 hybrid system in pigeonpea (Cajanus cajan (L.) Millsp.)
+
+# find search of vikas?? for '.pdf' files, etc. ????????
+
+# did preceding for both vikas18 & vikas19. So for moment, we have our list of references.
+
+****************************************************************************
+############################################################################
+
+05/13/20:
+
+# now what next ??????
+
+05/18/20:
+# vikas email, interest in  
+1. references for QTL studies mapping Rf loci => lot ssh, ... ???, not many QTL ???
+
+2. prev. studies on RFL gene family in each species => at stopping point
+
+3. Foundation info on RFL genes ?????????????????????
+
+4. RFL genes functioning as Rf ????, & exceptions => know they exist, may generate some as work with other refs ????
+
+5. RFL & RF references => at stopping point.
+
+#########################################################################
+Q: where to classify 
+Watson-Haigh et al. BMC Genomics (2018) 19:941
+(DAWN) ??????????????????????????????????????????????
+#########################################################################
+
+
+05/20/20:
+#5 working on #5, decided to look into fig S54 of Science 361 661 (2018). There is given the 'approx.' position of mapped Rf genes, RF1, Rf3, Rf8, Rf4. 
+
+# **Rf1 & Rf4**: I note, Rf1 & Rf4 apparently coming from ref. 166, Li, Z., J. Agric. Biotechnol. 22, 1114– 1122 (2014). This appears to be witten in Chinese, with an English abstract. So, unless can locate English version, for moment, will not further discuss these two Rf's?
+
+STOPPED
+
+# **Rf8**, see Sinha, p., ... in references list above
+# Q: cross 2x with 6x ??????????????????????
+# chi sq'd value ????
+# Q: chr 2DS, ????????????????
+# Q: 'validated' ???????????
+# Q: SSR marker Xwmc503
+# Q: p-432, alloplasmic ????????????
+# In conclusion, the SSR marker Xwmc503, linked to new fertility restorer gene Rf8 may play a crucial role in MAS to accelerate breeding of elite Rf lines with enhanced efficiency. 
+# note: specific gene not identified!!!!!!!!!!!!!!!!
+# Q: various authors find various Rf genes ('loci areas'), also 'modifier genes' cited. Q: explanation why different loci for the various 'Rf's' by different authors?
+ 
+ 
+# **RF3**, Geyer, M., Mol Breeding (2016) 36: 167
+# Distribution of the fertility-restoring gene Rf3 in common and spelt wheat determined by an informative SNP marker
+# common and spelt wheat ?????
+# We propose that Rf3 explains the restoration capacity of a large proportion of European common wheat lines.
+# Q: gene not identified, & not quantitative ???????
+# p-167, 'partially', 'combination' ???????
+# goal: map RF3 ...
+05/22/20:
+# 'common', 'spelt' ????????????????
+# p-5of11, fertility restoration was controlled by the same locus, namely Rf3, in all mapping populations.
+# Conclusion: couldn't follow lot of this paper ???????????????/
+
+# sent vikas an email with preceding info.
+
+05/23/20:
+# examine 61 refs above for item 
+(2), prev. studies on RFL gene family in each species
+
+Barchenger, J. Amer Soc Hort Sci 143(6):418 (2018)    (chili pepper)
+Fugii, PNAS 108(4) 1723 (2011)    (9 bracky, 26 arabidopsis, 38 soybean ctls)
+Melonek, J. Scientific Reports, 6:35152 (2016)    (Oryza genomes and Brachypodium distachyon)
+Cheng, S., The Plant Journal (2016) 85, 532-47       (109 genomes)
+
+05/24/20:
+
+Joeng, K., Ther Appl Genet (2018) 131:183
+# Q: how related to RFL system ???????????
+
+Krishnananda, Res. J. Biotech 14(7) (2019) 67
+# Q: relation to RFL's ???????????
+
+Bohra, A., Plant Cell Rep (2016) 35:967    (review)
+Dahan, RNA biology 10:9 1469-76 (2013)     (review)
+Melonek, The Plant Journal Journal (2019) 97, 281-295    (barley)
+Wei, C., Ther & Applied Genetics (2019) 132:2525-39      (Brassica napus)
+Qin, X., New Phytologist (2016) 210:934-945      (rice)
+Sykes, T., Genome Biol. Evol 9(2) 351-62      (Perennial Ryegrass (Lolium perenne L.))
+
+05/25/20:
+
+Manna, S., Biochimie 113 (2015) 93-99     (review, includes nonplant PPR's)
+Fujii, S., The Plant Journal, (2016) 86, 504-13   (Arabidopsis)
+Barkam, A., Annu Rev Plant Biol 2014, 65:415-42   (review)
+Shen, C. nature communications, 8 April, (2016)    (designer PPR (dPPR))
+Wang, Z., The Plant Cell, 18, 676-687 (2006)      (rice)
+Kazama, T., The Plant Journal (2016) 85, 707-716   (rice)
+Zhang, B., Journal of Cotton Research, (2018) 1:12   (cotton)
+Arakawa, T., PLOS One, June 1 (2018)      (beet)
+Gaborieau, L., Front. Plant Sci. 7:1816 (2016)    (review)
+Chen et al. BMC Plant Biology (2018) 18:366    (corn)
+Woodson, J., Nature Reviews | genetics  volume 9 | May 2008 | 383   (review)
+Krishnananda, I., Res. J. Biotech Vol. 14 (7) July (2019)   (sorghum)
+Saxena, R., Theoretical and Applied Genetics (2018) 131:1605–1614    (pigeonpea)
+
+# so 24 refs in category (2)
+
+# So, have lists for (2) & (5)
+
+
+05/26/20:
+
+06/12/20:
+# talked to vikas
+1. needs phylogram for 203 + 88 ctls  pid40(?)
+# looks like I have 35pid+88ctls (305 seqs) & 50pid+88 (206 seqs), but no 40pid+88ctls (216 seqs). I note, pattern/clustering locations of 88 ctls relative to the 203 RFL seqs would appear to be similar on all three. Than is, clustering of the 203 similar for pid35, pid40, pid50.
+# So, Q: would the pid35 &/or pid 50 substitute for pid40 ?????
+# To send email with this question ??????
+
+06/13/20:
+# try look at the pid50+88, find a bigger display of both for chr 1,2,6 & the 88 ctls, 4 species.
+
+find . -name 'list_wheatids*' -print
+cd ~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml/
+
+list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml_stats.txt
+list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_stdout.txt
+list_wheatids_pid50_plus88ctls_phyml_tree.txt
+
+
+
+cd ~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50plus88combo_fa_aln_hmmaln_phy_phyml_tree/
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50plus88combo_fa_aln_hmmaln_phy_phyml_tree
+
+cd ~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml/
+
+########################################################################
+# 1ST, LOOK AT TWO enlarged .png files for pid50+88, THIS MAY SATISFY Vikas
+# try look at two in figtree
+******************************************************************
+# this the file backing up the two '.png' files referring to in line pid50 in 06/12/20 section above. No coloring, etc. So if use to get a bigger phylogram, would have to do all the coloring etc. to arrive at the situation for those two '.png' files.
+~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50_plus88ctls_fa_aln_hmmaln_phy_phyml/
+
+list_wheatids_pid50_plus88ctls_phyml_tree.txt
+
+-rw-r--r--@   1 bterry  staff  15696 Sep 30  2018 list_wheatids_pid50_plus88ctls_phyml_tree.txt
+******************************************************************
+
+~/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/list_wheatids_pid50plus88combo_fa_aln_hmmaln_phy_phyml_tree/
+
+pid50plus88combo_phyml_tree.txt
+-rw-r--r--@   1 bterry  staff  15696 Oct  3  2018 pid50plus88combo_phyml_tree.txt
+
+# same size ?????
+
+########################################################################
+
+06/15/20:
+
+
+
+STOPPED
 
 
 
 
-
-2) read over RFL_Manuscript_Methods_v1f.doc, provide comments.
-
+# check vikas6 Rf(?) I prevly read about ????
 
 
+find . -name 'PPRv1.1.1913plus88ctls.txt' -print
+# apparently not on mbook ?????
 
-
-
+find . -name 'Jeong2018*' -print
+~/mbook2020/vikas20/Jeong2018_Article_FineMappingOfTheGenicMale-ster.pdf
 
 
 
