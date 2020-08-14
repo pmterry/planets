@@ -21545,10 +21545,1111 @@ pid50plus88combo_phyml_tree.txt
 ########################################################################
 
 06/15/20:
+# slip a save to ***github*** in here
+
+06/16/20:
+# regarding 06/12/20 request for phylogram for 203 + 88 ctls  pid40(?), for the 203 fasta seqs input, look for 203 fasta file leading to the '.png' file, pid40_216pruned13to203_phyml_tree_chrcolor_forRmd_scrshot_Un_purple.png
+# 
+pid40_216pruned13to203_phyml_tree_chrcolor
+
+# from line 13177
+
+# line 12475
+##########################################################################
+# so looks like his file can be the source of seqs for the 203 RFL's
+
+pid40_216pruned13to203.fa in
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# 1st seq:
+>TraesCS1A02G031600.1 gene=TraesCS1A02G031600
+##########################################################################
+
+# now for the 88 ctls seqs
+
+# line 11450
+
+# line 11443
+# see line 10003, 
+#copy rice1st_88ctls_soyfixed.fa file to /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+# from .../annotation1.1/PPRv1.1plus_88ctls dir.
+# now cat this file with list_WheatIDs_pid50.fa will give 206+88=294 seqs
+
+cat rice1st_88ctls_soyfixed.fa list_WheatIDs_pid35.fa > list_WheatIDs_pid35_plus88ctls.fa
+# bbedit shows 393 seqs.
+
+# so in vikas_filter, check file rice1st_88ctls_soyfixed.fa
+# looks like can use 
+# so looks like his file can be the source of seqs for the 203
+##########################################################################
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/rice1st_88ctls_soyfixed.fa 
+# for source '.fa' file for the 88 ctls
+# so looks like his file can be the source of seqs for the 203
+##########################################################################
+
+# ok, now
+cat these two together, proceed to the 'notes' stepsnotes
+
+# line 12482
+## Now run Notes steps ... 
+# Q: where copy this file ????
+
+# note line 8813
+
+#line 1331
+# think this the file name: Notes_Alignment_UsingHMMs.txt
+# so do a find:
+cd
+find . -name 'Notes_Alignment_UsingHMMs.txt' -print
+./mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/Notes_Alignment_UsingHMMs.txt
+
+# ref line 12479
+#then 'Notes ...' steps
+# there, running 'Notes_Alignment_UsingHMMs.txt' steps on pid40_216pruned13to203.fa
+# so here, create 203plus88ctls.fa
+# do all this in
+cd  /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/
+# dir, since these two files in that dir.
+ls -al ri*
+-rw-r--r--  1 bterry  staff     53917 Sep 20  2018 rice1st_88ctls_soyfixed.fa
+ls -al pid40_216pruned13to203.fa
+-rw-r--r--  1 bterry  staff  109338 Oct 24  2018 pid40_216pruned13to203.fa
+
+cat pid40_216pruned13to203.fa rice1st_88ctls_soyfixed.fa > 203plus88ctls.fa
+# in bbedit, 291 '>', 203+88=291, looks like success
+grep -c "^>" 203plus88ctls.fa   # 291 as expect
+
+# ref line 12482
+## Now run Notes steps ... 
+
+## dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+pwd ## /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+# check on the dir
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# currently empty, likely by > 6 mo. rule
+# so, use this dir on crane
+# so, follow steps from line 12482
+
+# copy slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh to slurm_muscle_wheatproj_203plus88ctls.sh
+cp slurm_muscle_wheatproj_PPRv1.1blastp50pid_plus88ctls.sh slurm_muscle_wheatproj_203plus88ctls.sh
+
+06/17/20:
+
+# modify as needed (done)
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp 203plus88ctls.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_203plus88ctls.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 10366)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_203plus88ctls.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_203plus88ctls.sh  27900724 11:18am => , done, 11:22am.
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          27900724     batch TJob_mus   pterry  R       0:42      1 c3709
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+ls -al
+-rw-r--r-- 1 pterry amundsen 163255 Jun 17 11:12 203plus88ctls.fa
+-rw-r--r-- 1 pterry amundsen 643800 Jun 17 11:21 203plus88ctls.fa.aln
+-rw-r--r-- 1 pterry amundsen 147422 Jun 17 11:21 job.27900724.err
+-rw-r--r-- 1 pterry amundsen      0 Jun 17 11:18 job.27900724.out
+
+less job.27900724.err
+# bunch strange stuff, different at start, end of file ?????????????????
+          
+sacct -j  27900724 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2020-06-17T11:18:32 2020-06-17T11:21:39 
+2020-06-17T11:18:32 2020-06-17T11:21:39 
+11:21:39 - 11:18:32 = 3 min 21 sec
+
+# output file:
+-rw-r--r-- 1 pterry amundsen 643800 Jun 17 11:21 203plus88ctls.fa.aln
+less 203plus88ctls.fa.aln
+
+# top of file apparently looks ok.  ???????????????
+
+wc -l 203plus88ctls.fa.aln
+10767 203plus88ctls.fa.aln
+
+grep -c "^>Tr" 203plus88ctls.fa.aln  ## 203 as expect
+grep -c "^>" 203plus88ctls.fa.aln  ## 291 as expect
+
+#ref line 10414, next (2nd) step, fasta2stockholm.pl conversion
+
+cd /work/baenziger/pterry/wheatproj/refinPprots820
+cd /work/baenziger/pterry/wheatproj
+ls -al
+# not finding a refinPprots820 dir ?????????????????
+find . -name 'fasta2stockholm.pl' -print
+# nothing returned
+# try on mbook
+find . -name 'fasta2stockholm.pl' -print
+~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/fasta2stockholm.pl
+
+# ok, so scp over to /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+cd ~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+scp fasta2stockholm.pl pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl 203plus88ctls.fa.aln > 203plus88ctls.fa.aln.slx
+ls -al
+-rw-r--r-- 1 pterry amundsen 628455 Jun 17 12:30 203plus88ctls.fa.aln.slx
+
+## to check top of stockholm file
+less 203plus88ctls.fa.aln.slx 
+# STOCKHOLM 1.0
+Glyma.10g002900.1 ----------------------------------------------------------------------------------------------------------------------------------------------
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 10441)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild 203plus88ctls.fa.aln.hmm 203plus88ctls.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             203plus88ctls.fa.aln.slx
+# output HMM file:                  203plus88ctls.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     203plus88ctls.fa.aln   291  2139   727     4.88  0.590 
+
+# CPU time: 2.52u 0.00s 00:00:02.52 Elapsed: 00:00:02.58
+exit
+
+ls -al *.hmm
+###############################################################################
+# following line wrong from 7/11/20
+###############################################################################
+-rw-r--r-- 1 pterry baenziger 344201 Jul 11 22:32 203plus87ctls.fa.aln.hmm
+
+less 203plus88ctls.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  203plus88ctls.fa.aln
+LENG  727
+ALPH  amino
+
+# ref: line 10478
+## realign using hmm model, hmmalign
+
+## copy from /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh 
+# to slurm_hmmalign_wheatproj_203plus88ctls.sh
+
+cp slurm_hmmalign_wheatproj_PPRv1.1blastp40pid_203.sh  slurm_hmmalign_wheatproj_203plus88ctls.sh
+
+ls slurm_hmmalign_wheatproj_203plus88ctls.sh
+slurm_hmmalign_wheatproj_203plus88ctls.sh
+# ok, so have
+
+# make needed changes (done)
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_203plus88ctls.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_203plus88ctls.sh
+ls -al *88ctls.sh
+sbatch slurm_hmmalign_wheatproj_203plus88ctls.sh ## 27911892  10:44pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          27911892     batch TJob_hmm   pterry  R       0:08      1 c3616
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al *hmmaln
+-rw-r--r-- 1 pterry amundsen 1143810 Jun 17 22:45 203plus88ctls.fa.aln.hmmaln
+
+sacct -j  27911892 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2020-06-17T22:44:44 2020-06-17T22:45:09 
+2020-06-17T22:44:44 2020-06-17T22:45:09 
+22:45:09 - 22:44:44 = 25 sec
+
+less 203plus88ctls.fa.aln.hmmaln  ## # STOCKHOLM 1.0
+
+## ref line 10517, next step, stockholm2fasta.pl conversion
+
+find . -name 'stockholm2fasta.pl' -print
+./mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/stockholm2fasta.pl
+
+# need to scp this file to /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp on crane.
+
+cd ~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+scp stockholm2fasta.pl pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al *hmmaln
+
+#cp /work/baenziger/pterry/wheatproj/refinPprots820/stockholm2fasta.pl .
+ls -al
+#-rwxr-xr-x  1 pterry amundsen    1398 Feb 16 23:21 stockholm2fasta.pl
+# looks like need 755 permissions
+-rw-r--r-- 1 pterry amundsen    1398 Jun 17 23:43 stockholm2fasta.pl
+chmod 755 stockholm2fasta.pl
+ls -al
+-rwxr-xr-x 1 pterry amundsen    1398 Jun 17 23:43 stockholm2fasta.pl
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g 203plus88ctls.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > 203plus88ctls..fa.aln.hmmaln.fa
+
+ls -al *hmmaln.fa
+-rw-r--r-- 1 pterry amundsen 217835 Jun 18 00:08 203plus88ctls..fa.aln.hmmaln.fa
+mv 203plus88ctls..fa.aln.hmmaln.fa 203plus88ctls.fa.aln.hmmaln.fa
+ls -al *hmmaln.fa
+-rw-r--r-- 1 pterry amundsen 217835 Jun 18 00:08 203plus88ctls.fa.aln.hmmaln.fa
+
+less 203plus88ctls.fa.aln.hmmaln.fa ## think looks ok  ????
+
+grep -c ">Traes" 203plus88ctls.fa.aln.hmmaln.fa  ## 203 as expect
+
+grep -c ">" 203plus88ctls.fa.aln.hmmaln.fa  ## 291 as expect
+exit
+
+## ref., line 10546, now fas to phy
+
+06/18/20:
+scp align_convert_fas_to_phy.pl from ~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs to /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+find . -name 'align_convert_fas_to_phy.pl' -print
+~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs/align_convert_fas_to_phy.pl
+
+cd ~/mbook2017/vikas17/wheatproj/hmmpipeline/FRprotseqs
+scp align_convert_fas_to_phy.pl pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
 
 
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## 755 scp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+./align_convert_fas_to_phy.pl 203plus88ctls.fa.aln.hmmaln.fa
+Can't locate Bio/AlignIO.pm in @INC (@INC contains: /home/amundsen/pterry/perl5/lib/perl5/x86_64-linux-thread-multi /home/amundsen/pterry/perl5/lib/perl5/x86_64-linux-thread-multi /home/amundsen/pterry/perl5/lib/perl5 /home/amundsen/pterry/perl5/lib/perl5/x86_64-linux-thread-multi /home/amundsen/pterry/perl5/lib/perl5/x86_64-linux-thread-multi /home/amundsen/pterry/perl5/lib/perl5 /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at ./align_convert_fas_to_phy.pl line 3.
+BEGIN failed--compilation aborted at ./align_convert_fas_to_phy.pl line 3.
+
+# I note line 3 is:
+
+use Bio::AlignIO;
+
+# guess thing to do, **sent** email to help@hcc.unl.edu ?????????
+# Q: might I have altered line 3 previously on version on crane ??????????
+
+# response from Natasha at hcc
+To fix this, please run your program as "perl align_convert_fas_to_phy.pl 203plus88ctls.fa.aln.hmmaln.fa".
+
+# ok, lets make the change and try again
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## 755 scp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+#./align_convert_fas_to_phy.pl 203plus88ctls.fa.aln.hmmaln.fa
+perl align_convert_fas_to_phy.pl 203plus88ctls.fa.aln.hmmaln.fa
+
+ 
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 323627 Jun 18 14:49 203plus88ctls.fa.aln.hmmaln.phy
+exit
+less 203plus88ctls.fa.aln.hmmaln.phy
+ 291 727
+'TraesCS6A02G014600.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+logout
+
+## scp back to macbook, (line 10576)
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/203plus88ctls.fa.aln.hmmaln.phy .
+ls -al 203*.phy
+-rw-r--r--  1 bterry  staff  323627 Jun 18 15:13 203plus88ctls.fa.aln.hmmaln.phy
+
+less 203plus88ctls.fa.aln.hmmaln.phy
+ 291 727
+'TraesCS6A02G014600.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+head -n 4  203plus88ctls.fa.aln.hmmaln.phy
+ 291 727
+'TraesCS6A02G014600.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+           'AB900794'  ---------- ---------- ----GGVPSA QGGTTQDLGR AGGSGTEGAR HVLDELPLRG 
+'TraesCS1B02G071617.1'  ----LRVLRR SSTSTSTSTS PPSRSWSPTA AFAAATERVR AGTLSQDDAH HLFDELLRQV 
+
+
+## so phy header       291 727, expect the 291
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus88ctls.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: 203plus88ctls
+
+The alignment file "203plus88ctls.fa.aln.hmmaln.phy" was uploaded, it contains 291 taxons of 727 characters.
+
+Your job was submitted.
+
+You can check your job status here:
+http://www.atgc-montpellier.fr/job_status/index.php?path=20200618-223154_Gc93/cmd.txt
+
+job was submitted. (Thurs, 06/18/20, 3:33pm)
+Execution time: 3 hour(s), 5 minute(s)
+#*******************************************************************
+
+# 1st, dnload the 203plus88ctls_fa_aln_hmmaln_phy_phyml.zip file
+# place in /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+dir.
+# unzip
+cd 203plus88ctls_fa_aln_hmmaln_phy_phyml
+ls -lh
+-rw-r--r--@ 1 bterry  staff   1.9K Jun 19  2020 203plus88ctls_fa_aln_hmmaln_phy_phyml_stats.txt
+-rw-r--r--@ 1 bterry  staff    15K Jun 19  2020 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+-rw-r--r--@ 1 bterry  staff   9.7K Jun 19  2020 203plus88ctls_fa_aln_hmmaln_phy_stdout.txt
+-rw-r--r--@ 1 bterry  staff   1.3K Jun 18  2020 sms.csv
+
+
+# in **figtree**
+# open 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# figtree pattern pretty much matches pid40_phyml_tree.txt tree.
+
+# talked to vikas
+# note, 1 chr5 (magenta), 5 chr7 (blue-green), 5 chrU (orange) in the 203 seqs. They are only co-located in groups chr2 & chr6. pid40_216pruned13to203_phyml_tree_other.txt
+
+# note: pid40_216pruned13to203_phyml_tree_color.txt has colored chr1 (red), chr2 (green), & chr6 (blue).
+
+# note: for chr 1, 2, 6, A, B, D figtree pattern *not* skewed.
+
+
+# get list of names of the 291 seqs in 203plus88ctls.fa
+cd  /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/
+# dir, since these two files in that dir.
+ls -al ri*
+
+grep -c "^>" 203plus88ctls.fa > 203plus88names.txt
+
+# in figtree, TO CHECK: seeing some diff. in clustering betw. 1A & 1B, 1D ??????
+
+06/19/20:
+# ok, plan following for 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree.txt file:
+# make copy: (plan no changes in this, only make copies from)
+203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt
+
+# 203plus88ctls_1_2_6_phyml_tree_circ.txt
+# Q: node or taxa ??????????
+# 203plus88ctls_1_2_6_phyml_tree_circ.png
+
+# 203plus88ctls_1_2_6_phyml_tree_linear.txt
+# 203plus88ctls_1_2_6_phyml_tree_linear.txt.png
+
+##################################################################
+# should 'Un' be added to 1, 2, 6, What about chr 3, 4, 5, 7 ????????
+##################################################################
+
+
+# left to do: build each pair (circ & linear phylograms) from copy *original* newick format, 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt
+in dir /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus88ctls_fa_aln_hmmaln_phy_phyml
+
+# rice9 (circ & linear)
+cp 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt 203plus88ctls_rice9_phyml_tree_circandlinear.txt
+# create 203plus88ctls_rice9_phyml_tree_circ.txt.png  
+# Q: vikas6, CAR... lighting up when type in 'AB' ???????????????????????/
+
+# then from 203plus88ctls_rice9_phyml_tree_circandlinear.txt
+# create 203plus88ctls_rice9_phyml_tree_linear.txt.png
 
 STOPPED
+
+# bracky9 (circ & linear)
+cp 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt 203plus88ctls_bracky9_phyml_tree_circandlinear.txt
+# create 203plus88ctls_bracky9_phyml_tree_circ.txt.png  
+
+# then from 203plus88ctls_bracky9_phyml_tree_circandlinear.txt
+# create 203plus88ctls_bracky9_phyml_tree_linear.txt.png
+
+06/20/20:
+# arabidopsis26 (circ & linear, cyan)
+cp 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt 203plus88ctls_arab26_phyml_tree_circandlinear.txt
+# create 203plus88ctls_arab26_phyml_tree_circ.txt.png  
+# preview, **'scale'**, 80%, bigger image
+# Q7... vikas6 seq lighting up in error, in chr 6 region
+# another cyan in chr 1 area (can't make out, but probably a vikas6 seq ?????)
+# another cyan (AT1G12770), vikas6 in chr 6 cluster ????????
+
+# then from 203plus88ctls_arab26_phyml_tree_circandlinear.txt
+# create 203plus88ctls_arab26_phyml_tree_linear.txt.png
+
+# soybean38 (circ & linear)
+cp 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt 203plus88ctls_gly38_phyml_tree_circandlinear.txt
+# create 203plus88ctls_gly38_phyml_tree_circ.txt.png  
+# preview, **'scale'**, 80%, bigger image
+
+then from 203plus88ctls_gly38_phyml_tree_circandlinear.txt
+# create 203plus88ctls_gly38_phyml_tree_linear.txt.png
+
+
+# Un & ch5 & chr7 (circ & linear)
+cp 203plus88ctls_fa_aln_hmmaln_phy_phyml_tree_original.txt 203plus88ctls_Un_ch5_7_tot11_phyml_tree_circandlinear.txt
+# create 203plus88ctls_Un_ch5_7_tot11_phyml_tree_circ.txt.png  
+# preview, **'scale'**, 80%, bigger image
+
+06/21/20:
+# now email to vikas, comments on these phylograms (done)
+
+07/03/20:
+# To do, rename/shorten by removing part to right of '.1', for the 6 vikas6 seqs in file 203plus88ctls.fa.aln.hmmaln.fa (output from stockholm2fasta.pl)
+# looks like 1st bring it back from crane to dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus88ctls_fa_aln_hmmaln_phy_phyml
+
+07/05/20:
+# ref: line 21918
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/203plus88ctls.fa.aln.hmmaln.fa .
+
+# so, copy file 203plus88ctls.fa.aln.hmmaln.fa to
+cp 203plus88ctls.fa.aln.hmmaln.fa 203plus88ctls.fa.aln.hmmaln_vikas6short.fa
+# then, go in with bbedit, shorten the 6 vikas6 names as described above.
+
+line 207 >CAR70003.1_At1g12700_Arabidopsis_thaliana = >CAR70003.1
+line 523 >BAM64814.1_bvCRP-1_Beta_vulgaris = >BAM64814.1
+line 15 >API57808.1_RFP1_Brassica_rapa = >API57808.1
+line 299 >AAM52339.1_fertilityrestorer_Petuniaxhybrida = >AAM52339.1
+line 329 >AJG06104.1_restorer-of-fertility_Raphanus_sativus =>AJG06104.1
+line 33 >Q76C99.1_Rf1_Oryza_sativa = >Q76C99.1
+
+# then scp 203plus88ctls.fa.aln.hmmaln_vikas6short.fa to crane, 
+
+scp 203plus88ctls.fa.aln.hmmaln_vikas6short.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+## ref., line 21890
+# then .fa to .phy with align_convert_fas_to_phy.pl
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## 755 scp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+#./align_convert_fas_to_phy.pl 203plus88ctls.fa.aln.hmmaln.fa
+perl align_convert_fas_to_phy.pl 203plus88ctls.fa.aln.hmmaln_vikas6short.fa
+
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+-rw-r--r-- 1 pterry amundsen 323521 Jul  5 17:47 203plus88ctls.fa.aln.hmmaln_vikas6short.phy
+exit
+less 203plus88ctls.fa.aln.hmmaln_vikas6short.phy
+ 291 727
+'TraesCS6A02G014600.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+logout
+
+# scp '.phy' file back to mbook, 
+# from line 21914
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/203plus88ctls.fa.aln.hmmaln_vikas6short.phy .
+ls -al 203*.phy
+-rw-r--r--  1 bterry  staff  323521 Jul  5 22:18 203plus88ctls.fa.aln.hmmaln_vikas6short.phy
+
+less 203plus88ctls.fa.aln.hmmaln_vikas6short.phy
+
+ 291 727
+'TraesCS6A02G014600.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+head -n 4  203plus88ctls.fa.aln.hmmaln_vikas6short.phy
+ 291 727
+'TraesCS6A02G014600.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+           'AB900794'  ---------- ---------- ----GGVPSA QGGTTQDLGR AGGSGTEGAR HVLDELPLRG 
+'TraesCS1B02G071617.1'  ----LRVLRR SSTSTSTSTS PPSRSWSPTA AFAAATERVR AGTLSQDDAH HLFDELLRQV 
+
+## so phy header       291 727, expect the 291
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus88ctls.fa.aln.hmmaln_vikas6short.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: 203plus88ctls_vikas6short
+
+job was submitted. (Sun, 07/05/20, 10:31pm)
+
+The alignment file "203plus88ctls.fa.aln.hmmaln_vikas6short.phy" was uploaded, it contains 291 taxons of 727 characters.
+
+Your job was submitted.
+
+STOPPED
+Execution time: 4 hour(s), 18 minute(s)
+
+dnloaded 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml.zip file
+
+# expanded it into dir:
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml
+
+# tree file in this dir. want to use in figtree is:
+-rw-r--r--@ 1 bterry  staff  15370 Jul  6 09:47 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt
+
+# made copy: 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree_orig.txt
+203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt
+cp 
+
+# now ready create some displays in figtree
+
+# line 21974
+# in **figtree**
+# line 22006
+203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt
+
+# then, bring into figtree
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# save 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt
+# then
+cp 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_circ.txt
+cp 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_linear.txt
+
+# finally open 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_circ.txt in figtree
+ 
+# Q: node or taxa ??????????
+# 203plus88ctls_1_2_6_phyml_tree_circ.png
+
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+##################################################################################
+## CAN'T MODIFY SIZE OF PHYOGRAM IN FIGTREE ???????
+## TRIED with copy of 'original' in dir  /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus88ctls_fa_aln_hmmaln_phy_phyml
+# that working, so my altering of .fa file before convert to .phy file PERHAPS A PROBLEM ??????????
+##################################################################################
+
+07/09/20
+# sent vikas email about Cannon Nature paper with example phylograms.
+
+# **SO**, instead, run thru 'Notes' steps with a fasta file of 203 + 87 ctls. Shorten the names of the 6 vikas6 seqs. Thinking need to eliminate one arabidopsis seq from initial fasta file, AT1G12770.1.
+
+# ref line 21606
+#then '.../FRprotseqs/Notes ...' steps
+
+# line 21622
+## dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+pwd ## /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+# line 21617
+# 203plus88ctls.fa
+cd  /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/
+
+cp 203plus88ctls.fa 203plus87ctls.fa
+# use bbedit to remove arabidopsis seq AT1G12770.1 (done)
+
+grep -c "^>" 203plus87ctls.fa   # 290 as expect
+
+# yet to shorten names 6 vikas6 ctl seqs ?????
+
+line 2617 >CAR70003.1_At1g12700_Arabidopsis_thaliana = >CAR70003.1
+line 2627 >BAM64814.1_bvCRP-1_Beta_vulgaris = >BAM64814.1
+line 2636 >API57808.1_RFP1_Brassica_rapa = >API57808.1
+line 2647 >AAM52339.1_fertilityrestorer_Petuniaxhybrida = >AAM52339.1
+line 2657 >AJG06104.1_restorer-of-fertility_Raphanus_sativus =>AJG06104.1
+line 2668 >Q76C99.1_Rf1_Oryza_sativa = >Q76C99.1
+
+line 21264
+## dir on crane to do 1st three steps, muscle, fasta2stockholm.pl, & hmmbuild.
+pwd ## /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+cp slurm_muscle_wheatproj_203plus88ctls.sh slurm_muscle_wheatproj_203plus87ctls.sh
+
+07/10/20:
+##########################################################################
+# after email reporting removal amundsen, checking
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al 
+-rwxr-xr-x 1 pterry amundsen    1398 Jun 17 23:43 stockholm2fasta.pl
+# Q: still 'amundsen' on file ????????
+##########################################################################
+
+# ref line 21640
+# modify as needed (done)
+
+07/11/20:
+cd /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp 203plus87ctls.fa pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+scp slurm_muscle_wheatproj_203plus87ctls.sh pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+## now, ready sbatch this slurm (see line 21647)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+
+## ck if slurm_muscle_wheatproj_203plus87ctls.sh
+ls -lh
+sbatch slurm_muscle_wheatproj_203plus87ctls.sh  28297995 1:56pm => , done, ??:??
+
+squeue -u pterry  ## a PD
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          28297995     batch TJob_mus   pterry  R       0:48      1 c1421
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh
+ls -al
+-rw-r--r-- 1 pterry baenziger  142322 Jul 11 13:59 job.28297995.err
+-rw-r--r-- 1 pterry baenziger       0 Jul 11 13:55 job.28297995.out
+# similar in size to previous runs, so think ok
+
+sacct -j  28297995 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2020-07-11T13:55:55 2020-07-11T13:59:02 
+2020-07-11T13:55:55 2020-07-11T13:59:02 
+# 3 min & 7 sec
+
+# output file:
+-rw-r--r-- 1 pterry baenziger  628980 Jul 11 13:59 203plus87ctls.fa.aln
+
+less 203plus87ctls.fa.aln
+# top of file apparently looks ok.  ???????????????
+
+wc -l 203plus87ctls.fa.aln
+10440 203plus87ctls.fa.aln
+
+grep -c "^>Tr" 203plus87ctls.fa.aln  ## 203 as expect
+grep -c "^>" 203plus87ctls.fa.aln  ## 290 as expect
+
+#ref line 21692, next (2nd) step, fasta2stockholm.pl conversion
+
+
+# ref. line 21709
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -lh  ## ck dir contents?
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load perl/5.22
+perl fasta2stockholm.pl 203plus87ctls.fa.aln > 203plus87ctls.fa.aln.slx
+ls -al
+-rw-r--r-- 1 pterry baenziger  613961 Jul 11 22:22 203plus87ctls.fa.aln.slx
+
+## to check top of stockholm file
+less 203plus87ctls.fa.aln.slx 
+# STOCKHOLM 1.0
+AT1G64585.1 --------------------------------------------------------------------
+
+# at top is '# STOCKHOLM 1.0'
+
+## now for *hmmbuild* (see line 21726)
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+# cd /work/baenziger/pterry/wheatproj/RF139
+ls -al
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+module load compiler/gcc/4.8 openmpi/1.8 hmmer
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+
+hmmbuild 203plus87ctls.fa.aln.hmm 203plus87ctls.fa.aln.slx
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             203plus87ctls.fa.aln.slx
+# output HMM file:                  203plus87ctls.fa.aln.hmm
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     203plus87ctls.fa.aln   290  2097   738     4.71  0.590 
+
+# CPU time: 3.00u 0.00s 00:00:03.00 Elapsed: 00:00:03.26
+
+ls -al *.hmm
+-rw-r--r-- 1 pterry baenziger 344201 Jul 11 22:32 203plus87ctls.fa.aln.hmm
+
+less 203plus87ctls.fa.aln.hmm
+HMMER3/f [3.1b2 | February 2015]
+NAME  203plus87ctls.fa.aln
+LENG  738
+ALPH  amino
+
+# ref: line 21766
+## realign using hmm model, hmmalign
+
+## copy from /Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/
+cp slurm_hmmalign_wheatproj_203plus88ctls.sh slurm_hmmalign_wheatproj_203plus87ctls.sh
+
+ls slurm_hmmalign_wheatproj_203plus87ctls.sh
+ls 203plus87ctls.fa.aln.hmmaln
+ls 203plus87ctls.fa.aln.hmm  ## on crane
+ls 203plus87ctls.fa  ## on crane
+
+# ok, so have
+
+# make needed changes (done)
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp slurm_hmmalign_wheatproj_203plus87ctls.sh  pterry@crane.unl.edu:/home/baenziger/pterry/scripts/
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## ck dir contents?
+cd /home/baenziger/pterry/scripts
+## ck if present slurm_hmmalign_wheatproj_203plus87ctls.sh
+ls -al *87ctls.sh
+sbatch slurm_hmmalign_wheatproj_203plus87ctls.sh ## 28307577  12:14pm => ??:??am, 
+
+squeue -u pterry  
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al *hmmaln
+-rw-r--r-- 1 pterry baenziger  974013 Jul 12 12:14 203plus87ctls.fa.aln.hmmaln
+
+sacct -j  28307577 -o start,end
+              Start                 End 
+------------------- ------------------- 
+2020-07-12T12:14:18 2020-07-12T12:14:34 
+2020-07-12T12:14:18 2020-07-12T12:14:34 
+# 16 sec
+
+-rw-r--r-- 1 pterry baenziger       0 Jul 12 12:14 job.28307577.err
+-rw-r--r-- 1 pterry baenziger       0 Jul 12 12:14 job.28307577.out
+
+less 203plus87ctls.fa.aln.hmmaln
+# STOCKHOLM 1.0
+
+#=GS TraesCS1A02G031600.1 DE gene=TraesCS1A02G031600
+
+07/12/20:
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al *hmmaln
+
+# Convert the realigned file from Stockholm to fasta format using Vikas perl script stockholm2fasta.pl.
+
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load perl/5.22
+
+perl stockholm2fasta.pl -c 999999 -g 203plus87ctls.fa.aln.hmmaln|perl -ne 'if (/^(>.+)/) {print $1,"\n"} if (/^[^>]/) {while (m/([A-Z-])/g) { print $1 }; print "\n" }' > 203plus87ctls.fa.aln.hmmaln.fa
+
+ls -al *hmmaln.fa
+-rw-r--r-- 1 pterry amundsen 217835 Jun 18 00:08 203plus88ctls..fa.aln.hmmaln.fa
+mv 203plus88ctls..fa.aln.hmmaln.fa 203plus88ctls.fa.aln.hmmaln.fa
+ls -al *hmmaln.fa
+-rw-r--r-- 1 pterry baenziger 220122 Jul 12 14:03 203plus87ctls.fa.aln.hmmaln.fa
+
+less 203plus87ctls.fa.aln.hmmaln.fa ## think looks ok  ????
+
+grep -c ">Traes" 203plus87ctls.fa.aln.hmmaln.fa  ## 203 as expect
+
+grep -c ">" 203plus87ctls.fa.aln.hmmaln.fa  ## 290 as expect
+exit
+
+## ref., line 10546, now fas to phy
+
+## ref., line 22094
+# then .fa to .phy with align_convert_fas_to_phy.pl
+
+STOPPED
+
+ssh -Y pterry@crane.unl.edu
+# Rrq096mN 
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+ls -al  ## 755 scp
+
+--try srun, 
+srun --pty --ntasks-per-node=4 --mem 4gb --qos=short $SHELL
+cd /work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp
+module load bioperl
+
+#./align_convert_fas_to_phy.pl 203plus87ctls.fa.aln.hmmaln.fa
+perl align_convert_fas_to_phy.pl 203plus87ctls.fa.aln.hmmaln.fa
+
+ls -al *.phy
+## Q: will it create file & name for output, yes.
+
+-rw-r--r-- 1 pterry baenziger 325890 Jul 12 14:14 203plus87ctls.fa.aln.hmmaln.phy
+exit
+less 203plus87ctls.fa.aln.hmmaln.phy
+ 290 738
+  'Glyma.09g263600.1'  ---------- ---------- ---------- ---------- ---------- -------MLH 
+
+logout
+
+# scp '.phy' file back to mbook, 
+# from line 22120
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter
+
+scp pterry@crane.unl.edu:/work/baenziger/pterry/wheatproj/hmmsrch_protv1.1/blastp/203plus87ctls.fa.aln.hmmaln.phy .
+ls -al 203*.phy
+-rw-r--r--  1 bterry  staff  325890 Jul 12 14:26 203plus87ctls.fa.aln.hmmaln.phy
+
+less 203plus87ctls.fa.aln.hmmaln.phy
+ 290 738
+  'Glyma.09g263600.1'  ---------- ---------- ---------- ---------- ---------- -------MLH 
+'TraesCS6D02G018941.1'  ---------- ---------- ---------- ---------- ---------- ---------- 
+
+## so phy header       290 727, expect the 290
+
+Then run this thru PhyMl online at http://www.atgc-montpellier.fr/phyml/
+--in PhyML, could use 'aLRT', faster than bootstrapping, get similar info.
+
+# ref: line 22145
+
+Selections:
+browse: 
+/Users/bterry/macbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls.fa.aln.hmmaln.phy
+
+Data type: aa's
+Still, no bootdstrap, rather aLRT SH-like
+# Q: other choices  ????????????????????????????????????
+
+Perform bootstrap, no
+
+Name: 203plus87ctls
+
+The alignment file "203plus87ctls.fa.aln.hmmaln.phy" was uploaded, it contains 290 taxons of 738 characters.
+
+Your job was submitted. (Sun, 07/12/20, 2:37pm)
+
+############################################################################
+# Q: if wanted to do bootstrap, how request it on PhyML web site ??????
+############################################################################
+
+ref: line 22166
+dnloaded 203plus87ctls_fa_aln_hmmaln_phy_phyml.zip file
+# Execution time: 3 hour(s), 29 minute(s)
+
+# expanded it into dir:
+
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+# tree file in this dir. want to use in figtree is:
+-rw-r--r--@ 1 bterry  staff  15322 Jul 13  2020 203plus87ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+
+cp 203plus87ctls_fa_aln_hmmaln_phy_phyml_tree.txt 203plus87ctls_fa_aln_hmmaln_phy_phyml_tree_orig.txt
+
+# now ready create some displays in figtree
+
+# line 21974
+# in **figtree**
+# line 22006
+203plus87ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+
+STOPPED
+
+# then, bring into figtree
+########################################################################
+# I note another long branch, from soybean in cluster of chr, glyma.10g002900.1 
+########################################################################
+
+Initially asked select a name for node values, gave aLRT
+
+tree/root tree/midpoint
+'Node labels', (display aLRT, format=%, sig. digits =2, for now left on 2)
+## on taxa 
+# save 203plus87ctls_fa_aln_hmmaln_phy_phyml_tree.txt
+
+07/13/20:
+
+mv 203plus87ctls_fa_aln_hmmaln_phy_phyml_tree.txt 203plus87ctls_phyml_tree_figbase.txt
+# ok, 
+
+# then
+cp 203plus87ctls_phyml_tree_figbase.txt 203plus87ctls_1_2_6_phyml_tree_figbase.txt
+# will save 'circ' & 'linear' from this file from figtree
+
+# so open 203plus87ctls_1_2_6_phyml_tree_figbase.txt in figtree
+########################################################################
+# Treas1B02G085995.1 is way out in/near ctls cluster ?????
+# at least 5 chr 2's in chr 1 cluster ????????
+########################################################################
+# create, export, rename circ & linear .png's
+cp 203plus87ctls_1_2_6_phyml_tree_figbase.txt 203plus87ctls_1_2_6_phyml_tree_figbase_circ.txt
+
+# now for 1_2_6 'linear' .png
+# in a linear phylogram of 1_2_6, if vikas wants the letters big enough so they be read by a reader, how to proceed ???????????????????????
+# note in the Cannon Nature fig2 phylogram, 46 seqs can read name of seqs.
+# we have 290 seqs (203+87)
+# what to do ????????????
+# perhaps, can one create a phylogram of all 290 seqs, names not readable, but colors rough location of clusters. Note, in 'linear view' too big to get all seqs in one phylogram ???????????????
+# then series more closeup sub-phylograms. Note: chr 1 too many names for one sub-phylogram, perhaps could do with 2, or 3 ?????????
+# Q: what is 'fish eye' menu item ?????????????
+# Q: would the 'middle' circular display help, seems give overview of relationship diff. chromosome groups, can see all seqs on same phylogram  ????????? 
+cp 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_circ.txt
+cp 203plus88ctls_fa_aln_hmmaln_vikas6short_phy_phyml_tree.txt 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_linear.txt
+# perhaps another phylogram display pgm can help ??????
+# bootstrap ???????
+
+07/15/20:
+
+# If *goal* to make names of sequences readable, for example, fig2 from Cannon Nature paper has 46 seqs, names readable, here have 203+87=290 seqs. To make readable in linear phylogram, tentatively would have to subset 290 perhaps to 5 subsets, so roughly 58 seqs/subset. Chr 1 has 112 seqs, so see if could subset it into 2 subsets. Chr 2 has 28 seqs. Chr 6 has 52.
+
+Created:
+
+--(1,2,6 +rice9 + bracky9 (monocot ctls)) a phylogram of all 290 seqs (203plus87ctls_1_2_6_rice9bracky9_phyml_tree_figbase.txt), names not readable, but colors (red, green, blue, cyan, brown) show rough location of clusters. Using 'middle circle' phylogram for this, seems best **'overview'** of the relative positions of the 290 seqs. Perhaps annotate this phylogram (somehow) for location of 5 subset phylograms, way relate to subset phylograms ???????
+
+cp 203plus87ctls_1_2_6_phyml_tree_figbase.txt 203plus87ctls_1_2_6_rice9bracky9_phyml_tree_figbase.txt
+
+--linear subset .png's from this phylogram, so can read the seq. names
+# prevly done for 1_2_6, 
+# now redo including rice9 & bracky9 wi chr 1,2,6
+
+STOPPED
+
+--2nd overview middlecirc phylogram, (dicot ctls), create 203plus87ctls_dicots_ctls_arab25_Glyma38_phyml_tree_figbase.txt from 203plus87ctls_phyml_tree_figbase.txt
+cp 203plus87ctls_phyml_tree_figbase.txt 203plus87ctls_dicots_ctls_arab25_Glyma38_phyml_tree_figbase.txt
+
+# now display in figtree
+# would be nice if could annotate clusters (not just figtree name colors ??????
+# perhaps use 1 overview phylogram, chr 1,2,6 & rice9 & bracky9 & arab25 & Glyma38 ??????????
+
+--linear subset '.png's' from this overview phylogram so can read seq. names.
+# yet to do
+
+# sent Vikas brief email regarding this scheme.
+
+07/18/20:
+###########################################################################
+pmtmbook15 laptop froze up had to force it by pressing & holding start button.
+###########################################################################
+
+# Checking on $COMMON for content of 'amundsen' copied over by Natasha ??????
+cd $WORK
+pwd
+/work/baenziger/pterry
+cd $COMMON
+pwd
+/common/baenziger/pterry
+ls -al
+drwxr-xr-x  2 pterry baenziger  0 Jul 10 10:54 amundsen
+
+# perhaps what Natasha moved to $COMMON was empty ???????
+
+# Q: What is $COMMON for, have heard of it, but never used it ???????????
+
+07/19/20:
+
+
+# too try, prepare sub-linear phylograms so can read seq names ???????
+
+
+# finally open 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_circ.txt in figtree
+ 
+
+
+
+
+
+
+
+
+
+# then, Run this file thru Phyml, (ref., line 21935) 
+
+
 
 
 
