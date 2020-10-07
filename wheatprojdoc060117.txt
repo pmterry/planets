@@ -22638,24 +22638,9 @@ drwxr-xr-x  2 pterry baenziger  0 Jul 10 10:54 amundsen
 
 # finally open 203plus88ctls_1_2_6_vikas6short_phy_phyml_tree_circ.txt in figtree
  
-
-
-
-
-
-
-
-
-
 # then, Run this file thru Phyml, (ref., line 21935) 
 
-
-
-
-
-
 # check vikas6 Rf(?) I prevly read about ????
-
 
 find . -name 'PPRv1.1.1913plus88ctls.txt' -print
 # apparently not on mbook ?????
@@ -22663,11 +22648,295 @@ find . -name 'PPRv1.1.1913plus88ctls.txt' -print
 find . -name 'Jeong2018*' -print
 ~/mbook2020/vikas20/Jeong2018_Article_FineMappingOfTheGenicMale-ster.pdf
 
-
-
-
-
 # next, the bracky, arab & soybean, **to match up** names in '88' list with fugii(2011) table S1.
+
+08/14/20:
+
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 08/14/20 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
+
+# talked to vikas
+# discussing phylograms for manuscript.
+# TO DO:
+i. 'circular center' phylogram, test removing 'aLRT' from for ' chr 1_2_6', see if clean enough to publish ??????
+ii. test 'overview linear' phylogram, overview guide to subset linear phylograms
+iii. internet example, 'circle color' outside of 'center circular' phylogram, note: leaves all same radius line ??????
+iv. test coloring all black except chroms ?????
+ 
+08/15/20:
+# ok, identify which files, what steps will follow
+# WHAT if 'circ-center' phylograms, omit "aLRT's"
+a. one with just 203 wheat chr. seqs (red, green, blue)
+b. one with all 87 ctls (mono & dicots, brown, yellow, purple & orange)
+c. perhaps a 'circ-center' with all with all 7 colors (chr 1, 2, 6, & ctls rice, bracky, soybean & arabidopsis) & no "aLRT's" ??? Note: vikas6 still 'black' writing ?????
+
+# Q: perhaps, try to do from one figtree input file. I note, std initial file appears to be (line 22603, 203plus87ctls_phyml_tree_figbase.txt)
+# To start, try line 22570, 203plus87ctls_1_2_6_phyml_tree_figbase_middlecirc.txt (a) above
+# Q: what dir in ?????
+cd /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+# uncheck 'node labels', cleans up phylogram, so export as 203plus87ctls_1_2_6_phyml_tree_figbase_middlecirc_noaLRT.png
+# this does (a) above.
+########################################################################
+# note non chr 1, 2, 6 chr seqs left as black color (***??????***) What to think ???
+########################################################################
+
+08/16/20:
+
+# now start with file 203plus87ctls_dicots_ctls_arab25_Glyma38_phyml_tree_figbase.txt
+in dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+cp 203plus87ctls_dicots_ctls_arab25_Glyma38_phyml_tree_figbase.txt 203plus87ctls_ALL87ctlsONLY_phyml_tree_figbase.txt
+
+Open 203plus87ctls_ALL87ctlsONLY_phyml_tree_figbase.txt in figtree
+
+# uncheck 'node labels'
+
+# Color the rice9 yellow & the bracky9 brown.
+# note: Q76C99.1 from vikas6 clustering here, obviously also a rice protein. Q: what to do with this seq in phylogram ?????
+# think, now just export print as '.png', 203plus87ctls_ALL87ctlsONLY_phyml_tree_figbase.txt.png
+# what if anything to do with vikas6 in 'black' print ???????
+###########################################################################
+# Q: should I try internet example from figtree, i.e., perfect circle, outside color circle, and labels outside circle ???
+###########################################################################
+# this does (b)
+
+# (c)
+# perhaps copy the file, 
+cp 203plus87ctls_1_2_6_phyml_tree_figbase_middlecirc.txt  203plus87ctls_ALL284COLORED_phyml_tree_figbase_middlecirc.txt
+# Note: change 290 to 284 as vikas6 not colored. 
+
+# then in figtree, add color for ctls: rice9 (yellow), bracky9 (brown), soybean38 (purple) & arabidopsis26 (orange).
+# export '.png' file: 203plus87ctls_ALL284COLORED_phyml_tree_figbase_middlecirc.txt.png
+###########################################################################
+For now, vikas6 **not** colored. Also chrs 5, 7 & 'Un' ???????
+###########################################################################
+
+# adding to (a), (b), (c) above,
+(d) (c) just converted to 'linear' form, can this serve as overview map for 'subset linear' phylograms ????
+# careful, 
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_middlecirc.txt  203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview.txt
+
+# then open in figtree, go to linear display, see if could serve as overview map for subset linear phylograms. Don't yet turn on (check) 'node labels'.
+
+08/17/20:
+# subset #4, linear phylograms, perhaps go % to decimal, 'overlapping' in phylogram ??
+# ok, for #4, includes rice (yellow) & 2nd chr 6 (blue)
+# turn on, (i.e., check) 'node labels'
+# file, perhaps 
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset4_2ndchr6.txt
+
+# then, linear subset rice9 (yellow) & chr 6 (2nd cluster)
+# ISSUE: rice9 yellow, can't read the rice seq. names on phylogram ?????
+# Perhaps color both monocot ctls same color ??????, then don't need to use yellow ???
+
+###########################################################################
+# note, screen shot, can select just seqs want, **avoid** 'overlapping' subset phylograms
+###########################################################################
+
+# subset #5, soybean, arabidopsis ctls clusters
+
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset5_dicotctls.txt
+
+# check 'node labels', decimal rather than %
+###########################################################################
+# thinking this subset phylogram may be workable ???
+###########################################################################
+
+# vikas, Q: aLRT rather than bootstrap ??????
+# Q: how do bootstrap on phyml ??????
+
+find . -name '09825*' -print
+
+08/21/20:
+talked to vikas yesterday
+# for (c) phylogram, change yellow to brown for rice9 seqs
+# for (d), remove names of seqs, change rice9 seqs yellow to brown (monocot ctls)
+# export as '.png'
+# then try create 'location lines' for the 5 subsets trying to show map for them in Word? Send '.png' to vikas for doing in Word. Take photo of (d) with pencil subset locations, also send to vikas.
+
+08/23/20:
+# working on (d)
+# in dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+open file 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview.txt in figtree
+# change rice9 from yellow to brown [DONE] (may have to go back to 'circ-center from to achieve ?????? File working wih:
+203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt
+
+# then back to linear display
+# then remove seq names (how ????)
+# CAN'T FIND WAY REMOVE SEQ NAMES/LABELS FROM BRANCHES ???????????????????
+# SO SKIP THAT FOR NOW
+# export as '.png' (done, 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt.png)
+# try bring into Word, draw five 'subset' groups (done, linoverview5subs.docx)
+# to do, or send to vikas to accomplish, png file & word file, note: looked thru what doc could find, did not come up with way to remove seq. names from end of branches?
+
+# **to do**, create subset 'png files, 1 to 5, each with unique subset of the 290 seqs. in the 290 seq. phylogram.
+
+08/25/20:
+
+# think just start with prev. subset4 or subset5 file, copy, make subset 1, 2, 3 from this.
+
+# so prevly,
+#cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset4_2ndchr6.txt
+
+# so for subset 1,
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset1_chr1.txt
+
+# now open 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset1_chr1.txt
+select down thru 3rd group green with screen capture (done)
+########################################################################
+# issue with the soybean long branch near top of subset 1 ??????????????
+# preview printout bcgd not white ???????????
+# seq names, aLRTvalues showing up well.
+########################################################################
+
+# for subset 2
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset2_chr1.txt
+
+# now open 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset2_chr1.txt
+select down thru end red (chr1) group with screen capture (done)
+
+STOPPED
+
+08/28/20:
+# test putting one of the subset 'png's in word doc. Want to test if darker colored background happens in Word doc as in preview?
+# note: not in dir. with input to figtree files cause was screen capture
+
+########################################################################
+# so in subsets5.docx, subset1 '.png' (from screen capture) still has tan-gray bcgd ??????
+# and of course has **long branch soybean seq still** ??????
+########################################################################
+
+/Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+09/03/20:
+# response from vikas of 08/30/20
+# proceed with screen-captured versions of subsets 1 thru 5, not to worry about gray-tan bcgd.
+# practice a bit with Word, adding pages, working in dir: /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+# working with 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset2_chr1.txt, screen capture in file ScreenShot2020-08-25_subset2.png 
+# brought into new page of work ok, can read brown letters/names on laptop, but not when print out the Word page ????
+
+# so, in lineoverview5subs.docx, bring in the 5 subset phylograms in 5 pages following the overview phylogram.
+# wait, working with 'subset5.docx'. So need instead add subsets to lineoverview5subs.docx.
+
+
+# for subset 3
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset3_1stchr6chr2.txt
+
+# now open 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset2_chr1.txt in figtree, in linear format,
+select down thru end green (chr2) group with screen capture (done)
+
+# for subset 4
+
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset3_1stchr6chr2.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset4_2ndchr6.txt
+
+# now open 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset4_2ndchr6.txt in figtree in linear format,
+
+select from brown monocot ctls down thru end blue (2nd chr6) group with screen capture (done) => ScreenShot2020-09-04subset4_2ndchr6.png
+# in dir. /Users/bterry/Desktop
+
+# for subset 5
+
+09/04/20
+# Juan Cui comment:
+Try export overview linear file as pdf from figtree, then thinks adobe or preview can subset, retain white bcgd ???? But me, would still need to be able to cut image into subsets. ???  But for now, finish lineoverview5subs.docx with 6 images.
+
+###########################################################################
+Note: to test, if can change output file for screen capture to like 'pdf' file, description on internet how to do, to try ???
+###########################################################################
+
+cp 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset3_1stchr6chr2.txt 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset5_ctls.txt
+
+# now open 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset5_ctls.tx in figtree in linear format,
+
+select basically the dicot ctls group with screen capture (done) => ScreenShot2020-09-04subset5_ctls.png
+
+# in dir. /Users/bterry/Desktop
+
+
+# now, place these 5 subset phylograms in file lineoverview5subs.docx which is in dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+# currently, in dir: /Users/bterry/Desktop
+
+09/05/20:
+
+ScreenShot2020-08-25_subset1.png
+ScreenShot2020-08-25_subset2.png
+Screen_Shot2020-09-03_subset31stchr6chr2.png
+ScreenShot2020-09-04subset4_2ndchr6.png
+ScreenShot2020-09-04subset5_ctls.png
+
+STOPPED 
+09/10/20:
+# vikas email
+1. check file
+203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt
+in figtree with 290 seqs. See if can make linear version big (bigger than display area of figtree, then export to png, see what png looks like. File name, test_linearoverview_brn.txt.png
+# result in preview, all seqs on gray bckg, names **to** small to read.
+# Q: could one just import this into Word, see what get. If all to small to read, any remedy in word?
+# trying, now get white bcgd, but still all on one page in word, too small to read. Q: **can** anything be done in Word at this point ?????
+
+09/24/20:
+# talked to vikas
+1. prepare Word doc. with 6 images, the overview of 290 seqs. smeared. Subseqent five images are the 5 subsets. *Check* if new printer cartridges produce ledgible names for all 5 subset images?
+2. Check on Arbor project with IWGSC (to do with exon capture ????)
+3. Items on the Uauy IWGSC webinar (07/15/20)
+--www.wheat-training.com (initially 'using ensembl plants')
+--pre-computed gene trees in **e!**
+-- > 10 mill. wheat mutants online at e!
+--polymarker, kasp markers for 10 mill. mutants at e!, also see pub.
+--wheat tiling (in silico) ????????, pangenome collection ??????
+-- Watkins NAM popn ??????
+--Knetminer
+--www.crop-haplotypes.com
+4. Oct conf. send url to vikas
+
+09/29/20:
+# finalize 
+ScreenShot2020-09-04subset5_ctls.png
+# to finalize lineview5subs.docx, does subset 5 image need to be regenerated ??? That is, top branch does not have name at end of branch? Perhaps 'BAM...' is top branch in subset 5? In 'png', is. So what is top line, 'no connection' to phylogram in subset 5 image in Word. May be, that it is not supposed to be in subset 5. Trying to get more names on right in subset 5, lost what top line of subset 5 image is ???
+
+Go into figtree and file 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset5_ctls.tx, try determine what that line is. If needed arrange to get, if not, remove it from subset 5 image in Word.
+# ok, re got subset 5 from figtree. Gets borders better, though names smaller.
+# so for moment add this 2nd subset 5, along with the 1st subset5 in file: lineview5subs.docx.
+
+10/06/20:
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+git add wheatprojdoc060117.txt
+git commit -m "update 08/31/17 wheatprojdoc060117.txt"
+git status
+git push origin master
+# git remote -v
+
+
+
+
+
+STOPPED
+
+# I note a limb name may be cutoff top subset 5? Check into, see if has a name, what to do about it ??????
+
+
+# presume will supply list(s) of names of the seqs in the 6 images, identified but subset phylogram ????
+# see file 203plus88names.txt, of course will omit the sequence omitted when reduced to 290 seqs from 291 ???
+
+
+
+
+# to do, yellow to brn in phylogram (c), i.e., file:  203plus87ctls_ALL284COLORED_phyml_tree_figbase_middlecirc.txt
+
+
+
 
 
 
