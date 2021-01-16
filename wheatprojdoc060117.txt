@@ -22913,19 +22913,301 @@ Go into figtree and file 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsu
 cd ~/planets
 git status
 git add wheatprojdoc060117.txt
+git commit -m "update 10/06/17 wheatprojdoc060117.txt"
+git status
+git push origin master
+git remote -v
+
+STOPPED
+
+10/14/20:
+talked to Vikas
+1. send syllabus
+2. for phylograms
+--use subset 5 2nd try
+--subset 2, remove 'green' at top
+--subset 3, remove red at top
+
+11/02/20:
+
+# talked to Vikas
+1. finish, fix  phylograms (see 10/14/20)
+2. copied several slides from Wenbo Ma talk. In future, may refer to them in connection with understanding PPRs.
+3. polymarker (IWGSC talk last week, try learn how to do, relisten to video for starters)
+
+11/08/20:
+# 1st for subset 2, input file for figtree is 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset2_chr1.txt
+# in dir: /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+#############################################################################
+# Q: figtree, screen capture, then NOT listed in finder in Desktop dir ????
+# Q: *note* issue with scp of Sequences file from crane, find in terminal, not in finder window ????
+# try go into terminal, then Desktop, can cd here, but then cannot 'ls' list files, permission denied 
+#############################################################################
+
+#############################################################################
+# to test:
+scp Sequences_1mil.txt from crane to 'pro' laptop (specific dir.), then see if can find file 
+i. in Terminal
+ii. in finder window (****yes****, can see), so mbook can't see new file in finder window, 'pro' works fine.
+
+iii. if want to try do figtree from 'pro', 1st need install ver. 1.4.4 as 1.4.3 currently not starting correctly ????????????????????????
+# if installs, then copy figtree input files to box, then to 'pro' and use screen capture to get from figtree to fix 10/14/20 work order above.
+# 1.4.4 installed on 'pro', but gives an error if try to open. 
+#############################################################################
+
+# slip a save to ***github*** in here
+cd ~/planets
+########################################################################
+git status  ## THIS COMMAND NOT WORKING ON MACBOOK ANYMORE???????????????????????/
+# SO UPLOADED THIS FILE TO UNL BOX, ANOTHER COPY.	
+########################################################################
+git add wheatprojdoc060117.txt
+git commit -m "update 10/06/17 wheatprojdoc060117.txt"
+git status
+git push origin master
+git remote -v
+ 
+12/04/20 vikas email:
+
+I came across this recent article describing the assemblies studied in our Spring class. Also, Small and Melonek have investigated RFL genes across these pan genomes. I'll also look into this study in a more detailed manner.
+
+
+https://www.scimex.org/newsfeed/landmark-study-to-improve-global-wheat-production
+# australia publicity for walkowiak paper.
+
+https://www.nature.com/articles/s41586-020-2961-x
+# walkowiak
+# dnloaded pdf !!!!! 
+
+https://www.nature.com/articles/s41586-020-2961-x/figures/7 
+# fig 4 of walkowiak ??????
+
+12/06/20:
+# review walkowiak paper, send email to vikas with think 3 topics
+
+12/12/20:
+# Q: how identity mTERF PPR genes ???? (working on walkowiak paper)
+
+12/13/20:
+
+p-2
+
+To provide an example of gene expansion on emerging breeding
+targets, we performed a more detailed analysis of the restorer of fertil-
+ity (Rf) gene families (**Supplementary Note 4**). Rf genes are involved in 23
+restoring pollen fertility in hybrid breeding programs , and we iden- tified a previously undescribed clade within the mitochondrial tran- scription termination factor (mTERF) family (Supplementary Table 9),
+24 which has recently been implicated in fertility restoration in barley(24). 
+
+##############################################################################
+Bernhard, T., Koch, M., Snowdon, R. J., Friedt, W. & Wittkop, B. Undesired fertility
+restoration in msm1 barley associates with two mTERF genes. Theor. Appl. Genet. 132,
+1335–1350 (2019).
+
+p-2 'Similar to PPRs' => does it mean mTERFs are not PPRs ???????????, see Barkan and Small 2014)
+p-8 mTERF & BLAST ???????????/, Q: how does one identify a mTERF ?????
+p-8 candidate gene HORVU6Hr1G005480, Q: how know a candidate gene ??????????
+p-8 overlap of 248 bp ???????????/
+p-9 4 different main haplotypes, perhaps means these 4 can 'explain' the 27 seqd lines ??????
+p-10 Discussion ???
+p-10 second single dominant locus 
+# mTERF apparently a multizipper protein possessing three putative leucine zippers one of which is bipartite (http://pfam.xfam.org/family/PF02536), so apparently not a PPR protein ??????
+
+##############################################################################
+*********************************************************************
+Extended Data Fig. 4: Evolutionary relationships among PPR and mTERF gene sequences.
+(a) The RFL clade is in blue and all remaining P-class PPRs are in green (Q: HOW DISTINGUISHED ???????????????)
+(b)  'Clustered' mTERF sequences are in blue and the remaining mTERFs are shown in green
+*********************************************************************
+
+
+Found internet url video explaining how to complete variant calling to get vcf file. https://www.coursera.org/lecture/genomic-tools/alignment-sequence-variation-6-samtools-mpileup-fcEwD 
+and two videos which automatically follow.
+Remaining problem, a step to index genome assembly (samtools faidx) has example for a *single* genomic fasta input file. Working with mouse, a fasta file for each chromosome, not a single one for whole genome. Presumably a solution for this, then left is to learn how best to use the new vcf file.
+
+--How much might your research use ideas in perhaps four of the iwgsc webinars (walkowiak, Uauy, Ramirez-Gonzales, Borrill, etc.) at
+https://www.youtube.com/c/internationalwheatgenomesequencingconsortium
+
+
+Of note, this clade shows evolutionary patterns similar to those of Rf-like
+pentatricopeptide repeat (PPR) proteins, representatives of which
+are associated with Rf3, a major locus used in hybrid wheat breeding
+programs (Extended Data Fig. 4). Although wheat is currently not a
+hybrid crop, there is substantial interest in Rf genes and their potential
+application in hybrid wheat production systems25. To our knowledge,
+no Rf genes have been cloned in wheat and our analysis of Rf genes in
+multiple RQAs and identification of an Rf clade in wheat [Q: HOW IDENTIFIED ???] is an important
+step forward in tackling the challenges of hybrid wheat breeding.
+
+**supplementary note 4**
+
+Despite the  promise  of  higher  yield  and  better  stress  resistance  of  hybrid  varieties  compared  to conventional  lines,  hybrid  breeding  in  wheat  remains  underexploited [evid?????].  An  efficient  pollination  control system  that  would  be  easy  to  apply  on  a  commercial  scale  is  missing.  The  application  of  cytoplasmic  male sterility (CMS) and restorer-of  -fertility (Rf)  genes  have been successful in other plant species such as rice and maize (Q: monocots or dicots ???), but is difficult to use in wheat due to poor effectiveness of the known wheat Rf genes [evid????]. In  most  flowering  plants,  the  majority  of  Rf  genes  belong  to  the  pentatricopeptide  repeat  (PPR)  family [??? encoding  mitochondrial  sequence-specific  RNA  binding  proteins ???].  The  PPR  family  can  be  split  into  two classes  based  on  their  motif  architecture,  and  this  distinction  correlates  with  function:  P-class  PPR  proteins  are  implicated  in  a  wide  range  of  RNA  processing  activities  whilst  PLS-class  PPR  proteins  are almost exclusively implicated in RNA editing. Rf genes are found within a subclade (Rf-like, or RFL genes) of the P-class.
+
+##########################################################################
+[Q: can one distinguish Rf from RFL of P-class] ???????????????????????????????
+##########################################################################
+
+Discovery of RFL-mTERF Clade and its Expansion in Wheat
+
+Members   of   another   family   of   sequence-specific   organellar   nucleic   acid   binding   proteins,   the mitochondrial  transcription  termination  factor  (mTERF)  family,  may  also  act  in  fertility  restoration  in plants.  The  wheat  genome  contains  ~400  mTERF  sequences  
+
+##########################################################################
+# Q: how to identify mTERF ????????????
+##########################################################################
+
+of  which  more  than  300  are  found  in clusters  overlapping  with  RFL  gene  clusters  (Supplementary  Table  9).
+
+# [Q: defn of 'score' in table 9 ???, see notes 'a' & 'b' in table, are hese criteria ????]
+
+For  comparison, in Arabidopsis, there are 35 mTERF genes [Q: HOW KNOWN ???????], of which 25 are distributed evenly across the genome and are **implicated** in RNA-associated  processes  in  chloroplasts  and  mitochondria.  Based  on  sequence  similarity [Q: BLAST ???],  these  25 genes are putatively orthologous to the ~28-30 scattered mTERF sequences found on each of the three subgenomes  in  wheat  (Supplementary  Table  9).  A  single  cluster  of  ~10  mTERF  genes  of  unknown function  from  Arabidopsis  may  correspond  to  the  huge  clusters  of  mTERF  genes  found  in  wheat  and other cereals including rye and barley. The discovery of clustered mTERF sequences that share genome locations and the same patterns of evolution as RFL-type PPR genes is a strong indication that they play  a major and hitherto unappreciated role in fertility restoration in cereals.
+
+
+12/8/20:
+# sent vikas email touching base on few topics.
+# to finish, subset phylograms in Word file.
+
+12/19/20:
+ref.: 10/14/20
+# still to do, redo subset (remove red at top)
+# try find figtree txt input file, basically focused on 'subset3 ?????
+# perhaps 203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearsubset3_1stchr6chr2.txt
+
+
+12/22/20:
+# produced ScreenShot2020-12-22subset3chr6chr2_2ndtry.png
+
+# now go back, prepare new Word file, smear + 5 subset images.
+
+12/27/20:
+# plan: **copy** lineoverview5subs.docx to lineoverview5subs_cp.docx, then add revised subset images to file. 
+# dir. is /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+
+# images to add are: (ref. line 22923)
+--use subset 5 2nd try (note: done)
+--subset 2, remove 'green' at top (done, file name = ScreenShot2020-11-08subset2_2ndtry.png)
+# note: for this file, find in Desktop dir, but **no** ref to this file in this file ??????
+--subset 3, remove red at top (done, ScreenShot2020-12-22subset3chr6chr2_2ndtry.png)
+
+12/28/20:
+
+# successfully inserted blank page in correct location for retry subset 2. Finding menu to insert .png image on the page starting with 'Tell Me'. So far, not finding way delete a page ??????
+
+# 'delete' found from youtube video. 'View', series delete content of page, delete the blank page, => gone. 
+
+12/29/20:
+
+# For sub3 retry, perhaps remove subset3 from page, insert subset3_retry, avoid inserting, deleting steps.
+
+# for lineoverview5subs_cp.docx
+# so have done with sub 2, 3, 5 2nd try's replacing 1st trys. 
+# But problem printout of 1st page ?????
+# so test print pages 5 & 6 => ok
+
+STOPPED
+
+# see if lineoverview5subs.docx smear page prints ok ???
+# NOW GET SAME PROBLEM IN THIS FILE ALSO ??????????????
+# 1st need find 'smear' image, not finding in 'Desktop' ??????
+##########################################################################
+# can't find ??????
+# perhaps, go back to figtree, create new smear .png by perhaps by just 'exporting' all 290 seqs in figtree display of all 290 ??????????
+# but **already** have that exported file:
+203plus87ctls_ALL284COLORED_phyml_tree_figbase_linearoverview_brn.txt.png
+# in dir. /Users/bterry/mbook2018/vikas18/131RFlike/annotation1.1/PPRv1.1plus_88ctls/vikas_filter/203plus87ctls_fa_aln_hmmaln_phy_phyml
+# so, try insert in cp2 Word file, see if can avoid the above printing problem ???? 
+# did, got ***same*** printing problem ??????????
+##########################################################################
+
+# so cp 'cp' to 'cp2', then remove 'smear' image from page 1, re-insert, then see of prints ok ???
+
+# Yet to do: redo labels, & placement of images, text on pages.
+
+12/30/20:
+# sent email to Vikas
+
+01/01/21:
+# try github again ????
+
+# slip a save to ***github*** in here
+cd ~/planets
+########################################################################
+git status  ## THIS COMMAND **still** NOT WORKING ON MACBOOK ANYMORE???????????????????????/
+SO, NEED FIX THIS ??????????????????
+********************************************************************
+NOTE: find on internet messages that **'catalina'** having this problem
+********************************************************************
+# perhaps, before migrate mbook to pro(M1), perhaps again copy wheatprojdoc060117.txt to unl(box)
+# then from pro(M1), try save wheatprojdoc060117.txt to github
+########################################################################
+git add wheatprojdoc060117.txt
+git commit -m "update 10/06/17 wheatprojdoc060117.txt"
+git status
+git push origin master
+git remote -v
+
+01/05/21:
+# visited vikas today. Will email attached file lineoverview5subs_cp.docx today.
+# copy wheatprojdoc060117.txt to thumb drive, as plan to migrate mbook (2015) to new macbook pro (M1 chip) tomorrow at huskertech in rm 31, love library south.
+# mentioned exon capture iwgsc arbor ??? collaboration ???
+
+# copied this file to thumb drive prepn tomorrow's transfer.
+
+01/06/21:
+# test try print 1st page of lineoverview5subs_cp.docx on new 'pro (M1), got **same** problem on the printing of page 1 (smear image).
+
+#####################################################################
+# 1st start of terminal on pro(M1)
+# prompt is
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+(base) philips-mbp:~ bterry$ 
+#####################################################################
+
+01/12/21:
+
+# to try github save on proM1.
+
+# slip a save to ***github*** in here
+cd ~/planets
+git status
+####################################################################
+philips-mbp:planets bterry$ git status
+xcode-select: note: no developer tools were found at '/Applications/Xcode.app', requesting install. Choose an option in the dialog to download the command line developer tools.
+
+opened a window asking if want to install the developer tools now ????
+
+'The git command requires the command-line developer tools. Would you like to install the tools now?
+
+# so perhaps install them (but wait till 'initial' backup completes) from the 'window'.
+
+
+
+####################################################################
+
+
+git add wheatprojdoc060117.txt
 git commit -m "update 08/31/17 wheatprojdoc060117.txt"
 git status
 git push origin master
 # git remote -v
 
+01/15/21:
+What is zsh on Mac?
+The Z shell, more commonly referred to as zsh , is a UNIX shell that is built on top of the Bourne shell (macOS default shell), better known as bash . Z shell is basically an extended version of Bash, with many additional features. ... Similarly, once you have installed zsh you can find the configuration file called .Jan 3, 2019
+
+###########################################################################
+To update your account to use zsh, please run `chsh -s /bin/zsh`
+Q: should I do ?????????????
+# I note:
+philips-mbp:planets bterry$ zsh --version
+zsh 5.8 (x86_64-apple-darwin20.0)
+# Q: perhaps already have it ??????????????????????????????
+###########################################################################
 
 
-
-
-STOPPED
 
 # I note a limb name may be cutoff top subset 5? Check into, see if has a name, what to do about it ??????
-
 
 # presume will supply list(s) of names of the seqs in the 6 images, identified but subset phylogram ????
 # see file 203plus88names.txt, of course will omit the sequence omitted when reduced to 290 seqs from 291 ???
